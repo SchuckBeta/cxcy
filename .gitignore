@@ -98,3 +98,9 @@ target
 
 /test-output
 /cxcy-nprovince-ui/node_modules
+/src/main/resources/db.properties
+/src/main/resources/initiate.properties
+/src/main/resources/initiate_nc.properties
+/src/main/resources/initiate_np.properties
+/src/main/resources/initiate_ns.properties
+/src/main/webapp/WEB-INF/web.xml
