@@ -1,0 +1,59 @@
+@charset "UTF-8";
+.modal-avatar {
+    /*width: 700px;*/
+    /*margin-left: -350px;*/
+}
+
+.modal-avatar .avatar-content {
+    /*overflow: hidden;*/
+}
+
+.modal-avatar .avatar-area {
+    /*float: left;*/
+}
+
+
+
+.modal-avatar .cut-avatar-area {
+    /*max-width: 400px;*/
+    /*max-height: 400px;*/
+}
+
+.modal-avatar .modal-footer .btn {
+    width: auto;
+    height: auto;
+    background-image: none;
+}
+
+.modal-avatar .modal-footer .btn-default:hover, .modal-avatar .modal-footer .btn-default:focus {
+    border: 1px solid #ccc;
+}
+
+.modal-avatar .btn-primary-oe {
+    color: #fff;
+    width: auto;
+    height: auto;
+    background-color: #e9442d;
+    background-image: none;
+}
+
+.modal-avatar .btn-primary-oe:hover, .modal-avatar .btn-primary-oe:focus {
+    color: #fff;
+    border: 1px solid #e9442d;
+    background-color: #e9442d;
+}
+.modal-header .close{
+    margin: 0;
+    width:  auto;
+    height: auto;
+}
+.modal button{
+    width: auto;
+    height: auto;
+}
+
+.modal .radio input[type="radio"]{
+    margin-top: 4px;
+    margin-right: 0;
+    margin-bottom: 0;
+}

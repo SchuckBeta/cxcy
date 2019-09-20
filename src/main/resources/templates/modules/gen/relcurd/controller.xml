@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>controller</name>
+	<filePath>src/main/java/${packageName}/${moduleName}/web/${subModuleName}</filePath>
+	<fileName>${ClassName}${RclassName}Controller.java</fileName>
+	<content><![CDATA[
+package ${packageName}.${moduleName}.web<#if subModuleName != "">.${subModuleName}</#if>;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.oseasy.com.pcore.common.config.CoreSval;
+import com.oseasy.com.pcore.common.persistence.Page;
+import com.oseasy.com.pcore.common.web.BaseController;
+import com.oseasy.util.common.utils.StringUtil;
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
+import ${packageName}.${moduleName}.service<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Service;
+
+/**
+ * ${functionName}Controller.
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+@Controller
+@RequestMapping(value = "${r"${adminPath}"}/${urlPrefix}")
+public class ${ClassName}${RclassName}Controller extends BaseController {
+
+	@Autowired
+	private ${ClassName}Service ${entityName}Service;
+
+	@ModelAttribute
+	public ${ClassName} get(@RequestParam(required=false) String id) {
+		${ClassName} ${entityName} = null;
+		if (StringUtil.isNotBlank(id)){
+			${entityName} = ${entityName}Service.get(id);
+		}
+		if (${entityName} == null){
+			${entityName} = new ${ClassName}();
+		}
+		return ${entityName};
+	}
+
+	@RequiresPermissions("${permissionPrefix}:view")
+	@RequestMapping(value = {"list", ""})
+	public String list(${ClassName} ${entityName}, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<${ClassName}> page = ${entityName}Service.findPage(new Page<${ClassName}>(request, response), ${entityName});
+		model.addAttribute(Page.PAGE, page);
+		return "${lastPackageName}/${viewPrefix}List";
+	}
+
+	@RequiresPermissions("${permissionPrefix}:view")
+	@RequestMapping(value = "form")
+	public String form(${ClassName} ${entityName}, Model model) {
+		model.addAttribute("${className}", ${entityName});
+		return "${lastPackageName}/${viewPrefix}Form";
+	}
+
+	@RequiresPermissions("${permissionPrefix}:edit")
+	@RequestMapping(value = "save")
+	public String save(${ClassName} ${entityName}, Model model, RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, ${entityName})){
+			return form(${entityName}, model);
+		}
+		${entityName}Service.save(${entityName});
+		addMessage(redirectAttributes, "保存${functionNameSimple}成功");
+		return CoreSval.REDIRECT+CoreSval.getAdminPath()+"/${viewPrefix}/?repage";
+	}
+
+	@RequiresPermissions("${permissionPrefix}:edit")
+	@RequestMapping(value = "delete")
+	public String delete(${ClassName} ${entityName}, RedirectAttributes redirectAttributes) {
+		${entityName}Service.delete(${entityName});
+		addMessage(redirectAttributes, "删除${functionNameSimple}成功");
+		return CoreSval.REDIRECT+CoreSval.getAdminPath()+"/${viewPrefix}/?repage";
+	}
+
+}]]>
+	</content>
+</template>

@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.impdata.dao.ImpInfoDao">
+
+	<sql id="impInfoColumns">
+		a.id AS "id",
+		a.imp_tpye AS "impTpye",
+		a.iep_type AS "iepType",
+		a.total AS "total",
+		a.success AS "success",
+		a.fail AS "fail",
+		a.is_complete AS "isComplete",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.msg AS "msg",
+		a.filename AS "filename",
+		a.errmsg AS "errmsg",
+		a.actywid AS "actywid",
+		a.protype AS "protype",
+		a.prosubtype AS "prosubtype"
+	</sql>
+
+	<sql id="impInfoJoins">
+	</sql>
+
+	<select id="get" resultType="ImpInfo">
+		SELECT
+		<include refid="impInfoColumns" />
+		FROM imp_info a
+		<include refid="impInfoJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ImpInfo">
+		SELECT
+		<include refid="impInfoColumns" />
+		FROM imp_info a
+		<include refid="impInfoJoins" />
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ImpInfo">
+		SELECT
+		<include refid="impInfoColumns" />
+		FROM imp_info a
+		<include refid="impInfoJoins" />
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByIep" resultType="ImpInfo">
+		SELECT
+		<include refid="impInfoColumns" />
+		FROM imp_info a
+		<include refid="impInfoJoins" />
+		<where>
+			a.iep_type = #{iepType}
+			<if test="iepTypes != null and iepTypes.size > 0">
+				AND a.imp_tpye in
+				<foreach item="id" collection="iepTypes" open="(" separator=" , "
+					close=")">
+					#{id}
+				</foreach>
+            </if>
+			<if test="impTpye != null and impTpye != ''">
+                    AND a.imp_tpye = #{impTpye}
+            </if>
+            <if test="actywid != null and actywid != ''">
+                    AND a.actywid = #{actywid}
+            </if>
+            <if test="isComplete != null and isComplete != ''">
+                    AND a.is_complete = #{isComplete}
+            </if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date desc, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO imp_info(
+		id,
+		imp_tpye,
+		iep_type,
+		total,
+		success,
+		fail,
+		is_complete,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		msg,
+		filename,
+		errmsg,
+		actywid,
+		protype,
+		prosubtype
+		) VALUES (
+		#{id},
+		#{impTpye},
+		#{iepType},
+		#{total},
+		#{success},
+		#{fail},
+		#{isComplete},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{msg},
+		#{filename},
+		#{errmsg},
+		#{actywid},
+		#{protype},
+		#{prosubtype}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE imp_info SET
+		imp_tpye = #{impTpye},
+		iep_type = #{iepType},
+		total = #{total},
+		success = #{success},
+		fail = #{fail},
+		is_complete = #{isComplete},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		msg=#{msg},
+		filename=#{filename},
+		errmsg=#{errmsg},
+		actywid=#{actywid},
+		protype=#{protype},
+		prosubtype=#{prosubtype}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM imp_info
+		WHERE id = #{id}
+	</update>
+	<select id="getDrCardList" resultType="ImpInfo">
+		select t.* from imp_info t
+		where t.imp_tpye=#{impTpye} order by t.create_date desc
+	</select>
+	<select id="getProModelList" resultType="ImpInfo">
+		select t.* from imp_info t
+		where t.protype=#{protype} and t.prosubtype=#{prosubtype} order by t.create_date desc
+	</select>
+	<select id="getMdList" resultType="java.util.HashMap"
+		parameterType="java.util.Map">
+		select t.id,
+		t.imp_tpye,t.total,t.success,t.fail,t.is_complete,date_format(t.create_date,'%Y-%m-%d %H:%i:%s') create_date,t.filename,t.errmsg from imp_info t
+		where t.imp_tpye=#{type} order by t.create_date desc limit
+		#{offset},#{pageSize}
+	</select>
+	<select id="getMdListCount" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select count(1) from imp_info t
+		where t.imp_tpye=#{type}
+	</select>
+	<select id="getList" resultType="java.util.HashMap"
+		parameterType="java.util.Map">
+		select t.id,
+		t.imp_tpye,t.total,t.success,t.fail,t.is_complete,date_format(t.create_date,'%Y-%m-%d %H:%i:%s') create_date from imp_info t
+		where t.imp_tpye in('1','2','3','4','5','9','10','13') and t.create_by=#{userid} order by t.create_date desc limit
+		#{offset},#{pageSize}
+	</select>
+	<select id="getListCount" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		select count(1) from imp_info t
+		where t.imp_tpye in('1','2','3','4','5','9','10','13') and t.create_by=#{userid}
+	</select>
+	<select id="getProjectMdData" resultType="java.util.HashMap" parameterType="java.lang.String">
+		select o.name oname,f.competition_number p_number,f.p_name,s1.label pro_category,s2.label level,
+		u1.name leader_name,u1.no,u1.mobile,
+		(select CONCAT_WS(',',GROUP_CONCAT(u22.name SEPARATOR '、')
+		,GROUP_CONCAT(ifnull(s.label,'无') SEPARATOR '、')
+		,GROUP_CONCAT(ifnull(u22.no,'无') SEPARATOR '、'))
+		from team_user_relation r  left join sys_user u22 on
+		r.user_id=u22.id
+		left join sys_teacher_expansion ste on u22.id=ste.user_id
+		left join sys_dict s on s.value=ste.post_title and s.type='teacher_level'
+		where f.team_id=r.team_id  and  (r.state='0' or r.state='4') and r.user_type='2') teachers,
+		(select GROUP_CONCAT(concat(u22.name,'(',ifnull(u22.no,''),')') SEPARATOR '、')
+		from team_user_relation r  left join sys_user u22 on
+		r.user_id=u22.id
+		left join sys_teacher_expansion ste on u22.id=ste.user_id
+		where f.team_id=r.team_id and f.declare_id!=r.user_id and  (r.state='0' or r.state='4') and r.user_type='1') members,
+		f.id,s3.label s3l,tt.project_introduction introduction
+		from pro_model_md t
+		left join pro_model f on t.model_id=f.id
+		left join sys_dict s1 on s1.value=f.pro_category and s1.type='project_type'
+		left join sys_dict s2 on s2.value=t.app_level and s2.type='0000000196'
+		left join sys_dict s3 on s3.value=t.subject and s3.type='0000000111'
+		left join sys_user u1 on f.declare_id=u1.id
+		left join sys_office o on u1.office_id=o.id
+		left join team tt on f.team_id=tt.id
+		where f.id in
+		<foreach collection="pids" item="id"  open="("
+			close=")" separator=" , ">
+			#{id}
+		</foreach>
+	</select>
+	<select id="getApprovalData" resultType="java.util.HashMap" parameterType="java.lang.String">
+		select s1.label pro_category,s2.label level,f.competition_number p_number,f.p_name,u1.name leader_name,u1.no,u1.mobile,
+		t.pro_source,
+		t.source_project_name,s3.label source_project_type,
+		(select CONCAT_WS(',',GROUP_CONCAT(u22.name SEPARATOR '/')
+		,GROUP_CONCAT(ifnull(s.label,'无') SEPARATOR '/')
+		,GROUP_CONCAT(ifnull(ss.label,'无') SEPARATOR '/')
+		,GROUP_CONCAT(ifnull(u22.no,'无') SEPARATOR '/'))
+		from team_user_relation r  left join sys_user u22 on
+		r.user_id=u22.id
+		left join sys_teacher_expansion ste on u22.id=ste.user_id
+		left join sys_dict s on s.value=ste.post_title and s.type='teacher_level'
+		left join sys_dict ss on ss.value=u22.education and ss.type='enducation_level'
+		where f.team_id=r.team_id  and  (r.state='0' or r.state='4') and r.user_type='2') teachers,
+		(case when t.iis_incubation='1' then '是' else '否' end) rufu,
+		(select CONCAT_WS(',',GROUP_CONCAT(u22.name SEPARATOR '/')
+		,GROUP_CONCAT(ifnull(u22.no,'无') SEPARATOR '/')
+		,GROUP_CONCAT(ifnull(u22.mobile,'无') SEPARATOR '/'))
+		from team_user_relation r  left join sys_user u22 on
+		r.user_id=u22.id
+		left join sys_teacher_expansion ste on u22.id=ste.user_id
+		where f.team_id=r.team_id and f.declare_id!=r.user_id and  (r.state='0' or r.state='4') and r.user_type='1') members
+		,f.id,o.name oname,t.app_level,f.proc_ins_id
+		from pro_model_md t
+		left join pro_model f on t.model_id=f.id
+		left join sys_dict s1 on s1.value=f.pro_category and s1.type='project_type'
+		left join sys_dict s2 on s2.value=t.app_level and s2.type='0000000196'
+		left join sys_dict s3 on s3.value=t.source_project_type and s3.type='0000000138'
+		left join sys_user u1 on f.declare_id=u1.id
+		left join sys_office o on u1.office_id=o.id
+		where f.id in
+		<foreach collection="pids" item="id"  open="("
+			close=")" separator=" , ">
+			#{id}
+		</foreach>
+	</select>
+	<select id="getMidData" resultType="java.util.HashMap" parameterType="java.lang.String">
+				select f.competition_number p_number,f.p_name,u1.name leader_name,u1.no,u1.mobile,
+		(select GROUP_CONCAT(u22.name SEPARATOR '/')
+		from team_user_relation r  left join sys_user u22 on
+		r.user_id=u22.id
+		left join sys_teacher_expansion ste on u22.id=ste.user_id
+		where f.team_id=r.team_id  and  (r.state='0' or r.state='4') and r.user_type='2') teachers,
+		s1.label pro_category,s2.label level,t.stage_result,t.reimbursement_amount,
+		f.id,o.name oname,f.proc_ins_id
+		from pro_model_md t
+		left join pro_model f on t.model_id=f.id
+		left join sys_dict s1 on s1.value=f.pro_category and s1.type='project_type'
+		left join sys_dict s2 on s2.value=t.app_level and s2.type='0000000196'
+		left join sys_user u1 on f.declare_id=u1.id
+		left join sys_office o on u1.office_id=o.id
+		where f.id in
+		<foreach collection="pids" item="id"  open="("
+			close=")" separator=" , ">
+			#{id}
+		</foreach>
+	</select>
+	<select id="getCloseData" resultType="java.util.HashMap" parameterType="java.lang.String">
+		select f.competition_number p_number,f.p_name,u1.name leader_name,u1.no,u1.mobile,
+		(select GROUP_CONCAT(concat(u22.name,'(',ifnull(u22.no,'无'),')') SEPARATOR '、')
+		from team_user_relation r  left join sys_user u22 on
+		r.user_id=u22.id
+		left join sys_teacher_expansion ste on u22.id=ste.user_id
+		where f.team_id=r.team_id and f.declare_id!=r.user_id and  (r.state='0' or r.state='4') and r.user_type='1') members,
+		(select CONCAT_WS(',',GROUP_CONCAT(u22.name SEPARATOR '/')
+		,GROUP_CONCAT(ifnull(u22.no,'无') SEPARATOR '/'))
+		from team_user_relation r  left join sys_user u22 on
+		r.user_id=u22.id
+		left join sys_teacher_expansion ste on u22.id=ste.user_id
+		where f.team_id=r.team_id  and  (r.state='0' or r.state='4') and r.user_type='2') teachers,
+		s2.label level,s1.label pro_category,t.result,t.reimbursement_amount,
+		f.id,o.name oname,f.proc_ins_id
+		from pro_model_md t
+		left join pro_model f on t.model_id=f.id
+		left join sys_dict s1 on s1.value=f.pro_category and s1.type='project_type'
+		left join sys_dict s2 on s2.value=t.app_level and s2.type='0000000196'
+		left join sys_user u1 on f.declare_id=u1.id
+		left join sys_office o on u1.office_id=o.id
+		where f.id in
+		<foreach collection="pids" item="id"  open="("
+			close=")" separator=" , ">
+			#{id}
+		</foreach>
+	</select>
+
+	<select id="getGnodeData" resultType="java.util.HashMap" parameterType="java.lang.String">
+		select s1.label pro_category,
+		f.competition_number p_number,
+		f.p_name,
+		u1.name leader_name,
+		u1.no,u1.mobile,
+		(select CONCAT_WS(',',GROUP_CONCAT(u22.name SEPARATOR '/')
+			,GROUP_CONCAT(ifnull(s.label,'无') SEPARATOR '/')
+			,GROUP_CONCAT(ifnull(ss.label,'无') SEPARATOR '/')
+			,GROUP_CONCAT(ifnull(u22.no,'无') SEPARATOR '/'))
+			from team_user_relation r
+			left join sys_user u22 on r.user_id=u22.id
+			left join sys_teacher_expansion ste on u22.id=ste.user_id
+			left join sys_dict s on s.value=ste.post_title and s.type='teacher_level'
+			left join sys_dict ss on ss.value=u22.education and ss.type='enducation_level'
+			where f.team_id=r.team_id  and  (r.state='0' or r.state='4') and r.user_type='2') teachers,
+		(select CONCAT_WS(',',GROUP_CONCAT(u22.name SEPARATOR '/')
+			,GROUP_CONCAT(ifnull(u22.no,'无') SEPARATOR '/')
+			,GROUP_CONCAT(ifnull(u22.mobile,'无') SEPARATOR '/'))
+			from team_user_relation r  left join sys_user u22 on r.user_id=u22.id
+			left join sys_teacher_expansion ste on u22.id=ste.user_id
+			where f.team_id=r.team_id and f.declare_id!=r.user_id and  (r.state='0' or r.state='4') and r.user_type='1') members
+		,f.id,
+		o.name oname,
+		f.proc_ins_id
+		from pro_model f
+		left join sys_dict s1 on s1.value=f.pro_category and s1.type='project_type'
+		left join sys_user u1 on f.declare_id=u1.id
+		left join sys_office o on u1.office_id=o.id
+		where f.id in
+		<foreach collection="pids" item="id"  open="("
+			close=")" separator=" , ">
+			#{id}
+		</foreach>
+	</select>
+
+	<select id="getProModelGnodeData" resultType="java.util.HashMap" parameterType="java.lang.String">
+		select o.name oname,
+		f.competition_number p_number,
+		f.p_name,
+		s1.label pro_category,
+		u1.name leader_name,
+		u1.no,
+		(select CONCAT_WS(',',GROUP_CONCAT(u22.name SEPARATOR '、')
+			,GROUP_CONCAT(ifnull(s.label,'无') SEPARATOR '、')
+			,GROUP_CONCAT(ifnull(u22.no,'无') SEPARATOR '、'))
+			from team_user_relation r  left join sys_user u22 on
+			r.user_id=u22.id
+			left join sys_teacher_expansion ste on u22.id=ste.user_id
+			left join sys_dict s on s.value=ste.post_title and s.type='teacher_level'
+			where f.team_id=r.team_id  and  (r.state='0' or r.state='4') and r.user_type='2') teachers,
+		(select GROUP_CONCAT(concat(u22.name,'(',ifnull(u22.no,''),')') SEPARATOR '、')
+			from team_user_relation r  left join sys_user u22 on
+			r.user_id=u22.id
+			left join sys_teacher_expansion ste on u22.id=ste.user_id
+			where f.team_id=r.team_id and f.declare_id!=r.user_id and  (r.state='0' or r.state='4') and r.user_type='1') members,
+		f.id,
+		tt.project_introduction introduction
+		from pro_model f
+		left join sys_dict s1 on s1.value=f.pro_category and s1.type='project_type'
+		left join sys_user u1 on f.declare_id=u1.id
+		left join sys_office o on u1.office_id=o.id
+		left join team tt on f.team_id=tt.id
+		where f.id in
+		<foreach collection="pids" item="id"  open="("
+			close=")" separator=" , ">
+			#{id}
+		</foreach>
+	</select>
+
+</mapper>

@@ -1,0 +1,201 @@
+.content{
+    width: 1242px;
+    overflow: hidden;
+    margin: 100px auto;
+    border-color:#e9432c;
+    border-style:solid;
+    border-top-width:1px;
+    border-left-width: 2px;
+    border-bottom-width: 2px;
+    border-right-width: 2px;
+}
+
+#form{
+
+    position:relative;
+}
+._btn{
+    position:absolute;
+    top: -33px;
+    left:80%;
+}
+
+._btn a{
+    display:inline-block;
+    padding: 5px 10px;
+    background-color:#f18680;
+    color:#fff;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+._btn a:last-child{
+    background-color: rgba(204, 204, 204, 1);
+}
+
+.head{
+    background-color: rgba(241, 134, 128, 1);
+    height: 28px;
+}
+
+.head img{
+    width: 153px;
+    height: 29px;
+}
+
+.head  .Contestlist{
+    position:relative;
+    top: -10px;
+    left: -140px;
+    font-size: 14px;
+    color:#FFF;
+    font-weight: bold;
+}
+
+#form table thead tr td{
+    color:#969696;
+}
+
+#form table thead tr{
+    background-color: rgba(252, 232, 231, 1);
+    height:35px;
+}
+
+#form table thead tr th{
+    font-size: 14px;
+    white-space:nowrap; 
+    color:#3D3D3D;
+}
+
+#form table tbody tr td{
+     font-size: 14px;
+     text-align: center;
+     border-left: 1px solid #C5C1AA;
+    border-bottom: 1px solid #C5C1AA;
+}
+
+#form table tbody tr td .buttom{
+    display:inline-block;
+    padding:3px 3px;
+    border:1px solid #C4C4C4;
+    border-radius: 4px;
+    margin: 15px 0 20px 0;
+    color:#969696;
+}
+
+#form table tbody tr td .col{
+    color:#696969;
+}
+
+.pages,ul{
+    overflow:hidden;
+}
+
+.pages ul {
+     float: left;
+}
+.pages ul li{
+    float: left;
+    padding: 3px 5px;
+    border: 1px solid #000;
+    margin:5px 10px;
+    background-color:#D3D3D3;
+    cursor:pointer;
+}
+
+.pages .page_info{
+    float:right;
+    font-size: 14px;
+    line-height: 39px;
+    margin-right: 10px;
+}
+
+.footer{
+    width:100%;
+    cursor: pointer;
+}
+
+.footer img{
+    display:block;
+      width:100%;
+}
+
+.layer{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+    z-index: 999;
+
+}
+
+.auditRecord{
+    width:1046px;
+    position:relative;
+    left:50%;
+    top: 50%;
+    margin-left: -523px;
+    display:none;
+    background-color: #fff;
+}
+
+.auditRecord .head .Record{
+    position:relative;
+    left:-123px;
+    top: -10px;
+    color:#fff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.auditRecord .head .return{
+   float:right;
+   line-height: 28px;
+   font-size: 14px;
+   color:#fff;
+   font-weight: bold;
+   margin-right: 15px;
+   cursor:pointer;
+}
+
+.auditRecord table thead tr th{
+    font-size: 15px;
+    font-family:'Microsoft yahei','Arial';
+    border: 1px solid #666666;
+    border-left: none;
+    padding:10px ;
+    background-color: #f2f2f2;
+    color:#3D3D3D;
+}
+
+.auditRecord table thead tr th:first-child{
+    border-left: 1px solid #666666;
+}
+
+.auditRecord table tbody tr td{
+    font-size: 15px;
+    font-family:'Microsoft yahei','Arial';
+    border: 1px solid #666666;
+    border-left: none;
+    border-top: none;
+    padding:10px ;
+    color:#3D3D3D;
+}
+
+.auditRecord table tbody tr .bd_col{
+    background-color: #f2f2f2;
+}
+
+
+.auditRecord table tbody tr td:first-child{
+     border-left: 1px solid #666666;
+}
+
+.auditRecord table tbody tr  .clea_bord{
+     border-left: none !important;
+}

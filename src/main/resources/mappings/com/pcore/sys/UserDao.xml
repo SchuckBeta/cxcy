@@ -1,0 +1,2340 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.com.pcore.modules.sys.dao.UserDao">
+	<resultMap id="useMap" type="com.oseasy.com.pcore.modules.sys.entity.User">
+		<id property="id" column="id" />
+		<result property="company.id" column="parent.id" />
+		<result property="office.id" column="office.id" />
+		<result property="loginName" column="loginName" />
+		<result property="regval" column="regval" />
+		<result property="password" column="password" />
+		<result property="no" column="no" />
+		<result property="sex" column="sex" />
+		<result property="name" column="name" />
+		<result property="email" column="email" />
+		<result property="phone" column="phone" />
+		<result property="mobile" column="mobile" />
+		<result property="userType" column="userType" />
+		<result property="loginIp" column="loginIp" />
+		<result property="loginDate" column="loginDate" />
+		<result property="remarks" column="remarks" />
+		<result property="loginFlag" column="loginFlag" />
+		<result property="photo" column="photo" />
+		<result property="professional" column="professional" />
+		<result property="professionalName" column="professionalName" />
+		<result property="school" column="school" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="updateDate" column="updateDate" />
+		<result property="delFlag" column="delFlag" />
+		<result property="idType" column="idType" />
+		<result property="birthday" column="birthday" />
+		<result property="idNumber" column="idNumber" />
+		<result property="national" column="national" />
+		<result property="political" column="political" />
+		<result property="country" column="country" />
+		<result property="qq" column="qq" />
+		<result property="source" column="source" />
+		<result property="passc" column="passc" />
+		<result property="education" column="education" />
+		<result property="degree" column="degree" />
+		<result property="views" column="views" />
+		<result property="likes" column="likes" />
+		<result property="residence" column="residence" />
+		<result property="introduction" column="introduction" />
+		<result property="office.name" column="office.name" />
+		<result property="office.parent.id" column="office.parent.id" />
+		<result property="office.parentIds" column="office.parentIds" />
+		<collection property="roleList" ofType="Role">
+			<id property="id" column="roleList.id" />
+		</collection>
+	</resultMap>
+
+
+	<sql id="useColumns">
+		DISTINCT a.id AS "id",
+		a.company_id AS "company.id",
+		a.office_id AS "office.id",
+		a.login_name AS "loginName",
+		a.regval AS "regval",
+		a.password,
+		a.no,
+		a.sex,
+		a.name,
+		a.email,
+		a.phone,
+		a.mobile,
+		a.user_type userType,
+		a.login_ip loginIp,
+		a.login_date loginDate,
+		a.remarks,
+		a.login_flag loginFlag,
+		a.photo,
+		a.professional,
+		a.professionalName,
+		a.school,
+		a.create_by AS "createBy.id",
+		a.create_date createDate,
+		a.update_by AS "updateBy.id",
+		a.update_date updateDate,
+		a.del_flag delFlag,
+		a.id_type idType,
+		a.birthday,
+		a.id_no idNumber,
+		a.national,
+		a.political,
+		a.country,
+		a.qq,
+		a.source,
+		a.passc,
+		a.education,
+		a.degree,
+		a.views,
+		a.likes,
+		a.residence,
+		a.introduction,
+		o.name AS "office.name",
+		o.parent_id AS "office.parent.id",
+		o.parent_ids AS "office.parentIds",
+		ur.role_id AS "roleList.id"
+	</sql>
+
+	<sql id="userColumns">
+		DISTINCT  a.id,
+		a.company_id AS "company.id",
+		a.office_id AS "office.id",
+		a.login_name AS "loginName",
+		a.regval AS "regval",
+		a.password,
+		a.no,
+		a.sex,
+		a.name,
+		a.email,
+		a.phone,
+		a.mobile,
+		a.user_type userType,
+		a.login_ip loginIp,
+		a.login_date loginDate,
+		a.remarks,
+		a.login_flag loginFlag,
+		a.photo,
+		a.professional,
+		a.professionalName,
+		a.school,
+		a.create_by AS "createBy.id",
+		a.create_date createDate,
+		a.update_by AS "updateBy.id",
+		a.update_date updateDate,
+		a.del_flag delFlag,
+		a.id_type idType,
+		a.birthday,
+		a.id_no idNumber,
+		a.national,
+		a.political,
+		a.country,
+		a.qq,
+		a.source,
+		a.passc,
+		a.education,
+		a.degree,
+		a.views,
+		a.likes,
+		a.residence,
+		a.introduction,
+		c.name AS "company.name",
+		c.parent_id AS "company.parent.id",
+		c.parent_ids AS "company.parentIds",
+		ca.id AS "company.area.id",
+		ca.name AS "company.area.name",
+		ca.parent_id AS "company.area.parent.id",
+		ca.parent_ids AS "company.area.parentIds",
+		o.name AS "office.name",
+		o.parent_id AS "office.parent.id",
+		o.parent_ids AS "office.parentIds",
+		oa.id AS "office.area.id",
+		oa.name AS "office.area.name",
+		oa.parent_id AS "office.area.parent.id",
+		oa.parent_ids AS "office.area.parentIds"
+		<!-- cu.id AS "company.primaryPerson.id",
+		cu.name AS "company.primaryPerson.name",
+		cu2.id AS "company.deputyPerson.id",
+		cu2.name AS "company.deputyPerson.name",
+		ou.id AS "office.primaryPerson.id",
+		ou.name AS "office.primaryPerson.name",
+		ou2.id AS "office.deputyPerson.id",
+		ou2.name AS "office.deputyPerson.name"
+		-->
+		<!-- , r.id AS "roleList.id", r.office_id AS
+			"roleList.office.id", r.name AS "roleList.name", r.enname AS "roleList.enname",
+			r.role_type AS "roleList.roleType", r.data_scope AS "roleList.dataScope" -->
+		,a.domain
+	</sql>
+
+	<sql id="userBygColumns">
+		DISTINCT  a.id,
+		a.tenant_id as "tenantId",
+		a.company_id AS "company.id",
+		a.office_id AS "office.id",
+		a.login_name AS "loginName",
+		a.regval AS "regval",
+		a.password,
+		a.no,
+		a.sex,
+		a.name,
+		a.email,
+		a.phone,
+		a.mobile,
+		t.teacherType AS teacherType,
+		a.user_type userType,
+		a.login_ip loginIp,
+		a.login_date loginDate,
+		a.remarks,
+		a.login_flag loginFlag,
+		a.photo,
+		a.professional,
+		a.professionalName,
+		a.school,
+		a.create_by AS "createBy.id",
+		a.create_date createDate,
+		a.update_by AS "updateBy.id",
+		a.update_date updateDate,
+		a.del_flag delFlag,
+		a.id_type idType,
+		a.birthday,
+		a.id_no idNumber,
+		a.national,
+		a.political,
+		a.country,
+		a.qq,
+		a.source,
+		a.passc,
+		a.education,
+		a.degree,
+		a.views,
+		a.likes,
+		a.residence,
+		a.introduction,
+		c.name AS "company.name",
+		c.parent_id AS "company.parent.id",
+		c.parent_ids AS "company.parentIds",
+		ca.id AS "company.area.id",
+		ca.name AS "company.area.name",
+		ca.parent_id AS "company.area.parent.id",
+		ca.parent_ids AS "company.area.parentIds",
+		o.name AS "office.name",
+		o.parent_id AS "office.parent.id",
+		o.parent_ids AS "office.parentIds",
+		oa.id AS "office.area.id",
+		oa.name AS "office.area.name",
+		oa.parent_id AS "office.area.parent.id",
+		oa.parent_ids AS "office.area.parentIds"
+		<!-- cu.id AS "company.primaryPerson.id",
+		cu.name AS "company.primaryPerson.name",
+		cu2.id AS "company.deputyPerson.id",
+		cu2.name AS "company.deputyPerson.name",
+		ou.id AS "office.primaryPerson.id",
+		ou.name AS "office.primaryPerson.name",
+		ou2.id AS "office.deputyPerson.id",
+		ou2.name AS "office.deputyPerson.name"
+		-->
+		<!-- , r.id AS "roleList.id", r.office_id AS
+			"roleList.office.id", r.name AS "roleList.name", r.enname AS "roleList.enname",
+			r.role_type AS "roleList.roleType", r.data_scope AS "roleList.dataScope" -->
+		,a.domain
+	</sql>
+
+	<sql id="userByStudentColumns">
+		a.id,
+		a.regval AS "regval",
+		a.name as name,
+		a.phone,
+		a.mobile,
+		a.user_type as userType,
+		a.login_name as loginName,
+		a.regval AS "regval",
+		a.domain as domain,
+		a.professional as professional,
+		a.professionalName,
+		a.school,
+		a.views,
+		a.likes,
+		a.source,
+		a.passc,
+		a.no
+	</sql>
+
+	<sql id="userByTeacherColumns">
+		a.id,
+		a.name as name,
+		a.phone,
+		a.mobile,
+		a.user_type as userType,
+		a.login_name as loginName,
+	  	a.regval AS "regval",
+		a.domain as domain,
+		a.professional as professional,
+		a.professionalName,
+		a.school,
+		t.teacherType as teacherType,
+		a.views,
+		a.likes,
+		a.residence,
+		a.introduction,
+		a.source,
+		a.passc,
+		a.no
+	</sql>
+
+	<sql id="userByColumns">
+		a.id,
+		a.name as name,
+		a.phone,
+		a.mobile,
+		a.user_type as userType,
+		a.login_name as loginName,
+	  	a.regval AS "regval",
+		a.domain as domain,
+		a.residence,
+		a.introduction,
+		a.professional as professional,
+		a.professionalName,
+		a.school,
+		a.views,
+		a.likes,
+		a.source,
+		a.passc,
+		a.no
+	</sql>
+
+	<sql id="useJoins">
+		LEFT JOIN sys_office o ON o.id = a.office_id and o.del_flag='0'
+		LEFT JOIN sys_user_role ur ON ur.user_id = a.id
+	</sql>
+
+	<sql id="userJoins">
+		LEFT JOIN sys_office c ON c.id = a.company_id
+		LEFT JOIN sys_area ca ON ca.id = c.area_id
+		LEFT JOIN sys_office o ON o.id = a.office_id and o.del_flag='0'
+		LEFT JOIN sys_area oa ON oa.id = o.area_id
+		LEFT JOIN sys_office op ON op.id = a.professional and op.del_flag='0'
+	</sql>
+	<sql id="userBygJoins">
+		LEFT JOIN sys_office c ON c.id = a.company_id
+		LEFT JOIN sys_area ca ON ca.id = c.area_id
+		LEFT JOIN sys_office o ON o.id = a.office_id and o.del_flag='0'
+		LEFT JOIN sys_area oa ON oa.id = o.area_id
+<!--    LEFT JOIN sys_user cu ON cu.id = c.primary_person
+		LEFT JOIN sys_user cu2 ON cu2.id = c.deputy_person
+		LEFT JOIN sys_user ou ON ou.id = o.primary_person
+		LEFT JOIN sys_user ou2 ON ou2.id = o.deputy_person -->
+		LEFT JOIN sys_office op ON op.id = a.professional and op.del_flag='0'
+		LEFT JOIN sys_teacher_expansion t ON t.user_id = a.id and t.del_flag='0'
+		<!-- LEFT JOIN sys_user_role ur ON ur.user_id = a.id LEFT JOIN sys_role
+			r ON r.id = ur.role_id -->
+	</sql>
+	<!-- 根据工号获得用户 -->
+	<select id="getByNo" resultType="User">
+		SELECT
+		<include refid="userBygColumns" />
+		FROM sys_user a
+		<include refid="userBygJoins" />
+		WHERE a.no = #{no} and a.del_flag='0' order by a.create_date desc
+		limit 1
+	</select>
+	<!-- 根据编号获得用户 -->
+	<select id="get" resultType="User">
+		SELECT
+		<include refid="userBygColumns" /><!-- , ro.office_id AS "roleList.officeList.id" -->
+		FROM sys_user a
+		<include refid="userBygJoins" /><!-- LEFT JOIN sys_role_office ro
+			ON ro.role_id = r.id -->
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getNtenant" resultType="User">
+		SELECT
+		<include refid="userBygColumns" /><!-- , ro.office_id AS "roleList.officeList.id" -->
+		FROM sys_user a
+		<include refid="userBygJoins" /><!-- LEFT JOIN sys_role_office ro
+			ON ro.role_id = r.id -->
+		WHERE a.id = #{id}
+	</select>
+
+	<!-- 根据登录名查询用户 -->
+	<select id="getByLoginName" resultType="User" parameterType="User">
+		SELECT
+		<include refid="userBygColumns" /><!-- , ro.office_id AS "roleList.officeList.id" -->
+		FROM sys_user a
+		<include refid="userBygJoins" /><!-- LEFT JOIN sys_role_office ro
+			ON ro.role_id = r.id -->
+		WHERE a.login_name = #{loginName} AND a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+	<select id="getByLoginNameNt" resultType="User" parameterType="User">
+		SELECT
+		<include refid="userBygColumns" /><!-- , ro.office_id AS "roleList.officeList.id" -->
+		FROM sys_user a
+		<include refid="userBygJoins" /><!-- LEFT JOIN sys_role_office ro
+			ON ro.role_id = r.id -->
+		WHERE a.login_name = #{loginName} AND a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+
+	<!-- 根据登录名或者学号查询用户 -->
+	<select id="getByLoginNameOrNo" resultType="User" parameterType="java.lang.String">
+		SELECT
+		<include refid="userBygColumns" />
+		FROM sys_user a
+		<include refid="userBygJoins" />
+		where a.del_flag = '0' and (a.login_name = #{loginNameOrNo} or a.no =
+		#{loginNameOrNo} )
+		<if test="id != null and id != ''">
+			and a.id != #{id}
+		</if>
+		limit 1
+	</select>
+	<!-- 根据登录名或者学号查询用户(全局唯一) -->
+	<select id="getByLoginNameOrNoForAll" resultType="User" parameterType="java.lang.String">
+		SELECT
+		<include refid="userBygColumns" />
+		FROM sys_user a
+		<include refid="userBygJoins" />
+		where a.del_flag = '0' and (a.login_name = #{loginNameOrNo} or a.no =
+		#{loginNameOrNo} )
+		<if test="id != null and id != ''">
+			and a.id != #{id}
+		</if>
+		limit 1
+	</select>
+
+	<select id="getByLoginNameAndNo" resultType="User"
+		parameterType="java.lang.String">
+		SELECT
+		<include refid="userBygColumns" />
+		FROM sys_user a
+		<include refid="userBygJoins" />
+		where a.del_flag = '0'
+		and ( 1=2
+		<if
+			test="(loginName != null and loginName != '') or (no != null and no != '')">
+			<if test="loginName != null and loginName != ''">
+				or a.login_name = #{loginName}
+			</if>
+			<if test="no != null and no != ''">
+				or a.no = #{no}
+			</if>
+		</if>
+		)
+		limit 1
+	</select>
+
+	<!-- 根据手机号查询用户 -->
+	<select id="getByMobile" resultType="User" parameterType="User">
+		SELECT
+		<include refid="userBygColumns" /><!-- , ro.office_id AS "roleList.officeList.id" -->
+		FROM sys_user a
+		<include refid="userBygJoins" /><!-- LEFT JOIN sys_role_office ro
+			ON ro.role_id = r.id -->
+		WHERE a.mobile = #{mobile} AND a.del_flag = #{DEL_FLAG_NORMAL} limit 1
+	</select>
+
+	<!-- 根据手机号查询用户(全局唯一) -->
+	<select id="getByMobileForAll" resultType="User" parameterType="User">
+		SELECT
+		<include refid="userBygColumns" /><!-- , ro.office_id AS "roleList.officeList.id" -->
+		FROM sys_user a
+		<include refid="userBygJoins" /><!-- LEFT JOIN sys_role_office ro
+			ON ro.role_id = r.id -->
+		WHERE a.mobile = #{mobile} AND a.del_flag = #{DEL_FLAG_NORMAL} limit 1
+	</select>
+
+	<!-- 根据手机号查询用户 -->
+	<select id="getUserByMobileAndName" resultType="User" parameterType="User">
+			SELECT
+			<include refid="userBygColumns" /><!-- , ro.office_id AS "roleList.officeList.id" -->
+			FROM sys_user a
+			<include refid="userBygJoins" /><!-- LEFT JOIN sys_role_office ro
+				ON ro.role_id = r.id -->
+			WHERE a.name = #{name} AND a.mobile = #{mobile} AND a.del_flag = #{DEL_FLAG_NORMAL} limit 1
+		</select>
+
+	<select id="getByMobileWithId" resultType="User" parameterType="User">
+		SELECT
+		<include refid="userBygColumns" /><!-- , ro.office_id AS "roleList.officeList.id" -->
+		FROM sys_user a
+		<include refid="userBygJoins" /><!-- LEFT JOIN sys_role_office ro
+			ON ro.role_id = r.id -->
+		WHERE a.mobile = #{mobile} AND a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="id != null and id != ''">
+			and a.id!=#{id}
+		</if>
+		limit 1
+	</select>
+	<select id="findListByRoleName" parameterType="java.lang.String"
+		resultType="User">
+		SELECT a.id,
+		a.company_id AS "company.id",
+		a.office_id AS "office.id",
+		o.name AS "office.name",
+		a.login_name,
+	  	a.regval AS "regval",
+		a.password,
+		a.no,
+		a.name,
+		a.email,
+		a.phone,
+		a.mobile,
+		a.user_type,
+		a.login_ip,
+		a.login_date,
+		a.remarks,
+		a.login_flag,
+		a.photo,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS
+		"updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.views,
+		a.likes
+		FROM sys_user a
+		LEFT JOIN sys_user_role ur ON ur.user_id = a.id
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		LEFT JOIN sys_role r ON
+		r.id = ur.role_id
+		WHERE r.enname = #{enname} and a.del_flag='0'
+	</select>
+
+	<select id="findUserListByRoleId" parameterType="java.lang.String"
+			resultType="User">
+			SELECT a.id,
+			a.company_id AS "company.id",
+			a.office_id AS "office.id",
+			a.login_name AS "loginName",
+			a.regval AS "regval",
+			a.password,
+			a.no,
+			a.name,
+			a.email,
+			a.phone,
+			a.mobile,
+			a.user_type,
+			a.login_ip,
+			a.login_date,
+			a.remarks,
+			a.login_flag,
+			a.photo,
+			a.create_by AS "createBy.id",
+			a.create_date,
+			a.update_by AS  "updateBy.id",
+			a.update_date,
+			a.del_flag,
+			a.views,
+			a.likes
+			FROM sys_user a
+			LEFT JOIN sys_user_role ur ON ur.user_id = a.id
+
+			LEFT JOIN sys_role r ON r.id = ur.role_id
+			WHERE r.id = #{roleId} and a.del_flag='0' and r.del_flag='0'
+		</select>
+
+	<select id="findListByRoleNameAndOffice" parameterType="java.lang.String"
+		resultType="User">
+		SELECT a.id,
+		a.company_id AS "company.id",
+		a.office_id AS
+		"office.id",
+		a.login_name,
+	  	a.regval AS "regval",
+		a.password,
+		a.no,
+		a.name,
+		a.email,
+		a.phone,
+		a.mobile,
+		a.user_type,
+		a.login_ip,
+		a.login_date,
+		a.remarks,
+		a.login_flag,
+		a.photo,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS
+		"updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.views,
+		a.likes
+		FROM sys_user a
+		LEFT JOIN sys_user_role ur ON ur.user_id = a.id
+		LEFT JOIN sys_user u2
+		ON a.office_id=u2.office_id
+		LEFT JOIN sys_role r ON r.id = ur.role_id
+		WHERE r.enname = #{enname} and u2.id = #{userId} and a.del_flag='0'
+	</select>
+
+	<select id="findListByRoleId" parameterType="java.lang.String"
+		resultType="User">
+		SELECT a.id,
+		a.company_id AS "company.id",
+		a.office_id AS
+		"office.id",
+		a.login_name,
+	  	a.regval AS "regval",
+		a.password,
+		a.no,
+		a.name,
+		a.email,
+		a.phone,
+		a.mobile,
+		a.user_type,
+		a.login_ip,
+		a.login_date,
+		a.remarks,
+		a.login_flag,
+		a.photo,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS
+		"updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.views,
+		a.likes
+		FROM sys_user a
+		LEFT JOIN sys_user_role ur ON ur.user_id = a.id
+		LEFT JOIN sys_role r ON
+		r.id = ur.role_id
+		WHERE a.del_flag='0' and r.id = #{roleId}
+	</select>
+
+
+	<select id="findProvListByRoleId" parameterType="java.lang.String"
+			resultType="User">
+		SELECT a.id,
+			   a.company_id AS "company.id",
+			   a.office_id AS
+							   "office.id",
+			   a.login_name,
+			   a.regval AS "regval",
+			   a.password,
+			   a.no,
+			   a.name,
+			   a.email,
+			   a.phone,
+			   a.mobile,
+			   a.user_type,
+			   a.login_ip,
+			   a.login_date,
+			   a.remarks,
+			   a.login_flag,
+			   a.photo,
+			   a.create_by AS "createBy.id",
+			   a.create_date,
+			   a.update_by AS
+							   "updateBy.id",
+			   a.update_date,
+			   a.del_flag,
+			   a.views,
+			   a.likes
+		FROM sys_user a
+				 LEFT JOIN sys_user_role ur ON ur.user_id = a.id
+				 LEFT JOIN sys_role r ON
+			r.id = ur.role_id
+		WHERE a.del_flag='0' and a.tenant_id=#{tenantId} and r.id = #{roleId}
+	</select>
+
+	<select id="findListByRoleIdAndOffice" parameterType="java.lang.String"
+			resultType="User">
+			SELECT a.id,
+			a.company_id AS "company.id",
+			a.office_id AS
+			"office.id",
+			a.login_name,
+		  	a.regval AS "regval",
+			a.password,
+			a.no,
+			a.name,
+			a.email,
+			a.phone,
+			a.mobile,
+			a.user_type,
+			a.login_ip,
+			a.login_date,
+			a.remarks,
+			a.login_flag,
+			a.photo,
+			a.create_by AS "createBy.id",
+			a.create_date,
+			a.update_by AS
+			"updateBy.id",
+			a.update_date,
+			a.del_flag,
+			a.views,
+			a.likes
+			FROM sys_user a
+			LEFT JOIN sys_user_role ur ON ur.user_id = a.id
+			LEFT JOIN sys_user u2
+			ON a.office_id=u2.office_id
+			LEFT JOIN sys_role r ON r.id = ur.role_id
+			WHERE r.id = #{roleId} and u2.id = #{userId} and a.del_flag='0'
+		</select>
+
+	<select id="findListByRoleTypeAndOffice" parameterType="java.lang.String"
+			resultType="User">
+			SELECT
+			<include refid="userByColumns" />
+			FROM sys_user a
+			WHERE a.office_id = #{officeid} and a.del_flag='0'
+			and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=u.id and sr.biz_type=#{roletype} and sr.del_flag='0'
+				)
+	</select>
+
+	<select id="getCollegeSecs" parameterType="java.lang.String"
+		resultType="User">
+		SELECT a.id,
+		a.login_name AS loginName,
+		a.name AS name
+		FROM
+		sys_user a
+		LEFT JOIN sys_user u2 ON a.office_id=u2.office_id
+		WHERE
+		u2.id=#{id} and a.del_flag='0'
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type='3' and sr.del_flag='0'
+				)
+	</select>
+
+	<select id="getCollegeExperts" parameterType="java.lang.String"
+		resultType="User">
+		SELECT a.id,
+		a.login_name AS loginName,
+		a.name AS name
+		FROM
+		sys_user a
+		LEFT JOIN sys_user u2 ON a.office_id=u2.office_id
+		WHERE
+		u2.id=#{id} and a.del_flag='0'
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type='4' and sr.del_flag='0'
+				)
+	</select>
+
+	<select id="getSchoolSecs" resultType="User">
+		SELECT a.id,
+		a.login_name
+		AS loginName,
+		a.name AS name
+		FROM sys_user a
+		WHERE
+		a.del_flag='0'
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type='6' and sr.del_flag='0'
+				)
+	</select>
+
+	<select id="getSchoolExperts" resultType="User">
+		SELECT a.id,
+		a.login_name AS loginName,
+		a.name AS name
+		FROM sys_user a
+		WHERE
+		a.del_flag='0'
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type='5' and sr.del_flag='0'
+				)
+	</select>
+	<select id="findUserByLoginName" resultType="User"
+		parameterType="java.lang.String">
+		SELECT id,
+		company_id AS "company.id",
+		office_id AS
+		"office.id"
+		FROM sys_user
+		WHERE login_name = #{loginName} and del_flag =
+		'0'
+	</select>
+
+	<select id="findByRoleBizType" parameterType="User" resultType="User">
+		SELECT a.id,
+		a.company_id AS "company.id",
+		a.office_id AS "office.id",
+		a.login_name,
+		a.regval AS "regval",
+		a.password,
+		a.no,
+		a.name,
+		a.email,
+		a.phone,
+		a.mobile,
+		a.user_type,
+		a.login_ip,
+		a.login_date,
+		a.residence,
+		a.introduction,
+		a.remarks,
+		a.login_flag,
+		a.photo,
+		a.user_type AS "userType",
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.views,
+		a.likes
+		FROM sys_user a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="roleBizTypes != null and roleBizTypes.size >0">
+				and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id
+				and sr.biz_type in
+				<foreach item="rbt" collection="roleBizTypes" open="(" separator="," close=")">
+					#{rbt}
+				</foreach>
+				and sr.del_flag='0'
+				)
+		</if>
+		<if test="id!=null and id!=''">
+			and a.id != #{id}
+		</if>
+	</select>
+	<select id="findByType" parameterType="User" resultType="User">
+		SELECT a.id,
+		a.company_id AS "company.id",
+		a.office_id AS "office.id",
+		a.login_name,
+		a.regval AS "regval",
+		a.password,
+		a.no,
+		a.name,
+		a.email,
+		a.phone,
+		a.mobile,
+		a.residence,
+		a.introduction,
+		a.user_type,
+		a.login_ip,
+		a.login_date,
+		a.remarks,
+		a.login_flag,
+		a.photo,
+		a.user_type AS "userType",
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.views,
+		a.likes
+		FROM sys_user a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=u.id and sr.biz_type=#{userType} and sr.del_flag='0'
+				)
+		<if test="id!=null and id!=''">
+			and a.id != #{id}
+		</if>
+	</select>
+
+
+	<!-- 分页查询用户信息 -->
+	<!-- 分页查询用户信息 -->
+	<select id="findList" resultType="User">
+		SELECT
+		<include refid="userColumns" />
+		FROM sys_user a
+		<include refid="userJoins" />
+		<if test="role != null and role.id != null and role.id != ''">
+			JOIN sys_user_role ur ON ur.user_id = a.id AND ur.role_id
+			= #{role.id}
+		</if>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="company != null and company.id != null and company.id != ''">
+			AND (c.id = #{company.id} OR c.parent_ids LIKE CONCAT('%,', #{company.id}, ',%'))
+		</if>
+		<if test="office != null and office.id != null and office.id != ''">
+			AND (op.id = #{office.id} or o.id = #{office.id} OR o.parent_ids LIKE
+			CONCAT('%,', #{office.id}, ',%'))
+		</if>
+		<!-- 如果不是超级管理员，则不显示超级管理员用户 -->
+		<if test="!currentUser.admin">
+			AND a.id != '1'
+		</if>
+		<if test="no != null and no != ''">
+			AND a.no like CONCAT('%', #{no}, '%')
+
+		</if>
+		<if test="loginName != null and loginName != ''">
+			AND a.login_name like CONCAT('%', #{loginName}, '%')
+		</if>
+		<if test="name != null and name != ''">
+			AND a.name like CONCAT('%', #{name}, '%')
+		</if>
+
+		<if test="queryStr != null and queryStr != ''">
+			AND (a.name like CONCAT('%', #{queryStr}, '%')
+			or a.mobile like CONCAT('%', #{queryStr}, '%')
+			or a.login_name like CONCAT('%', #{queryStr}, '%')
+			or a.no like CONCAT('%', #{queryStr}, '%')
+			or a.professional like CONCAT('%', #{queryStr}, '%')
+			<if test="dictList != null and dictList.size() != 0">
+				<foreach collection="dictList" item="dictValue" >
+					or  a.domain like CONCAT ('%', #{dictValue}, '%')
+				</foreach>
+			</if>
+			)
+		</if>
+
+		<if test="mobile != null and mobile != ''">
+			AND a.mobile like CONCAT('%', #{mobile}, '%')
+		</if>
+
+		<if test="roleId != null and roleId != ''">
+			AND a.id in (select ur.user_id from sys_user_role ur left
+			join sys_user u on ur.user_id = u.id where ur.role_id = #{roleId})
+		</if>
+		<if test="roleBizTypes != null and roleBizTypes.size >0">
+			and EXISTS (
+			select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+			where ur.user_id=a.id
+			and sr.biz_type in
+			<foreach item="rbt" collection="roleBizTypes" open="(" separator="," close=")">
+				#{rbt}
+			</foreach>
+			and sr.del_flag='0'
+			)
+		</if>
+		<!-- <if test="user!=null"> AND a.id not in (SELECT t.`user_id` FROM team_user_relation
+			t LEFT JOIN team a ON t.`team_id`=a.`id` WHERE t.`user_id`='1' AND t.`state`='0')
+			</if> -->
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				<!-- ORDER BY c.code, o.code, a.name -->
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByOffice" resultMap="useMap">
+		SELECT
+		<include refid="useColumns" />
+		FROM sys_user a
+		<include refid="useJoins" />
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND (o.id = #{office.id} OR o.parent_ids LIKE CONCAT('%,', #{office.id}, ',%'))
+	</select>
+
+	<select id="findListByOfftop" resultMap="useMap">
+		SELECT
+		<include refid="useColumns" />
+		FROM sys_user a
+		<include refid="useJoins" />
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND (o.id = #{office.id})
+	</select>
+
+
+	<select id="findListByOffsub" resultMap="useMap">
+		SELECT
+		<include refid="useColumns" />
+		FROM sys_user a
+		<include refid="useJoins" />
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND o.parent_ids LIKE CONCAT('%,', #{office.id}, ',%')
+	</select>
+
+	<select id="findListByg" resultType="User">
+		SELECT
+
+		<include refid="userBygColumns" />
+		FROM sys_user a
+		<include refid="userBygJoins" />
+
+		<if test="role != null and role.id != null and role.id != ''">
+			JOIN sys_user_role ur ON ur.user_id = a.id AND ur.role_id
+			= #{role.id}
+		</if>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="company != null and company.id != null and company.id != ''">
+			AND (c.id = #{company.id} OR c.parent_ids LIKE CONCAT('%,', #{company.id}, ',%'))
+		</if>
+		<if test="office != null and office.id != null and office.id != ''">
+			AND (op.id = #{office.id} or o.id = #{office.id} OR o.parent_ids LIKE
+			CONCAT('%,', #{office.id}, ',%'))
+		</if>
+		<!-- 如果不是超级管理员，则不显示超级管理员用户 -->
+		<if test="!currentUser.admin">
+			AND a.id != '1'
+		</if>
+		<if test="no != null and no != ''">
+			AND a.no like CONCAT('%', #{no}, '%')
+
+		</if>
+		<if test="loginName != null and loginName != ''">
+			AND a.login_name like CONCAT('%', #{loginName}, '%')
+		</if>
+		<if test="name != null and name != ''">
+			AND a.name like CONCAT('%', #{name}, '%')
+		</if>
+
+		<if test="queryStr != null and queryStr != ''">
+			AND (a.name like CONCAT('%', #{queryStr}, '%')
+			or a.mobile like CONCAT('%', #{queryStr}, '%')
+			or a.login_name like CONCAT('%', #{queryStr}, '%')
+			or a.no like CONCAT('%', #{queryStr}, '%')
+			or a.professional like CONCAT('%', #{queryStr}, '%')
+			<if test="dictList != null and dictList.size() != 0">
+				<foreach collection="dictList" item="dictValue" >
+					or  a.domain like CONCAT ('%', #{dictValue}, '%')
+				</foreach>
+			</if>
+			)
+		</if>
+
+		<if test="mobile != null and mobile != ''">
+			AND a.mobile like CONCAT('%', #{mobile}, '%')
+		</if>
+
+		<if test="roleId != null and roleId != ''">
+			AND a.id in (select ur.user_id from sys_user_role ur left
+			join sys_user u on ur.user_id = u.id where ur.role_id = #{roleId})
+		</if>
+		<if test="roleBizTypes != null and roleBizTypes.size >0">
+				and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id
+				and sr.biz_type in
+				<foreach item="rbt" collection="roleBizTypes" open="(" separator="," close=")">
+					#{rbt}
+				</foreach>
+				and sr.del_flag='0'
+				)
+		</if>
+		<!-- <if test="user!=null"> AND a.id not in (SELECT t.`user_id` FROM team_user_relation
+			t LEFT JOIN team a ON t.`team_id`=a.`id` WHERE t.`user_id`='1' AND t.`state`='0')
+			</if> -->
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				<!-- ORDER BY c.code, o.code, a.name -->
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 分页查询专家信息 -->
+	<select id="findUserByExpert" resultType="User">
+		SELECT
+		<include refid="userBygColumns" />
+		FROM sys_user a
+		<include refid="userBygJoins" />
+			JOIN sys_user_role ur ON ur.user_id = a.id AND ur.role_id
+		in ('5989c28a34024f6f93e309d673709897')
+
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="office != null and office.id != null and office.id != ''">
+			AND (op.id = #{office.id} or o.id = #{office.id} OR o.parent_ids LIKE
+			<if test="dbName == 'oracle'">'%,'||#{office.id}||',%')</if>
+			<if test="dbName == 'mssql'">'%,'+#{office.id}+',%')</if>
+			<if test="dbName == 'mysql'">CONCAT('%,', #{office.id}, ',%'))</if>
+		</if>
+		<!-- 如果不是超级管理员，则不显示超级管理员用户 -->
+		<if test="!currentUser.admin">
+			AND a.id != '1'
+		</if>
+		<if test="no != null and no != ''">
+			AND a.no like CONCAT('%', #{no}, '%')
+		</if>
+
+		<if test="queryStr != null and queryStr != ''">
+			AND (a.no like CONCAT('%', #{queryStr}, '%')
+				or a.name like CONCAT('%', #{queryStr}, '%')
+			)
+		</if>
+
+		<if test="loginName != null and loginName != ''">
+			AND a.login_name like
+			<if test="dbName == 'oracle'">'%'||#{loginName}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{loginName}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{loginName}, '%')</if>
+		</if>
+		<if test="name != null and name != ''">
+			AND a.name like
+			<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+		</if>
+
+		<if test="roleId != null and roleId != ''">
+			AND a.id in (select ur.user_id from sys_user_role ur left
+			join sys_user u on ur.user_id = u.id where ur.role_id = #{roleId})
+		</if>
+		group by a.id
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}  ${page.orderByType}
+			</when>
+			<otherwise>
+				<!-- ORDER BY c.code, o.code, a.name -->
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<!-- 查询所有需要修复的学生 -->
+	<select id="findUserByRepair" resultType="String">
+		SELECT a.id FROM
+		sys_user a
+		LEFT JOIN sys_user_role ur ON ur.user_id = a.id
+		LEFT JOIN
+		sys_role r ON r.id = ur.role_id
+		WHERE a.del_flag = 0
+		AND (r.id is null OR r.id = '')
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type='1' and sr.del_flag='0'
+				)
+	</select>
+
+	<!-- 分页查询用户信息 -->
+	<select id="findListTree" resultType="User">
+		SELECT
+		<!-- <include refid="userBygColumns"/> -->
+		a.id,
+		a.login_name,
+		a.regval AS "regval",
+		a.name as name,
+		a.phone,
+		a.mobile,
+		a.user_type as userType,
+		a.residence,
+		a.introduction,
+		a.login_name as loginName,
+		a.domain as domain,
+		a.professional as professional,
+		a.professionalName,
+		a.school,
+		t.teacherType as teacherType,
+		a.views,
+		a.likes
+		FROM
+		sys_user a
+		left JOIN
+		sys_office o ON o.id = a.office_id
+		left join
+		sys_teacher_expansion t on
+		t.user_id = a.id
+		left join
+		sys_student_expansion s on s.user_id = a.id
+		<!-- JOIN sys_student_expansion stu on stu.user_id = a.id JOIN sys_teacher_expansion
+			te on te.user_id = a.id -->
+		WHERE a.del_flag = '0'
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type in('1','2') and sr.del_flag='0'
+				)
+		and ((t.is_open is
+		null and s.is_open=1) or (t.is_open=1 and s.is_open is null))
+		<!--除去已经加入到任意团队中的用户 -->
+		AND a.id NOT IN (SELECT tr.`user_id` FROM `team_user_relation` tr
+		INNER JOIN `team` t ON t.`id` = tr.`team_id` WHERE tr.state = '0' AND
+		tr.`del_flag` = '0' AND t.del_flag = '0' AND t.`state` IN(0,1) AND
+		tr.`user_id` IS NOT NULL)
+		<!-- <if test="company != null and company.id != null and company.id !=
+			''"> AND (c.id = #{company.id} OR c.parent_ids LIKE <if test="dbName == 'oracle'">'%,'||#{company.id}||',%')</if>
+			<if test="dbName == 'mssql'">'%,'+#{company.id}+',%')</if> <if test="dbName
+			== 'mysql'">CONCAT('%,', #{company.id}, ',%'))</if> </if> -->
+		<if test="office != null and office.id != null and office.id != ''">
+			AND (o.id = #{office.id} OR o.parent_ids LIKE
+			<if test="dbName == 'oracle'">'%,'||#{office.id}||',%')</if>
+			<if test="dbName == 'mssql'">'%,'+#{office.id}+',%')</if>
+			<if test="dbName == 'mysql'">CONCAT('%,', #{office.id}, ',%'))</if>
+		</if>
+		<!-- 如果不是超级管理员，则不显示超级管理员用户 -->
+		<!-- <if test="!currentUser.admin"> AND a.id != '1' </if> -->
+		<if test="userType != null and userType != ''">
+			and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type=#{userType} and sr.del_flag='0'
+				)
+		</if>
+
+		<if
+			test="userType != null and userType != '' and userType == 2 and teacherType!=null and teacherType!=''">
+			AND t.teacherType = #{teacherType}
+
+		</if>
+		<if test="loginName != null and loginName != ''">
+			AND a.login_name like
+			<if test="dbName == 'oracle'">'%'||#{loginName}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{loginName}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{loginName}, '%')</if>
+		</if>
+		<if test="name != null and name != ''">
+			AND a.name like
+			<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+		</if>
+
+		<if test="professional != null and professional != ''">
+			AND a.professional = #{professional}
+
+		</if>
+
+		<if test="domain != null and domain != ''">
+			AND #{domain} in (select t.domain from sys_user t where t.domain is
+			not NULL )
+			<!-- <if test="dbName == 'oracle'">'%'||#{domain}||'%'</if> <if test="dbName
+				== 'mssql'">'%'+#{domain}+'%'</if> <if test="dbName == 'mysql'">CONCAT('%',
+				#{domain}, '%')</if> -->
+		</if>
+
+
+
+		<!-- <if test="roleId != null and roleId != ''"> AND a.id in (select ur.user_id
+			from sys_user_role ur left join sys_user u on ur.user_id = u.id where ur.role_id
+			= #{roleId}) </if> -->
+
+		<!-- 数据范围过滤 -->
+		<!-- ${sqlMap.dsf} -->
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				<!-- ORDER BY c.code, o.code, a.name -->
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 分页查询用户(导师)信息 -->
+	<select id="findListTreeByTeacher" resultType="User">
+		SELECT
+		<include refid="userByTeacherColumns" />
+		FROM
+		sys_teacher_expansion t
+		LEFT JOIN sys_user a on t.user_id = a.id  and a.del_flag = '0'
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		WHERE
+		a.del_flag = '0'
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type='2' and sr.del_flag='0'
+				)
+		and
+		((t.is_open is null) or (t.is_open=1))
+		<if test="office != null and office.id != null and office.id != ''">
+			AND (o.id = #{office.id} OR o.parent_ids LIKE
+			<if test="dbName == 'oracle'">'%,'||#{office.id}||',%')</if>
+			<if test="dbName == 'mssql'">'%,'+#{office.id}+',%')</if>
+			<if test="dbName == 'mysql'">CONCAT('%,', #{office.id}, ',%'))</if>
+		</if>
+		<!-- 如果不是超级管理员，则不显示超级管理员用户 -->
+		<if test="teacherType != null and teacherType != ''">
+			AND t.teacherType = #{teacherType}
+		</if>
+		<if test="loginName != null and loginName != ''">
+			AND a.login_name like
+			<if test="dbName == 'oracle'">'%'||#{loginName}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{loginName}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{loginName}, '%')</if>
+		</if>
+		<if test="name != null and name != ''">
+			AND (a.name like
+				<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+				or EXISTS (select 1 from sys_dict s8 where s8.type='technology_field'
+				and FIND_IN_SET(s8.value,a.domain) and s8.label like CONCAT('%', #{name}, '%')
+				)
+				or (a.no  LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+				)
+			)
+		</if>
+		<if test="professional != null and professional != ''">
+			AND a.professional = #{professional}
+		</if>
+		<if test="domain != null and domain != ''">
+			AND #{domain} in (select t.domain from sys_user t where
+			t.domain is not NULL )
+		</if>
+		<if test="curJoinParam!=null">
+			and t.user_id in( select xx.user_id from team_user_history xx where
+			<foreach collection="curJoinParam" item="cj" index="index"
+				open="((" close="))" separator=") or (">
+				xx.pro_type=CONCAT(#{cj.pType}, ',')
+				and xx.pro_sub_type=#{cj.psType} and xx.del_flag='0' and
+				xx.finish='0'
+			</foreach>
+			)
+		</if>
+
+		<if test="ids != null and ids.size >0">
+			and t.user_id  not in
+			<foreach collection="ids" item="cj" index="index"
+				open="(" close=")" separator=",">
+				#{cj}
+			</foreach>
+		</if>
+		<!-- 数据范围过滤 -->
+		<!-- ${sqlMap.dsf} -->
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				<!-- ORDER BY c.code, o.code, a.name -->
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 分页查询用户(学生)信息 -->
+	<select id="findListTreeByStudent" resultType="User">
+		SELECT a.id,
+		a.login_name,
+		a.regval AS "regval",
+		a.name as name,
+		a.phone,
+		a.mobile,
+		a.user_typ as userType,
+		a.login_name as loginName,
+		a.domain as domain,
+		a.professional as professional,
+		a.professionalName,
+		a.school,
+		a.residence,
+		a.introduction,
+		a.views,
+		a.likes,
+		a.no,
+		a.update_date,
+		<!-- (select GROUP_CONCAT(DISTINCT ifnull(s1.label,s2.label)) from
+		team_user_history thu
+		left join sys_dict s1 on
+		s1.value=thu.pro_sub_type and
+		s1.type='project_style' and
+		thu.pro_type='1,'
+		left join sys_dict s2 on s2.value=thu.pro_sub_type
+		and
+		s2.type='competition_type' and thu.pro_type='7,'
+		where
+		thu.user_id=s.user_id and thu.del_flag='0' and thu.finish='0')
+		curJoin, -->
+		s3.label currStateStr
+		FROM
+		sys_student_expansion s
+		LEFT JOIN sys_user a on a.id = s.user_id and a.del_flag = '0'
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		left join sys_dict s3 on s3.value=s.curr_state and s3.type='current_sate'
+		LEFT JOIN sys_dict s8 ON FIND_IN_SET(s8. VALUE, a.domain) AND s8.type = 'technology_field'
+		<if test="name != null and name != ''">
+			AND s8.label LIKE CONCAT('%', #{name}, '%')
+		</if>
+		WHERE
+		a.del_flag =
+		'0'
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type='1' and sr.del_flag='0'
+				)
+		AND a.name is not null
+		and a.office_id is not null
+		and ((s.is_open=1) or
+		(s.is_open is null))
+		<if test="office != null and office.id != null and office.id != ''">
+			AND (o.id = #{office.id} OR o.parent_ids LIKE
+			<if test="dbName == 'oracle'">'%,'||#{office.id}||',%')</if>
+			<if test="dbName == 'mssql'">'%,'+#{office.id}+',%')</if>
+			<if test="dbName == 'mysql'">CONCAT('%,', #{office.id}, ',%'))</if>
+		</if>
+		<!-- 如果不是超级管理员，则不显示超级管理员用户 -->
+		<if test="loginName != null and loginName != ''">
+			AND a.login_name like
+			<if test="dbName == 'oracle'">'%'||#{loginName}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{loginName}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{loginName}, '%')</if>
+		</if>
+		<if test="name != null and name != ''">
+			AND (a.name like
+				<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+				<!-- or EXISTS (select 1 from sys_dict s8 where s8.type='technology_field'
+				and FIND_IN_SET(s8.value,a.domain) and s8.label like CONCAT('%',
+				#{name}, '%')) -->
+				or (a.no  LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%')</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%')</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+				)
+			)
+		</if>
+
+		<if test="professional != null and professional != ''">
+			AND a.professional = #{professional}
+		</if>
+		<if test="currState != null and currState != ''">
+			AND s.curr_state = #{currState}
+		</if>
+		<if test="domain != null and domain != ''">
+			AND #{domain} in (select s.domain from sys_user t where
+			s.domain is not NULL )
+		</if>
+		<if test="curJoinParam!=null">
+			and s.user_id in( select xx.user_id from team_user_history xx where
+			<foreach collection="curJoinParam" item="cj" index="index"
+				open="((" close="))" separator=") or (">
+				xx.pro_type=CONCAT(#{cj.pType}, ',')
+				and xx.pro_sub_type=#{cj.psType} and xx.del_flag='0' and
+				xx.finish='0'
+			</foreach>
+			)
+		</if>
+		<if test="ids != null and ids.size >0">
+			and s.user_id  not in
+			<foreach collection="ids" item="cj" index="index"
+				open="(" close=")" separator=",">
+				#{cj}
+			</foreach>
+		</if>
+		<!-- 数据范围过滤 -->
+		<!-- ${sqlMap.dsf} -->
+		GROUP BY a.id
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				<!-- ORDER BY c.code, o.code, a.name -->
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 分页查询用户(学生)信息 -->
+	<select id="findListTreeByStudentNoDomain" resultType="User">
+		SELECT a.id,
+		a.name as name,
+		a.phone,
+		a.mobile,
+		a.user_type
+		as userType,
+		a.login_name as loginName,
+		a.regval AS "regval",
+		a.domain as domain,
+		a.professional as professional,
+		a.professionalName,
+		a.school,
+		a.views,
+		a.likes,
+		a.residence,
+		a.introduction,
+		a.no,
+		a.update_date,
+		s3.label currStateStr
+		FROM
+		sys_student_expansion s
+		LEFT JOIN sys_user a on a.id = s.user_id and a.del_flag = '0'
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		LEFT join sys_dict s3 on s3.value=s.curr_state and s3.type='current_sate'
+		<if test="name != null and name != ''">
+			LEFT JOIN sys_dict s8 ON FIND_IN_SET(s8. VALUE, a.domain) AND s8.type = 'technology_field'
+			AND s8.label LIKE CONCAT('%', #{name}, '%')
+		</if>
+		WHERE
+		a.del_flag =
+		'0'
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type='1' and sr.del_flag='0'
+				)
+		AND a.name is not null
+		and a.office_id is not null
+		and ((s.is_open=1) or
+		(s.is_open is null))
+		<if test="office != null and office.id != null and office.id != ''">
+			AND (o.id = #{office.id} OR o.parent_ids LIKE
+			<if test="dbName == 'oracle'">'%,'||#{office.id}||',%')</if>
+			<if test="dbName == 'mssql'">'%,'+#{office.id}+',%')</if>
+			<if test="dbName == 'mysql'">CONCAT('%,', #{office.id}, ',%'))</if>
+		</if>
+		<!-- 如果不是超级管理员，则不显示超级管理员用户 -->
+		<if test="loginName != null and loginName != ''">
+			AND a.login_name like
+			<if test="dbName == 'oracle'">'%'||#{loginName}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{loginName}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{loginName}, '%')</if>
+		</if>
+		<if test="name != null and name != ''">
+			AND (a.name like
+				<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+				<!-- or EXISTS (select 1 from sys_dict s8 where s8.type='technology_field'
+				and FIND_IN_SET(s8.value,a.domain) and s8.label like CONCAT('%',
+				#{name}, '%')) -->
+				or (a.no  LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%')</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%')</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+				)
+			)
+		</if>
+
+		<if test="professional != null and professional != ''">
+			AND a.professional = #{professional}
+		</if>
+		<if test="currState != null and currState != ''">
+			AND s.curr_state = #{currState}
+		</if>
+		<if test="domain != null and domain != ''">
+			AND #{domain} in (select s.domain from sys_user t where
+			s.domain is not NULL )
+		</if>
+		<if test="curJoinParam!=null">
+			and s.user_id in( select xx.user_id from team_user_history xx where
+			<foreach collection="curJoinParam" item="cj" index="index"
+				open="((" close="))" separator=") or (">
+				xx.pro_type=CONCAT(#{cj.pType}, ',')
+				and xx.pro_sub_type=#{cj.psType} and xx.del_flag='0' and
+				xx.finish='0'
+			</foreach>
+			)
+		</if>
+		<if test="ids != null and ids.size >0">
+			and s.user_id  not in
+			<foreach collection="ids" item="cj" index="index"
+				open="(" close=")" separator=",">
+				#{cj}
+			</foreach>
+		</if>
+		<!-- 数据范围过滤 -->
+		<!-- ${sqlMap.dsf} -->
+		GROUP BY a.id
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				<!-- ORDER BY c.code, o.code, a.name -->
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 分页查询用户(基本)信息 -->
+	<select id="findListTreeByUser" resultType="User">
+		SELECT
+		<include refid="userByColumns" />
+		FROM
+		(
+		SELECT su.*
+		FROM sys_user su
+		where su.del_flag = '0'
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=su.id and sr.biz_type=('1','2') and sr.del_flag='0'
+				)
+		) a
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		WHERE
+		a.id NOT IN (
+		SELECT tr.`user_id`
+		FROM `team_user_relation` tr
+		INNER JOIN `team` tm ON tm.`id` = tr.`team_id`
+		WHERE tr.state = '0'
+		AND tr.`del_flag` = '0'
+		AND tm.del_flag = '0'
+		AND tm.`state` IN(0,1)
+		AND tr.`user_id` IS NOT NULL
+		)
+		<!-- <if test="company != null and company.id != null and company.id !=
+			''"> AND (c.id = #{company.id} OR c.parent_ids LIKE <if test="dbName == 'oracle'">'%,'||#{company.id}||',%')</if>
+			<if test="dbName == 'mssql'">'%,'+#{company.id}+',%')</if> <if test="dbName
+			== 'mysql'">CONCAT('%,', #{company.id}, ',%'))</if> </if> -->
+		<if test="office != null and office.id != null and office.id != ''">
+			AND (o.id = #{office.id} OR o.parent_ids LIKE
+			<if test="dbName == 'oracle'">'%,'||#{office.id}||',%')</if>
+			<if test="dbName == 'mssql'">'%,'+#{office.id}+',%')</if>
+			<if test="dbName == 'mysql'">CONCAT('%,', #{office.id}, ',%'))</if>
+		</if>
+		<!-- 如果不是超级管理员，则不显示超级管理员用户 -->
+		<!-- <if test="!currentUser.admin"> AND a.id != '1' </if> -->
+		<if test="userType != null and userType != ''">
+			and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type=#{userType} and sr.del_flag='0'
+				)
+		</if>
+		<if test="loginName != null and loginName != ''">
+			AND a.login_name like
+			<if test="dbName == 'oracle'">'%'||#{loginName}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{loginName}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{loginName}, '%')</if>
+		</if>
+		<if test="name != null and name != ''">
+			AND a.name like
+			<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+		</if>
+
+		<if test="professional != null and professional != ''">
+			AND a.professional = #{professional}
+		</if>
+		<!-- <if test="roleId != null and roleId != ''"> AND a.id in (select ur.user_id
+			from sys_user_role ur left join sys_user u on ur.user_id = u.id where ur.role_id
+			= #{roleId}) </if> -->
+
+		<!-- 数据范围过滤 -->
+		<!-- ${sqlMap.dsf} -->
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				<!-- ORDER BY c.code, o.code, a.name -->
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 根据OfficeId获取用户（树查询用户时用） -->
+	<select id="findUserByOfficeId" resultType="User" useCache="true">
+		SELECT
+		a.id,
+		a.name,
+		a.user_type AS "userType",
+		a.login_name AS "loginName",
+	  	a.regval AS "regval"
+		FROM sys_user a
+		WHERE a.del_flag =
+		#{DEL_FLAG_NORMAL}
+		AND (a.office_id = #{office.id} or
+		a.professional =
+		#{office.id})
+		ORDER BY a.name
+	</select>
+
+	<!-- 根据专业获取用户（树查询用户时用） -->
+	<select id="findUserByProfessionId" resultType="User" useCache="true">
+		SELECT
+		a.id, a.name, a.user_type userType,a.login_name
+		FROM sys_user a
+		WHERE a.del_flag = 0
+		AND a.professional in (${professional})
+		ORDER BY
+		a.name
+	</select>
+	<select id="findUserByProfessionIdAndRoleType" resultType="User" useCache="true">
+		SELECT
+		a.id, a.name, a.user_type userType,a.login_name
+		FROM sys_user a
+		WHERE a.del_flag = 0
+		AND a.professional in (${professional})
+		<if test="roleBizTypes != null and roleBizTypes.size >0">
+				and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id
+				and sr.biz_type in
+				<foreach item="rbt" collection="roleBizTypes" open="(" separator="," close=")">
+					#{rbt}
+				</foreach>
+				and sr.del_flag='0'
+				)
+		</if>
+	</select>
+
+	<!--根据userId查询导师类型 -->
+	<select id="getTeacherTypeByUserId" resultType="java.lang.String">
+		SELECT
+		te.teacherType as teacherType
+		FROM sys_teacher_expansion te
+		WHERE
+		te.del_flag = 0
+		AND te.user_id = #{userId}
+	</select>
+
+	<!-- 查询全部用户 -->
+	<select id="findAllList" resultType="User">
+		SELECT
+		<include refid="userBygColumns" />
+		FROM sys_user a
+		<include refid="userBygJoins" />
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY c.code, o.code, a.name
+	</select>
+
+	<!-- 查询全部用户数目 -->
+	<select id="findAllCount" resultType="long">
+		SELECT COUNT(1) FROM sys_user a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+
+	<!-- 插入用户 -->
+	<insert id="insert">
+		INSERT INTO sys_user(
+		id,
+		company_id,
+		office_id,
+		login_name,
+		regval,
+		password,
+		no,
+		sex,
+		name,
+		email,
+		phone,
+		mobile,
+		user_type,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks,
+		login_flag,
+		photo,
+		del_flag,
+		id_type,
+		national,
+		political,
+		country,
+		area,
+		qq,
+		source,
+		passc,
+		professional,
+		professionalName,
+		school,
+		degree,
+		education,
+		domain,
+		id_no,
+		birthday,
+		residence,
+		introduction,
+		views,
+		likes
+
+		)
+		VALUES (
+		#{id},
+		#{company.id},
+		#{office.id},
+		#{loginName},
+		#{regval},
+		#{password},
+		#{no},
+		#{sex},
+		#{name},
+		#{email},
+		#{phone},
+		#{mobile},
+		#{userType},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{remarks},
+		#{loginFlag},
+		#{photo},
+		#{delFlag},
+		#{idType},
+		#{national},
+		#{political},
+		#{country},
+		#{area},
+		#{qq},
+		#{source},
+		#{passc},
+		#{professional},
+		#{professionalName},
+		#{school},
+		#{degree},
+		#{education},
+		#{domain},
+		#{idNumber},
+		#{birthday},
+		#{residence},
+		#{introduction},
+		#{views},
+		#{likes}
+		)
+	</insert>
+
+	<!-- 插入用户拓展表 -->
+	<insert id="insertUserStu">
+		<selectKey resultType="String" keyProperty="uuid" order="BEFORE">
+			SELECT REPLACE(UUID(),'-','')
+		</selectKey>
+
+		INSERT INTO sys_student_expansion(
+			id,
+			tenant_id,
+			user_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		)
+		VALUES (
+			#{uuid},
+			#{tenantId},
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+	<insert id="insertUserTea">
+		<selectKey resultType="String" keyProperty="uuid" order="BEFORE">
+			SELECT REPLACE(UUID(),'-','')
+		</selectKey>
+
+		INSERT INTO sys_teacher_expansion(
+			id,
+			tenant_id,
+			user_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		)
+		VALUES (
+			#{uuid},
+			#{tenantId},
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="updateMobile">
+		UPDATE sys_user SET mobile = #{mobile} WHERE id =
+		#{id}
+	</update>
+
+	<!-- 更新用户 -->
+	<update id="update">
+		UPDATE sys_user SET
+
+		company_id = #{company.id},
+
+		office_id = #{office.id},
+		login_name = #{loginName},
+		regval = #{regval},
+		<if test="password!=null and password!=''">
+		password = #{password},
+		</if>
+		no = #{no},
+		name = #{name},
+		email = #{email},
+		phone = #{phone},
+		mobile = #{mobile},
+		user_type = #{userType},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		remarks = #{remarks},
+		login_flag = #{loginFlag},
+		photo = #{photo},
+		professional = #{professional},
+		professionalName = #{professionalName},
+		school = #{school},
+		degree = #{degree},
+		education = #{education},
+		id_type = #{idType},
+		national = #{national},
+		political = #{political},
+		birthday = #{birthday},
+		sex = #{sex},
+		qq = #{qq},
+		source=#{source},
+		passc=#{passc},
+		country = #{country},
+		area = #{area},
+		id_no = #{idNumber},
+		domain = #{domain},
+		residence = #{residence},
+		introduction = #{introduction},
+		views = #{views},
+		likes = #{likes}
+		WHERE id = #{id}
+	</update>
+
+	<!-- 更新用户 -->
+	<update id="updateUserPhoto">
+		UPDATE sys_user SET
+		photo = #{photo}
+		WHERE id = #{id}
+	</update>
+
+	<!-- 删除用户和角色关联表数据 -->
+	<delete id="deleteUserRole">
+		DELETE FROM sys_user_role WHERE user_id = #{id}
+	</delete>
+
+
+	<delete id="deleteUserRoleByTypes">
+		DELETE s.* FROM sys_user_role s WHERE s.user_id = #{userId} and s.role_id in (select a.id from sys_role a where
+			a.rtype in
+		<foreach collection="rtypes" item="rtype" open="("
+				 separator="," close=")">
+			#{rtype}
+		</foreach>
+		     AND a.del_flag = '0' AND a.rinit = '1' and a.tenant_id = #{tenantId}
+		    )
+	</delete>
+
+	<!-- 删除用户和角色关联表数据 -->
+	<delete id="deleteByUserRole">
+		DELETE FROM sys_user_role WHERE user_id = #{userId} and role_id=#{roleId}
+	</delete>
+
+	<!-- 删除用户 -->
+	<delete id="deleteWLByOffice">
+		DELETE FROM sys_user WHERE office_id = #{office.id}
+		OR office_id in (
+			SELECT o.id FROM sys_office o WHERE o.parent_ids LIKE CONCAT('%,', #{office.id}, ',%')
+		)
+	</delete>
+
+	<!-- 删除用户 -->
+	<delete id="deleteWLByOfftop">
+		DELETE FROM sys_user WHERE (office_id = #{office.id})
+	</delete>
+
+	<!-- 删除用户 -->
+	<delete id="deleteWLByOffsub">
+		DELETE FROM sys_user WHERE office_id in (
+			SELECT o.id FROM sys_office o WHERE o.parent_ids LIKE CONCAT('%,', #{office.id}, ',%')
+		)
+	</delete>
+
+	<!-- 插入用户和角色关联表数据 -->
+	<insert id="insertUserRole">
+		INSERT INTO sys_user_role(user_id, role_id)
+		<foreach collection="roleList" item="role" separator=" union all ">
+			SELECT #{id}, #{role.id}
+			<if test="dbName != 'mssql'">
+				FROM dual
+			</if>
+		</foreach>
+	</insert>
+
+	<!-- 更新用户信息 -->
+	<update id="updateUserInfo">
+		UPDATE sys_user SET
+		email = #{email},
+		phone = #{phone},
+		mobile = #{mobile},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		remarks = #{remarks},
+		photo = #{photo}
+		WHERE id = #{id}
+	</update>
+
+	<!-- 更新用户登录名 -->
+	<update id="updateUserLoginName">
+		UPDATE sys_user SET
+		login_name = #{loginName}
+		WHERE id = #{id}
+	</update>
+
+	<!-- 更新用户密码 -->
+	<update id="updatePasswordById">
+		UPDATE sys_user SET
+		password = #{password},
+		passc='0'
+		WHERE id =
+		#{id}
+	</update>
+
+	<!-- 通过手机号码修改密码 -->
+	<update id="updateUserByPhone">
+		UPDATE sys_user SET
+		password = #{password}
+		WHERE mobile
+		= #{mobile}
+	</update>
+
+	<!-- 更新登录信息，如登录IP、登录时间 -->
+	<update id="updateLoginInfo">
+		UPDATE sys_user SET
+		login_ip = #{loginIp},
+		login_Date =
+		#{loginDate}
+		WHERE id = #{id}
+	</update>
+
+	<!-- 逻辑删除用户 -->
+	<update id="delete">
+		UPDATE sys_user SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<select id="getUserByName" resultType="User">
+		select a.id,a.name from
+		sys_user a
+		where a.name=#{name}
+	</select>
+	<select id="getStuByCdn" resultType="User">
+		select a.* from
+		sys_user a
+		where 1=2
+		<if test="(name != null and name != '') or (no != null and no != '')">
+			or ( EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type='1' and sr.del_flag='0'
+				) and a.del_flag='0'
+			<if test="name != null and name != '' ">
+				and a.name=#{name}
+			</if>
+			<if test="no != null and no != '' ">
+				and a.no=#{no}
+			</if>
+			)
+		</if>
+	</select>
+	<select id="getTeaByCdn" resultType="User">
+		select a.* from
+		sys_user a
+		where 1=2
+		<if test="(name != null and name != '') or (no != null and no != '')">
+			or ( EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type='2' and sr.del_flag='0'
+				) and a.del_flag='0'
+			<if test="name != null and name != '' ">
+				and a.name=#{name}
+			</if>
+			<if test="no != null and no != '' ">
+				and a.no=#{no}
+			</if>
+			)
+		</if>
+	</select>
+	<update id="updateViews" parameterType="java.util.Map">
+		UPDATE sys_user SET views = CASE id
+		<foreach collection="param.keys" item="key" separator=" ">
+			WHEN
+			#{key} THEN ifnull(views,0)+#{param[${key}]}
+		</foreach>
+		END
+		where id in
+		<foreach collection="param.keys" item="key" open="("
+			separator="," close=")">
+			#{key}
+		</foreach>
+	</update>
+	<update id="updateLikes" parameterType="java.util.Map">
+		UPDATE sys_user SET likes = CASE id
+		<foreach collection="param.keys" item="key" separator=" ">
+			WHEN
+			#{key} THEN ifnull(likes,0)+#{param[${key}]}
+		</foreach>
+		END
+		where id in
+		<foreach collection="param.keys" item="key" open="("
+			separator="," close=")">
+			#{key}
+		</foreach>
+	</update>
+	<select id="findListByVo" resultType="com.oseasy.com.pcore.modules.sys.vo.UserVo">
+		select distinct
+		t.name,
+		t.id,f.user_type usertype,
+		(case when t.user_type='1'
+			then '学生'
+			else (case when t.user_type='2'
+				then '导师'
+				else '' end)
+		end)
+		usertypeStr,
+		(select GROUP_CONCAT(s6.label) from sys_dict s6
+		where FIND_IN_SET(s6.value,t.domain) and
+		s6.type='technology_field') domain,
+		s1.label currentSateStr,
+		CONCAT(
+			(case when p.id is not null then '大创项目' else '' end),
+			(case when g.id is not null then '互联网+大赛' else '' end)
+		)
+		currentInStr
+		from sys_user t
+		left join team_user_history f on t.id=f.user_id
+		left join project_declare p on f.pro_id=p.id and p.del_flag='0' and p.status not in ('0','8','9')
+		left join g_contest g on f.pro_id=g.id and g.del_flag='0' and g.audit_state not in ('0','7')
+		left join sys_student_expansion st on st.user_id=t.id
+		left join sys_dict s1 on s1.value=st.curr_state and s1.type='current_sate'
+		where 1=1
+		<if test="userType != null and userType != '' ">
+			and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=t.id and sr.biz_type=#{userType} and sr.del_flag='0'
+				)
+		</if>
+		<if test="office != null and office != '' ">
+			and t.office_id =#{office}
+		</if>
+		<if test="professional != null and professional != '' ">
+			and t.professional=#{professional}
+		</if>
+		<if test="name != null and name != '' ">
+			and t.name like CONCAT('%', #{name}, '%')
+		</if>
+		<if test="idsArr != null and idsArr.length!=0">
+			and t.id not in
+			<foreach collection="idsArr" item="id" index="index" open="("
+				close=")" separator=",">
+				#{id}
+			</foreach>
+		</if>
+		<if test="currState != null and currState != ''">
+			AND st.curr_state = #{currState}
+		</if>
+		<if test="curJoinParam!=null">
+			and t.id in( select xx.user_id from team_user_history xx where
+			<foreach collection="curJoinParam" item="cj" index="index"
+				open="((" close="))" separator=") or (">
+				xx.pro_type=CONCAT(#{cj.pType}, ',')
+				and xx.pro_sub_type=#{cj.psType} and xx.del_flag='0' and
+				xx.finish='0'
+			</foreach>
+			)
+		</if>
+		ORDER BY t.update_date DESC
+	</select>
+	<select id="getStudentInfo" resultType="com.oseasy.com.pcore.modules.sys.vo.UserVo">
+		SELECT
+		(select GROUP_CONCAT(DISTINCT ifnull(s1.label,s2.label)) from
+		team_user_history thu
+		left join sys_dict s1 on
+		s1.value=thu.pro_sub_type and
+		s1.type='project_style' and
+		thu.pro_type='1,'
+		left join sys_dict s2 on s2.value=thu.pro_sub_type
+		and
+		s2.type='competition_type' and thu.pro_type='7,'
+		where
+		thu.user_id=a.id and thu.del_flag='0' and thu.finish='0')
+		curJoin,
+			a.name,
+			a.no,
+			a.photo,
+			a.email,
+			o.name office,
+			op.name professional,
+			(
+				SELECT
+					GROUP_CONCAT(s6.label)
+				FROM sys_dict s6
+				WHERE
+					FIND_IN_SET(s6.value,a.domain)
+					AND s6.type='technology_field'
+			) AS "domain",
+			a.mobile,
+			s11.label instudy,
+			a.user_type userType,
+			a.id userId
+		FROM sys_user a
+			LEFT JOIN sys_office o ON a.office_id=o.id
+			LEFT JOIN sys_office op ON a.professional=op.id and op.del_flag='0'
+			LEFT JOIN sys_student_expansion ss ON a.id=ss.user_id
+			LEFT JOIN sys_dict s11 ON ss.instudy=s11.value AND s11.type='degree_type'
+		WHERE
+			 EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type='1' and sr.del_flag='0'
+				)
+			AND a.del_flag='0'
+			AND a.id in
+			<foreach collection="idsArr" item="id"  open="("
+				close=")" separator=",">
+				#{id}
+			</foreach>
+	</select>
+	<select id="getTeaInfo" resultType="com.oseasy.com.pcore.modules.sys.vo.UserVo">
+	SELECT
+		(select GROUP_CONCAT(DISTINCT ifnull(s1.label,s2.label))
+		from team_user_history thu
+		left join sys_dict s1 on s1.value=thu.pro_sub_type and s1.type='project_style'
+		and thu.pro_type='1,'
+		left join sys_dict s2 on s2.value=thu.pro_sub_type and s2.type='competition_type'
+		and thu.pro_type='7,'
+		where thu.user_id=a.id and  thu.del_flag='0' and thu.finish='0')
+		curJoin,
+			a.name AS "name",
+			ifnull(st.work_unit,o.name) org_name,
+			st.technical_title,
+			(
+				SELECT
+					GROUP_CONCAT(s6.label)
+				FROM sys_dict s6
+				WHERE
+					FIND_IN_SET(s6.value,a.domain)
+					AND s6.type='technology_field'
+			) domain,
+			a.mobile,
+			a.no,
+			s12.label education,
+			a.email,
+			a.photo,
+			a.user_type userType,
+			s11.label teacherType,
+			st.post_title postTitle,
+			a.id userId
+		FROM sys_user a
+			LEFT JOIN sys_office o on a.office_id=o.id
+			LEFT JOIN sys_teacher_expansion st on a.id=st.user_id
+			LEFT JOIN sys_dict s11 ON st.teacherType=s11.value AND s11.type='master_type'
+			LEFT JOIN sys_dict s12 ON a.education=s12.value AND s12.type='enducation_level'
+		WHERE
+			EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type='2' and sr.del_flag='0'
+				)
+			AND a.del_flag='0'
+			AND a.id in
+			<foreach collection="idsArr" item="id"  open="("
+				close=")" separator=",">
+				#{id}
+			</foreach>
+	</select>
+
+	<select id="getUserByNoAndLoginName" resultType="User">
+		SELECT
+		<include refid="userBygColumns" />
+		FROM sys_user a
+		<include refid="userBygJoins" />
+		<where>
+			a.del_flag = '0' AND (a.login_name = #{loginName} OR a.no = #{no})
+		</where>
+	</select>
+	<select id="checkUserByNoAndLoginName" resultType="Integer">
+		SELECT COUNT(1) FROM sys_user a
+		<where>
+			a.del_flag = '0' AND (a.login_name = #{loginName} OR a.no = #{no})
+		</where>
+	</select>
+
+	<select id="checkStudentByUid" resultType="Integer">
+		SELECT COUNT(1) FROM sys_student_expansion a
+		<where>
+			a.del_flag = '0' AND a.user_id = #{uid}
+		</where>
+	</select>
+	<select id="checkTeacherByUid" resultType="Integer">
+		SELECT COUNT(1) FROM sys_teacher_expansion a
+		<where>
+			a.del_flag = '0' AND a.user_id = #{uid}
+		</where>
+	</select>
+
+	<select id="checkLoginNameUnique" resultType="Integer">
+		SELECT COUNT(1) FROM sys_user a
+		<where>
+			<if test="loginName != null and loginName != ''"> AND  a.login_name = #{loginName}</if>
+			<if test="id != null and id != ''"> AND  a.id != #{id}</if>
+			AND a.del_flag = '0'
+		</where>
+	</select>
+	<select id="checkLoginNameUniqueByTenant" resultType="Integer">
+		SELECT COUNT(1) FROM sys_user a
+		<where>
+			<if test="loginName != null and loginName != ''"> AND  a.login_name = #{loginName}</if>
+			<if test="id != null and id != ''"> AND  a.id != #{id}</if>
+			AND a.del_flag = '0'
+		</where>
+	</select>
+
+	<select id="checkNoUnique" resultType="Integer">
+		SELECT COUNT(1) FROM sys_user a
+		<where>
+			<if test="no != null and no != ''"> AND a.no = #{no}</if>
+			<if test="id != null and id != ''"> AND a.id != #{id}</if>
+			AND a.del_flag = '0'
+		</where>
+	</select>
+	<select id="checkNoUniqueByTenant" resultType="Integer">
+		SELECT COUNT(1) FROM sys_user a
+		<where>
+			<if test="no != null and no != ''"> AND a.no = #{no}</if>
+			<if test="id != null and id != ''"> AND a.id != #{id}</if>
+			AND a.del_flag = '0'
+		</where>
+	</select>
+
+	<select id="checkMobileUnique" resultType="Integer">
+		SELECT COUNT(1) FROM sys_user a
+		<where>
+			<if test="mobile != null and mobile != ''"> AND a.mobile = #{mobile}</if>
+			<if test="id != null and id != ''"> AND a.id != #{id}</if>
+			AND a.del_flag = '0'
+		</where>
+	</select>
+
+	<select id="checkUserNoUnique" resultType="Integer">
+		SELECT COUNT(1) FROM sys_user a
+		<where>
+			<if test="no != null and no != ''">
+				AND (a.login_name = #{no} or a.no =
+				#{no} )</if>
+			<if test="userId != null and userId != ''"> AND a.id != #{userId}</if>
+			AND a.del_flag = '0'
+		</where>
+	</select>
+
+	<select id="getUserByPorIdAndTeamId" resultType="com.oseasy.com.pcore.modules.sys.vo.UserVo">
+		select
+			a.name,
+			a.no,
+			a.photo,
+			o.name office,
+			op.name professional,
+			(SELECT
+					GROUP_CONCAT(s6.label)
+				FROM sys_dict s6
+				WHERE FIND_IN_SET(s6.value,a.domain)
+					AND s6.type='technology_field'
+			) AS "domain"
+		FROM sys_user a
+		LEFT JOIN sys_office o ON a.office_id=o.id
+		LEFT JOIN sys_office op ON a.professional=op.id and op.del_flag='0'
+		LEFT JOIN team_user_history tuh on tuh.user_id= a.id
+		where tuh.pro_id=#{proId}
+		AND tuh.team_id=#{teamId}
+		AND tuh.user_type=#{userType}
+	</select>
+
+</mapper>

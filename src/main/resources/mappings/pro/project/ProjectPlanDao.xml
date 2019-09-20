@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.project.dao.ProjectPlanDao">
+    
+	<sql id="projectPlanColumns">
+		a.id AS "id",
+		a.project_id AS "projectId",
+		a.content AS "content",
+		a.description AS "description",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.cost AS "cost",
+		a.quality AS "quality",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.sort AS "sort",
+		a.update_by AS "updateBy.id"
+	</sql>
+	
+	<sql id="projectPlanJoins">
+	</sql>
+    
+	<select id="get" resultType="ProjectPlan">
+		SELECT 
+			<include refid="projectPlanColumns"/>
+		FROM project_plan a
+		<include refid="projectPlanJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ProjectPlan">
+		SELECT 
+			<include refid="projectPlanColumns"/>
+		FROM project_plan a
+		<include refid="projectPlanJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProjectPlan">
+		SELECT 
+			<include refid="projectPlanColumns"/>
+		FROM project_plan a
+		<include refid="projectPlanJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO project_plan(
+			id,
+			project_id,
+			content,
+			description,
+			start_date,
+			end_date,
+			cost,
+			quality,
+			create_date,
+			create_by,
+			update_date,
+			update_by,
+			sort
+		) VALUES (
+			#{id},
+			#{projectId},
+			#{content},
+			#{description},
+			#{startDate},
+			#{endDate},
+			#{cost},
+			#{quality},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{sort}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE project_plan SET 	
+			project_id = #{projectId},
+			content = #{content},
+			description = #{description},
+			start_date = #{startDate},
+			end_date = #{endDate},
+			cost = #{cost},
+			quality = #{quality},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			sort=#{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM project_plan
+		WHERE id = #{id}
+	</update>
+	<select id="findListByProjectId" parameterType="java.lang.String" resultType="ProjectPlan">
+		SELECT
+			a.*
+		FROM project_plan a
+		WHERE a.project_id = #{projectId} order by a.sort
+	</select>
+		
+	<delete id="deleteByProjectId">
+		DELETE FROM project_plan
+		WHERE project_id = #{projectId}
+	</delete>
+</mapper>

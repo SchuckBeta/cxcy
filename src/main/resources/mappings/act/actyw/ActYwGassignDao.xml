@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwGassignDao">
+
+	<sql id="actYwGassignColumns">
+		a.id AS "id",
+		a.yw_id AS "ywId",
+		a.gnode_id AS "gnodeId",
+		a.promodel_id AS "promodelId",
+		a.assign_user_id AS "assignUserId",
+		a.rev_user_id AS "revUserId",
+		a.is_over AS "isOver",
+		a.type AS "type",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="actYwGassignBygColumns">
+		<include refid="actYwGassignColumns"/>,
+		a.assign_user_id AS "assignUser.id",
+		u2.name AS "assignUser.name",
+		a.rev_user_id AS "revUser.id",
+		u3.name AS "revUser.name"
+	</sql>
+
+	<sql id="actYwGassignJoins">
+	</sql>
+
+	<sql id="actYwGassignBygJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.assign_user_id
+		LEFT JOIN sys_user u3 ON u3.id = a.rev_user_id
+	</sql>
+
+	<select id="get" resultType="ActYwGassign">
+		SELECT
+			<include refid="actYwGassignColumns"/>
+		FROM act_yw_gassign a
+		<include refid="actYwGassignJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ActYwGassign">
+		SELECT
+		<include refid="actYwGassignColumns"/>
+		FROM act_yw_gassign a
+		<include refid="actYwGassignJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByTenant" resultType="ActYwGassign">
+		SELECT
+		<include refid="actYwGassignColumns"/>
+		FROM act_yw_gassign a
+		<include refid="actYwGassignJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getListByActYwGassign" resultType="ActYwGassign">
+		SELECT
+			<include refid="actYwGassignColumns"/>
+		FROM act_yw_gassign a
+		<include refid="actYwGassignJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+
+			<if test="revUserId != null and revUserId != ''">
+				AND a.rev_user_id = #{revUserId}
+			</if>
+			<if test="promodelId != null and promodelId != ''">
+				AND a.promodel_id = #{promodelId}
+			</if>
+			<if test="gnodeId != null and gnodeId != ''">
+				AND a.gnode_id = #{gnodeId}
+			</if>
+			<if test="ywId != null and ywId != ''">
+				AND a.yw_id = #{ywId}
+			</if>
+		</where>
+	</select>
+
+	<select id="getByActYwGassign" resultType="ActYwGassign">
+		SELECT
+			<include refid="actYwGassignColumns"/>
+		FROM act_yw_gassign a
+		<include refid="actYwGassignJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+
+			<if test="revUserId != null and revUserId != ''">
+				AND a.rev_user_id = #{revUserId}
+			</if>
+			<if test="promodelId != null and promodelId != ''">
+				AND a.promodel_id = #{promodelId}
+			</if>
+			<if test="gnodeId != null and gnodeId != ''">
+				AND a.gnode_id = #{gnodeId}
+			</if>
+			<if test="ywId != null and ywId != ''">
+				AND a.yw_id = #{ywId}
+			</if>
+		</where>
+	</select>
+
+	<select id="getProListByActYwGassign" resultType="java.lang.String">
+			SELECT a.promodel_id
+			FROM act_yw_gassign a
+			<include refid="actYwGassignJoins"/>
+			<where>
+				a.del_flag = #{DEL_FLAG_NORMAL}
+				<if test="revUserId != null and revUserId != ''">
+					AND a.rev_user_id = #{revUserId}
+				</if>
+				<if test="promodelId != null and promodelId != ''">
+					AND a.promodel_id = #{promodelId}
+				</if>
+				<if test="gnodeId != null and gnodeId != ''">
+					AND a.gnode_id = #{gnodeId}
+				</if>
+				<if test="ywId != null and ywId != ''">
+					AND a.yw_id = #{ywId}
+				</if>
+			</where>
+		</select>
+
+	<select id="getTodoDelegateList" resultType="java.lang.String">
+		SELECT a.rev_user_id
+		FROM act_yw_gassign a
+		<include refid="actYwGassignJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}  and (a.is_over is null or a.is_over=0)
+			<if test="revUserId != null and revUserId != ''">
+				AND a.rev_user_id = #{revUserId}
+			</if>
+			<if test="promodelId != null and promodelId != ''">
+				AND a.promodel_id = #{promodelId}
+			</if>
+			<if test="gnodeId != null and gnodeId != ''">
+				AND a.gnode_id = #{gnodeId}
+			</if>
+			<if test="ywId != null and ywId != ''">
+				AND a.yw_id = #{ywId}
+			</if>
+		</where>
+	</select>
+
+	<select id="getTodoProListByActYwGassign" resultType="java.lang.String">
+		SELECT DISTINCT a.promodel_id
+		FROM act_yw_gassign a
+		<include refid="actYwGassignJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and (a.is_over is null or a.is_over=0)
+			<if test="revUserId != null and revUserId != ''">
+				AND a.rev_user_id = #{revUserId}
+			</if>
+			<if test="promodelId != null and promodelId != ''">
+				AND a.promodel_id = #{promodelId}
+			</if>
+			<if test="gnodeId != null and gnodeId != ''">
+				AND a.gnode_id = #{gnodeId}
+			</if>
+			<if test="ywId != null and ywId != ''">
+				AND a.yw_id = #{ywId}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+	</select>
+
+	<select id="findListByPro" resultType="ActYwGassign">
+		SELECT
+			<include refid="actYwGassignBygColumns"/>
+		FROM act_yw_gassign a
+		<include refid="actYwGassignBygJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="revUserId != null and revUserId != ''">
+				AND a.rev_user_id = #{revUserId}
+			</if>
+			<if test="promodelId != null and promodelId != ''">
+				AND a.promodel_id = #{promodelId}
+			</if>
+			<if test="gnodeId != null and gnodeId != ''">
+				AND a.gnode_id = #{gnodeId}
+			</if>
+			<if test="ywId != null and ywId != ''">
+				AND a.yw_id = #{ywId}
+			</if>
+		</where>
+	</select>
+
+	<select id="findAllList" resultType="ActYwGassign">
+		SELECT
+			<include refid="actYwGassignColumns"/>
+		FROM act_yw_gassign a
+		<include refid="actYwGassignJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getUserDelegateList" resultType="ActYwGassign">
+		SELECT   a.is_over, a.promodel_id,a.gnode_id
+		FROM act_yw_gassign a
+		WHERE a.del_flag = '0' AND a.yw_id=#{ywId} AND a.rev_user_id = #{revUserId}
+		AND a.type='0'
+	</select>
+
+	<select id="getProListByActYwEtAssignTaskVo" resultType="String">
+		SELECT DISTINCT  a.promodel_id
+		FROM act_yw_gassign a
+		WHERE a.del_flag = '0' and a.yw_id=#{actywId} and a.gnode_id=#{gnodeId}
+	</select>
+
+	<select id="getProListTodoDelegate" parameterType="actYwEtAssignTaskVo" resultType="String">
+		SELECT DISTINCT  a.promodel_id
+		FROM act_yw_gassign a
+		WHERE a.del_flag = '0'
+		<if test="gnodeId != null and gnodeId != ''">
+			AND a.gnode_id = #{gnodeId}
+		</if>
+		<if test="actywId != null and actywId != ''">
+			and a.yw_id=#{actywId}
+		</if>
+		and (a.is_over is null or a.is_over=0)
+		<if test="proIds != null and proIds.size() != 0">
+			AND a.promodel_id in
+			<foreach collection="proIds" item="id" open="(" close=")"
+				separator=" , ">
+				#{id}
+			</foreach>
+		</if>
+	</select>
+
+	<select id="getProListHasDelegate" parameterType="actYwEtAssignTaskVo" resultType="String">
+		SELECT DISTINCT  a.promodel_id
+		FROM act_yw_gassign a
+		WHERE a.del_flag = '0'
+		<if test="gnodeId != null and gnodeId != ''">
+			AND a.gnode_id = #{gnodeId}
+		</if>
+		<if test="actywId != null and actywId != ''">
+			and a.yw_id=#{actywId}
+		</if>
+		<if test="proIds != null and proIds.size() != 0">
+			AND a.promodel_id in
+			<foreach collection="proIds" item="id" open="(" close=")"
+				separator=" , ">
+				#{id}
+			</foreach>
+		</if>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_gassign(
+			id,
+			yw_id,
+			gnode_id,
+			promodel_id,
+			assign_user_id,
+			rev_user_id,
+			is_over,
+			type,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{ywId},
+			#{gnodeId},
+			#{promodelId},
+			#{assignUserId},
+			#{revUserId},
+			#{isOver},
+			#{type},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertPl" >
+		INSERT INTO act_yw_gassign(
+			id,
+			yw_id,
+			gnode_id,
+			promodel_id,
+			assign_user_id,
+			rev_user_id,
+			is_over,
+			type,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+				 separator=",">
+			(
+			#{item.id},
+			#{item.ywId},
+			#{item.gnodeId},
+			#{item.promodelId},
+			#{item.assignUserId},
+			#{item.revUserId},
+			#{item.isOver},
+			#{item.type},
+			#{item.updateDate},
+			#{item.updateBy.id},
+			#{item.createDate},
+			#{item.createBy.id},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_gassign SET
+			yw_id = #{ywId},
+			gnode_id = #{gnodeId},
+			promodel_id = #{promodelId},
+			assign_user_id = #{assignUserId},
+			rev_user_id = #{revUserId},
+			is_over= #{isOver},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE act_yw_gassign SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteTodo">
+		UPDATE act_yw_gassign SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE (is_over='0' or is_over is null)
+		<if test="gnodeId != null and gnodeId != ''">
+			AND gnode_id = #{gnodeId}
+		</if>
+		<if test="promodelId != null and promodelId != ''">
+			AND promodel_id = #{promodelId}
+		</if>
+	</update>
+
+	<update id="deleteByAssign">
+		UPDATE act_yw_gassign SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE
+		promodel_id = #{promodelId}
+		<if test="gnodeId != null and gnodeId != ''">
+		AND gnode_id = #{gnodeId}
+		</if>
+	</update>
+
+
+	<update id="deleteWL">
+		DELETE FROM act_yw_gassign WHERE id = #{id}
+	</update>
+</mapper>

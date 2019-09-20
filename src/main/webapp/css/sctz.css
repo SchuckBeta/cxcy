@@ -1,0 +1,101 @@
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+.scinfonavigation ul li:first-child {
+    margin-top: -2px;
+}
+
+.scinfonavigation ul li {
+    float: left;
+    letter-spacing: 3px;
+    margin-left: 10px;
+}
+
+.sctitle {
+    margin-top: 46px;
+
+}
+
+.sctitle ul {
+    width: 625px;
+    text-align: center;
+    margin: auto;
+}
+
+.sctitle ul li {
+    float: left;
+    border-bottom: 3px solid transparent;
+}
+
+.sctitle ul li a {
+    width: 208px;
+    border-right: 1px solid #A9A9A9;;
+    margin-left: 90px;
+}
+
+.tab_clum {
+    margin-top: 46px;
+}
+
+.tab_clum .tab {
+    text-align: center;
+    width: 314px;
+    margin: 0 auto;
+}
+
+.tab_clum .tab li {
+    float: left;
+    margin-right: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid transparent;
+}
+
+.tab_clum .tab li a {
+    display: block;
+    padding: 0px 18px;
+    border-right: 1px solid #A9A9A9;
+    font-size: 15px;
+    color: #000;
+}
+
+.tab_clum .tab li:last-child a {
+    border: none;
+}
+
+.tab_clum .tab li a:hover {
+    color: #e92f27;
+}
+
+.tab_clum .tab li:hover {
+}
+
+.tab_clum .tab_items {
+    margin-top: 30px;
+}
+
+.tab_clum .tab_items ul li {
+    float: left;
+    width: 240px;
+    padding: 10px;
+    margin: 0 5px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    border: 1px solid #D3D3D3;
+    border-radius: 3px;
+}
+
+.sxtz_li {
+    margin-top: 81px;
+}
+
+.sxtz_li ul li {
+    border-bottom: 1px dashed #eee;
+    line-height: 42px;
+}
+
+.sxtz_li span {
+    float: right;
+    color: #888;
+}

@@ -1,0 +1,1628 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.dr.modules.dr.dao.DrCardRecordDao">
+
+	<sql id="drCardRecordColumns">
+		a.id AS "id",
+		a.uid AS "user.id",
+		a.card_id AS "card.id",
+		a.cerspace_id AS "cerspace.id",
+		a.erspace_id AS "cerspace.erspace.id",
+		a.rspace_name AS "rspaceName",
+		a.card_no AS "cardNo",
+		a.ept_sn AS "eptSn",
+		a.ept_id AS "eptId",
+		a.rsp_type AS "rspType",
+		a.rspace_id AS "rspaceId",
+		a.dr_no AS "drNo",
+		a.name AS "name",
+		a.is_enter AS "isEnter",
+		a.type AS "type",
+		a.pc_time AS "pcTime",
+		a.time AS "time",
+		a.dispose,
+		a.dispose_msg,
+		a.msg,
+		a.tmp_no AS "tmpNo",
+		a.tmp_name AS "tmpName",
+		a.tmp_tel AS "tmpTel",
+
+		b.ept_id AS "cerspace.erspace.epment.id",
+		b.rsp_type AS "cerspace.erspace.rspType",
+		b.rspace_id AS "cerspace.erspace.rspace",
+		b.dr_no AS "cerspace.erspace.drNo",
+		b.name AS "cerspace.erspace.name"
+	</sql>
+
+	<sql id="drCardRecordBygColumns">
+		a.id AS "id",
+		a.uid AS "user.id",
+		a.card_id AS "card.id",
+		a.cerspace_id AS "cerspace.id",
+		a.erspace_id AS "cerspace.erspace.id",
+		a.rspace_name AS "rspaceName",
+		a.card_no AS "cardNo",
+		a.ept_sn AS "eptSn",
+		a.ept_id AS "eptId",
+		a.rsp_type AS "rspType",
+		a.rspace_id AS "rspaceId",
+		a.dr_no AS "drNo",
+		a.name AS "name",
+		a.is_enter AS "isEnter",
+		a.type AS "type",
+		a.pc_time AS "pcTime",
+		a.time AS "time",
+		a.dispose,
+		a.dispose_msg,
+		a.msg,
+		a.tmp_no AS "tmpNo",
+		a.tmp_name AS "tmpName",
+		a.tmp_tel AS "tmpTel",
+
+		b.ept_id AS "cerspace.erspace.epment.id",
+		b.rsp_type AS "cerspace.erspace.rspType",
+		b.rspace_id AS "cerspace.erspace.rspace",
+		b.dr_no AS "cerspace.erspace.drNo",
+		b.name AS "cerspace.erspace.name",
+
+		c.no AS "cerspace.erspace.epment.no",
+		c.name AS "cerspace.erspace.epment.name",
+		c.psw AS "cerspace.erspace.epment.psw",
+		c.ip AS "cerspace.erspace.epment.ip",
+		c.type AS "cerspace.erspace.epment.type",
+		c.port AS "cerspace.erspace.epment.port",
+		c.dr_no AS "cerspace.erspace.epment.drNo",
+		c.tindex AS "cerspace.erspace.epment.tindex",
+
+		d.no AS "card.no",
+		d.password AS "card.password",
+		d.expiry AS "card.expiry",
+		d.status AS "card.status",
+		d.open_times AS "card.openTimes",
+		d.privilege AS "card.privilege",
+		d.holiday_use AS "card.holidayUse",
+		d.dr_no AS "card.drNo",
+		d.warnning AS "card.warnning",
+		d.is_cancel AS "card.isCancel",
+		d.card_type AS "card.cardType",
+		d.tmp_name AS "card.tmpName",
+		d.tmp_tel AS "card.tmpTel",
+		u2.name AS "card.user.name"
+	</sql>
+
+	<sql id="drCardRecordJoins">
+        LEFT JOIN dr_equipment_rspace b ON b.id = a.erspace_id
+	</sql>
+
+	<sql id="drCardRecordBygJoins">
+        LEFT JOIN dr_card_erspace ce ON ce.id = a.cerspace_id
+        LEFT JOIN dr_equipment_rspace b ON b.id = ce.erspace_id
+        LEFT JOIN dr_equipment c ON c.id = b.ept_id
+        LEFT JOIN dr_card d ON d.id = a.card_id
+		LEFT JOIN sys_user u2 ON u2.id = a.uid
+	</sql>
+
+	<select id="get" resultType="DrCardRecord">
+		SELECT
+			<include refid="drCardRecordColumns"/>
+		FROM dr_card_record a
+		<include refid="drCardRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByg" resultType="DrCardRecord">
+		SELECT
+			<include refid="drCardRecordBygColumns"/>
+		FROM dr_card_record a
+		<include refid="drCardRecordBygJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getLastEnterTime" resultType="java.util.Date">
+		SELECT
+			a.pc_time
+		FROM dr_card_record a
+		WHERE a.is_enter='1' and a.card_id = #{cardId}
+		ORDER BY a.pc_time DESC
+		LIMIT 1
+	</select>
+
+	<select id="findRecordList" resultType="com.oseasy.dr.modules.dr.vo.DrCardRecordShowVo">
+		select
+			t.id AS id,
+			t.msg AS msg,
+			t.card_no AS cardNo,
+			b.ept_id AS "cerspace.erspace.epment.id",
+			b.rsp_type AS "cerspace.erspace.rspType",
+			b.rspace_id AS "cerspace.erspace.rspace",
+			b.dr_no AS "cerspace.erspace.drNo",
+			b.name AS "cerspace.erspace.name",
+			(case when dc.card_type='0' then dc.tmp_no else u.no end) uno,
+			(case when dc.card_type='0' then dc.tmp_name else u.name end) uname,
+			(case when dc.card_type='0' then dc.tmp_tel else u.mobile end) umobile,
+			o.id AS oid,
+			o.name AS office,
+			t.pc_time,
+			date_format(t.pc_time,'%Y-%m-%d %H:%i') pcTimeStr,
+			(select
+				GROUP_CONCAT(ss.name /*subOrder*/order by ss.type SEPARATOR '>')
+			from pw_space ss
+			where
+				ss.id!='1'
+				and (FIND_IN_SET(ss.id,ps.parent_ids) or ss.id=ps.id) and ss.del_flag='0') psname,
+				CONCAT(
+					(select GROUP_CONCAT(ss.name /*subOrder*/order by ss.type SEPARATOR '>')
+					from pw_space ss
+					where ss.id!='1'
+					and (FIND_IN_SET(ss.id,ps2.parent_ids) or ss.id=ps2.id) and ss.del_flag='0'),'>', pr.name) `space`
+		from dr_card_record t
+			left join dr_equipment_rspace b on b.id=t.erspace_id
+			left join sys_user u on t.uid=u.id
+			left join sys_office o on u.office_id=o.id
+			left join pw_space ps on t.rspace_id=ps.id
+			left join pw_room pr on t.rspace_id=pr.id
+			left join pw_space ps2 on pr.sid=ps2.id
+			left join dr_card dc on t.card_id=dc.id
+		<where> 1=1
+			<!-- and dc.id is not null -->
+			AND t.card_no IS NOT NULL
+		 	<if test="officeIds != null and officeIds.size() != 0">
+                  AND o.id IN
+                <foreach item="item" collection="officeIds" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+			<if test="ids != null and ids.size() != 0">
+                  AND t.id IN
+                <foreach item="item" collection="ids" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+			<if test="id != null and id != ''">
+				AND t.id = #{id}
+			</if>
+			<if test="card != null">
+				<if test="card.cardType != null and card.cardType != ''">
+					AND dc.card_type = #{card.cardType}
+				</if>
+			</if>
+			<if test="qryStr !=null and qryStr !='' ">
+				and (
+					t.card_no LIKE concat('%',#{qryStr},'%')
+					OR dc.no like concat('%',#{qryStr},'%')
+					OR dc.tmp_no LIKE concat('%',#{qryStr},'%')
+					OR dc.tmp_name LIKE concat('%',#{qryStr},'%')
+					OR dc.tmp_tel LIKE concat('%',#{qryStr},'%')
+					OR u.no like concat('%',#{qryStr},'%')
+					OR u.name like concat('%',#{qryStr},'%')
+					OR b.name like concat('%',#{qryStr},'%')
+					OR o.name like concat('%',#{qryStr},'%')
+					OR pr.NAME LIKE concat('%',#{qryStr},'%')
+					OR ps.NAME LIKE concat('%',#{qryStr},'%')
+				)
+			</if>
+			<if test="qryStartTime !=null and qryStartTime !='' ">
+				and t.pc_time <![CDATA[ >= ]]> str_to_date(concat(#{qryStartTime},' 00:00:00'),'%Y-%m-%d %H:%i:%s')
+			</if>
+			<if test="qryEndTime !=null and qryEndTime !='' ">
+				and t.pc_time <![CDATA[ <= ]]> str_to_date(concat(#{qryEndTime},' 23:59:59'),'%Y-%m-%d %H:%i:%s')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY t.pc_time DESC, ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY t.pc_time DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findList" resultType="DrCardRecord">
+		SELECT
+			<include refid="drCardRecordColumns"/>
+		FROM dr_card_record a
+		<include refid="drCardRecordJoins"/>
+		<where> 1 = 1
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="isEnter != null and isEnter != ''">
+				AND a.is_enter = #{isEnter}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="user != null">
+				<if test="user.id != null and user.id != ''">
+					AND a.uid = #{user.id}
+				</if>
+			</if>
+			<if test="card != null">
+				<if test="card.ids != null">
+                  AND a.card_id IN
+	                <foreach item="item" collection="card.ids" separator="," open="("
+	                         close=")">
+	                    #{item}
+	                </foreach>
+	            </if>
+				<if test="card.id != null and card.id != ''">
+					AND a.card_id = #{card.id}
+				</if>
+			</if>
+			<if test="cerspace != null">
+				<if test="cerspace.id != null and cerspace.id != ''">
+					AND a.cerspace_id = #{cerspace.id}
+				</if>
+				<if test="cerspace.erspace != null">
+					<if test="cerspace.erspace.id != null and cerspace.erspace.id != ''">
+						AND a.erspace_id = #{cerspace.erspace.id}
+					</if>
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findInList" parameterType="java.lang.String" resultType="java.lang.String">
+		select dc.id from dr_card dc
+		where dc.id not in(
+			select dcr.card_id  from dr_card_record dcr
+			where dcr.is_enter='1'
+			GROUP BY dcr.card_id
+			HAVING max(dcr.pc_time)
+			&gt;=
+			date_add(
+				SYSDATE(),interval - #{day} day
+			)
+		)
+	</select>
+
+	<select id="findOutList" parameterType="java.util.Date" resultType="java.lang.String">
+		select dc.id from dr_card dc
+		where dc.id not in(
+			select dcr.card_id from dr_card_record dcr
+			where dcr.pc_time &gt;= #{beginTime}
+				and  dcr.pc_time &lt;= #{endTime}
+			GROUP BY dcr.id
+		)
+	</select>
+
+	<select id="findAllCard" resultType="DrCardRecord">
+		SELECT
+			a.no AS "cardNo",
+			e.no AS "eptSn",
+			er.dr_no AS "drNo",
+			a.id AS "card.id",
+			a.uid AS "user.id",
+			ce.id AS "cerspace.id",
+			<!-- er.id AS "erspace.id", -->
+			er.rsp_type AS "rspType",
+			er.rspace_id AS "rspaceId",
+			<!-- '' AS "rspaceName", -->
+			e.id AS "eptId",
+			CONCAT(e.name, "-", er.dr_no, "门") AS "name"
+		FROM
+			dr_card a
+		LEFT JOIN dr_card_erspace ce ON ce.card_id = a.id
+		LEFT JOIN dr_equipment_rspace er ON er.id = ce.erspace_id
+		LEFT JOIN dr_equipment e ON e.id = er.ept_id
+	</select>
+
+	<select id="findAllSpace" resultType="DrCardRecord">
+		SELECT
+			'2' AS "rspType",
+			pr.id AS "rspaceId",
+			  (case when (pspppp.name='root') then
+						CONCAT(psppp.name, "/", pspp.name, "/", psp.name, "/", ps.name, "/", pr.name)
+				when (psppp.name = 'root') then
+						CONCAT(pspp.name, "/", psp.name, "/", ps.name, "/", pr.name)
+				when (pspp.name = 'root') then
+						CONCAT(psp.name, "/", ps.name, "/", pr.name)
+				when (psp.name = 'root') then
+						CONCAT(ps.name, "/", pr.name)
+				when (pr.sid IS NULL OR pr.sid = '') then
+						CONCAT(pr.name)
+				end) AS "rspaceName"
+		FROM pw_room pr
+		LEFT JOIN pw_space ps ON ps.id = pr.sid
+		LEFT JOIN pw_space psp ON psp.id = ps.parent_id
+		LEFT JOIN pw_space pspp ON pspp.id = psp.parent_id
+		LEFT JOIN pw_space psppp ON psppp.id = pspp.parent_id
+		LEFT JOIN pw_space pspppp ON pspppp.id = psppp.parent_id
+		UNION ALL
+		SELECT
+			'1' AS "rspType",
+			ps.id AS "rspaceId",
+			(case when (pspppp.name='root') then
+					CONCAT(psppp.name, "/", pspp.name, "/", psp.name, "/", ps.name)
+			when (psppp.name = 'root') then
+					CONCAT(pspp.name, "/", psp.name, "/", ps.name)
+			when (pspp.name = 'root') then
+					CONCAT(psp.name, "/", ps.name)
+			when (psp.name = 'root') then
+					CONCAT(ps.name)
+			end) AS "rspaceName"
+		FROM pw_space ps
+		LEFT JOIN pw_space psp ON psp.id = ps.parent_id
+		LEFT JOIN pw_space pspp ON pspp.id = psp.parent_id
+		LEFT JOIN pw_space psppp ON psppp.id = pspp.parent_id
+		LEFT JOIN pw_space pspppp ON pspppp.id = psppp.parent_id
+	</select>
+
+	<select id="findAllMsg" resultType="DrCardRecord">
+		SELECT
+			CASE
+				WHEN (crm.card_no IS NULL OR crm.card_no = '') THEN
+				'99垃圾数据-卡号为空'
+				WHEN (crm.ept_sn IS NULL OR crm.ept_sn = '') THEN
+				'98垃圾数据-设备号为空'
+				WHEN (crm.dr_no IS NULL) THEN
+				'97垃圾数据-设备门号为空'
+				WHEN (crm.card_id IS NULL OR crm.card_id = '') THEN
+				'89卡数据问题-卡未定义'
+				WHEN (crm.ept_id IS NULL OR crm.ept_id = '') THEN
+				'79设备数据问题-设备未定义'
+				WHEN (crm.rspace_id IS NULL OR crm.rspace_id = '') THEN
+				'69设备场地数据问题-设备未场地问绑定'
+				WHEN (crm.cerspace_id IS NULL OR crm.cerspace_id = '') THEN
+				'正常数据-未授权'
+				ELSE
+				'正常数据'
+			END AS "msg",
+			crm.id
+		FROM
+			dr_card_record crm
+		ORDER BY
+			crm.msg DESC,
+			crm.card_no DESC,
+			crm.ept_sn DESC,
+			crm.dr_no DESC,
+			crm.rspace_id DESC
+	</select>
+
+	<select id="findAllRecord" resultType="DrCardRecord">
+		SELECT
+			r.id AS "id",
+			CASE WHEN (r.uid IS NULL OR r.uid = '') THEN c.uid ELSE r.uid END AS "user.id",
+			CASE WHEN (r.card_id IS NULL OR r.card_id = '') THEN c.card_id ELSE r.card_id END AS "card.id",
+			CASE WHEN (r.card_no IS NULL OR r.card_no = '') THEN c.card_no ELSE r.card_no END AS "cardNo",
+			CASE WHEN (r.cerspace_id IS NULL OR r.cerspace_id = '') THEN c.cerspace_id ELSE r.cerspace_id END AS "cerspace.id",
+			CASE WHEN (r.erspace_id IS NULL OR r.erspace_id = '') THEN c.erspace_id ELSE r.erspace_id END AS "cerspace.erspace.id",
+			CASE WHEN (r.rsp_type IS NULL OR r.rsp_type = '') THEN e.rsp_type ELSE r.rsp_type END AS "rspType",
+			CASE WHEN (r.rspace_id IS NULL OR r.rspace_id = '') THEN e.rspace_id ELSE r.rspace_id END AS "rspaceId",
+			CASE WHEN (r.rspace_name IS NULL OR r.rspace_name = '') THEN eps.rspace_name ELSE r.rspace_name END AS "rspaceName",
+			CASE WHEN (r.dr_no IS NULL) THEN e.dr_no ELSE r.dr_no END AS "drNo",
+			CASE WHEN (r.ept_id IS NULL OR r.ept_id = '') THEN e.ept_id ELSE r.ept_id END AS "eptId",
+			CASE WHEN (r.ept_no IS NULL OR r.ept_no = '') THEN e.ept_no ELSE r.ept_no END AS "eptSn",
+			CASE WHEN (r.name IS NULL OR r.name = '') THEN e.name ELSE r.name END AS "name",
+			r.is_enter AS "isEnter",
+			r.type AS "type",
+			r.pc_time AS "pcTime",
+			(r.time + 1) AS "time",
+			r.dispose AS "dispose",
+			CASE WHEN locate('50', m.nmsg) THEN '1' ELSE '0' END AS "disposeMsg",
+			m.nmsg AS "msg"
+		FROM (
+			SELECT
+				cr.card_no AS "card_no",
+				cr.ept_sn AS "ept_no",
+				cr.dr_no AS "dr_no",
+				cr.id AS "id",
+				cr.uid AS "uid",
+				cr.card_id AS "card_id",
+				'' AS "cerspace_id",
+				cr.erspace_id AS "erspace_id",
+				cr.rsp_type AS "rsp_type",
+				cr.rspace_id AS "rspace_id",
+				'' AS "rspace_name",
+				cr.ept_id AS "ept_id",
+				cr.name AS "name",
+				cr.is_enter AS "is_enter",
+				cr.type AS "type",
+				cr.pc_time AS "pc_time",
+				cr.time AS "time",
+				cr.dispose AS "dispose",
+				cr.dispose_msg AS "disposeMsg",
+				cr.msg AS "msg"
+			FROM
+				dr_card_record cr
+			WHERE cr.ept_sn IS NOT NULL AND cr.card_no IS NOT NULL
+			AND cr.dispose_msg = '0' AND cr.time <![CDATA[ <= ]]> 3
+		) r
+		LEFT JOIN (
+			SELECT
+				a. NO AS "card_no",
+				'' AS "ept_no",
+				'' AS "dr_no",
+				a.id AS "card_id",
+				a.uid AS "uid",
+				ce.id AS "cerspace_id",
+				ce.erspace_id AS "erspace_id",
+				'' AS "rsp_type",
+				'' AS "rspace_id",
+				'' AS "rspace_name",
+				'' AS "ept_id",
+				'' AS "name"
+			FROM
+				dr_card a
+			LEFT JOIN dr_card_erspace ce ON ce.card_id = a.id
+		) c ON c.card_no = r.card_no
+		LEFT JOIN (
+			SELECT
+				'' AS "card_no",
+				e. NO AS "ept_no",
+				er.dr_no AS "dr_no",
+				'' AS "card_id",
+				'' AS "uid",
+				'' AS "cerspace_id",
+				'' AS "erspace_id",
+				er.rsp_type AS "rsp_type",
+				er.rspace_id AS "rspace_id",
+				'' AS "rspace_name",
+				e.id AS "ept_id",
+				CONCAT(e. NAME, "-", er.dr_no, "门") AS "name"
+			FROM
+				dr_equipment e
+			LEFT JOIN dr_equipment_rspace er ON e.id = er.ept_id
+		) e ON e.ept_no = r.ept_no AND e.dr_no = r.dr_no
+		LEFT JOIN (
+			SELECT
+				'2' AS "rsp_type",
+				pr.id AS "rspace_id",
+				  (case when (pspppp.name='root') then
+							CONCAT(psppp.name, "/", pspp.name, "/", psp.name, "/", ps.name, "/", pr.name)
+					when (psppp.name = 'root') then
+							CONCAT(pspp.name, "/", psp.name, "/", ps.name, "/", pr.name)
+					when (pspp.name = 'root') then
+							CONCAT(psp.name, "/", ps.name, "/", pr.name)
+					when (psp.name = 'root') then
+							CONCAT(ps.name, "/", pr.name)
+					when (pr.sid IS NULL OR pr.sid = '') then
+							CONCAT(pr.name)
+					end) AS "rspace_name"
+			FROM pw_room pr
+			LEFT JOIN pw_space ps ON ps.id = pr.sid
+			LEFT JOIN pw_space psp ON psp.id = ps.parent_id
+			LEFT JOIN pw_space pspp ON pspp.id = psp.parent_id
+			LEFT JOIN pw_space psppp ON psppp.id = pspp.parent_id
+			LEFT JOIN pw_space pspppp ON pspppp.id = psppp.parent_id
+			UNION ALL
+			SELECT
+				'1' AS "rsp_type",
+				ps.id AS "rspace_id",
+				(case when (pspppp.name='root') then
+						CONCAT(psppp.name, "/", pspp.name, "/", psp.name, "/", ps.name)
+				when (psppp.name = 'root') then
+						CONCAT(pspp.name, "/", psp.name, "/", ps.name)
+				when (pspp.name = 'root') then
+						CONCAT(psp.name, "/", ps.name)
+				when (psp.name = 'root') then
+						CONCAT(ps.name)
+				end) AS "rspace_name"
+			FROM pw_space ps
+			LEFT JOIN pw_space psp ON psp.id = ps.parent_id
+			LEFT JOIN pw_space pspp ON pspp.id = psp.parent_id
+			LEFT JOIN pw_space psppp ON psppp.id = pspp.parent_id
+			LEFT JOIN pw_space pspppp ON pspppp.id = psppp.parent_id
+		) eps ON eps.rspace_id = e.rspace_id
+		LEFT JOIN (
+			SELECT
+				CASE
+					WHEN (crm.card_no IS NULL OR crm.card_no = '') THEN
+					'99垃圾数据-卡号为空'
+					WHEN (crm.ept_sn IS NULL OR crm.ept_sn = '') THEN
+					'98垃圾数据-设备号为空'
+					WHEN (crm.dr_no IS NULL) THEN
+					'97垃圾数据-设备门号为空'
+					WHEN (crm.card_id IS NULL OR crm.card_id = '') THEN
+					'89卡数据问题-卡未定义'
+					WHEN (crm.ept_id IS NULL OR crm.ept_id = '') THEN
+					'79设备数据问题-设备未定义'
+					WHEN (crm.rspace_id IS NULL OR crm.rspace_id = '') THEN
+					'69设备场地数据问题-设备未场地问绑定'
+					WHEN (crm.cerspace_id IS NULL OR crm.cerspace_id = '') THEN
+					'59正常数据-未授权'
+					ELSE
+					'50正常数据'
+				END AS "nmsg",
+				crm.id AS "id"
+			FROM
+				dr_card_record crm
+		) m ON m.id = r.id
+		WHERE 1=1
+		<if test="minPcTime !=null and minPcTime != ''">
+			AND r.pc_time <![CDATA[ >= ]]> #{minPcTime}
+		</if>
+		<if test="maxPcTime !=null and maxPcTime != ''">
+			AND r.pc_time <![CDATA[ <= ]]> #{maxPcTime}
+		</if>
+		GROUP BY r.id
+		ORDER BY r.pc_time DESC
+	</select>
+
+	<select id="findAllSynRecord" resultType="DrCardRecord">
+		SELECT
+			r.id AS "id",
+			CASE WHEN (r.uid IS NULL OR r.uid = '') THEN c.uid ELSE r.uid END AS "user.id",
+			CASE WHEN (r.card_id IS NULL OR r.card_id = '') THEN c.card_id ELSE r.card_id END AS "card.id",
+			CASE WHEN (r.card_no IS NULL OR r.card_no = '') THEN c.card_no ELSE r.card_no END AS "cardNo",
+			CASE WHEN (r.cerspace_id IS NULL OR r.cerspace_id = '') THEN c.cerspace_id ELSE r.cerspace_id END AS "cerspace.id",
+			CASE WHEN (r.erspace_id IS NULL OR r.erspace_id = '') THEN c.erspace_id ELSE r.erspace_id END AS "cerspace.erspace.id",
+			CASE WHEN (r.rsp_type IS NULL OR r.rsp_type = '') THEN e.rsp_type ELSE r.rsp_type END AS "rspType",
+			CASE WHEN (r.rspace_id IS NULL OR r.rspace_id = '') THEN e.rspace_id ELSE r.rspace_id END AS "rspaceId",
+			CASE WHEN (r.rspace_name IS NULL OR r.rspace_name = '') THEN eps.rspace_name ELSE r.rspace_name END AS "rspaceName",
+			CASE WHEN (r.dr_no IS NULL) THEN e.dr_no ELSE r.dr_no END AS "drNo",
+			CASE WHEN (r.ept_id IS NULL OR r.ept_id = '') THEN e.ept_id ELSE r.ept_id END AS "eptId",
+			CASE WHEN (r.ept_no IS NULL OR r.ept_no = '') THEN e.ept_no ELSE r.ept_no END AS "eptSn",
+			CASE WHEN (r.name IS NULL OR r.name = '') THEN e.name ELSE r.name END AS "name",
+			r.is_enter AS "isEnter",
+			r.type AS "type",
+			r.pc_time AS "pcTime",
+			(r.time + 1) AS "time",
+			r.dispose AS "dispose",
+			CASE WHEN locate('50', r.nmsg) THEN '1' ELSE '0' END AS "disposeMsg",
+			r.nmsg AS "msg"
+		FROM (
+			SELECT
+				cr.card_no AS "card_no",
+				cr.ept_sn AS "ept_no",
+				cr.dr_no AS "dr_no",
+				cr.id AS "id",
+				cr.uid AS "uid",
+				cr.card_id AS "card_id",
+				'' AS "cerspace_id",
+				cr.erspace_id AS "erspace_id",
+				cr.rsp_type AS "rsp_type",
+				cr.rspace_id AS "rspace_id",
+				'' AS "rspace_name",
+				cr.ept_id AS "ept_id",
+				cr.name AS "name",
+				cr.is_enter AS "is_enter",
+				cr.type AS "type",
+				cr.pc_time AS "pc_time",
+				cr.time AS "time",
+				cr.dispose AS "dispose",
+				cr.dispose_msg AS "disposeMsg",
+				cr.msg AS "msg",
+				CASE
+					WHEN (cr.card_no IS NULL OR cr.card_no = '') THEN
+					'99垃圾数据-卡号为空'
+					WHEN (cr.ept_sn IS NULL OR cr.ept_sn = '') THEN
+					'98垃圾数据-设备号为空'
+					WHEN (cr.dr_no IS NULL) THEN
+					'97垃圾数据-设备门号为空'
+					WHEN (cr.card_id IS NULL OR cr.card_id = '') THEN
+					'89卡数据问题-卡未定义'
+					WHEN (cr.ept_id IS NULL OR cr.ept_id = '') THEN
+					'79设备数据问题-设备未定义'
+					WHEN (cr.rspace_id IS NULL OR cr.rspace_id = '') THEN
+					'69设备场地数据问题-设备未场地问绑定'
+					WHEN (cr.cerspace_id IS NULL OR cr.cerspace_id = '') THEN
+					'59正常数据-未授权'
+					ELSE
+					'50正常数据'
+				END AS "nmsg"
+			FROM
+				dr_card_record cr
+			WHERE cr.ept_sn IS NOT NULL AND cr.card_no IS NOT NULL
+			AND cr.dispose_msg = '0' AND cr.time <![CDATA[ <= ]]> 3
+		) r
+		LEFT JOIN (
+			SELECT
+				a. NO AS "card_no",
+				'' AS "ept_no",
+				'' AS "dr_no",
+				a.id AS "card_id",
+				a.uid AS "uid",
+				ce.id AS "cerspace_id",
+				ce.erspace_id AS "erspace_id",
+				'' AS "rsp_type",
+				'' AS "rspace_id",
+				'' AS "rspace_name",
+				'' AS "ept_id",
+				'' AS "name"
+			FROM
+				dr_card a
+			LEFT JOIN dr_card_erspace ce ON ce.card_id = a.id
+		) c ON c.card_no = r.card_no
+		LEFT JOIN (
+			SELECT
+				'' AS "card_no",
+				e. NO AS "ept_no",
+				er.dr_no AS "dr_no",
+				'' AS "card_id",
+				'' AS "uid",
+				'' AS "cerspace_id",
+				'' AS "erspace_id",
+				er.rsp_type AS "rsp_type",
+				er.rspace_id AS "rspace_id",
+				'' AS "rspace_name",
+				e.id AS "ept_id",
+				CONCAT(e. NAME, "-", er.dr_no, "门") AS "name"
+			FROM
+				dr_equipment e
+			LEFT JOIN dr_equipment_rspace er ON e.id = er.ept_id
+		) e ON e.ept_no = r.ept_no AND e.dr_no = r.dr_no
+		LEFT JOIN (
+			SELECT
+				'2' AS "rsp_type",
+				pr.id AS "rspace_id",
+				  (case when (pspppp.name='root') then
+							CONCAT(psppp.name, "/", pspp.name, "/", psp.name, "/", ps.name, "/", pr.name)
+					when (psppp.name = 'root') then
+							CONCAT(pspp.name, "/", psp.name, "/", ps.name, "/", pr.name)
+					when (pspp.name = 'root') then
+							CONCAT(psp.name, "/", ps.name, "/", pr.name)
+					when (psp.name = 'root') then
+							CONCAT(ps.name, "/", pr.name)
+					when (pr.sid IS NULL OR pr.sid = '') then
+							CONCAT(pr.name)
+					end) AS "rspace_name"
+			FROM pw_room pr
+			LEFT JOIN pw_space ps ON ps.id = pr.sid
+			LEFT JOIN pw_space psp ON psp.id = ps.parent_id
+			LEFT JOIN pw_space pspp ON pspp.id = psp.parent_id
+			LEFT JOIN pw_space psppp ON psppp.id = pspp.parent_id
+			LEFT JOIN pw_space pspppp ON pspppp.id = psppp.parent_id
+			UNION ALL
+			SELECT
+				'1' AS "rsp_type",
+				ps.id AS "rspace_id",
+				(case when (pspppp.name='root') then
+						CONCAT(psppp.name, "/", pspp.name, "/", psp.name, "/", ps.name)
+				when (psppp.name = 'root') then
+						CONCAT(pspp.name, "/", psp.name, "/", ps.name)
+				when (pspp.name = 'root') then
+						CONCAT(psp.name, "/", ps.name)
+				when (psp.name = 'root') then
+						CONCAT(ps.name)
+				end) AS "rspace_name"
+			FROM pw_space ps
+			LEFT JOIN pw_space psp ON psp.id = ps.parent_id
+			LEFT JOIN pw_space pspp ON pspp.id = psp.parent_id
+			LEFT JOIN pw_space psppp ON psppp.id = pspp.parent_id
+			LEFT JOIN pw_space pspppp ON pspppp.id = psppp.parent_id
+		) eps ON eps.rspace_id = e.rspace_id
+		WHERE 1=1
+		<if test="minPcTime !=null and minPcTime != ''">
+			AND r.pc_time <![CDATA[ >= ]]> #{minPcTime}
+		</if>
+		<if test="maxPcTime !=null and maxPcTime != ''">
+			AND r.pc_time <![CDATA[ <= ]]> #{maxPcTime}
+		</if>
+		GROUP BY r.id
+		ORDER BY r.pc_time DESC
+	</select>
+
+	<select id="getListVo" parameterType="java.util.Date" resultType="DrCardRecordWarnVo">
+		SELECT
+			(@idx :=@idx + 1) AS sortid,
+			warm_list.gid AS gid,
+			warm_list.gname AS gname,
+			warm_list.card_id AS cardId,
+			warm_list.card_no AS cardNo,
+			warm_list.card_status AS cardStatus,
+			warm_list.rspace_id AS rspaceId,
+			warm_list.erspace_id AS erspaceId,
+			'' AS isEnter,
+			warm_list.pc_time AS pcTime,
+			warm_list.enter_time AS enterTime,
+			warm_list.exit_time AS exitTime,
+			warm_list.lastEnterDate AS lastEnterDate,
+			warm_list.lastExitDate AS lastExitDate,
+			warm_list.warn_over AS warnOver,
+			'' AS warnCurr,
+			<!-- warm_list.warn_curr AS warnCurr, -->
+			warm_list.warn_h24 AS warnH24,
+			<!-- (case
+			when (warm_list.warn_over = '' AND warm_list.warn_h24 = '' AND warm_list.warn_curr IS NOT NULL) then warm_list.warn_curr
+			when (warm_list.warn_h24 = '' AND warm_list.warn_curr = '' AND warm_list.warn_over IS NOT NULL) then warm_list.warn_over
+			when (warm_list.warn_curr = '' AND warm_list.warn_over = '' AND warm_list.warn_h24 IS NOT NULL) then warm_list.warn_h24
+			when (warm_list.warn_curr IS NOT NULL AND warm_list.warn_over IS NOT NULL AND warm_list.warn_h24 = '') then CONCAT(warm_list.warn_curr, ' ', warm_list.warn_over)
+			when (warm_list.warn_curr IS NOT NULL AND warm_list.warn_over = '' AND warm_list.warn_h24 IS NOT NULL) then CONCAT(warm_list.warn_curr, ' ', warm_list.warn_h24)
+			when (warm_list.warn_curr = '' AND warm_list.warn_over IS NOT NULL AND warm_list.warn_h24 IS NOT NULL) then CONCAT(warm_list.warn_h24, ' ', warm_list.warn_over)
+			when (warm_list.warn_curr IS NOT NULL AND warm_list.warn_over IS NOT NULL AND warm_list.warn_h24 IS NOT NULL) then CONCAT(warm_list.warn_curr, ' ', warm_list.warn_h24, ' ', warm_list.warn_over)
+			else '' end) AS warnName, -->
+			warm_list.rspace_name AS rspaceName,
+			warm_list.uid AS uid,
+			warm_list.uno AS uno,
+			warm_list.uname AS uname,
+			warm_list.umobile AS umobile,
+			warm_list.oid AS oid,
+			warm_list.office AS office
+		FROM (
+			SELECT
+				ggi.id AS gid,
+				ggi.name AS gname,
+				ir.card_id AS card_id,
+				dc.no AS card_no,
+				dc.status AS card_status,
+				ir.rspace_id AS rspace_id,
+				ir.erspace_id AS erspace_id,
+				ir.pc_time AS pc_time,
+				ir.enter_time AS enter_time,
+				ir.exit_time AS exit_time,
+				max(ir.pc_time) AS lastEnterDate,
+				max(ir.exit_time) AS lastExitDate,
+				<if test="(isEnter == null) or (isEnter != null and isEnter != 1)">
+					'' AS warn_over,
+				</if>
+				<if test="isEnter !=null and isEnter == 1">
+					(CASE
+						WHEN ((max(ir.enter_time) IS NOT NULL) AND (DATE_ADD(max(ir.enter_time), INTERVAL #{enterDay} DAY) > now())) THEN ''
+						WHEN ((max(ir.exit_time) IS NOT NULL) AND (DATE_ADD(max(ir.exit_time), INTERVAL #{enterDay} DAY) > now())) THEN ''
+						ELSE CONCAT('超过', #{enterDay}, '天未打卡')
+					END) AS warn_over,
+				</if>
+				<if test="(isOut == null)">
+					'' AS warn_curr,
+					'' AS warn_h24,
+				</if>
+
+				<if test="isOut != null and isOut == 1">
+					(CASE WHEN ((max(ir.enter_time) IS NOT NULL) AND (max(ir.enter_time) BETWEEN #{outBeginDate} AND #{outEndDate} )) THEN '' ELSE '当天未打卡' END) AS warn_curr,
+					(CASE WHEN ((max(ir.exit_time) IS NOT NULL) AND (max(ir.exit_time) <![CDATA[ >= ]]> max(ir.enter_time)) AND (max(ir.exit_time) BETWEEN str_to_date(concat(str_to_date(now(),'%Y-%m-%d'),' 00:00:00'),'%Y-%m-%d %H:%i:%s') AND str_to_date(concat(str_to_date(now(),'%Y-%m-%d'),' 23:59:59'),'%Y-%m-%d %H:%i:%s') )) THEN '' ELSE '当天未出基地' END) AS warn_h24,
+				</if>
+				<if test="isOut != null and isOut != 1">
+					'' AS warn_curr,
+					'' AS warn_h24,
+				</if>
+				eps.rspace_name AS rspace_name,
+				u.id AS uid,
+				(case when dc.card_type='0' then dc.tmp_no else u.no end) AS uno,
+				(case when dc.card_type='0' then dc.tmp_name else u.name end) AS uname,
+				(case when dc.card_type='0' then dc.tmp_tel else u.mobile end) AS umobile,
+				o.id AS oid,
+				o.name AS office
+			FROM (
+					SELECT
+						g.id AS id,
+						g.name AS name,
+						gi.erspace_id AS erspace_id
+					FROM dr_cardre_group g
+					LEFT JOIN dr_cardre_gitem gi ON gi.gid = g.id
+					WHERE g.del_flag = '0'
+			) ggi
+			LEFT JOIN dr_inout_record ir ON ir.erspace_id = ggi.erspace_id
+			LEFT JOIN (
+				SELECT
+					'2' AS "rsp_type",
+					pr.id AS "rspace_id",
+						(case when (pspppp.name='root') then
+								CONCAT(psppp.name, "/", pspp.name, "/", psp.name, "/", ps.name, "/", pr.name)
+						when (psppp.name = 'root') then
+								CONCAT(pspp.name, "/", psp.name, "/", ps.name, "/", pr.name)
+						when (pspp.name = 'root') then
+								CONCAT(psp.name, "/", ps.name, "/", pr.name)
+						when (psp.name = 'root') then
+								CONCAT(ps.name, "/", pr.name)
+						when (pr.sid IS NULL OR pr.sid = '') then
+								CONCAT(pr.name)
+						end) AS "rspace_name"
+				FROM pw_room pr
+				LEFT JOIN pw_space ps ON ps.id = pr.sid
+				LEFT JOIN pw_space psp ON psp.id = ps.parent_id
+				LEFT JOIN pw_space pspp ON pspp.id = psp.parent_id
+				LEFT JOIN pw_space psppp ON psppp.id = pspp.parent_id
+				LEFT JOIN pw_space pspppp ON pspppp.id = psppp.parent_id
+			UNION ALL
+				SELECT
+					'1' AS "rsp_type",
+					ps.id AS "rspace_id",
+					(case when (pspppp.name='root') then
+							CONCAT(psppp.name, "/", pspp.name, "/", psp.name, "/", ps.name)
+					when (psppp.name = 'root') then
+							CONCAT(pspp.name, "/", psp.name, "/", ps.name)
+					when (pspp.name = 'root') then
+							CONCAT(psp.name, "/", ps.name)
+					when (psp.name = 'root') then
+							CONCAT(ps.name)
+					end) AS "rspace_name"
+				FROM pw_space ps
+				LEFT JOIN pw_space psp ON psp.id = ps.parent_id
+				LEFT JOIN pw_space pspp ON pspp.id = psp.parent_id
+				LEFT JOIN pw_space psppp ON psppp.id = pspp.parent_id
+				LEFT JOIN pw_space pspppp ON pspppp.id = psppp.parent_id
+			) eps ON eps.rspace_id = ir.rspace_id
+			LEFT JOIN dr_card dc ON dc.id = ir.card_id
+			LEFT JOIN sys_user u ON dc.uid=u.id
+			LEFT JOIN sys_office o ON u.office_id=o.id
+
+			WHERE ggi.id IS NOT NULL
+			GROUP BY ggi.id, ir.card_id
+			<!--  , ir.rspace_id -->
+		) warm_list ,(SELECT @idx:= 0) sortidx
+		WHERE 1=1 AND warm_list.card_no IS NOT NULL AND !(warm_list.warn_curr = '' AND warm_list.warn_h24 = '' AND warm_list.warn_over = '')
+			<if test="gid != null and gid != ''">
+				AND warm_list.gid = #{gid}
+			</if>
+			<if test="rspaceIds != null and rspaceIds.size() != 0">
+				AND warm_list.rspaceId IN
+                <foreach item="item" collection="rspaceIds" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+			<if test="drGtimes != null and drGtimes.size() != 0">
+               <foreach item="item" collection="drGtimes" separator=" " open=" " close=" ">
+				AND warm_list.pc_time NOT BETWEEN #{item.beginDate} AND #{item.endDate}
+                </foreach>
+            </if>
+			<if test="officeIds != null and officeIds.size() != 0">
+                  AND warm_list.oid IN
+                <foreach item="item" collection="officeIds" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+			<if test="ids != null and ids.size() != 0">
+                  AND warm_list.id IN
+                <foreach item="item" collection="ids" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+			<if test="gids != null and gids.size() != 0">
+                  AND warm_list.gid IN
+                <foreach item="item" collection="gids" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="sortids != null and sortids.size() != 0">
+                  AND warm_list.sortid IN
+                <foreach item="item" collection="sortids" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+			<if test="id != null and id != ''">
+				AND warm_list.id = #{id}
+			</if>
+			<if test="qryOffice !=null and qryOffice !='' ">
+				AND warm_list.oid=#{qryOffice}
+			</if>
+			<if test="queryWarn !=null and queryWarn !='' ">
+				AND (
+					warm_list.warn_over LIKE concat('%',#{queryWarn},'%')
+					OR warm_list.warn_curr LIKE concat('%',#{queryWarn},'%')
+					OR warm_list.warn_h24 LIKE concat('%',#{queryWarn},'%')
+				)
+			</if>
+			<if test="qryStr !=null and qryStr !='' ">
+				AND (
+					warm_list.warn_over LIKE concat('%',#{qryStr},'%')
+					OR warm_list.warn_curr LIKE concat('%',#{qryStr},'%')
+					OR warm_list.warn_h24 LIKE concat('%',#{qryStr},'%')
+					OR warm_list.card_no LIKE concat('%',#{qryStr},'%')
+					OR warm_list.uno like concat('%',#{qryStr},'%')
+					OR warm_list.uname like concat('%',#{qryStr},'%')
+					OR warm_list.umobile like concat('%',#{qryStr},'%')
+					OR warm_list.office like concat('%',#{qryStr},'%')
+					OR warm_list.gname like concat('%',#{qryStr},'%')
+					OR warm_list.rspace_name like concat('%',#{qryStr},'%')
+				)
+			</if>
+			<if test="qryStartTime !=null and qryStartTime !='' ">
+				AND warm_list.pc_time <![CDATA[ >= ]]> str_to_date(concat(#{qryStartTime},' 00:00:00'),'%Y-%m-%d %H:%i:%s')
+			</if>
+			<if test="qryEndTime !=null and qryEndTime !='' ">
+				AND warm_list.pc_time <![CDATA[ <= ]]> str_to_date(concat(#{qryEndTime},' 23:59:59'),'%Y-%m-%d %H:%i:%s')
+			</if>
+			ORDER BY warm_list.pc_time DESC
+	</select>
+
+
+	<!-- <select id="getListVo" parameterType="java.util.Date" resultType="DrCardRecordWarnVo">
+		SELECT
+			warm_list.sortid AS sortid,
+			warm_list.id AS id,
+			warm_list.cardNo AS cardNo,
+			warm_list.cardStatus AS cardStatus,
+			warm_list.uid AS uid,
+			warm_list.uno AS uno,
+			warm_list.uname AS uname,
+			warm_list.umobile AS umobile,
+			warm_list.oid AS oid,
+			warm_list.office AS office,
+			warm_list.warnName AS warnName,
+			ggi.id AS gid,
+			ggi.name AS gname,
+			irs.rspace_id AS rspaceId,
+			irs.erspace_id AS erspaceId,
+			irs.rspace_name AS rspaceName,
+			irs.pc_time AS pcTime
+		FROM (
+			SELECT
+				(@idx:=@idx + 1) AS sortid,
+				warn.id AS id,
+				warn.cardNo AS cardNo,
+				warn.cardStatus AS cardStatus,
+				warn.uid AS uid,
+				warn.uno AS uno,
+				warn.uname AS uname,
+				warn.umobile AS umobile,
+				warn.oid AS oid,
+				warn.office AS office,
+				warn.warnName AS warnName
+			 FROM (
+				SELECT
+					dc.id AS id,
+					dc.no AS cardNo,
+					dc.status AS cardStatus,
+					u.id AS uid,
+				 	(case when dc.card_type='0' then dc.tmp_no else u.no end) AS uno,
+					(case when dc.card_type='0' then dc.tmp_name else u.name end) AS uname,
+					(case when dc.card_type='0' then dc.tmp_tel else u.mobile end) AS umobile,
+					o.id AS oid,
+					o.name AS office,
+					'当天未打卡' warnName
+				FROM dr_card dc
+				LEFT JOIN sys_user u ON dc.uid=u.id
+				LEFT JOIN sys_office o ON u.office_id=o.id
+				WHERE 1=1
+				<if test="isOut ==null">
+					and 1=2
+				</if>
+				<if test="isOut !=null and isOut != 1">
+					and 1=2
+				</if>
+				<if test="isOut !=null and isOut == 1">
+					and dc.id not in(
+						select dcr.card_id from dr_card_record dcr
+						WHERE
+						dcr.is_enter='0' and
+						dcr.pc_time <![CDATA[ >= ]]> #{outBeginDate}
+						and dcr.pc_time <![CDATA[ <= ]]> #{outEndDate}
+						GROUP BY dcr.id
+					)
+				</if>
+				UNION
+				SELECT
+					dc.id AS id,
+					dc.no AS cardNo,
+					dc.status AS cardStatus,
+					u.id AS uid,
+				 	(case when dc.card_type='0' then dc.tmp_no else u.no end) AS uno,
+					(case when dc.card_type='0' then dc.tmp_name else u.name end) AS uname,
+					(case when dc.card_type='0' then dc.tmp_tel else u.mobile end) AS umobile,
+					o.id AS oid,
+					o.name AS office,
+					<if test="isEnter ==null">
+					'' warnName
+					</if>
+					<if test="isEnter !=null and isEnter != 1">
+					'' warnName
+					</if>
+					<if test="isEnter !=null and isEnter == 1">
+						CONCAT('超过',#{enterDay},'天未打卡') warnName
+					</if>
+				FROM dr_card dc
+				LEFT JOIN sys_user u ON dc.uid=u.id
+				LEFT JOIN sys_office o ON u.office_id=o.id
+				WHERE 1=1
+				<if test="isEnter ==null">
+					AND 1=2
+				</if>
+				<if test="isEnter !=null and isEnter != 1">
+					AND 1=2
+				</if>
+				<if test="isEnter !=null and isEnter == 1">
+					AND dc.id not in(
+						SELECT
+							dcr.card_id from dr_card_record dcr
+	 					WHERE
+	 						dcr.is_enter='1'
+						GROUP BY dcr.card_id
+						HAVING max(dcr.pc_time) <![CDATA[ >= ]]> DATE_ADD(SYSDATE(),INTERVAL - #{enterDay} DAY)
+					)
+				</if>
+			) warn ,(SELECT @idx:= 0) sortidx
+		) warm_list
+		LEFT JOIN (
+			SELECT
+				ir.card_id AS card_id,
+				ir.rspace_id AS rspace_id,
+				ir.erspace_id AS erspace_id,
+				max(ir.pc_time) AS pc_time,
+				eps.rspace_name AS rspace_name
+			FROM dr_inout_record ir
+			LEFT JOIN (
+					SELECT
+						'2' AS "rsp_type",
+						pr.id AS "rspace_id",
+							(case when (pspppp.name='root') then
+									CONCAT(psppp.name, "/", pspp.name, "/", psp.name, "/", ps.name, "/", pr.name)
+							when (psppp.name = 'root') then
+									CONCAT(pspp.name, "/", psp.name, "/", ps.name, "/", pr.name)
+							when (pspp.name = 'root') then
+									CONCAT(psp.name, "/", ps.name, "/", pr.name)
+							when (psp.name = 'root') then
+									CONCAT(ps.name, "/", pr.name)
+							when (pr.sid IS NULL OR pr.sid = '') then
+									CONCAT(pr.name)
+							end) AS "rspace_name"
+					FROM pw_room pr
+					LEFT JOIN pw_space ps ON ps.id = pr.sid
+					LEFT JOIN pw_space psp ON psp.id = ps.parent_id
+					LEFT JOIN pw_space pspp ON pspp.id = psp.parent_id
+					LEFT JOIN pw_space psppp ON psppp.id = pspp.parent_id
+					LEFT JOIN pw_space pspppp ON pspppp.id = psppp.parent_id
+				UNION ALL
+					SELECT
+						'1' AS "rsp_type",
+						ps.id AS "rspace_id",
+						(case when (pspppp.name='root') then
+								CONCAT(psppp.name, "/", pspp.name, "/", psp.name, "/", ps.name)
+						when (psppp.name = 'root') then
+								CONCAT(pspp.name, "/", psp.name, "/", ps.name)
+						when (pspp.name = 'root') then
+								CONCAT(psp.name, "/", ps.name)
+						when (psp.name = 'root') then
+								CONCAT(ps.name)
+						end) AS "rspace_name"
+					FROM pw_space ps
+					LEFT JOIN pw_space psp ON psp.id = ps.parent_id
+					LEFT JOIN pw_space pspp ON pspp.id = psp.parent_id
+					LEFT JOIN pw_space psppp ON psppp.id = pspp.parent_id
+					LEFT JOIN pw_space pspppp ON pspppp.id = psppp.parent_id
+			) eps ON eps.rspace_id = ir.rspace_id
+			GROUP BY ir.card_id, ir.rspace_id
+		) irs ON irs.card_id = warm_list.id
+		LEFT JOIN (
+			SELECT
+				g.id AS id,
+				g.name AS name,
+				gi.erspace_id AS erspace_id
+			FROM dr_cardre_group g
+			LEFT JOIN dr_cardre_gitem gi ON gi.gid = g.id
+			WHERE g.del_flag = '0'
+		) ggi ON ggi.erspace_id = irs.erspace_id
+		WHERE ggi.id IS NOT NULL
+			AND warm_list.cardNo IS NOT NULL
+			<if test="gid != null and gid != ''">
+				AND ggi.id = #{gid}
+			</if>
+			<if test="rspaceIds != null and rspaceIds.size() != 0">
+				AND irs.rspace_id IN
+                <foreach item="item" collection="rspaceIds" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+			<if test="officeIds != null and officeIds.size() != 0">
+                  AND warm_list.oid IN
+                <foreach item="item" collection="officeIds" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+			<if test="ids != null and ids.size() != 0">
+                  AND warm_list.id IN
+                <foreach item="item" collection="ids" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="sortids != null and sortids.size() != 0">
+                  AND warm_list.sortid IN
+                <foreach item="item" collection="sortids" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+			<if test="id != null and id != ''">
+				AND warm_list.id = #{id}
+			</if>
+			<if test="qryOffice !=null and qryOffice !='' ">
+				AND warm_list.oid=#{qryOffice}
+			</if>
+			<if test="qryStr !=null and qryStr !='' ">
+				AND (
+					warm_list.warnName LIKE concat('%',#{qryStr},'%')
+					OR warm_list.cardNo LIKE concat('%',#{qryStr},'%')
+					OR warm_list.uno like concat('%',#{qryStr},'%')
+					OR warm_list.uname like concat('%',#{qryStr},'%')
+					OR warm_list.umobile like concat('%',#{qryStr},'%')
+					OR warm_list.office like concat('%',#{qryStr},'%')
+					OR ggi.name like concat('%',#{qryStr},'%')
+					OR irs.rspace_name like concat('%',#{qryStr},'%')
+				)
+			</if>
+			<if test="qryStartTime !=null and qryStartTime !='' ">
+				AND warm_list.pc_time <![CDATA[ >= ]]> str_to_date(concat(#{qryStartTime},' 00:00:00'),'%Y-%m-%d %H:%i:%s')
+			</if>
+			<if test="qryEndTime !=null and qryEndTime !='' ">
+				AND warm_list.pc_time <![CDATA[ <= ]]> str_to_date(concat(#{qryEndTime},' 23:59:59'),'%Y-%m-%d %H:%i:%s')
+			</if>
+			ORDER BY irs.pc_time DESC
+	</select> -->
+
+
+	<select id="findListByg" resultType="DrCardRecord">
+		SELECT
+			<include refid="drCardRecordBygColumns"/>
+		FROM dr_card_record a
+		<include refid="drCardRecordBygJoins"/>
+		<where> 1 = 1
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="isEnter != null and isEnter != ''">
+				AND a.is_enter = #{isEnter}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="card != null">
+				<if test="card.ids != null">
+                  AND a.card_id IN
+	                <foreach item="item" collection="card.ids" separator="," open="("
+	                         close=")">
+	                    #{item}
+	                </foreach>
+	            </if>
+				<if test="card.id != null and card.id != ''">
+					AND d.id = #{card.id}
+				</if>
+				<if test="card.no != null and card.no != ''">
+					AND d.no = #{card.no}
+				</if>
+				<if test="card.drNo != null and card.drNo != ''">
+					AND d.dr_no = #{card.drNo}
+				</if>
+				<if test="card.status != null and card.status != ''">
+					AND d.status = #{card.status}
+				</if>
+				<if test="card.openTimes != null and card.openTimes != ''">
+					AND d.open_times = #{card.openTimes}
+				</if>
+				<if test="card.privilege != null and card.privilege != ''">
+					AND d.privilege = #{card.privilege}
+				</if>
+				<if test="card.warnning != null and card.warnning != ''">
+					AND d.warnning = #{card.warnning}
+				</if>
+				<if test="card.isCancel != null and card.isCancel != ''">
+					AND d.is_cancel = #{card.isCancel}
+				</if>
+				<if test="card.cardType != null and card.cardType != ''">
+					AND d.card_type = #{card.cardType}
+				</if>
+				<if test="card.tmpName != null and card.tmpName != ''">
+					AND d.tmp_name = #{card.tmpName}
+				</if>
+				<if test="card.tmpTel != null and card.tmpTel != ''">
+					AND d.tmp_tel = #{card.tmpTel}
+				</if>
+				<if test="card.holidayUse != null and card.holidayUse != ''">
+					AND d.holiday_use = #{card.holidayUse}
+				</if>
+				<if test="card.expiry != null and card.expiry != ''">
+					AND d.expiry <![CDATA[  >= ]]> #{card.expiry}
+				</if>
+			</if>
+			<if test="user != null">
+				<if test="user.id != null and user.id != ''">
+					AND d.uid = #{user.id}
+				</if>
+				<if test="user.name != null and user.name != ''">
+					AND u2.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+				</if>
+			</if>
+			<if test="cerspace != null">
+				<if test="cerspace.id != null and cerspace.id != ''">
+					AND ce.id = #{cerspace.id}
+				</if>
+				<if test="cerspace.erspace != null">
+					<if test="cerspace.erspace.id != null and cerspace.erspace.id != ''">
+						AND b.id = #{cerspace.erspace.id}
+					</if>
+					<if test="cerspace.erspace.rspace != null and cerspace.erspace.rspace != ''">
+						AND b.rspace_id = #{cerspace.erspace.rspace}
+					</if>
+					<if test="cerspace.erspace.drNo != null and cerspace.erspace.drNo != ''">
+						AND b.dr_no = #{cerspace.erspace.drNo}
+					</if>
+					<if test="cerspace.erspace.epment != null">
+						<if test="cerspace.erspace.epment.id != null and cerspace.erspace.epment.id != ''">
+							AND c.id = #{cerspace.erspace.epment.id}
+						</if>
+						<if test="cerspace.erspace.epment.no != null and cerspace.erspace.epment.no != ''">
+							AND c.no = #{cerspace.erspace.epment.no}
+						</if>
+						<if test="cerspace.erspace.epment.name != null and cerspace.erspace.epment.name != ''">
+							AND c.name LIKE
+								<if test="dbName == 'oracle'">'%'||#{cerspace.erspace.epment.name}||'%'</if>
+								<if test="dbName == 'mssql'">'%'+#{cerspace.erspace.epment.name}+'%'</if>
+								<if test="dbName == 'mysql'">concat('%',#{cerspace.erspace.epment.name},'%')</if>
+						</if>
+						<if test="cerspace.erspace.epment.ip != null and cerspace.erspace.epment.ip != ''">
+							AND c.ip = #{cerspace.erspace.epment.ip}
+						</if>
+						<if test="cerspace.erspace.epment.port != null and cerspace.erspace.epment.port != ''">
+							AND c.port  = #{cerspace.erspace.epment.port}
+						</if>
+						<if test="cerspace.erspace.epment.type != null and cerspace.erspace.epment.type != ''">
+							AND c.type = #{cerspace.erspace.epment.type}
+						</if>
+						<if test="cerspace.erspace.epment.drNo != null and cerspace.erspace.epment.drNo != ''">
+							AND c.dr_no LIKE
+								<if test="dbName == 'oracle'">'%'||#{cerspace.erspace.epment.drNo}||'%'</if>
+								<if test="dbName == 'mssql'">'%'+#{cerspace.erspace.epment.drNo}+'%'</if>
+								<if test="dbName == 'mysql'">concat('%',#{cerspace.erspace.epment.drNo},'%')</if>
+						</if>
+						<if test="cerspace.erspace.epment.tindex != null and cerspace.erspace.epment.tindex != ''">
+							AND c.tindex <![CDATA[  >= ]]> #{cerspace.erspace.epment.tindex}
+						</if>
+					</if>
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="DrCardRecord">
+		SELECT
+			<include refid="drCardRecordColumns"/>
+		FROM dr_card_record a
+		<include refid="drCardRecordJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllListByg" resultType="DrCardRecord">
+		SELECT
+			<include refid="drCardRecordColumns"/>
+		FROM dr_card_record a
+		<include refid="drCardRecordJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dr_card_record(
+			id,
+			uid,
+			card_id,
+			cerspace_id,
+			erspace_id,
+			rspace_name,
+			is_enter,
+			type,
+			pc_time,
+			time,
+			dispose,
+			dispose_msg,
+			msg,
+			card_no,
+			ept_sn,
+			ept_id,
+			rsp_type,
+			create_date,
+			rspace_id,
+			dr_no,
+			name
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{card.id},
+			#{cerspace.id},
+			#{cerspace.erspace.id},
+			#{rspaceName},
+			#{isEnter},
+			#{type},
+			#{pcTime},
+			#{time},
+			#{dispose},
+			#{disposeMsg},
+			#{msg},
+			#{cardNo},
+			#{eptSn},
+			#{eptId},
+			#{rspType},
+			#{createDate},
+			#{rspaceId},
+			#{drNo},
+			#{name}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE dr_card_record SET
+			uid = #{user.id},
+			card_id = #{card.id},
+			cerspace_id = #{cerspace.id},
+			erspace_id = #{cerspace.erspace.id},
+			rspace_name = #{rspaceName},
+			card_no = #{cardNo},
+			ept_sn = #{eptSn},
+			ept_id = #{eptId},
+			rsp_type = #{rspType},
+			rspace_id = #{rspaceId},
+			dr_no = #{drNo},
+			name = #{name},
+			is_enter = #{isEnter},
+			type = #{type},
+			pc_time = #{pcTime},
+			time = #{time},
+			dispose=#{dispose},
+			dispose_msg=#{disposeMsg},
+			msg=#{msg}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM dr_card_record
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM dr_card_record WHERE id = #{id}
+	</update>
+
+	<insert id="savePl" >
+		INSERT INTO dr_card_record(
+			id,
+			uid,
+			card_id,
+			cerspace_id,
+			erspace_id,
+			rspace_name,
+			is_enter,
+			type,
+			pc_time,
+			time,
+			dispose,
+			dispose_msg,
+			msg,
+			card_no,
+			ept_sn,
+			ept_id,
+			rsp_type,
+			create_date,
+			rspace_id,
+			dr_no,
+			name
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				#{item.id},
+				#{item.user.id},
+				#{item.card.id},
+				#{item.cerspace.id},
+				#{item.cerspace.erspace.id},
+				#{item.rspaceName},
+				#{item.isEnter},
+				#{item.type},
+				#{item.pcTime},
+				#{item.time},
+				#{item.dispose},
+				#{item.disposeMsg},
+				#{item.msg},
+				#{item.cardNo},
+				#{item.eptSn},
+				#{item.eptId},
+				#{item.rspType},
+				#{item.createDate},
+				#{item.rspaceId},
+				#{item.drNo},
+				#{item.name}
+			)
+		</foreach>
+	</insert>
+
+	<update id="updateByPl" parameterType="java.util.List" >
+		UPDATE dr_card_record
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="uid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.user.id}
+				</foreach>
+			</trim>
+			<trim prefix="card_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.card.id}
+				</foreach>
+			</trim>
+			<trim prefix="cerspace_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.cerspace.id}
+				</foreach>
+			</trim>
+			<trim prefix="erspace_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.cerspace.erspace.id}
+				</foreach>
+			</trim>
+			<trim prefix="is_enter =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isEnter}
+				</foreach>
+			</trim>
+			<trim prefix="type =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.type}
+				</foreach>
+			</trim>
+			<trim prefix="pc_time =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.pcTime}
+				</foreach>
+			</trim>
+			<trim prefix="time =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.time}
+				</foreach>
+			</trim>
+			<trim prefix="dispose =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.dispose}
+				</foreach>
+			</trim>
+			<trim prefix="dispose_msg =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.disposeMsg}
+				</foreach>
+			</trim>
+			<trim prefix="msg =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.msg}
+				</foreach>
+			</trim>
+			<trim prefix="card_no =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.cardNo}
+				</foreach>
+			</trim>
+			<trim prefix="ept_sn =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.eptSn}
+				</foreach>
+			</trim>
+			<trim prefix="ept_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.eptId}
+				</foreach>
+			</trim>
+			<trim prefix="rsp_type =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rspType}
+				</foreach>
+			</trim>
+			<trim prefix="rspace_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rspaceId}
+				</foreach>
+			</trim>
+			<trim prefix="dr_no =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.drNo}
+				</foreach>
+			</trim>
+			<trim prefix="name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.name}
+				</foreach>
+			</trim>
+			<trim prefix="rspace_name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rspaceName}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="updateUidByPl" parameterType="java.util.List" >
+		UPDATE dr_card_record
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="card_no =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.cardNo}
+				</foreach>
+			</trim>
+			<trim prefix="uid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.user.id}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<select id="getDataToDispose" resultType="com.oseasy.dr.modules.dr.vo.DrCardRecordVo">
+		SELECT
+			a.id AS id,
+			a.uid AS uid,
+			a.card_id AS "cardId",
+			a.cerspace_id AS "cerspaceId",
+			a.erspace_id AS "erspaceId",
+			a.is_enter AS "isEnter",
+			a.type AS "type",
+			a.pc_time AS "pcTime",
+			a.time AS "time",
+			a.dispose AS dispose,
+			a.dispose_msg AS disposeMsg,
+			a.msg AS msg,
+			a.card_no AS cardNo,
+			a.ept_id AS eptId,
+			a.rsp_type AS rspType,
+			a.rspace_id AS rspaceId,
+			a.dr_no AS drNo,
+			a.name AS name,
+			g.id AS gid
+		FROM dr_card_record a
+		<!-- LEFT JOIN dr_equipment_rspace er ON er.rspace_id = a.rspace_id  -->
+		LEFT JOIN dr_cardre_gitem gi ON gi.erspace_id = a.erspace_id
+		LEFT JOIN dr_cardre_group g ON g.id = gi.gid
+		WHERE (a.dispose = '0' OR a.dispose is null) AND g.is_show = '1'
+			AND a.pc_time <![CDATA[ <= ]]> str_to_date(concat(#{date},' 23:59:59'),'%Y-%m-%d %H:%i:%s')
+			<if test="rspaceIds != null and rspaceIds.size() != 0">
+            	AND a.rspace_id IN
+                <foreach item="item" collection="rspaceIds" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="gids != null and gids.size() != 0">
+            	AND g.id IN
+                <foreach item="item" collection="gids" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+	    GROUP BY a.id,g.id
+		ORDER BY a.pc_time
+	</select>
+	<update id="updateDisposeDone">
+		UPDATE dr_card_record SET
+			dispose='1'
+		WHERE
+		<foreach collection="ds" item="item" index="index" separator=" or ">
+			id = #{item.id}
+		</foreach>
+	</update>
+</mapper>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.promodel.dao.ProTeamDao">
+	<resultMap id="gcoVo"
+		type="com.oseasy.pro.modules.promodel.entity.GContestUndergo">
+		<id property="id" column="id" />
+		<result property="type" column="type" />
+		<result property="createDate" column="createDate" />
+		<result property="finish" column="finish" />
+		<result property="leaderId" column="leaderId" />
+		<result property="pName" column="pName" />
+		<result property="award" column="award" />
+		<result property="sponsor" column="sponsor" />
+		<result property="level" column="level" />
+		<collection property="userList" ofType="User">
+			<id property="id" column="userList.id" />
+			<id property="userType" column="userList.userType" />
+			<id property="no" column="userList.no" />
+			<id property="name" column="userList.name" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="expVo"
+		type="com.oseasy.pro.modules.project.vo.ProjectExpVo">
+		<id property="id" column="id" />
+		<result property="startDate" column="startDate" />
+		<result property="endDate" column="endDate" />
+		<result property="name" column="name" />
+		<result property="proName" column="proName" />
+		<result property="leaderId" column="leaderId" />
+		<result property="level" column="level" />
+		<result property="result" column="result" />
+		<result property="finish" column="finish" />
+		<collection property="userList" ofType="User">
+			<id property="id" column="userList.id" />
+			<id property="userType" column="userList.userType" />
+			<id property="no" column="userList.no" />
+			<id property="name" column="userList.name" />
+		</collection>
+	</resultMap>
+
+	<select id="findGContestByTeamId" resultMap="gcoVo"
+		parameterType="java.lang.String">
+		SELECT
+		pp.type as "type",
+		g.create_date as "createDate",
+		pp.project_name AS "proName",
+		g.p_name as "pName",
+		gca.award as "award",
+		t.sponsor as "leaderId",
+		g.type as "level",
+		g.id id,
+		tuh.finish AS
+		"finish",
+		tuh.user_id AS "userList.id",
+		tuh.user_type AS
+		"userList.userType",
+		su.name AS "userList.name",
+		su.no AS "userList.no"
+		FROM g_contest g
+		LEFT JOIN g_contest_award gca ON gca.contest_id=g.id
+		LEFT JOIN act_yw ay ON ay.id=g.actyw_id
+		LEFT JOIN pro_project pp ON
+		ay.rel_id=pp.id
+		LEFT JOIN team t ON g.team_id = t.id
+		LEFT JOIN
+		team_user_history tuh ON g.team_id = tuh.team_id
+		LEFT JOIN sys_user su
+		ON su.id = tuh.user_id
+		WHERE g.team_id = #{teamId} and g.del_flag='0'
+		and g.proc_ins_id is not null
+		UNION
+		SELECT
+		pp.type as "type",
+		p.create_date as "createDate",
+		p.p_name as "pName",
+		pp.project_name AS
+		"proName",
+		'' as "award",
+		t.sponsor as "leaderId",
+		p.pro_category as
+		"level",
+		p.id id,
+		tuh.finish AS "finish",
+		tuh.user_id AS "userList.id",
+		tuh.user_type AS "userList.userType",
+		su.name AS "userList.name",
+		su.no AS
+		"userList.no"
+		FROM pro_model p
+		LEFT JOIN act_yw ay ON ay.id=p.actyw_id
+		LEFT JOIN pro_project pp ON ay.rel_id=pp.id
+		LEFT JOIN team t ON
+		p.team_id = t.id
+		LEFT JOIN team_user_history tuh ON p.team_id =
+		tuh.team_id
+		LEFT JOIN sys_user su ON su.id = tuh.user_id
+		WHERE p.team_id
+		= #{teamId} and p.del_flag='0' and p.sub_status='1'
+		and
+		pp.pro_type='7,'
+	</select>
+
+	<select id="findProjectByTeamId" resultMap="expVo"
+		parameterType="java.lang.String">
+		SELECT a.id AS id , y.start_date AS "startDate",
+		y.end_date AS "endDate",
+		a.name AS "name",
+		pp.project_name AS "proName",
+		t.sponsor as "leaderId",
+		( SELECT label FROM sys_dict dict
+		WHERE TYPE="project_degree" AND dict.value=a.level) AS "level",
+		( SELECT
+		label FROM sys_dict dict
+		WHERE TYPE="project_result" AND
+		dict.value=a.final_result) AS "result",
+		tuh.finish AS "finish",
+		tuh.user_id AS "userList.id",
+		tuh.user_type AS "userList.userType",
+		su.name AS "userList.name",
+		su.no AS "userList.no"
+		FROM project_declare a
+		LEFT JOIN act_yw ay ON ay.id=a.actyw_id
+		LEFT JOIN pro_project pp ON ay.rel_id=pp.id
+		LEFT JOIN team t ON a.team_id = t.id
+		LEFT JOIN team_user_history tuh ON a.team_id = tuh.team_id
+		LEFT JOIN sys_user su ON su.id = tuh.user_id
+		Left join act_yw_year y on y.actyw_id = ay.id
+		WHERE a.team_id = #{teamId} and a.del_flag='0' AND a.proc_ins_id is not
+		null
+		and a.id=tuh.pro_id
+		UNION
+		SELECT pm.id AS id , y.start_date AS "startDate",
+		y.end_date AS "endDate",
+		pm.p_name AS "name",
+		pp.project_name AS "proName",
+		t.sponsor as "leaderId",
+		( SELECT label FROM sys_dict dict
+		WHERE TYPE="project_degree" AND dict.value=pm.final_status) AS "level",
+		( SELECT label FROM sys_dict dict WHERE TYPE="project_result" AND
+		dict.value=pm.grade) AS "result",
+		tuh.finish AS "finish",
+		tuh.user_id AS "userList.id",
+		tuh.user_type AS "userList.userType",
+		su.name AS "userList.name",
+		su.no AS "userList.no"
+		FROM pro_model pm
+		LEFT JOIN act_yw ay ON ay.id=pm.actyw_id
+		LEFT JOIN pro_project pp ON ay.rel_id=pp.id
+		LEFT JOIN team t ON pm.team_id = t.id
+		LEFT JOIN team_user_history tuh ON pm.team_id = tuh.team_id
+		LEFT JOIN sys_user su ON su.id = tuh.user_id
+		Left join act_yw_year y on y.actyw_id = ay.id
+		WHERE pm.team_id = #{teamId} and pm.del_flag='0' and pm.sub_status='1'
+		and pp.pro_type='1,' and pm.id=tuh.pro_id
+	</select>
+</mapper>

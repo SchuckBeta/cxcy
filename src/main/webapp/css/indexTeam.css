@@ -1,0 +1,205 @@
+
+
+.page-container{
+    width: 1270px;
+    margin-right: auto;
+    margin-left: auto;
+    padding:50px 15px 0 15px;
+}
+
+.create-box{
+    overflow: hidden;
+    padding:20px 20px 10px 0;
+    margin-bottom:10px;
+    font-size: 12px;
+}
+
+.box-border{
+    border:1px solid #F1F1F1;
+    margin-top:20px;
+    margin-bottom:20px;
+}
+
+table th{
+    background-color: white !important;
+}
+
+#app label{
+    margin-bottom:0;
+}
+
+#app .el-form-item--mini .el-form-item__content,#app .el-form-item--mini .el-form-item__label{
+    height:auto;
+}
+
+a:hover{
+    cursor: pointer;
+}
+
+.dele-btn{
+    float:right;
+    margin-left:10px;
+}
+
+.team-publi{
+    overflow: hidden;
+    height:400px;
+}
+
+.publi-list{
+    width:30%;
+    height:100%;
+    float: left;
+    overflow: auto;
+    font-size:12px;
+}
+
+.publi-list li{
+    margin-left:30px;
+}
+
+.publi-list li:hover{
+    cursor:pointer;
+}
+
+.publi-list li.active{
+    color:#E9432D;
+}
+
+.publi-form{
+    width:70%;
+    height:100%;
+    float: left;
+    overflow: auto;
+}
+
+.publi-list li.table-first{
+    margin-left:0;
+}
+
+.team-table .do-p p{
+    margin-bottom:0;
+}
+
+.team-table .do-p p button{
+    text-decoration: underline;
+}
+
+.publi-list .dashed-line{
+    position: relative;
+}
+
+.publi-list .dashed-line::after,.publi-list .dashed-line::before{
+	content: '';
+	position: absolute;
+	right: auto;
+	left: -18px;
+}
+
+.publi-list .dashed-line::before{
+	border-left:1px dotted #CDCDCD;
+	height: 100%;
+	top: -18px;
+	left: -15px;
+	bottom: 100px;
+	width: 1px;
+}
+
+.publi-list .dashed-line::after{
+	border-top:1px dotted #CDCDCD;
+	height:20px;
+    top:-11px;
+    width:13px;
+    left: -15px;
+}
+
+.publi-list .dashed-line:last-child::before{
+	height:8px;
+}
+
+.teamBuild .publi-list .dashed-line:last-child::after{
+	width:0;
+    height:0;
+}
+
+.publi-list .add{
+    display: inline-block;
+    width:8px;
+}
+
+
+
+
+
+
+.teamBuild .el-form-item.is-error .el-input__inner,.teamBuild .el-form-item.is-error .el-input__inner:focus,.teamBuild .el-form-item.is-error .el-textarea__inner,
+.teamBuild .el-form-item.is-error .el-textarea__inner:focus,.teamBuild .el-message-box__input input.invalid,.teamBuild .el-message-box__input input.invalid:focus{
+
+    border-color:rgba(82,168,236,0.8);
+    outline:0;
+    box-shadow:inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
+}
+
+
+.teamBuild .el-form-item.is-success .el-input__inner,.teamBuild .el-form-item.is-success .el-input__inner:focus,.teamBuild .el-form-item.is-success .el-textarea__inner,
+.teamBuild .el-form-item.is-success .el-textarea__inner:focus{
+    border-color:#dcdfe6;
+}
+
+.teamBuild .el-input.is-active .el-input__inner,.teamBuild .el-input__inner:focus{
+    border-color:#dcdfe6;
+}
+
+.teamBuild .block{
+    margin-bottom:20px;
+    overflow: hidden;
+}
+
+.teamBuild .el-pagination{
+    display: inline-block;
+    float: right;
+}
+
+
+
+#app.teamBuild label{
+    text-align: center;
+}
+
+.teamBuild .e-checkbox,.teamBuild .e-radio{
+    width: 59px;
+    margin: 0 0px 10px 0;
+}
+
+
+.teamBuild .search-input{
+    float: right;
+    margin-top:4px;
+}
+
+
+.teamBuild .team-home{
+    text-decoration: underline;
+}
+
+.teamBuild .team-home:hover{
+    color:#333;
+}
+
+.teamBuild .el-form-item__label{
+    font-size:12px;
+    padding:0;
+}
+
+.teamBuild .el-form-item--mini .el-form-item__error{
+    padding-top:5px;
+}
+
+.teamBuild .member-top{
+    margin-top:7px;
+}
+
+.teamBuild .el-pagination button,.teamBuild .el-pagination span:not([class*=suffix]),.teamBuild .el-pagination__sizes .el-input .el-input__inner,.teamBuild .el-pager li,
+#app .teamBuild .el-select-dropdown__item{
+    font-size:12px;
+}

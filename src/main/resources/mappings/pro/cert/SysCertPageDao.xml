@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.cert.dao.SysCertPageDao">
+
+	<sql id="sysCertPageColumns">
+		a.id AS "id",
+		a.cert_id AS "certId",
+		a.name AS "name",
+		a.height AS "height",
+		a.width AS "width",
+		a.html AS "html",
+		a.ui_json AS "uiJson",
+		a.sort AS "sort",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysCertPageJoins">
+	</sql>
+
+	<select id="get" resultType="SysCertPage">
+		SELECT
+			<include refid="sysCertPageColumns"/>
+		FROM sys_cert_page a
+		<include refid="sysCertPageJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SysCertPage">
+		SELECT
+			<include refid="sysCertPageColumns"/>
+		FROM sys_cert_page a
+		<include refid="sysCertPageJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysCertPage">
+		SELECT
+			<include refid="sysCertPageColumns"/>
+		FROM sys_cert_page a
+		<include refid="sysCertPageJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_cert_page(
+			id,
+			cert_id,
+			name,
+			height,
+			width,
+			html,
+			ui_json,
+			sort,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{certId},
+			#{name},
+			#{height},
+			#{width},
+			#{html},
+			#{uiJson},
+			#{sort},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_cert_page SET
+			cert_id = #{certId},
+			name = #{name},
+			height = #{height},
+			width = #{width},
+			html = #{html},
+			ui_json=#{uiJson},
+			sort = #{sort},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_cert_page SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sys_cert_page WHERE id = #{id}
+	</update>
+	<select id="getMaxSort" resultType="java.lang.Integer">
+		select max(t.sort) from sys_cert_page t where t.cert_id=#{certid}
+	</select>
+	<select id="getSysCertPages" resultType="SysCertPage">
+		select t.* from sys_cert_page t where t.cert_id=#{certid} order by t.sort
+	</select>
+	<update id="savePageName">
+		UPDATE sys_cert_page SET
+			name = #{pagename}
+		WHERE id = #{pageid}
+	</update>
+	
+</mapper>

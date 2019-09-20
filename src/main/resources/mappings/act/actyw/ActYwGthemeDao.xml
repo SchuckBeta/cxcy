@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwGthemeDao">
+
+	<sql id="actYwGthemeColumns">
+		a.id AS "id",
+		a.idx AS "idx",
+		a.ftype AS "ftype",
+		a.keyss AS "keyss",
+		a.name AS "name",
+		a.sname AS "sname",
+		a.service_name AS "serviceName",
+		a.enable AS "enable",
+		a.sort AS "sort",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="actYwGthemeJoins">
+	</sql>
+
+	<select id="get" resultType="ActYwGtheme">
+		SELECT
+			<include refid="actYwGthemeColumns"/>
+		FROM act_yw_gtheme a
+		<include refid="actYwGthemeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ActYwGtheme">
+		SELECT
+			<include refid="actYwGthemeColumns"/>
+		FROM act_yw_gtheme a
+		<include refid="actYwGthemeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="enable !=null and enable !=''">
+				and a.enable=#{enable}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.sort, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwGtheme">
+		SELECT
+			<include refid="actYwGthemeColumns"/>
+		FROM act_yw_gtheme a
+		<include refid="actYwGthemeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.sort, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_gtheme(
+			id,
+			idx,
+			ftype,
+			keyss,
+			name,
+			sname,
+			service_name,
+			enable,
+			sort,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{idx},
+			#{ftype},
+			#{keyss},
+			#{name},
+			#{sname},
+			#{serviceName},
+			#{enable},
+			#{sort},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO act_yw_gtheme(
+			id,
+			idx,
+			ftype,
+			keyss,
+			name,
+			sname,
+			service_name,
+			enable,
+			sort,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES
+		<foreach collection="entitys" item="item" index="index" separator=",">
+			(
+				#{item.id},
+				#{item.idx},
+				#{item.ftype},
+				#{item.keyss},
+				#{item.name},
+				#{item.sname},
+				#{item.serviceName},
+				#{item.enable},
+				#{item.sort},
+				#{item.updateDate},
+				#{item.updateBy.id},
+				#{item.createDate},
+				#{item.createBy.id},
+				#{item.remarks},
+				#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_gtheme SET
+			idx = #{idx},
+			ftype = #{ftype},
+			keyss = #{keyss},
+			name = #{name},
+			sname = #{sname},
+			service_name = #{serviceName},
+			enable = #{enable},
+			sort = #{sort},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE act_yw_gtheme
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="idx =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.idx}
+				</foreach>
+			</trim>
+			<trim prefix="ftype =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.ftype}
+				</foreach>
+			</trim>
+			<trim prefix="keyss =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.keyss}
+				</foreach>
+			</trim>
+			<trim prefix="name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.name}
+				</foreach>
+			</trim>
+			<trim prefix="sname =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.sname}
+				</foreach>
+			</trim>
+			<trim prefix="service_name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.serviceName}
+				</foreach>
+			</trim>
+			<trim prefix="enable =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.enable}
+				</foreach>
+			</trim>
+			<trim prefix="sort =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.sort}
+				</foreach>
+			</trim>
+			<trim prefix="update_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateDate}
+				</foreach>
+			</trim>
+			<trim prefix="update_by =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateBy.id}
+				</foreach>
+			</trim>
+			<trim prefix="remarks =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.remarks}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="updatePLSort" parameterType="java.util.List" >
+		UPDATE act_yw_gtheme
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="sort =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.sort}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="delete">
+		UPDATE act_yw_gtheme SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deletePL">
+		UPDATE act_yw_gtheme SET
+			del_flag = #{DEL_FLAG_DELETE}
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM act_yw_gtheme WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM act_yw_gtheme WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM act_yw_gtheme where tenant_id =#{tenantId}
+	</update>
+</mapper>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.com.pcore.modules.sys.dao.DictDao">
+
+	<select id="get" resultType="Dict">
+		SELECT
+			*
+		FROM sys_dict a
+		WHERE id = #{id}
+	</select>
+
+	<select id="getByValue" resultType="Dict">
+		SELECT * FROM sys_dict a WHERE a.value = #{type}
+	</select>
+
+	<select id="findList" resultType="Dict">
+		SELECT
+			*
+		FROM sys_dict a
+		WHERE del_flag = #{DEL_FLAG_NORMAL}
+		<if test="type != null and type != ''">
+			AND type = #{type}
+		</if>
+		<if test="description != null and description != ''">
+			AND description LIKE
+					<if test="dbName == 'oracle'">'%'||#{description}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{description}+'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{description}, '%')</if>
+		</if>
+		ORDER BY type, sort, update_date DESC
+	</select>
+
+	<select id="findAllList" resultType="Dict">
+		SELECT
+			*
+		FROM sys_dict a
+		WHERE del_flag = #{DEL_FLAG_NORMAL} and parent_id!='0'
+		ORDER BY type, sort, update_date DESC
+	</select>
+	<select id="getAllData" resultType="Dict">
+		SELECT
+			*
+		FROM sys_dict
+	</select>
+	<select id="findTypeList" resultType="string">
+		SELECT
+			type
+		FROM sys_dict a
+		WHERE del_flag = #{DEL_FLAG_NORMAL}
+		GROUP BY type
+		ORDER BY type
+	</select>
+
+	<select id="runBySqlString" resultType="Dict">
+		${sqlMap.dsf}
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_dict(
+			id,
+			value,
+			label,
+			type,
+			description,
+			sort,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			parent_id,
+			is_sys,
+			is_push
+		) VALUES (
+			#{id},
+			#{value},
+			#{label},
+			#{type},
+			#{description},
+			#{sort},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{parentId},
+			#{isSys},
+			#{isPush}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_dict SET
+			value = #{value},
+			label = #{label},
+			is_push = #{isPush},
+			type = #{type},
+			description = #{description},
+			<if test="sort != null and sort != '' ">
+			sort = #{sort},
+			</if>
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			parent_id = #{parentId},
+			is_sys=#{isSys}
+		WHERE id = #{id}
+	</update>
+
+	<update id="edtBackDoorDict">
+		UPDATE sys_dict SET
+			label = #{label}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_dict SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<select id="getDictTypeListPlus" resultType="java.util.HashMap"
+		parameterType="java.util.Map">
+		SELECT
+			*
+		FROM sys_dict a
+		WHERE del_flag = '0' and parent_id='0'
+		ORDER BY create_date DESC
+	</select>
+	<select id="getDictListPlus" resultType="java.util.HashMap"
+		parameterType="java.util.Map">
+		SELECT
+			a.* ,p.label type_name
+		FROM sys_dict a left join sys_dict p on a.parent_id=p.id
+		WHERE a.del_flag = '0'
+		<if test="typeid == null or typeid == '' ">
+			and a.parent_id !='0'
+		</if>
+		<if test="typeid != null and typeid != '' ">
+			and a.parent_id=#{typeid}
+		</if>
+		<if test="name != null and name != '' ">
+			and a.label like concat('%',#{name},'%')
+		</if>
+		ORDER BY create_date DESC
+		limit
+		#{offset},#{pageSize}
+	</select>
+	<select id="getDictListPlusCount" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		SELECT
+			count(1)
+		FROM sys_dict a
+		WHERE a.del_flag = '0'
+		<if test="typeid == null or typeid == '' ">
+			and a.parent_id !='0'
+		</if>
+		<if test="typeid != null and typeid != '' ">
+			and a.parent_id=#{typeid}
+		</if>
+		<if test="name != null and name != '' ">
+			and a.label like concat('%',#{name},'%')
+		</if>
+	</select>
+	<select id="getDictTypeCountByCdn" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		SELECT
+			count(1)
+		FROM sys_dict t
+		WHERE t.del_flag = '0' and t.parent_id ='0'
+		<if test="id != null and id != '' ">
+			and t.id!=#{id}
+		</if>
+		<if test="name != null and name != '' ">
+			and t.label =#{name}
+		</if>
+	</select>
+	<select id="getDictCountByCdn" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		SELECT
+			count(1)
+		FROM sys_dict t
+		WHERE t.del_flag = '0' and t.parent_id =#{typeid}
+		<if test="id != null and id != '' ">
+			and t.id!=#{id}
+		</if>
+		<if test="name != null and name != '' ">
+			and t.label =#{name}
+		</if>
+	</select>
+
+	<update id="delDictType">
+		UPDATE sys_dict SET
+			del_flag = '1'
+		WHERE id = #{id} or parent_id = #{id}
+	</update>
+
+	<update id="delDictByTenantId">
+		UPDATE sys_dict SET
+		del_flag = '1'
+		WHERE tenant_id=#{tenantId}
+	</update>
+</mapper>

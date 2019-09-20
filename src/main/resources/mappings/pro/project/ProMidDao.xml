@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.project.dao.ProMidDao">
+
+	<sql id="proMidColumns">
+		a.id AS "id",
+		a.project_id AS "projectId",
+		a.programme AS "programme",
+		a.tutor_suggest AS "tutorSuggest",
+		a.tutor_suggest_date AS "tutorSuggestDate",
+		a.task_begin_date  AS "taskBeginDate",
+		a.task_end_date  AS "taskEndDate",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.status AS "status",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="proMidJoins">
+	</sql>
+
+	<select id="get" resultType="ProMid">
+		SELECT
+			<include refid="proMidColumns"/>
+		FROM pro_mid a
+		<include refid="proMidJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ProMid">
+		SELECT
+			<include refid="proMidColumns"/>
+		FROM pro_mid a
+		<include refid="proMidJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ProMid">
+		SELECT
+			<include refid="proMidColumns"/>
+		FROM pro_mid a
+		<include refid="proMidJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pro_mid(
+			id,
+			project_id,
+			programme,
+			tutor_suggest,
+			tutor_suggest_date,
+			task_begin_date,
+			task_end_date,
+			create_date,
+			create_by,
+			update_date,
+			update_by,
+			status,
+			del_flag
+		) VALUES (
+			#{id},
+			#{projectId},
+			#{programme},
+			#{tutorSuggest},
+			#{tutorSuggestDate},
+			#{taskBeginDate},
+			#{taskEndDate},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{status},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pro_mid SET
+			project_id = #{projectId},
+			programme = #{programme},
+			tutor_suggest = #{tutorSuggest},
+			tutor_suggest_date = #{tutorSuggestDate},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE pro_mid SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<select id="getByProjectId" resultType="ProMid" parameterType="java.lang.String">
+		SELECT
+			<include refid="proMidColumns"/>
+		FROM pro_mid a
+		<where>
+			a.del_flag = '0' AND a.project_id = #{pid}
+		</where>
+		order by a.create_date desc limit 1
+	</select>
+</mapper>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.scr.dao.ScoRapplyRecordDao">
+
+	<sql id="scoRapplyRecordColumns">
+		a.id AS "id",
+		a.app_id AS "apply.id",
+		a.uid AS "user.id",
+		a.status AS "status",
+		a.aut_by AS "autBy.id",
+		a.create_by AS "createBy.id",
+		a.aut_by AS "autBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u.`name` AS "user.name",
+		ut.`name` AS "autBy.name"
+	</sql>
+
+	<sql id="scoRapplyRecordJoins">
+		LEFT JOIN sys_user u on a.uid = u.id and u.del_flag=0
+		LEFT JOIN sys_user ut on a.aut_by = ut.id and ut.del_flag=0
+	</sql>
+
+	<select id="get" resultType="ScoRapplyRecord">
+		SELECT
+			<include refid="scoRapplyRecordColumns"/>
+		FROM sco_rapply_record a
+		<include refid="scoRapplyRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ScoRapplyRecord">
+		SELECT
+			<include refid="scoRapplyRecordColumns"/>
+		FROM sco_rapply_record a
+		<include refid="scoRapplyRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="apply != null and apply.id != null and apply.id != ''">
+				AND a.app_id  = #{apply.id}
+			</if>
+			<if test="queryStr != null and queryStr != ''">
+				AND a.status  in(${queryStr})
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findCourseAuditList" resultType="ScoRapplyRecord">
+		SELECT
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.apply_id AS "apply.id",
+		a.suggest AS "remarks",
+		a.create_by AS "createBy.id",
+		a.aut_by AS "autBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		u2.name AS "user.name",
+		ap.audit_status as "status"
+		FROM sco_auditing a
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id and u2.del_flag=0
+		LEFT JOIN sco_apply ap on ap.id = a.apply_id and ap.del_flag=0
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="applyId != null and applyId != ''">
+				AND a.apply_id = #{apply.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ScoRapplyRecord">
+		SELECT
+			<include refid="scoRapplyRecordColumns"/>
+		FROM sco_rapply_record a
+		<include refid="scoRapplyRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sco_rapply_record(
+			id,
+			app_id,
+			uid,
+			status,
+			create_by,
+			aut_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{apply.id},
+			#{user.id},
+			#{status},
+			#{createBy.id},
+			#{autBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO sco_rapply_record(
+			id,
+			app_id,
+			uid,
+			status,
+			create_by,
+			aut_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.apply.id},
+			#{item.user.id},
+			#{item.status},
+			#{item.createBy.id},
+			#{item.autBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE sco_rapply_record SET
+			app_id = #{apply.id},
+			uid = #{user.id},
+			status = #{status},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE sco_rapply_record
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="app_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.appId}
+				</foreach>
+			</trim>
+			<trim prefix="uid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.uid}
+				</foreach>
+			</trim>
+			<trim prefix="status =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.status}
+				</foreach>
+			</trim>
+			<trim prefix="update_by =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateBy.id}
+				</foreach>
+			</trim>
+			<trim prefix="update_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateDate}
+				</foreach>
+			</trim>
+			<trim prefix="remarks =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.remarks}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+
+	<update id="delete">
+		UPDATE sco_rapply_record SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deletePL">
+		UPDATE sco_rapply_record SET
+			del_flag = #{DEL_FLAG_DELETE}
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sco_rapply_record WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM sco_rapply_record WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM sco_rapply_record
+	</update>
+</mapper>

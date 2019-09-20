@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.dr.modules.dr.dao.DrCardreGtimeDao">
+
+	<sql id="drCardreGtimeColumns">
+		a.id AS "id",
+		a.gid AS "group.id",
+		a.sort AS "sort",
+		a.begin_date AS "beginDate",
+		a.end_date AS "endDate",
+		a.status AS "status",
+		a.del_flag AS "delFlag",
+
+		g.name AS "group.name",
+		g.is_time_limit AS "group.isTimeLimit",
+		g.del_flag AS "group.delFlag",
+		g.remarks AS "group.remarks"
+	</sql>
+
+	<sql id="drCardreGtimeJoins">
+        LEFT JOIN dr_cardre_group g ON g.id = a.gid
+	</sql>
+
+	<select id="get" resultType="DrCardreGtime">
+		SELECT
+			<include refid="drCardreGtimeColumns"/>
+		FROM dr_cardre_gtime a
+		<include refid="drCardreGtimeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="DrCardreGtime">
+		SELECT
+			<include refid="drCardreGtimeColumns"/>
+		FROM dr_cardre_gtime a
+		<include refid="drCardreGtimeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="sort != null and sort != ''">
+				AND a.sort >= #{sort}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+			<if test="beginDate != null and beginDate != ''">
+				AND a.begin_date <![CDATA[ >= #{beginDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.end_date <![CDATA[ <= #{endDate} ]]>
+			</if>
+			<if test="group != null">
+				<if test="group.id != null and group.id != ''">
+					AND a.gid = #{group.id}
+				</if>
+				<if test="group.name != null and group.name != ''">
+					AND a.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{group.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{group.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{group.name},'%')</if>
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="DrCardreGtime">
+		SELECT
+			<include refid="drCardreGtimeColumns"/>
+		FROM dr_cardre_gtime a
+		<include refid="drCardreGtimeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dr_cardre_gtime(
+			id,
+			gid,
+			sort,
+			begin_date,
+			end_date,
+			status,
+			del_flag
+		) VALUES (
+			#{id},
+			#{group.id},
+			#{sort},
+			#{beginDate},
+			#{endDate},
+			#{status},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE dr_cardre_gtime SET
+			gid = #{group.id},
+			sort = #{sort},
+			begin_date = #{beginDate},
+			end_date = #{endDate},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+
+	<insert id="savePl" >
+		INSERT INTO dr_cardre_gtime(
+			id,
+			gid,
+			sort,
+			begin_date,
+			end_date,
+			status
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+				 separator=",">
+			(
+				#{item.id},
+				#{item.group.id},
+				#{item.sort},
+				#{item.beginDate},
+				#{item.endDate},
+				#{item.status}
+			)
+		</foreach>
+	</insert>
+
+	<update id="delete">
+		UPDATE dr_cardre_gtime SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM dr_cardre_gtime WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPLByGid">
+		DELETE FROM dr_cardre_gtime WHERE gid = #{gid}
+	</update>
+
+	<update id="deleteWLPLByIds">
+		DELETE FROM dr_cardre_gtime WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+</mapper>

@@ -1,0 +1,87 @@
+
+
+/*.nav-tabs a{*/
+    /*color:#A29C9C;*/
+/*}*/
+/*.nav-tabs>.active>a{*/
+    /*color:#e9432d;*/
+    /*font-weight: bold;*/
+/*}*/
+/*.self_table th{*/
+    /*white-space: normal !important;*/
+    /*background: #f4e6d4;*/
+    /*color: rgb(100,100,100);*/
+    /*font-size: 13px;*/
+    /*!*padding-left: 0;*!*/
+    /*!*padding-right: 7px;*!*/
+/*}*/
+/*.self_table td {font-size: 13px;}*/
+/*.check_btn{*/
+    /*display: inline-block;*/
+    /*height: 26px;*/
+    /*!*width: 60px;*!*/
+    /*line-height: 26px;*/
+    /*text-align: center;*/
+    /*border: 1px solid rgb(205,205,205);*/
+    /*color:#e9432d;*/
+    /*background: #e5e5e5;*/
+    /*border-radius: 3px;;*/
+    /*text-decoration: none !important;*/
+    /*padding:0 10px;*/
+    /*font-size: 12px;*/
+    /*white-space: nowrap;*/
+    /*text-overflow: ellipsis;*/
+    /*margin:2px 0px;*/
+/*}*/
+/*.check_btn + .check_btn {margin-left: 5px;}*/
+/*.btn-pray{*/
+    /*color:#666;*/
+    /*background: #e5e5e5;*/
+/*}*/
+
+/*!*閲嶇疆initiate 琛ㄥ崟绌洪棿*!*/
+/*.form-search input,select{*/
+    /*height: 30px;*/
+    /*max-width: 150px;*/
+/*}*/
+
+/*.form_desc .title{*/
+    /*height: 40px;*/
+    /*line-height: 42px;*/
+    /*background: url(../../img/guide_arrow.png) no-repeat left center;*/
+    /*color: #fff;*/
+    /*padding-left: 10px;*/
+    /*font-size:19px;*/
+/*}*/
+
+.mybreadcrumbs {margin: 20px 1.5em;margin-left: 27px;border-bottom: 3px solid #f4e6d4;}
+.mybreadcrumbs span {position: relative;top: 9px;font-size: 16px;font-weight:bold;color: #e9432d;display: inline-block;background-color: #FFF;padding-right:10px;}
+
+/*.toolbar2 {padding-top: 8px;}*/
+
+/*.input-item {display: inline-block; margin-top: 4px;}*/
+/*!* label 涓瘡涓眽瀛楀搴︼細 55px/4  *!*/
+/*.input-item label{width: 55px; padding-right: 5px;}*/
+/*.input-item label.char6{width: 82.5px;}*/
+
+/*.input-item + .pull-right {padding-top: 4px;}*/
+/*.content_panel {padding-left: 27px; padding-right: 27px;}*/
+/*.content_panel > .nav {margin-bottom: 0;}*/
+/*.content_panel td,.content_panel th {text-align: center;vertical-align: middle !important;word-break: break-all;}*/
+/*.content_panel select {outline: none;}*/
+/*.content_panel .table-bordered {border-top-left-radius: 0;border-top-right-radius: 0;}*/
+/*!* 瑕嗙洊 bs3 榛樿鏍峰紡 *!*/
+/*.content_panel .table-bordered thead:first-child tr:first-child>th:first-child, .content_panel .table-bordered tbody:first-child tr:first-child>td:first-child, .content_panel .table-bordered tbody:first-child tr:first-child>th:first-child {border-top-left-radius: 0;}*/
+/*.content_panel .table-bordered thead:first-child tr:first-child>th:last-child, .content_panel .table-bordered tbody:first-child tr:first-child>td:last-child, .content_panel .table-bordered tbody:first-child tr:first-child>th:last-child {border-top-right-radius: 0;}*/
+
+/*#searchForm{height: 40px;}*/
+
+/*#searchForm .input-item{*/
+    /*height:30px;*/
+/*}*/
+/*#searchForm .input-item select,#searchForm .input-item input{*/
+    /*height: 28px;*/
+/*}*/
+/*.form-search input, select{*/
+    /*height: 28px;*/
+/*}*/

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oseasy.com.pcore.modules.sys.dao.OrderDemoDao" >
+
+    <select id="queryById2" parameterType="Long" resultType="com.oseasy.com.pcore.modules.sys.entity.OrderDemo">
+        SELECT * FROM t_order WHERE order_id IN
+        <foreach collection="orderIdList" item="orderId" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </select>
+
+    <insert id="insert" parameterType="com.oseasy.com.pcore.modules.sys.entity.OrderDemo">
+        INSERT INTO t_order (order_id, user_id) VALUES (#{orderId}, #{userId})
+    </insert>
+
+</mapper>

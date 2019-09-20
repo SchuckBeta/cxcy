@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.sys.modules.sys.dao.SysNumberRuleDetailDao">
+
+    <sql id="sysNumberRuleDetailColumns">
+        a.id AS "id",
+        a.rule_type AS "ruleType",
+        a.text AS "text",
+        a.num_length AS "numLength",
+        a.type_value AS "typeValue",
+        a.pro_number_rule_id AS "proNumberRuleId",
+        a.create_date AS "createDate",
+        a.create_by AS "createBy.id",
+        a.update_date AS "updateDate",
+        a.update_by AS "updateBy.id",
+        a.del_flag AS "delFlag",
+        a.sort as "sort"
+    </sql>
+
+    <sql id="sysNumberRuleDetailJoins">
+    </sql>
+
+    <select id="get" resultType="SysNumberRuleDetail">
+        SELECT
+        <include refid="sysNumberRuleDetailColumns"/>
+        FROM sys_number_rule_detail a
+        <include refid="sysNumberRuleDetailJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="getBySysNumberRule" resultType="SysNumberRuleDetail">
+       SELECT
+       <include refid="sysNumberRuleDetailColumns"/>
+       FROM sys_number_rule_detail a
+       <include refid="sysNumberRuleDetailJoins"/>
+       WHERE a.pro_number_rule_id = #{sysNumberRuleId} and a.rule_type=#{ruleType}
+    </select>
+
+    <select id="findList" resultType="SysNumberRuleDetail">
+        SELECT
+        <include refid="sysNumberRuleDetailColumns"/>
+        FROM sys_number_rule_detail a
+        <include refid="sysNumberRuleDetailJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy} ${page.orderByType}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findSysNumberRuleDetailList" resultType="SysNumberRuleDetail">
+          SELECT
+          <include refid="sysNumberRuleDetailColumns"/>
+          FROM sys_number_rule_detail a
+          <include refid="sysNumberRuleDetailJoins"/>
+          <where>
+              a.del_flag = '0'and a.pro_number_rule_id= #{ruleId}
+          </where>
+          ORDER BY a.update_date DESC
+      </select>
+
+    <select id="findAllList" resultType="SysNumberRuleDetail">
+        SELECT
+        <include refid="sysNumberRuleDetailColumns"/>
+        FROM sys_number_rule_detail a
+        <include refid="sysNumberRuleDetailJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy} ${page.orderByType}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO sys_number_rule_detail(
+        id,
+        rule_type,
+        text,
+        type_value,
+        num_length,
+        pro_number_rule_id,
+        create_date,
+        create_by,
+        update_date,
+        update_by,
+        del_flag,
+        sort
+        ) VALUES (
+        #{id},
+        #{ruleType},
+        #{text},
+        #{typeValue},
+        #{numLength},
+        #{proNumberRuleId},
+        #{createDate},
+        #{createBy.id},
+        #{updateDate},
+        #{updateBy.id},
+        #{delFlag},
+        #{sort}
+        )
+    </insert>
+
+    <insert id="batchSave">
+        INSERT INTO sys_number_rule_detail(
+        id,
+        rule_type,
+        text,
+        type_value,
+        num_length,
+        pro_number_rule_id,
+        create_date,
+        create_by,
+        update_date,
+        update_by,
+        del_flag,
+        sort
+        ) VALUES
+        <foreach collection="list" item="detail" separator=",">
+            (
+            #{detail.id},
+            #{detail.ruleType},
+            #{detail.text},
+            #{detail.typeValue},
+            #{detail.numLength},
+            #{detail.proNumberRuleId},
+            #{detail.createDate},
+            #{detail.createBy.id},
+            #{detail.updateDate},
+            #{detail.updateBy.id},
+            #{detail.delFlag},
+            #{detail.sort}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE sys_number_rule_detail SET
+        rule_type = #{ruleType},
+        text = #{text},
+        type_value = #{typeValue},
+        num_length = #{numLength},
+        pro_number_rule_id = #{proNumberRuleId},
+        update_date = #{updateDate},
+        update_by = #{updateBy.id},
+        sort = #{sort}
+        WHERE id = #{id}
+    </update>
+
+    <update id="delete">
+        UPDATE sys_number_rule_detail SET
+        del_flag = #{DEL_FLAG_DELETE}
+        WHERE id = #{id}
+    </update>
+
+    <update id="deleteWL">
+        DELETE FROM sys_number_rule_detail WHERE id = #{id}
+    </update>
+
+    <update id="deleteByRuleId">
+        DELETE FROM sys_number_rule_detail WHERE pro_number_rule_id = #{ruleId}
+    </update>
+
+</mapper>

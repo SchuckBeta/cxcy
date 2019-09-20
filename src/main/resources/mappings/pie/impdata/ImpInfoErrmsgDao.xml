@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.impdata.dao.ImpInfoErrmsgDao">
+
+	<sql id="impInfoErrmsgColumns">
+		a.id AS "id",
+		a.imp_id AS "impId",
+		a.data_id AS "dataId",
+		a.data_sub_id AS "dataSubId",
+		a.colname AS "colname",
+		a.sheet_indx AS "sheetIndx",
+
+		a.row_index AS "rowIndex",
+		a.cell_index AS "cellIndex",
+		a.errmsg AS "errmsg",
+		a.create_by AS
+		"createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS
+		"updateBy.id",
+		a.update_date AS "updateDate"
+	</sql>
+
+	<sql id="impInfoErrmsgJoins">
+	</sql>
+
+	<select id="get" resultType="ImpInfoErrmsg">
+		SELECT
+		<include refid="impInfoErrmsgColumns" />
+		FROM imp_info_errmsg a
+		<include refid="impInfoErrmsgJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ImpInfoErrmsg">
+		SELECT
+		<include refid="impInfoErrmsgColumns" />
+		FROM imp_info_errmsg a
+		<include refid="impInfoErrmsgJoins" />
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ImpInfoErrmsg">
+		SELECT
+		<include refid="impInfoErrmsgColumns" />
+		FROM imp_info_errmsg a
+		<include refid="impInfoErrmsgJoins" />
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO imp_info_errmsg(
+		id,
+		imp_id,
+		data_id,
+		data_sub_id,
+		colname,
+		row_index,
+		cell_index,
+		errmsg,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		sheet_indx
+		) VALUES (
+		#{id},
+		#{impId},
+		#{dataId},
+		#{dataSubId},
+		#{colname},
+		#{rowIndex},
+		#{cellIndex},
+		#{errmsg},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{sheetIndx}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE imp_info_errmsg SET
+		imp_id = #{impId},
+		data_id = #{dataId},
+		data_sub_id=#{dataSubId},
+		colname = #{colname},
+		errmsg = #{errmsg},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		sheet_indx=#{sheetIndx}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM imp_info_errmsg
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLByImpId">
+		DELETE FROM imp_info_errmsg
+		WHERE imp_id = #{impId}
+	</update>
+
+	<update id="deleteByImpId" parameterType="java.lang.String">
+		DELETE FROM
+		imp_info_errmsg
+		WHERE imp_id = #{impid}
+	</update>
+
+	<select id="getListByImpId" resultType="java.util.HashMap"
+		parameterType="java.lang.String">
+		SELECT
+		t.*
+		FROM
+		imp_info_errmsg t
+		WHERE
+		t.imp_id = #{impid}
+		order by
+		t.create_date desc
+	</select>
+	<select id="getListByImpIdAndSheet" resultType="java.util.HashMap"
+		parameterType="java.lang.String">
+		SELECT
+		t.*
+		FROM
+		imp_info_errmsg t
+		WHERE
+		t.imp_id = #{impid} and t.sheet_indx=#{sheet}
+		order by
+		t.create_date desc
+	</select>
+</mapper>

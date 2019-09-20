@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.analysis.dao.TeamAnalysisDao">
+
+	<select id="findTeamTeacherByYear" resultType="java.util.HashMap">
+		select t1.year, t2.label,t2.value,t1.tid ,t2.project_name,COUNT(*) num from (
+			select SUBSTRING(pd.apply_time,1,4) year,tm.team_id tid,tm.user_id,pd.name,pd.type pType,pd.id ,pd.actyw_id ,ay.rel_id pid from project_declare pd
+			LEFT join act_yw ay on ay.id=pd.actyw_id
+			LEFT join pro_project pp on pp.id=ay.rel_id
+			LEFT JOIN team_user_relation tm ON tm.team_id=pd.team_id
+			where pd.apply_time is not null and pd.del_flag='0' and ay.rel_id is not null
+			and tm.user_type='2' and pp.del_flag='0'
+			GROUP BY tm.user_id
+			UNION
+			select SUBSTRING(g.sub_time,1,4) year,tm.team_id tid,tm.user_id,g.p_name name,g.type pType,g.id ,g.actyw_id ,ay.rel_id pid from g_contest g
+			LEFT join act_yw ay on ay.id=g.actyw_id
+			LEFT join pro_project pp on pp.id=ay.rel_id
+			LEFT JOIN team_user_relation tm ON tm.team_id=g.team_id
+			where g.sub_time is not null and g.del_flag='0' and ay.rel_id is not null
+			and tm.user_type='2' and pp.del_flag='0'
+			GROUP BY tm.user_id
+			UNION
+			select SUBSTRING(pm.sub_time,1,4) year ,tm.team_id tid,tm.user_id,pm.p_name name,pm.pro_category pType,pm.id,pm.actyw_id ,ay.rel_id pid from pro_model pm
+			LEFT join act_yw ay on ay.id=pm.actyw_id
+			LEFT join pro_project pp on pp.id=ay.rel_id
+			LEFT JOIN team_user_relation tm ON tm.team_id=pm.team_id
+			where pm.sub_time is not null and pm.del_flag='0' and ay.rel_id is not null
+			and tm.user_type='2' and pp.del_flag='0'
+			GROUP BY tm.user_id
+			) t1
+		LEFT JOIN
+		(
+		select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+		inner JOIN pro_project p on d.value=p.type
+		where d.type='project_style' and p.type is not null and p.pro_type='1,'
+		and d.del_flag='0' and p.del_flag='0'
+		UNION
+		select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+		inner JOIN pro_project p on d.value=p.type
+		where d.type='competition_type' and p.type is not null and p.pro_type='7,'
+		and d.del_flag='0' and p.del_flag='0'
+		) t2
+		on t1.pid=t2.pid
+		where 1=1
+		GROUP BY year ,label
+	</select>
+
+	<select id="findTeamTeacherByCollege" resultType="java.util.HashMap"  parameterType="java.util.Map">
+		select t3.label,t.name  ,count(*) as num from sys_office t
+		LEFT JOIN(
+			select t1.year, t2.label,t2.value,t1.officeId,t1.pid ,t2.project_name from (
+			select SUBSTRING(pd.apply_time,1,4) year,pd.leader,so.id officeId,pd.name,pd.type pType,pd.id ,pd.actyw_id ,ay.rel_id pid from project_declare pd
+			LEFT join act_yw ay on ay.id=pd.actyw_id
+			LEFT join sys_user su on su.id=pd.leader
+			LEFT join sys_office so on so.id=su.office_id
+			LEFT JOIN team_user_relation tm ON tm.team_id=pd.team_id
+			where pd.apply_time is not null and pd.del_flag='0' and ay.rel_id is not null
+			and su.office_id is not null and tm.user_type='2'
+			UNION
+			select SUBSTRING(g.sub_time,1,4) year,g.declare_id,so.id officeId,g.p_name,g.type pType,g.id ,g.actyw_id ,ay.rel_id pid from g_contest g
+			LEFT join act_yw ay on ay.id=g.actyw_id
+			LEFT join sys_user su on su.id=g.declare_id
+			LEFT join sys_office so on so.id=su.office_id
+			LEFT JOIN team_user_relation tm ON tm.team_id=g.team_id
+			where g.sub_time is not null and g.del_flag='0' and ay.rel_id is not null
+			and su.office_id is not null and tm.user_type='2'
+			UNION
+			select SUBSTRING(pm.sub_time,1,4) year ,pm.declare_id,so.id officeId,pm.p_name name,pm.pro_category pType,pm.id,pm.actyw_id ,ay.rel_id pid from pro_model pm
+			LEFT join act_yw ay on ay.id=pm.actyw_id
+			LEFT join sys_user su on su.id=pm.declare_id
+			LEFT join sys_office so on so.id=su.office_id
+			LEFT JOIN team_user_relation tm ON tm.team_id=pm.team_id
+			where pm.sub_time is not null and pm.del_flag='0' and ay.rel_id is not null
+			and su.office_id is not null and tm.user_type='2'
+		) t1
+		LEFT JOIN
+		(
+		select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+		inner JOIN pro_project p on d.value=p.type
+		where d.type='project_style' and p.type is not null and p.pro_type='1,' and d.del_flag='0'
+		UNION
+		select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+		inner JOIN pro_project p on d.value=p.type
+		where d.type='competition_type' and p.type is not null and p.pro_type='7,' and d.del_flag='0'
+		) t2
+		on t1.pid=t2.pid
+		where 1=1
+		<if test="year != null and year!= ''">
+			AND t1.year = #{year}
+		</if>
+		)t3 on t.id=t3.officeId
+		where t.grade =2 and t3.officeId is not null
+		GROUP BY label,name
+	</select>
+
+	<select id="findTeamNumByYear" resultType="java.util.HashMap">
+		select t1.year, t2.label,t2.value,t1.tid ,t1.name,t2.project_name,count(*) as num from (
+			select SUBSTRING(pd.apply_time,1,4) year,tm.id tid,pd.name,pd.type pType,pd.id ,pd.actyw_id ,ay.rel_id pid from project_declare pd
+			LEFT join act_yw ay on ay.id=pd.actyw_id
+			LEFT JOIN team tm ON tm.id=pd.team_id
+			where pd.apply_time is not null and pd.del_flag='0' and ay.rel_id is not null
+			and tm.del_flag='0'
+			UNION
+			select SUBSTRING(g.sub_time,1,4) year,tm.id tid,g.p_name name,g.type pType,g.id ,g.actyw_id ,ay.rel_id pid from g_contest g
+			LEFT join act_yw ay on ay.id=g.actyw_id
+			LEFT JOIN team tm ON tm.id=g.team_id
+			where g.sub_time is not null and g.del_flag='0' and ay.rel_id is not null
+			and tm.del_flag='0'
+			UNION
+			select SUBSTRING(pm.sub_time,1,4) year ,tm.id tid,pm.p_name name,pm.pro_category pType,pm.id,pm.actyw_id ,ay.rel_id pid from pro_model pm
+			LEFT join act_yw ay on ay.id=pm.actyw_id
+			LEFT JOIN team tm ON tm.id=pm.team_id
+			where pm.sub_time is not null and pm.del_flag='0' and ay.rel_id is not null
+			and tm.del_flag='0'
+			) t1
+		LEFT JOIN
+		(
+		select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+		inner JOIN pro_project p on d.value=p.type
+		where d.type='project_style' and p.type is not null and p.pro_type='1,' and d.del_flag='0'
+		UNION
+		select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+		inner JOIN pro_project p on d.value=p.type
+		where d.type='competition_type' and p.type is not null and p.pro_type='7,' and d.del_flag='0'
+		) t2
+		on t1.pid=t2.pid
+		where 1=1
+		GROUP BY year,label
+	</select>
+
+
+	<select id="getColleges" resultType="java.lang.String">
+		select t.name from sys_office t where t.grade='2'  and t.del_flag='0'
+	</select>
+	<select id="getYears" resultType="java.lang.String">
+		select * from (
+		select SUBSTRING(g.sub_time,1,4) year from g_contest g
+		LEFT join act_yw ay on ay.id=g.actyw_id
+		where g.sub_time is not null and g.del_flag='0' and ay.rel_id is not null
+		UNION
+		select SUBSTRING(pd.apply_time,1,4) year from project_declare pd
+		LEFT join act_yw ay on ay.id=pd.actyw_id
+		where pd.apply_time is not null and pd.del_flag='0' and ay.rel_id is not null
+		UNION
+		select SUBSTRING(pm.sub_time,1,4) year from pro_model pm
+		LEFT join act_yw ay on ay.id=pm.actyw_id
+		where pm.sub_time is not null and pm.del_flag='0' and ay.rel_id is not null
+		) m
+		group by year
+		order by year
+	</select>
+	<select id="getTypes" resultType="java.lang.String">
+		select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+				inner JOIN pro_project p on d.value=p.type
+				where d.type='project_style' and p.type is not null and p.pro_type='1,'
+				 and p.del_flag='0'
+			UNION
+		select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+				inner JOIN pro_project p on d.value=p.type
+				where d.type='competition_type' and p.type is not null and p.pro_type='7,'
+				 and p.del_flag='0'
+	</select>
+	<select id="getTeamNumFromProject" resultType="java.util.HashMap" parameterType="java.lang.String">
+		select s.label,o.name,count(1) cc from team t left join project_declare p on t.id=p.team_id
+		left join sys_dict s on s.value='1' and s.type='project_style'
+		left join sys_user u on p.leader=u.id 
+		left join sys_office o on u.office_id=o.id
+		where (p.proc_ins_id is not null or (p.status is not null and p.status!=0)) and p.del_flag='0' 
+		<if test="year!=null and year!=''">
+		and
+		p.apply_time &gt;=str_to_date(#{year},'%Y-%m-%d %H:%i:%s')
+		and
+		p.apply_time &lt;date_add(str_to_date(#{year},'%Y-%m-%d %H:%i:%s'),
+		interval 1 year)
+		</if>
+		group by s.label,o.name
+	</select>
+	<select id="getTeamNumFromGcontest" resultType="java.util.HashMap" parameterType="java.lang.String">
+		select s.label,o.name,count(1) cc from team t left join g_contest p on t.id=p.team_id
+		left join sys_dict s on s.value='1' and s.type='competition_type'
+		left join sys_user u on p.declare_id=u.id 
+		left join sys_office o on u.office_id=o.id
+		where p.proc_ins_id is not null and p.del_flag='0' 
+		<if test="year!=null and year!=''">
+		and
+		p.sub_time &gt;=str_to_date(#{year},'%Y-%m-%d %H:%i:%s')
+		and
+		p.sub_time &lt;date_add(str_to_date(#{year},'%Y-%m-%d %H:%i:%s'),
+		interval 1 year)
+		</if>
+		group by s.label,o.name
+	</select>
+	<select id="getTeamNumFromModel" resultType="java.util.HashMap" parameterType="java.lang.String">
+		select ifnull(s.label,s2.label) label,o.name,count(1) cc from team t left join pro_model p on t.id=p.team_id
+		left join sys_dict s on s.value=p.type and p.type!='1'  and s.type='competition_type' and p.pro_type='7,'
+		left join sys_dict s2 on s2.value=p.type and p.type!='1' and s2.type='project_style' and p.pro_type='1,'
+		left join sys_user u on p.declare_id=u.id 
+		left join sys_office o on u.office_id=o.id
+		where p.sub_status='1' and p.del_flag='0'
+		<if test="year!=null and year!=''">
+		and
+		p.sub_time &gt;=str_to_date(#{year},'%Y-%m-%d %H:%i:%s')
+		and
+		p.sub_time &lt;date_add(str_to_date(#{year},'%Y-%m-%d %H:%i:%s'),
+		interval 1 year)
+		</if>
+		group by s.label,o.name
+	</select>
+	<select id="getTeamMemsFromProject" resultType="java.util.HashMap" parameterType="java.lang.String">
+	select s.label,o.name,count(1) cc from team t left join project_declare p on t.id=p.team_id
+		left join sys_dict s on s.value='1' and s.type='project_style'
+		left join sys_user u on p.leader=u.id 
+		left join sys_office o on u.office_id=o.id
+		left join team_user_relation tu on tu.team_id=t.id and tu.del_flag='0' and (tu.state='0' or tu.state='4') and tu.user_type='1'
+		where (p.proc_ins_id is not null or (p.status is not null and p.status!=0)) and p.del_flag='0' 
+		<if test="year!=null and year!=''">
+		and
+		p.apply_time &gt;=str_to_date(#{year},'%Y-%m-%d %H:%i:%s')
+		and
+		p.apply_time &lt;date_add(str_to_date(#{year},'%Y-%m-%d %H:%i:%s'),
+		interval 1 year)
+		</if>
+		group by s.label,o.name
+	</select>
+	<select id="getTeamMemsFromGcontest" resultType="java.util.HashMap" parameterType="java.lang.String">
+	select s.label,o.name,count(1) cc from team t left join g_contest p on t.id=p.team_id
+		left join sys_dict s on s.value='1' and s.type='competition_type'
+		left join sys_user u on p.declare_id=u.id 
+		left join sys_office o on u.office_id=o.id
+		left join team_user_relation tu on tu.team_id=t.id and tu.del_flag='0' and (tu.state='0' or tu.state='4') and tu.user_type='1'
+		where p.proc_ins_id is not null and p.del_flag='0' 
+		<if test="year!=null and year!=''">
+		and
+		p.sub_time &gt;=str_to_date(#{year},'%Y-%m-%d %H:%i:%s')
+		and
+		p.sub_time &lt;date_add(str_to_date(#{year},'%Y-%m-%d %H:%i:%s'),
+		interval 1 year)
+		</if>
+		group by s.label,o.name
+	</select>
+	<select id="getTeamMemsFromModel" resultType="java.util.HashMap" parameterType="java.lang.String">
+	select ifnull(s.label,s2.label) label,o.name,count(1) cc from team t left join pro_model p on t.id=p.team_id
+		left join sys_dict s on s.value=p.type and p.type!='1'  and s.type='competition_type' and p.pro_type='7,'
+		left join sys_dict s2 on s2.value=p.type and p.type!='1' and s2.type='project_style' and p.pro_type='1,'
+		left join sys_user u on p.declare_id=u.id 
+		left join sys_office o on u.office_id=o.id
+		left join team_user_relation tu on tu.team_id=t.id and tu.del_flag='0' and (tu.state='0' or tu.state='4') and tu.user_type='1'
+		where p.sub_status='1' and p.del_flag='0' 
+		<if test="year!=null and year!=''">
+		and
+		p.sub_time &gt;=str_to_date(#{year},'%Y-%m-%d %H:%i:%s')
+		and
+		p.sub_time &lt;date_add(str_to_date(#{year},'%Y-%m-%d %H:%i:%s'),
+		interval 1 year)
+		</if>
+		group by s.label,o.name
+	</select>
+	<select id="getTeamYearMemsFromProject" resultType="java.util.HashMap" parameterType="java.lang.String">
+		select s.label,DATE_FORMAT(p.apply_time,"%Y") name,count(1) cc from team t left join project_declare p on t.id=p.team_id
+		left join sys_dict s on s.value='1' and s.type='project_style'
+		left join team_user_relation tu on tu.team_id=t.id and tu.del_flag='0' and (tu.state='0' or tu.state='4') and tu.user_type='1'
+		where (p.proc_ins_id is not null or (p.status is not null and p.status!=0)) and p.del_flag='0'
+		group by s.label,DATE_FORMAT(p.apply_time,"%Y")
+	</select>
+	<select id="getTeamYearMemsFromGcontest" resultType="java.util.HashMap" parameterType="java.lang.String">
+		select s.label,DATE_FORMAT(p.sub_time,"%Y") name,count(1) cc from team t left join g_contest p on t.id=p.team_id
+		left join sys_dict s on s.value='1' and s.type='competition_type'
+		left join team_user_relation tu on tu.team_id=t.id and tu.del_flag='0' and (tu.state='0' or tu.state='4') and tu.user_type='1'
+		where p.proc_ins_id is not null and p.del_flag='0'
+		group by s.label,DATE_FORMAT(p.sub_time,"%Y")
+	</select>
+	<select id="getTeamYearMemsFromModel" resultType="java.util.HashMap" parameterType="java.lang.String">
+		select ifnull(s.label,s2.label) label,DATE_FORMAT(p.sub_time,"%Y") name,count(1) cc from team t left join pro_model p on t.id=p.team_id
+		left join sys_dict s on s.value=p.type and p.type!='1'  and s.type='competition_type' and p.pro_type='7,'
+		left join sys_dict s2 on s2.value=p.type and p.type!='1' and s2.type='project_style' and p.pro_type='1,'
+		left join team_user_relation tu on tu.team_id=t.id and tu.del_flag='0' and (tu.state='0' or tu.state='4') and tu.user_type='1'
+		where p.sub_status='1' and p.del_flag='0'
+		group by s.label,DATE_FORMAT(p.sub_time,"%Y")
+	</select>
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwFassetsnoRuleDao">
+    
+	<sql id="pwFassetsnoRuleColumns">
+		a.id AS "id",
+		a.fcid AS "fcid",
+		a.prefix AS "prefix",
+		a.format AS "format",
+		a.start_number AS "startNumber",
+		a.number_len AS "numberLen",
+		a.max_value AS "maxValue"
+		a.version AS "version",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="pwFassetsnoRuleJoins">
+	</sql>
+    
+	<select id="get" resultType="PwFassetsnoRule">
+		SELECT 
+			<include refid="pwFassetsnoRuleColumns"/>
+		FROM pw_fassetsno_rule a
+		<include refid="pwFassetsnoRuleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PwFassetsnoRule">
+		SELECT 
+			<include refid="pwFassetsnoRuleColumns"/>
+		FROM pw_fassetsno_rule a
+		<include refid="pwFassetsnoRuleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PwFassetsnoRule">
+		SELECT 
+			<include refid="pwFassetsnoRuleColumns"/>
+		FROM pw_fassetsno_rule a
+		<include refid="pwFassetsnoRuleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pw_fassetsno_rule(
+			id,
+			fcid,
+			prefix,
+			format,
+			start_number,
+			number_len,
+			max_value,
+			version,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{fcid},
+			#{prefix},
+			#{format},
+			#{startNumber},
+			#{numberLen},
+			#{maxValue},
+			#{version},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pw_fassetsno_rule SET 	
+			fcid = #{fcid},
+			prefix = #{prefix},
+			format = #{format},
+			start_number = #{startNumber},
+			number_len = #{numberLen},
+			max_value = #{maxValue},
+			version = version + 1,
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		<where>
+			id = #{id} AND version = #{version}
+		</where>
+
+	</update>
+
+
+	<update id="delete">
+		UPDATE pw_fassetsno_rule SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="deleteByFcids" parameterType="java.util.List">
+		DELETE FROM pw_fassetsno_rule
+		WHERE fcid in
+		<foreach item="item" collection="fcids" separator="," open="("
+				 close=")">
+			#{item}
+		</foreach>
+
+	</delete>
+	
+</mapper>

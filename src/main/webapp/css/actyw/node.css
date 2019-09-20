@@ -1,0 +1,146 @@
+@charset "utf-8";
+
+
+
+
+.modal {
+    display: block;
+}
+
+.modal-transition {
+    transition: all .6s ease;
+}
+
+.modal-leave {
+    /* 样式没什么用，但可以让根标签的transitionEnd生效，以去掉modal-leave */
+    border-radius: 1px !important;
+}
+
+.modal-transition .modal-dialog, .modal-transition .modal-backdrop {
+    transition: all .5s ease;
+}
+
+.modal-enter .modal-dialog, .modal-leave .modal-dialog {
+    opacity: 0;
+    transform: translateY(-30%);
+}
+
+.modal-enter .modal-backdrop, .modal-leave .modal-backdrop {
+    opacity: 0;
+}
+
+.edit-bar{
+	margin-bottom: 30px;
+	margin-top:30px;
+}
+.edit-bar-left {
+    position: relative;
+}
+
+.edit-bar-left > span {
+    position: relative;
+    padding: 0 15px 0 0;
+    color: #e9432d;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 2.5;
+    background: #fff;
+    z-index: 1;
+}
+
+.edit-bar-left .line {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    right: 0;
+    border-top: 1px solid rgb(243, 213, 175);
+}
+
+.table-flow-node>thead>tr{
+	background-color: #f4e6d4;
+}
+
+.tool-bar{
+	position: relative;
+	overflow: hidden;
+	z-index: 2;
+}
+.tool-bar .btn{
+	color: #fff;
+	background-color: #dd4814;
+}
+.table-title{
+	position: relative;
+	font-size: 0;
+}
+.table-title>a{
+	display: inline-block;
+	padding: 6px 12px;
+	font-size: 14px;
+	color: #333;
+	background-color: #f5f0ef;
+	border-radius: 4px 4px 0 0;
+	text-decoration: none;
+}
+.table-title .cur{
+	background-color: #f4e6d4;
+}
+.btn-node-primary{
+	color: #fff;
+	background-color: #dd4814;
+}
+.btn-node-primary:hover,.btn-node-primary:focus{
+	color: #fff;
+}
+.btn-node-hover:focus,.btn-node-hover:hover{
+	background-color: #d5400d;
+	color: #fff;
+	border-color: #d5400d;
+}
+.table-flow-node>tbody>tr>td{
+	vertical-align: middle;
+}
+
+.form-create-node .control-label{
+	float: left;
+	padding-right: 15px;
+	padding-left: 15px;
+	font-weight: normal;
+}
+
+.form-create-node .control-label .icon-require{
+	color: red;
+	margin-right: 4px;
+}
+.form-create-node .w130{
+	width: 130px
+}
+.form-create-node .input-box{
+	margin-left: 130px; 
+	padding-right: 15px;
+}
+
+.form-lable-w84 .control-label{
+	width: 84px;
+}
+.form-lable-w84 .input-box{
+	margin-left: 84px;
+}
+.node-container{
+	position: relative;
+	padding: 28px 15px 20px;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	margin-bottom: 30px;
+}
+.node-container .title{
+	position: absolute;
+	left: 15px;
+	top: -8px;
+	padding:  0 15px;
+	margin-bottom: 0;
+	font-size: 16px;
+	color: #000;
+	background-color: #fff;
+}

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwRenewalRuleDao">
+
+	<sql id="pwRenewalRuleColumns">
+		a.id AS "id",
+		a.is_warm AS "isWarm",
+		a.warm_time AS "warmTime",
+		a.apply_max_num AS "apply_max_num",
+		a.is_hatback AS "isHatback",
+		a.hatback_time AS "hatbackTime",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="pwRenewalRuleJoins">
+	</sql>
+
+	<select id="get" resultType="PwRenewalRule">
+		SELECT
+			<include refid="pwRenewalRuleColumns"/>
+		FROM pw_renewal_rule a
+		<include refid="pwRenewalRuleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="PwRenewalRule">
+		SELECT
+			<include refid="pwRenewalRuleColumns"/>
+		FROM pw_renewal_rule a
+		<include refid="pwRenewalRuleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="PwRenewalRule">
+		SELECT
+			<include refid="pwRenewalRuleColumns"/>
+		FROM pw_renewal_rule a
+		<include refid="pwRenewalRuleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pw_renewal_rule(
+			id,
+			is_warm,
+			warm_time,
+			apply_max_num,
+			is_hatback,
+			hatback_time,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{isWarm},
+			#{warmTime},
+			#{applyMaxNum},
+			#{isHatback},
+			#{hatbackTime},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pw_renewal_rule SET
+			is_warm = #{isWarm},
+			warm_time = #{warmTime},
+			apply_max_num = #{applyMaxNum},
+			is_hatback = #{isHatback},
+			hatback_time = #{hatbackTime},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE pw_renewal_rule SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+
+	<select id="getPwRenewalRule" resultType="PwRenewalRule">
+		SELECT
+			<include refid="pwRenewalRuleColumns"/>
+		FROM pw_renewal_rule a
+			<include refid="pwRenewalRuleJoins"/>
+		limit 1
+	</select>
+
+	<update id="deleteWL">
+		DELETE FROM pw_renewal_rule WHERE id = #{id}
+	</update>
+</mapper>

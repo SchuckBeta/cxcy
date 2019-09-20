@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.scr.dao.ScoRsumDao">
+
+	<sql id="scoRsumColumns">
+		a.id AS "id",
+		a.app_id AS "apply.id",
+		a.rid AS "rule.id",
+		a.rdid AS "rdetail.id",
+		a.uid AS "user.id",
+		a.val AS "val",
+		a.is_spro AS "isSpro",
+		a.val_type AS "valType",
+		a.val_remarks AS "valRemarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="scoRsumJoins">
+	</sql>
+
+	<select id="get" resultType="ScoRsum">
+		SELECT
+			<include refid="scoRsumColumns"/>
+		FROM sco_rsum a
+		<include refid="scoRsumJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="updateValList" resultType="ScoRsum">
+		SELECT
+		a.id AS "id",
+		a.app_id AS "apply.id",
+		a.rid AS "rule.id",
+		a.rdid AS "rdetail.id",
+		a.uid AS "user.id",
+		u.name AS "user.name",
+		a.val AS "val",
+		a.is_spro AS "isSpro",
+		a.val_type AS "valType",
+		a.val_remarks AS "valRemarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+		FROM sco_rsum a
+		LEFT JOIN sys_user u on u.id = a.uid and u.del_flag=0
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="apply != null">
+				<if test="apply.id != null and apply.id != ''">
+					and a.app_id = #{apply.id}
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findRdetailSum" resultType="ScoRsum">
+		SELECT
+								y.userId,
+								y.userName,
+								y.`no`,
+								y.photo,
+								y.officeName,
+								y.professional,
+								y.officeId,
+								y. NAME,
+
+							IF (
+								y.val > d.joinmax,
+								1,
+								0
+							) AS "val"
+							FROM
+								(
+									SELECT
+										a.uid AS "userId",
+										u. NAME AS "userName",
+										u.`no`,
+										u.photo,
+										o. NAME AS "officeName",
+										o1. NAME AS "professional",
+										o.id AS "officeId",
+										ru. NAME,
+										sum(a.val) AS "val",
+										deta.id AS "retaid"
+									FROM
+										sco_rsum a
+									LEFT JOIN sco_rapply r ON r.id = a.app_id
+									AND r.del_flag = 0
+									LEFT JOIN sys_user u ON u.id = a.uid
+									AND u.del_flag = 0
+									LEFT JOIN sys_office o ON o.id = u.office_id
+									AND o.del_flag = 0
+									LEFT JOIN sys_office o1 ON o1.id = u.professional
+									AND o1.del_flag = 0
+									LEFT JOIN sco_rule ru ON ru.id = a.rid
+									AND ru.del_flag = 0
+									LEFT JOIN sco_rule_detail deta ON deta.id = a.rdid
+									AND deta.del_flag = 0
+									WHERE
+										a.del_flag = 0
+									AND r.`status` = 3
+									AND a.is_spro = 0
+									AND deta.maxorsum = 2
+									AND u.id=#{user.id}
+									AND deta.id=#{rdetail.id}
+									OR (
+										deta.maxorsum = 1
+										AND deta.is_special = 1
+										AND a.del_flag = 0
+									)
+									GROUP BY
+										a.uid,
+										deta.id
+								) AS y,
+								sco_rule_detail d
+							WHERE
+								y.retaid = d.id
+							AND d.del_flag = 0
+
+	</select>
+
+	<select id="findRdetailPersonalSum" resultType="ScoRsum">
+		SELECT if(sum(s.val) >= d.joinmax,1,0) as "sum" from sco_rsum s
+LEFT JOIN sco_rule_detail d on d.id = s.rdid and d.del_flag=0
+where s.del_flag=0 and s.uid = #{user.id} and s.rdid=#{apply.rdetail.id} and d.maxorsum =2 or(d.maxorsum =1 and d.is_special=1)
+	</select>
+
+	<select id="findList" resultType="ScoRsum">
+		SELECT
+			<include refid="scoRsumColumns"/>
+		FROM sco_rsum a
+		<include refid="scoRsumJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByAppId" resultType="ScoRsum">
+		SELECT
+			<include refid="scoRsumColumns"/>
+		FROM sco_rsum a
+		<include refid="scoRsumJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND a.app_id = #{apply.id}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByAppIds" resultType="ScoRsum">
+		SELECT
+			<include refid="scoRsumColumns"/>
+		FROM sco_rsum a
+		<include refid="scoRsumJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND a.app_id in
+			<foreach item="id" collection="appIds" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+
+	<select id="findScoSumList" resultType="java.util.HashMap">
+		SELECT * FROM (
+		SELECT q.`user.name` AS "user.name", q.`user.no` AS "user.no", q.`user.id` AS "user.id", q.`user.photo` AS "user.photo", q.`user.professional` AS "user.professional", q.`user.office.name` AS "user.officeName", q.`user.office.id` AS "user.officeId",
+		<if test="entitys != null and entitys.size >0">
+			<foreach collection="entitys" item="item" separator=",">
+				IFNULL(MAX(CASE name WHEN '${item.name}' THEN vals END ),0) "${item.name}"
+			</foreach>
+		</if>
+		,round(sum(vals), 2) "总分"
+		FROM (
+		SELECT mm.userId AS "user.id", mm.userName AS "user.name", mm. NO AS "user.no", mm.photo AS "user.photo", mm.officeName AS "user.office.name", mm.professional AS "user.professional", mm.officeId AS "user.office.id", mm. NAME, IFNULL(round(sum(mm.val), 2), 0) AS "vals"
+		FROM (
+		SELECT m.userId, m.userName, m.`no`, m.photo, m.officeName, m.professional, m.officeId, m.`NAME`, m.val
+		FROM (
+		SELECT a.uid AS "userId", u. NAME AS "userName", u.`no`, u.photo, o. NAME AS "officeName", o1. NAME AS "professional", o.id AS "officeId", ru. NAME, a.val, deta.rid, deta.id,a.val as "score"
+		FROM sco_rsum a LEFT JOIN sco_rapply r ON r.id = a.app_id AND r.del_flag = 0
+		LEFT JOIN sys_user u ON u.id = a.uid AND u.del_flag = 0
+		LEFT JOIN sys_office o ON o.id = u.office_id AND o.del_flag = 0
+		LEFT JOIN sys_office o1 ON o1.id = u.professional AND o1.del_flag = 0
+		LEFT JOIN sco_rule ru ON ru.id = a.rid AND ru.del_flag = 0
+		LEFT JOIN sco_rule_detail deta ON deta.id = a.rdid AND deta.del_flag = 0
+		WHERE a.del_flag = 0 AND r.`status` = 3 AND a.is_spro = 0 AND deta.maxorsum = 1 and deta.is_special !=1 ) AS m
+		WHERE m.score = (
+		SELECT cc.scores FROM ( SELECT aa.uid AS "userId",detaa.id, detaa.rid, MAX(aa.val) AS "scores" FROM sco_rsum aa
+		LEFT JOIN sco_rapply rr ON rr.id = aa.app_id AND rr.del_flag = 0
+		LEFT JOIN sys_user u ON u.id = aa.uid AND u.del_flag = 0
+		LEFT JOIN sys_office o ON o.id = u.office_id AND o.del_flag = 0
+		LEFT JOIN sys_office o1 ON o1.id = u.professional AND o1.del_flag = 0
+		LEFT JOIN sco_rule ruu ON ruu.id = aa.rid AND ruu.del_flag = 0
+		LEFT JOIN sco_rule_detail detaa ON detaa.id = aa.rdid AND detaa.del_flag = 0
+		WHERE aa.del_flag = 0 AND rr.`status` = 3 AND aa.is_spro = 0 AND detaa.maxorsum = 1 and detaa.is_special !=1 GROUP BY aa.uid, detaa.rid ) AS cc
+		WHERE cc.rid = m.rid  AND cc.userId = m.userId  )
+		UNION ALL
+		SELECT y.userId, y.userName, y.`no`, y.photo, y.officeName, y.professional, y.officeId, y. NAME, IF ( y.val > d.joinmax, d.joinmax, y.val ) AS "val"
+		FROM ( SELECT a.uid AS "userId", u. NAME AS "userName", u.`no`, u.photo, o. NAME AS "officeName", o1. NAME AS "professional", o.id AS "officeId", ru. NAME, sum(a.val) AS "val", deta.id AS "retaid" FROM sco_rsum a
+		LEFT JOIN sco_rapply r ON r.id = a.app_id AND r.del_flag = 0
+		LEFT JOIN sys_user u ON u.id = a.uid AND u.del_flag = 0
+		LEFT JOIN sys_office o ON o.id = u.office_id AND o.del_flag = 0
+		LEFT JOIN sys_office o1 ON o1.id = u.professional AND o1.del_flag = 0
+		LEFT JOIN sco_rule ru ON ru.id = a.rid AND ru.del_flag = 0
+		LEFT JOIN sco_rule_detail deta ON deta.id = a.rdid AND deta.del_flag = 0
+		WHERE a.del_flag = 0 AND r.`status` =3 AND a.is_spro = 0 AND deta.maxorsum = 2 or( deta.maxorsum = 1 and deta.is_special=1 and a.del_flag = 0 ) GROUP BY a.uid, deta.id ) AS y, sco_rule_detail d
+		WHERE y.retaid = d.id AND d.del_flag = 0
+		UNION ALL
+		SELECT sa.user_id AS "userId", su. NAME AS "userName", su. NO AS "no", su.photo AS "photo", so. NAME AS "officeName", o3.`name` AS "professional", so.id AS "officeId", "创新创业课程" AS NAME, IFNULL(sa.score, 0) AS "val" FROM sco_course a
+		LEFT JOIN sco_apply sa ON sa.course_id = a.id
+		INNER JOIN sys_user su ON su.id = sa.user_id
+		INNER JOIN sys_office so ON so.id = su.office_id
+		LEFT JOIN sys_office o3 ON o3.id = su.professional AND o3.del_flag = 0
+		WHERE a.del_flag = 0 AND sa.del_flag = 0 AND sa.audit_status = 3 ) mm GROUP BY mm.userId, mm. NAME ) q GROUP BY q.`user.id` ) t
+		<where>
+			1=1
+			<if test="user != null">
+				<if test="user.office != null">
+					<if test="user.office.id != null and user.office.id != ''">
+						AND t.`user.officeId`= #{user.office.id}
+					</if>
+				</if>
+				<if test="user.id != null and user.id != ''">
+					AND t.`user.id`= #{user.id}
+				</if>
+			</if>
+			<if test="keys != null and keys != ''">
+				and (t.`user.no` like '%${keys}%' or t.`user.name` like '%${keys}%' or t.`user.professional` like '%${keys}%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY t.`总分` desc
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="findScoRsumCourseList" resultType="com.oseasy.scr.modules.scr.entity.ScoCreditValue">
+		SELECT "1" AS id,"创新创业课程" AS name,IFNULL(sum(course_score),0) AS value  from sco_score s
+		LEFT JOIN sco_course c on c.id =s.course_id and c.del_flag=0
+		where s.del_flag=0 and s.user_id=#{userId}
+	</select>
+
+	<select id="findScoRsumCreditList" resultType="com.oseasy.scr.modules.scr.entity.ScoCreditValue">
+		SELECT a.rid AS id,ru.name,IFNULL(sum(a.val),0) AS value from sco_rsum a
+		LEFT JOIN sco_rapply r on r.id = a.app_id and r.del_flag=0
+		LEFT JOIN sys_user u on u.id=a.uid and u.del_flag=0
+		LEFT JOIN sco_rule ru on ru.id = a.rid and ru.del_flag=0
+		where a.del_flag=0 and r.`status`=#{status} and a.uid=#{userId}
+		GROUP BY a.rid
+	</select>
+
+	<select id="findAllList" resultType="ScoRsum">
+		SELECT
+			<include refid="scoRsumColumns"/>
+		FROM sco_rsum a
+		<include refid="scoRsumJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sco_rsum(
+			id,
+			app_id,
+			rid,
+			rdid,
+			uid,
+			val,
+			is_spro,
+			val_type,
+			val_remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{apply.id},
+			#{rule.id},
+			#{rdetail.id},
+			#{user.id},
+			#{val},
+			#{isSpro},
+			#{valType},
+			#{valRemarks},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO sco_rsum(
+			id,
+			app_id,
+			rid,
+			rdid,
+			uid,
+			val,
+			is_spro,
+			val_type,
+			val_remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.apply.id},
+			#{item.rule.id},
+			#{item.rdetail.id},
+			#{item.user.id},
+			#{item.val},
+			#{item.isSpro},
+			#{item.valType},
+			#{item.valRemarks},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE sco_rsum SET
+			app_id = #{apply.id},
+			rid = #{rule.id},
+			rdid = #{rdetail.id},
+			uid = #{user.id},
+			val = #{val},
+			is_spro = #{isSpro},
+			val_type = #{valType},
+			val_remarks = #{valRemarks},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE sco_rsum
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="app_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.apply.id}
+				</foreach>
+			</trim>
+			<trim prefix="rid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rule.id}
+				</foreach>
+			</trim>
+			<trim prefix="rdid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rdetail.id}
+				</foreach>
+			</trim>
+			<trim prefix="uid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.user.id}
+				</foreach>
+			</trim>
+			<trim prefix="val =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.val}
+				</foreach>
+			</trim>
+			<trim prefix="is_spro =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isSpro}
+				</foreach>
+			</trim>
+			<trim prefix="val_type =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.valType}
+				</foreach>
+			</trim>
+			<trim prefix="val_remarks =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.valRemarks}
+				</foreach>
+			</trim>
+			<trim prefix="update_by =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateBy.id}
+				</foreach>
+			</trim>
+			<trim prefix="update_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateDate}
+				</foreach>
+			</trim>
+			<trim prefix="remarks =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.remarks}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+
+	<update id="delete">
+		UPDATE sco_rsum SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteByAppId">
+		UPDATE sco_rsum SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE app_id = #{apply.id}
+	</update>
+
+	<update id="updateVal">
+		update sco_rsum set val = #{val} where app_id=#{apply.id} and uid=#{user.id}
+	</update>
+
+	<update id="deletePL">
+		UPDATE sco_rsum SET
+			del_flag = #{DEL_FLAG_DELETE}
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sco_rsum WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLByAppId">
+		DELETE FROM sco_rsum WHERE app_id = #{apply.id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM sco_rsum WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM sco_rsum
+	</update>
+</mapper>

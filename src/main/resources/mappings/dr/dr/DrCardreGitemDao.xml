@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.dr.modules.dr.dao.DrCardreGitemDao">
+
+	<sql id="drCardreGitemColumns">
+		a.id AS "id",
+		a.gid AS "group.id",
+		a.estatus AS "estatus",
+		a.erspace_id AS "erspace.id",
+
+		e.ept_id AS "erspace.epment.id",
+		e.rsp_type AS "erspace.rspType",
+		e.rspace_id AS "erspace.rspace",
+		e.dr_no AS "erspace.drNo",
+		e.name AS "erspace.name",
+		e.deal_status AS "erspace.dealStatus",
+
+		et.no AS "erspace.epment.no",
+		et.name AS "erspace.epment.name",
+		et.psw AS "erspace.epment.psw",
+		et.ip AS "erspace.epment.ip",
+		et.type AS "erspace.epment.type",
+		et.port AS "erspace.epment.port",
+		et.dr_no AS "erspace.epment.drNo",
+		et.tindex AS "erspace.epment.tindex",
+
+		g.name AS "group.name",
+		g.is_time_limit AS "group.isTimeLimit",
+		g.del_flag AS "group.delFlag",
+		g.remarks AS "group.remarks"
+	</sql>
+
+	<sql id="drCardreGitemJoins">
+        LEFT JOIN dr_equipment_rspace e ON e.id = a.erspace_id
+        LEFT JOIN dr_equipment et ON et.id = e.ept_id
+        LEFT JOIN dr_cardre_group g ON g.id = a.gid
+	</sql>
+
+	<select id="get" resultType="DrCardreGitem">
+		SELECT
+			<include refid="drCardreGitemColumns"/>
+		FROM dr_cardre_gitem a
+		<include refid="drCardreGitemJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="DrCardreGitem">
+		SELECT
+			<include refid="drCardreGitemColumns"/>
+		FROM dr_cardre_gitem a
+		<include refid="drCardreGitemJoins"/>
+		<where>
+			<if test="group != null">
+				<if test="group.id != null and group.id != ''">
+					AND a.gid = #{group.id}
+				</if>
+				<if test="group.name != null and group.name != ''">
+					AND a.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{group.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{group.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{group.name},'%')</if>
+				</if>
+			</if>
+			<if test="erspace != null">
+				<if test="erspace.id != null and erspace.id != ''">
+					AND a.erspace_id = #{erspace.id}
+				</if>
+			</if>
+			<if test="estatus != null and estatus != ''">
+				AND a.estatus = #{estatus}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="DrCardreGitem">
+		SELECT
+			<include refid="drCardreGitemColumns"/>
+		FROM dr_cardre_gitem a
+		<include refid="drCardreGitemJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dr_cardre_gitem(
+			id,
+			gid,
+			estatus,
+			erspace_id
+		) VALUES (
+			#{id},
+			#{group.id},
+			#{estatus},
+			#{erspace.id}
+		)
+	</insert>
+
+	<insert id="savePl" >
+		INSERT INTO dr_cardre_gitem(
+			id,
+			gid,
+			estatus,
+			erspace_id
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+				 separator=",">
+			(
+				#{item.id},
+				#{item.group.id},
+				#{item.estatus},
+				#{item.erspace.id}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE dr_cardre_gitem SET
+			gid = #{group.id},
+			estatus = #{estatus},
+			erspace_id = #{erspace.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM dr_cardre_gitem
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM dr_cardre_gitem WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPLByGid">
+		DELETE FROM dr_cardre_gitem WHERE gid = #{gid}
+	</update>
+
+	<update id="deleteWLPLByIds">
+		DELETE FROM dr_cardre_gitem WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+</mapper>

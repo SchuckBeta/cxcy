@@ -1,0 +1,65 @@
+body{
+	font-family: "微软雅黑";
+}
+.scinfonavigation ul li:first-child {
+	margin-top: -2px;
+}
+
+.scinfonavigation ul li {
+	float: left;
+	letter-spacing: 3px;
+	margin-left: 10px;
+}
+.title_info{
+	margin-top: 114px;
+	text-align: center;
+	
+}
+.title_info h3{
+	letter-spacing: 3px;
+	
+}
+.title_info h4{
+	letter-spacing: 3px;
+	margin-top: 27px;
+}
+.title_info p{
+	color: #D8D8D8;
+	margin-top: 34px;
+}
+
+.china{
+	border: 1px solid #D8D8D8;
+	margin-top: 55px;
+	text-align: center;
+}
+.china_info{
+	padding: -20px 100px; 
+}
+.china_info h2{
+	padding-top: 100px;
+	color: #F02020;
+	border-bottom: 4px solid #F02020;
+	width: 807px;
+	margin: auto;
+	padding-bottom: 24px;
+}
+#chinaborder{
+	border-bottom: 2px solid #F02020;
+	padding-bottom: 3px;
+	width: 807px;
+	margin: auto;
+}
+.china_info p{
+	margin-top: 33px;
+	margin-left: 690px;
+	font-weight: bold;
+}
+.china_info h4{
+	margin-top: 50px;
+}
+
+.china_info h4,.china_info h5{
+	font-weight: bold;
+
+}

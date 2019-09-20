@@ -1,0 +1,78 @@
+*{
+	margin: 0;
+	padding: ;
+}
+ul li {
+	list-style: none;
+}
+.yxxm{
+	width: 100%;
+	height: 70px;
+	margin:-30px 54px;
+}
+
+.yxxm ul li a:hover{
+	text-decoration: none;
+}
+
+.yxxm ul li{
+	float: left;
+	margin:60px 80px;
+}
+
+.yxxm ul li a{
+	color: #828282;
+}
+
+.yxxm ul li a:hover{
+	color: #EF987E;
+}
+
+.yxxm ul li:hover .borderinfo{
+	border: 2px solid red;
+	width: 80px;
+}
+
+.sctzinfo img{
+	width: 100%;
+}
+.yximg img{
+	width: 100%;
+}
+.yxgjz{
+	margin-bottom: 10px;
+	width: 200px;
+	height: 30px;
+}
+.yxtitle {	
+	margin-top: 50px;
+	margin-right: 300px;
+}
+.pageinfoone ul li{
+	float: left;
+	letter-spacing: 5px;
+	text-align: center;
+	width: 30px;
+	height: 30px;
+	border: 1px solid #C6C6C6;
+	line-height: 30px;
+	text-align: center;
+	margin: 2px;
+}
+
+.pageinfoone ul li:first-child{
+	width: 50px;
+	height: 30px;
+}
+
+.pageinfoone ul li:last-child{
+	width: 50px;
+	height: 30px;
+}
+
+.pageinfoone ul li:hover{
+	background-color: red;
+}
+.pageinfoone ul li a:hover{
+	color: #fff;
+}

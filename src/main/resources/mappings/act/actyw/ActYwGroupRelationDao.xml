@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwGroupRelationDao">
+
+	<sql id="actYwGroupRelationColumns">
+		a.id AS "id",
+		a.prov_group_id AS "provGroupId",
+		a.model_group_id AS "modelGroupId",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="actYwGrelColumns">
+		gn.id AS "id",
+		gn.name AS "name",
+		gn.status AS "status",
+		gn.type AS "type",
+		gn.flow_type AS "flowType",
+		gn.theme AS "theme",
+		gn.temp AS "temp",
+		gn.keyss AS "keyss",
+		gn.author AS "author",
+		gn.version AS "version",
+		gn.flow_id AS "flowId",
+		gn.sort AS "sort",
+		gn.ui_json AS "uiJson",
+		gn.ui_html AS "uiHtml",
+		gn.update_date AS "updateDate",
+		gn.update_by AS "updateBy.id",
+		gn.create_date AS "createDate",
+		gn.create_by AS "createBy.id",
+		gn.remarks AS "remarks",
+		gn.del_flag AS "delFlag",
+		gn.tenant_id AS "tenantId"
+	</sql>
+
+	<sql id="actYwYrelColumns">
+		b.id AS "id",
+		b.rel_id AS "relId",
+		b.group_id AS "groupId",
+		b.flow_id AS "flowId",
+		b.deployment_id AS "deploymentId",
+		b.is_deploy AS "isDeploy",
+		b.is_pre_release AS "isPreRelease",
+		b.is_show_axis AS "isShowAxis",
+		b.is_curr AS "isCurr",
+		b.is_nrule AS "isNrule",
+		b.status  AS  "status",
+		b.show_time AS "showTime",
+		b.key_Type AS "keyType",
+		b.del_flag AS "delFlag",
+		b.tenant_id AS "tenantId"
+	</sql>
+
+	<sql id="actYwGroupRelationJoins">
+	        LEFT JOIN act_yw_group g ON g.id = a.prov_group_id
+			LEFT JOIN act_yw_group gn ON gn.id = a.model_group_id
+	</sql>
+
+	<select id="get" resultType="ActYwGroupRelation">
+		SELECT
+			<include refid="actYwGroupRelationColumns"/>
+		FROM act_yw_group_relation a
+		<include refid="actYwGroupRelationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getModelActYwGroupByProv" resultType="java.lang.String">
+		SELECT
+		a.model_group_id AS "modelGroupId"
+		FROM act_yw_group_relation a
+		<include refid="actYwGroupRelationJoins"/>
+		WHERE a.prov_group_id = #{groupId} and a.del_flag='0'
+	</select>
+
+	<select id="getNscActYwGroupByProv" resultType="ActYwGroup">
+		SELECT
+			a.id AS "id",
+			a.name AS "name",
+			a.status AS "status",
+			a.type AS "type",
+			a.flow_type AS "flowType",
+			a.theme AS "theme",
+			a.temp AS "temp",
+			a.keyss AS "keyss",
+			a.author AS "author",
+			a.version AS "version",
+			a.flow_id AS "flowId",
+			a.sort AS "sort",
+			a.del_flag AS "delFlag",
+			a.tenant_id AS "tenantId"
+		FROM act_yw_group_relation gr
+		LEFT JOIN act_yw_group a ON a.id = gr.model_group_id
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND gr.prov_group_id = #{provGroupId}
+	</select>
+
+	<select id="findList" resultType="ActYwGroupRelation">
+		SELECT
+		<include refid="actYwGroupRelationColumns"/>
+		FROM act_yw_group_relation a
+		<include refid="actYwGroupRelationJoins"/>
+		<where>
+			1=1
+			<if test="provGroupId != null and provGroupId != ''">
+				AND a.prov_group_id = #{provGroupId}
+			</if>
+			<if test="modelGroupId != null and modelGroupId != ''">
+				AND a.model_group_id = #{modelGroupId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListHasGrel" resultType="ActYwGroup">
+		SELECT
+		<include refid="actYwGrelColumns"/>
+		FROM act_yw_group_relation a
+		<include refid="actYwGroupRelationJoins"/>
+	</select>
+
+	<select id="findListHasYrel" resultType="ActYw">
+		SELECT
+		<include refid="actYwYrelColumns"/>
+		FROM act_yw_group_relation a
+		<include refid="actYwGroupRelationJoins"/>
+		LEFT JOIN act_yw b ON b.group_id = a.model_group_id
+		WHERE b.del_flag = '0' AND b.id is not NULL AND g.id is not NULL AND gn.id is not NULL
+	</select>
+
+	<select id="findAllList" resultType="ActYwGroupRelation">
+		SELECT
+			<include refid="actYwGroupRelationColumns"/>
+		FROM act_yw_group_relation a
+		<include refid="actYwGroupRelationJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="saveAll" parameterType="java.util.List">
+		insert into act_yw_group_relation (
+			id,
+			prov_group_id,
+			model_group_id,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		)
+	    values
+	    <foreach collection="list" item="item" index="index" separator="," >
+	        (
+			#{item.id},
+			#{item.provGroupId},
+			#{item.modelGroupId},
+			#{item.updateDate},
+			#{item.updateBy.id},
+			#{item.createDate},
+			#{item.createBy.id},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+	    </foreach>
+	</insert>
+
+	<insert id="insert">
+		INSERT INTO act_yw_group_relation(
+			id,
+			prov_group_id,
+			model_group_id,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{provGroupId},
+			#{modelGroupId},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_group_relation SET
+			prov_group_id = #{provGroupId},
+			modelGroupId = #{modelGroupId},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM act_yw_group_relation
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM act_yw_group_relation WHERE id = #{id}
+	</update>
+
+
+
+</mapper>

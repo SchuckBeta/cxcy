@@ -1,0 +1,21 @@
+	.pagination_num{
+		overflow:hidden;
+		margin:20px 10px !important;
+	}
+	.pagination_list{
+		float:left;
+	}
+	.num_page{
+		float:right;
+		overflow:hidden;
+	}
+	.page_tips{
+		white-space: nowrap;
+		float: left;
+		margin-top: 0 !important;
+	}
+	.per_page_count{
+		max-width:50px;
+		outline: none;
+		float: left;
+	}

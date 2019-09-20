@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.cms.modules.cms.dao.CmsIndexRegionDao">
+
+	<sql id="cmsIndexRegionColumns">
+		a.id AS "id",
+		a.region_id AS "regionId",
+		a.region_name AS "regionName",
+		a.region_model AS "regionModel",
+		a.region_type AS "regionType",
+		a.region_state AS "regionState",
+		a.region_sort AS "regionSort",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+
+		b.id AS "category.id",
+		b.parent_id AS "category.parent.id",
+		b.parent_ids AS "category.parentIds",
+		b.site_id AS "category.site.id",
+		<!-- b.office_id AS "category.office.id", -->
+		b.module AS "category.module",
+		b.name AS "category.name",
+		<!-- b.image AS "category.image", -->
+		b.href AS "category.href",
+		<!-- b.target AS "category.target",
+		b.description AS "category.description",
+		b.keywords AS "category.keywords", -->
+		b.sort AS "category.sort",
+		<!-- b.in_menu AS "category.inMenu", -->
+		<!-- b.in_list AS "category.inList", -->
+		b.show_modes AS "category.showModes",
+		b.allow_comment AS "category.allowComment",
+		b.is_audit AS "category.isAudit",
+		<!--b.custom_list_view AS "category.customListView",-->
+		<!--b.custom_content_view AS "category.customContentView",-->
+		<!--b.view_config AS "category.viewConfig", -->
+		b.create_by AS "category.createBy.id",
+		b.create_date AS "category.createDate",
+		b.update_by AS "category.updateBy.id",
+		b.update_date AS "category.updateDate",
+		b.remarks AS "category.remarks",
+		b.del_flag AS "category.delFlag",
+
+		bp.name AS "category.parent.name",
+		bpp.id AS "category.parent.parent.id",
+		bpp.name AS "category.parent.parent.name",
+		bppp.id AS "category.parent.parent.parent.id",
+		bppp.name AS "category.parent.parent.parent.name"
+	</sql>
+
+	<sql id="cmsIndexRegionJoins">
+	    LEFT JOIN cms_category b ON b.id = a.category_id
+	    LEFT JOIN cms_category bp ON bp.id = b.parent_id
+	    LEFT JOIN cms_category bpp ON bpp.id = bp.parent_id
+	    LEFT JOIN cms_category bppp ON bppp.id = bpp.parent_id
+	</sql>
+
+	<select id="get" resultType="CmsIndexRegion">
+		SELECT
+			<include refid="cmsIndexRegionColumns"/>
+		FROM cms_index_region a
+		<include refid="cmsIndexRegionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="CmsIndexRegion">
+		SELECT
+			<include refid="cmsIndexRegionColumns"/>
+		FROM cms_index_region a
+		<include refid="cmsIndexRegionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="category != null">
+				<if test="category.id != null and category.id != ''">
+					AND b.id = #{category.id}
+				</if>
+				<if test="category.name != null and category.name != ''">
+					AND b.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{category.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{category.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{category.name},'%')</if>
+				</if>
+			</if>
+			<if test="regionId != null and regionId != ''">
+				AND a.region_id = #{regionId}
+			</if>
+			<if test="regionName != null and regionName != ''">
+				AND a.region_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{regionName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{regionName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{regionName},'%')</if>
+			</if>
+			<if test="regionModel != null and regionModel != ''">
+				AND a.region_model = #{regionModel}
+			</if>
+			<if test="regionType != null and regionType != ''">
+				AND a.region_type = #{regionType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY bppp.parent_id,bpp.parent_id,bp.parent_id,b.parent_id,${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY bppp.parent_id,bpp.parent_id,bp.parent_id,b.parent_id,a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="CmsIndexRegion">
+		SELECT
+			<include refid="cmsIndexRegionColumns"/>
+		FROM cms_index_region a
+		<include refid="cmsIndexRegionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY bppp.parent_id,bpp.parent_id,bp.parent_id,b.parent_id,${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY bppp.parent_id,bpp.parent_id,bp.parent_id,b.parent_id,a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cms_index_region(
+			id,
+			category_id,
+			region_id,
+			region_name,
+			region_model,
+			region_type,
+			region_state,
+			region_sort,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag
+		) VALUES (
+			#{id},
+			#{category.id},
+			#{regionId},
+			#{regionName},
+			#{regionModel},
+			#{regionType},
+			#{regionState},
+			#{regionSort},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE cms_index_region SET
+			category_id = #{category.id},
+			region_id = #{regionId},
+			region_name = #{regionName},
+			region_model = #{regionModel},
+			region_type = #{regionType},
+			region_state = #{regionState},
+			region_sort = #{regionSort},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE cms_index_region SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

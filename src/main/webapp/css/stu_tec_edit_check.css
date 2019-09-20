@@ -1,0 +1,192 @@
+@charset "utf-8";
+
+.breadcrumb {
+    margin-top: 15px;
+    background-color: transparent;
+}
+
+.breadcrumb > li > a {
+    color: #333;
+    text-decoration: none;
+}
+
+.edit-bar {
+    margin-bottom: 15px;
+}
+
+.edit-bar-left {
+    position: relative;
+}
+
+.edit-bar-left > span {
+    position: relative;
+    padding: 0 15px 0 0;
+    color: #e9432d;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 2.5;
+    background: #fff;
+    z-index: 1;
+}
+
+.edit-bar-left .line {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    right: 0;
+    border-top: 1px solid rgb(243, 213, 175);
+}
+
+.user-base-info {
+    min-height: 160px;
+    margin-bottom: 30px;
+}
+
+.user-base-info .user-pic-box {
+    float: left;
+    width: 212px;
+    height: 212px;
+    padding: 6px;
+    border: 1px solid #ddd;
+    overflow: hidden;
+}
+
+.user-info-box {
+    margin-left: 242px;
+    height: auto;
+    overflow: hidden;
+}
+
+.user-label-control {
+    float: left;
+    width: 72px;
+    line-height: 2;
+    margin-bottom: 0;
+    text-align: right;
+}
+
+.user-val {
+    margin-left: 72px;
+    line-height: 2;
+    text-align: justify;
+}
+.user-pic{
+    display: block;
+    max-width: 100%;
+    width: auto;
+    margin: 0 auto;
+}
+.user-info-box div[class^="col-md"] {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    overflow: hidden;
+}
+
+.ud-inner {
+    padding: 0 15px;
+}
+
+label {
+    font-weight: normal;
+}
+
+.ud-title {
+    position: relative;
+    padding-left: 8px;
+    margin-bottom: 20px;
+    line-height: 2;
+    font-size: 16px;
+    color: #000;
+}
+
+.ud-title:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 16px;
+    margin-top: -8px;
+    width: 2px;
+    background-color: #fa5a45;
+}
+
+.info-cards {
+    padding: 0 15px;
+    margin-bottom: 15px;
+}
+
+.info-card {
+    position: relative;
+    padding-top: 20px;
+    padding-left: 28px;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.info-card-title {
+    position: absolute;
+    left: 40px;
+    top: -10px;
+    height: 20px;
+    padding: 0 20px;
+    margin: 0;
+    color: #333;
+    background-color: #fff;
+}
+
+.card-item-span {
+    display: block;
+    float: left;
+    width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.5;
+}
+
+.card-item-box {
+    float: left;
+    margin-bottom: 0px;
+    line-height: 1.5;
+}
+
+.info-card-table {
+    margin-bottom: 0;
+}
+
+.info-card-table > tr > td {
+    text-align: left;
+}
+
+.info-card div[class^="col-md"] {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    overflow: hidden;
+}
+
+.info-match .user-label-control {
+    width: 102px;
+}
+
+.btn-primary-oe{
+    margin-bottom: 30px;
+    width: auto;
+    height: auto;
+    color: #fff;
+    border: 1px solid #982c16;
+}
+.btn-primary-oe:hover,.btn-primary-oe:focus{
+    color: #fff;
+    background-color: #b7351b;
+    border: 1px solid #982c16;
+}
+
+.info-card .user-label-control{
+    width: 100px;
+}
+.info-card .user-val{
+    margin-left: 100px;
+}

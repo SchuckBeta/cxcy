@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.com.pcore.modules.sys.dao.SysPropDao">
+	<resultMap id="sysPropMap" type="com.oseasy.com.pcore.modules.sys.entity.SysProp">
+		<id property="id" column="id" />
+		<result property="type" column="type" />
+		<result property="title" column="title" />
+		<result property="micaPanic" column="micaPanic" />
+		<result property="onOff" column="onOff" />
+
+		<collection property="items" ofType="SysPropItem">
+			<id property="id" column="items.id" />
+			<result property="name" column="items.name" />
+			<result property="isOpen" column="items.isOpen" />
+			<result property="params" column="items.params" />
+			<result property="pfomat" column="items.pfomat" />
+			<result property="instruction" column="items.instruction" />
+		</collection>
+	</resultMap>
+
+	<sql id="sysPropColumns">
+		a.id AS "id",
+		a.type AS "type",
+		a.title AS "title",
+		a.mica_panic AS "micaPanic",
+		a.on_off AS "onOff",
+
+		b.id AS "items.id",
+		b.name AS "items.name",
+		b.is_open AS "items.isOpen",
+		b.params AS "items.params",
+		b.pfomat AS "items.pfomat",
+		b.instruction AS "items.instruction"
+	</sql>
+
+	<sql id="sysPropJoins">
+        LEFT JOIN sys_prop_item b ON b.pid = a.id
+	</sql>
+
+	<select id="get" resultMap="sysPropMap">
+		SELECT
+			<include refid="sysPropColumns"/>
+		FROM sys_prop a
+		<include refid="sysPropJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultMap="sysPropMap">
+		SELECT
+			<include refid="sysPropColumns"/>
+		FROM sys_prop a
+		<include refid="sysPropJoins"/>
+		<where>
+
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="onOff != null and onOff != ''">
+				AND a.on_off = #{onOff}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultMap="sysPropMap">
+		SELECT
+			<include refid="sysPropColumns"/>
+		FROM sys_prop a
+		<include refid="sysPropJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_prop(
+			id,
+			type,
+			title,
+			mica_panic,
+			on_off
+		) VALUES (
+			#{id},
+			#{type},
+			#{title},
+			#{micaPanic},
+			#{onOff}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_prop SET
+			type = #{type},
+			title = #{title},
+			mica_panic = #{micaPanic},
+			on_off = #{onOff}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM sys_prop
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sys_prop WHERE id = #{id}
+	</update>
+</mapper>

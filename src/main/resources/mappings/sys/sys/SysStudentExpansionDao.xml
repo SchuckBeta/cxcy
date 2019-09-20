@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.sys.modules.sys.dao.SysStudentExpansionDao">
+
+	<sql id="sysStudentExpansionColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.field AS "field",
+		a.instudy AS "instudy",
+		a.project_experience AS "projectExperience",
+		a.contest_experience AS "contestExperience",
+		a.award AS "award",
+		a.is_open AS "isOpen",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.graduation AS "graduation",
+		u2.qq AS "user.qq",
+		u2.name AS "user.name"
+	</sql>
+
+	<sql id="sysStudentExpansionJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+
+	<select id="get" resultType="SysStudentExpansion">
+		SELECT
+			<include refid="sysStudentExpansionColumns"/>
+		FROM sys_student_expansion a
+		<include refid="sysStudentExpansionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByUserId" resultType="SysStudentExpansion">
+		SELECT a.id,
+		      a.enterDate    AS  "enterDate",
+			  a.graduation ,
+			  a.curr_state AS "currState"
+		FROM sys_student_expansion a
+		WHERE a.user_id = #{user_id}
+	</select>
+
+	<select id="findList" resultType="SysStudentExpansion">
+		SELECT
+			<include refid="sysStudentExpansionColumns"/>
+		FROM sys_student_expansion a
+		<include refid="sysStudentExpansionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysStudentExpansion">
+		SELECT
+			<include refid="sysStudentExpansionColumns"/>
+		FROM sys_student_expansion a
+		<include refid="sysStudentExpansionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<!--查找学生信息 addBy zhangzheng -->
+	<select id="getStudentList" resultType="SysStudentExpansion">
+		SELECT  a.id AS "id",
+			a.name AS "name",
+			office.name AS "officeName",
+			a.no  AS "no",
+		    office2.name AS "professional",
+			student.enterDate AS  "enterDate",
+			a.mobile AS "mobile",
+			a.email AS "email"
+		FROM sys_user a
+		left join sys_office office on a.office_id=office.id
+		left join sys_student_expansion student on a.id=student.user_id
+		left join sys_office office2 on a.professional=office2.id
+		<where>
+			a.del_flag='0'
+			and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=a.id and sr.biz_type='1' and sr.del_flag='0'
+				)
+			and a.name!=""
+		</where>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_student_expansion(
+			id,
+			user_id,
+			field,
+			instudy,
+			project_experience,
+			contest_experience,
+			award,
+			is_open,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag,
+			graduation
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{field},
+			#{instudy},
+			#{projectExperience},
+			#{contestExperience},
+			#{award},
+			#{isOpen},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag},
+			#{graduation}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_student_expansion SET
+			user_id = #{user.id},
+			field = #{field},
+			instudy = #{instudy},
+			project_experience = #{projectExperience},
+			contest_experience = #{contestExperience},
+			award = #{award},
+			is_open = #{isOpen},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			graduation = #{graduation}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_student_expansion SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+  <select id="findUserInfo" resultType="com.oseasy.sys.modules.sys.entity.UserInfo">
+	SELECT  u.id AS "id",
+  	  u.name AS "name",
+  	  u.email AS "email",
+  	  u.phone AS "phone",
+  	  u.mobile AS "mobile",
+  	  u.photo  AS "photo",
+  	  u.area AS "area",
+  	  u.domain AS "domain",
+	  u.political AS "political",
+	  u.professional AS "professional",
+	  u.birthday AS "birthday",
+	  u.sex AS "sex",
+	  u.degree AS "degree",
+	  u.education AS "education",
+	  u.id_type AS "idType",
+	  u.no AS "no",
+	  u.id_no as "idNo",
+	  se.temporary_date AS "temporaryDate",
+	  se.graduation AS "graduation",
+	  se.t_class AS "tClass",
+	  se.user_id AS "userId" ,
+	  t.sponsor as "sponsor",
+	  u.office_id AS "officeId",
+	  t.local_college as "localCollege",
+	  pd.`name` as "pname",
+	  pd.type as "type",
+	  pd.final_result as "finalResult",
+	  pd.level as "level",
+	  pa.begin_date as "beginDate",
+	  pa.final_end_date as "finalEndDate",
+	  gc.p_name as "contestName",
+	  reward_situation as "rewardSituation",
+	  u.user_type AS "userType"
+    FROM `team` t
+    LEFT JOIN `team_user_relation` ur
+       ON t.id=ur.team_id
+    LEFT JOIN `sys_user` u
+       ON u.id=ur.team_id
+    LEFT JOIN `sys_student_expansion` se
+       ON u.id=se.user_id
+    LEFT JOIN `project_declare` pd
+       ON pd.team_id=t.`id`
+    LEFT JOIN `project_announce` pa
+       ON pa.id=pd.template_id
+    LEFT JOIN `g_contest` gc
+       ON gc.team_id=t.id
+    LEFT JOIN `apply_scientific` s
+       ON t.id =s.team_id
+    WHERE u.id=#{id} GROUP BY u.id
+  </select>
+</mapper>

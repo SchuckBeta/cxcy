@@ -1,0 +1,2157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.scr.dao.ScoRapplyDao">
+
+	<sql id="scoRapplyColumns">
+		a.id AS "id",
+		a.uid AS "user.id",
+		a.rtid AS "top.id",
+		a.rpid AS "rule.id",
+		a.rid AS "lrule.id",
+		a.rdid AS "rdetail.id",
+		a.proc_ins_id AS "procInsId",
+		a.name AS "name",
+		a.status AS "status",
+		a.is_temp AS "isTemp",
+		a.is_first AS "isFirst",
+		a.iend AS "iaprop.iend",
+		a.iendgnid AS "iaprop.iendgnid",
+		a.yw_id AS "actYw.id",
+		a.cond_val AS "condVal",
+		a.tval AS "tval",
+		a.tcval AS "tcval",
+		a.appIds AS "appIds",
+		a.applyCert_id AS "scoRapplyCert.id",
+		a.cert_date AS "certDate",
+		a.apply_date AS "applyDate",
+		a.aut_date AS "autDate",
+		a.aut_by AS "autBy.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		c.name AS "scoRapplyCert.name",
+		u.name AS "user.name",
+		u.mobile AS "user.mobile",
+		u.email AS "user.email",
+		u.photo AS "user.photo",
+		u.no AS "user.no",
+		u.sex AS "user.sex",
+		u.phone AS "user.phone",
+		u.id_type AS "user.idType",
+		u.id_no AS "user.idNumber",
+		u.country AS "user.country",
+		u.birthday AS "user.birthday",
+		u.introduction AS "user.introduction",
+		o.id AS "user.office.id",
+		o.name AS "user.office.name",
+		op.id AS "user.professional",
+		op.name AS "user.professional.name"
+	</sql>
+
+	<sql id="scoRapplyBygColumns">
+		a.id AS "id",
+		a.uid AS "user.id",
+		a.rtid AS "top.id",
+		a.rpid AS "rule.id",
+		a.rid AS "lrule.id",
+		a.rdid AS "rdetail.id",
+		a.proc_ins_id AS "procInsId",
+		a.name AS "name",
+		a.status AS "status",
+		a.is_temp AS "isTemp",
+		a.is_first AS "isFirst",
+		a.iend AS "iaprop.iend",
+		a.iendgnid AS "iaprop.iendgnid",
+		a.yw_id AS "actYw.id",
+		a.cond_val AS "condVal",
+		a.tval AS "tval",
+		a.tcval AS "tcval",
+		a.appIds AS "appIds",
+		a.applyCert_id AS "scoRapplyCert.id",
+		a.cert_date AS "certDate",
+		a.apply_date AS "applyDate",
+		a.aut_date AS "autDate",
+		a.aut_by AS "autBy.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		c.name AS "scoRapplyCert.name",
+		u.name AS "user.name",
+		u.mobile AS "user.mobile",
+		u.email AS "user.email",
+		u.photo AS "user.photo",
+		u.no AS "user.no",
+		u.sex AS "user.sex",
+		u.phone AS "user.phone",
+		u.id_type AS "user.idType",
+		u.id_no AS "user.idNumber",
+		u.country AS "user.country",
+		u.birthday AS "user.birthday",
+		u.professional AS "user.professional",
+		u.introduction AS "user.introduction",
+		o.id AS "user.office.id",
+		o.name AS "user.office.name",
+		op.id AS "user.subject.id",
+		op.name AS "user.subject.name",
+
+		rt.parent_id AS "top.parent.id",
+		rt.parent_ids AS "top.parentIds",
+		rt.name AS "top.name",
+		rt.type AS "top.type",
+		rt.ptype AS "top.ptype",
+		rt.is_pb AS "top.isPb",
+		rt.is_show AS "top.isShow",
+
+		rp.parent_id AS "rule.parent.id",
+		rp.parent_ids AS "rule.parentIds",
+		rp.name AS "rule.name",
+		rp.type AS "rule.type",
+		rp.ptype AS "rule.ptype",
+		rp.is_pb AS "rule.isPb",
+		rp.is_show AS "rule.isShow",
+
+		r.parent_id AS "lrule.parent.id",
+		r.parent_ids AS "lrule.parentIds",
+		r.name AS "lrule.name",
+		r.type AS "lrule.type",
+		r.ptype AS "lrule.ptype",
+		r.is_pb AS "lrule.isPb",
+		r.is_show AS "lrule.isShow",
+		r.update_date AS "lrule.updateDate",
+		r.update_by AS "lrule.updateBy.id",
+		r.create_date AS "lrule.createDate",
+		r.create_by AS "lrule.createBy.id",
+		r.remarks AS "lrule.remarks",
+		r.del_flag AS "lrule.delFlag",
+
+		rd.rid AS "rdetail.rule.id",
+		rd.name AS "rdetail.name",
+		rd.score AS "rdetail.score",
+		rd.sc_min AS "rdetail.scMin",
+		rd.sc_max AS "rdetail.scMax",
+		rd.level AS "rdetail.level",
+		rd.is_limitm AS "rdetail.isLimitm",
+		rd.is_half AS "rdetail.isHalf",
+		rd.half_remarks AS "rdetail.halfRemarks",
+		rd.join_type AS "rdetail.joinType",
+		rd.joinmax AS "rdetail.joinMax",
+		rd.cond_val AS "rdetail.condition",
+		rd.cond_name AS "rdetail.condName",
+		rd.maxorsum AS "rdetail.maxOrSum",
+		rd.is_lowsco AS "rdetail.isLowSco",
+		rd.is_join AS "rdetail.isJoin",
+		rd.lowsco AS "rdetail.lowSco",
+		rd.lowscomax AS "rdetail.lowScoMax",
+		rd.cond_type AS "rdetail.condType",
+		rd.is_condcheck AS "rdetail.isCondcheck",
+		rd.unit AS "rdetail.unit",
+		rd.update_date AS "rdetail.updateDate",
+		rd.update_by AS "rdetail.updateBy.id",
+		rd.create_date AS "rdetail.createDate",
+		rd.create_by AS "rdetail.createBy.id",
+		rd.remarks AS "rdetail.remarks",
+		rd.del_flag AS "rdetail.delFlag"
+	</sql>
+
+	<sql id="scoRapplyDetailColumns">
+		a.id AS "id",
+		a.uid AS "user.id",
+		a.rtid AS "top.id",
+		a.rpid AS "rule.id",
+		a.rid AS "lrule.id",
+		a.rdid AS "rdetail.id",
+		a.proc_ins_id AS "procInsId",
+		a.name AS "name",
+		a.status AS "status",
+		a.is_temp AS "isTemp",
+		a.is_first AS "isFirst",
+		a.iend AS "iaprop.iend",
+		a.iendgnid AS "iaprop.iendgnid",
+		a.yw_id AS "actYw.id",
+		a.cond_val AS "condVal",
+		a.tval AS "tval",
+		a.tcval AS "tcval",
+		a.appIds AS "appIds",
+		a.applyCert_id AS "scoRapplyCert.id",
+		a.cert_date AS "certDate",
+		a.apply_date AS "applyDate",
+		a.aut_date AS "autDate",
+		a.aut_by AS "autBy.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+
+		sr.name AS "rule.name",
+
+		sr1.parent_ids AS "rdetail.rule.parentIds",
+		sr1.parent_id AS "lrule.parent.id",
+		sr1.parent_ids AS "lrule.parentIds",
+		sr1.name AS "lrule.name",
+		sr1.type AS "lrule.type",
+		sr1.ptype AS "lrule.ptype",
+		sr1.is_pb AS "lrule.isPb",
+		sr1.is_show AS "lrule.isShow",
+		sr1.update_date AS "lrule.updateDate",
+		sr1.update_by AS "lrule.updateBy.id",
+		sr1.create_date AS "lrule.createDate",
+		sr1.create_by AS "lrule.createBy.id",
+		sr1.remarks AS "lrule.remarks",
+		sr1.del_flag AS "lrule.delFlag",
+
+		srd.rid AS "rdetail.rule.id",
+		srd.name AS "rdetail.name",
+		srd.score AS "rdetail.score",
+		srd.sc_min AS "rdetail.scMin",
+		srd.sc_max AS "rdetail.scMax",
+		srd.level AS "rdetail.level",
+		srd.is_limitm AS "rdetail.isLimitm",
+		srd.is_half AS "rdetail.isHalf",
+		srd.half_remarks AS "rdetail.halfRemarks",
+		srd.join_type AS "rdetail.joinType",
+		srd.joinmax AS "rdetail.joinMax",
+		srd.cond_val AS "rdetail.condition",
+		srd.cond_name AS "rdetail.condName",
+		srd.maxorsum AS "rdetail.maxOrSum",
+		srd.is_lowsco AS "rdetail.isLowSco",
+		srd.is_join AS "rdetail.isJoin",
+		srd.lowsco AS "rdetail.lowSco",
+		srd.lowscomax AS "rdetail.lowScoMax",
+		srd.cond_type AS "rdetail.condType",
+		srd.is_condcheck AS "rdetail.isCondcheck",
+		srd.unit AS "rdetail.unit",
+		srd.update_date AS "rdetail.updateDate",
+		srd.update_by AS "rdetail.updateBy.id",
+		srd.create_date AS "rdetail.createDate",
+		srd.create_by AS "rdetail.createBy.id",
+		srd.remarks AS "rdetail.remarks",
+		srd.del_flag AS "rdetail.delFlag",
+
+		c.name AS "scoRapplyCert.name",
+		c.parent_ids AS "scoRapplyCert.parentIds",
+		u.name AS "user.name",
+		u.sex AS "user.sex",
+		u.mobile AS "user.mobile",
+		u.email AS "user.email",
+		u.birthday AS "user.birthday",
+		u.`no` AS "user.no",
+		u.photo AS "user.photo",
+		o.`name` as "user.office.name",
+		o1.`name` AS "user.professional",
+		e.t_class AS "studentExpansion.tClass",
+		e.graduation AS "studentExpansion.graduation"
+	</sql>
+
+	<sql id="scoRuleInRapplyColumns">
+		a.id AS "id",
+		a.uid AS "user.id",
+		a.rtid AS "top.id",
+		a.rpid AS "rule.id",
+		a.rid AS "lrule.id",
+		a.rdid AS "rdetail.id",
+		a.proc_ins_id AS "procInsId",
+		a.name AS "name",
+		a.status AS "status",
+		a.is_temp AS "isTemp",
+		a.is_first AS "isFirst",
+		a.iend AS "iaprop.iend",
+		a.iendgnid AS "iaprop.iendgnid",
+		a.yw_id AS "actYw.id",
+		a.cond_val AS "condVal",
+		a.tval AS "tval",
+		a.tcval AS "tcval",
+		a.appIds AS "appIds",
+		a.applyCert_id AS "scoRapplyCert.id",
+		a.cert_date AS "certDate",
+		a.apply_date AS "applyDate",
+		a.aut_date AS "autDate",
+		a.aut_by AS "autBy.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="courseRapplyDetailColumns">
+		d.label AS "rule.name",
+		c.`name` AS "rdetail.name",
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u.id AS "user.id",
+		u.name AS "user.name",
+		u.sex AS "user.sex",
+		u.mobile AS "user.mobile",
+		u.email AS "user.email",
+		u.birthday AS "user.birthday",
+		u.`no` AS "user.no",
+		u.photo AS "user.photo",
+		o.`name` as "user.office.name",
+		o1.`name` AS "user.professional",
+		e.t_class AS "studentExpansion.tClass",
+		e.graduation AS "studentExpansion.graduation"
+	</sql>
+
+	<sql id="scoRapplyJoins">
+		LEFT JOIN sys_user u on u.id = a.uid and u.del_flag=0
+		LEFT JOIN sys_office o ON o.id = u.office_id and o.del_flag=0
+		LEFT JOIN sco_rapply_cert c on a.applyCert_id=c.id and c.del_flag=0
+		LEFT JOIN sys_office op ON op.id = u.professional and op.del_flag=0
+	</sql>
+
+	<sql id="scoRapplyBygJoins">
+		LEFT JOIN sco_rule rt on rt.id = a.rtid and rt.del_flag=0
+		LEFT JOIN sco_rule rp on rp.id = a.rpid and rp.del_flag=0
+		LEFT JOIN sco_rule r on r.id = a.rid and r.del_flag=0
+		LEFT JOIN sco_rule_detail rd on rd.id = a.rdid and rd.del_flag=0
+		LEFT JOIN sys_user u on u.id = a.uid and u.del_flag=0
+		LEFT JOIN sys_office o ON o.id = u.office_id
+		LEFT JOIN sys_office op ON op.id = u.professional
+		LEFT JOIN sco_rapply_cert c on a.applyCert_id=c.id and c.del_flag=0
+	</sql>
+
+	<sql id="scoRapplyDetailJoins">
+		LEFT JOIN sys_user u on u.id = a.uid and u.del_flag=0
+		LEFT JOIN sco_rapply_cert c on a.applyCert_id=c.id and c.del_flag=0
+		LEFT JOIN sys_office o on o.id = u.office_id and o.del_flag=0
+		LEFT JOIN sys_office o1 on o1.id = u.professional and o.del_flag=0
+		LEFT JOIN sys_student_expansion e on e.user_id = u.id and e.del_flag=0
+		LEFT JOIN sco_rule sr on sr.id = a.rpid and sr.del_flag=0
+		LEFT JOIN sco_rule sr1 on sr1.id = a.rid and sr1.del_flag=0
+		LEFT JOIN sco_rule_detail srd on srd.id = a.rdid and srd.del_flag=0
+	</sql>
+
+	<sql id="courseRapplyDetailJoins">
+		LEFT JOIN sco_course c on c.id = a.course_id and c.del_flag=0
+		LEFT JOIN sys_dict d on d.`value` = c.type and d.del_flag=0
+		LEFT JOIN sys_user u on u.id = a.user_id and u.del_flag=0
+		LEFT JOIN sys_office o on o.id = u.office_id and o.del_flag=0
+		LEFT JOIN sys_office o1 on o1.id = u.professional and o.del_flag=0
+		LEFT JOIN sys_student_expansion e on e.user_id = u.id and e.del_flag=0
+	</sql>
+
+	<sql id="scoCreditQueryJoins">
+		LEFT JOIN sco_rsum s on s.app_id = a.id and s.del_flag=0
+		LEFT JOIN sco_rule_detail srd on srd.id = a.rdid and srd.del_flag=0
+		LEFT JOIN sco_rule sr1 on sr1.id = a.rpid and sr1.del_flag=0
+		LEFT JOIN sco_rule sr2 on sr2.id = a.rtid and sr2.del_flag=0
+		LEFT JOIN sco_rule sr3 on sr3.id = a.rid and sr3.del_flag=0
+		LEFT JOIN sys_user u on u.id = a.uid and u.del_flag=0
+		LEFT JOIN sys_office o on o.id = u.office_id and o.del_flag=0
+		LEFT JOIN sys_office of on of.id = u.professional and of.del_flag=0
+		LEFT JOIN sco_rapply_cert c on c.id = a.applyCert_id and c.del_flag = 0
+	</sql>
+
+	<select id="get" resultType="ScoRapply">
+		SELECT
+			<include refid="scoRapplyDetailColumns"/>
+		FROM sco_rapply a
+		<include refid="scoRapplyDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+
+	<select id="findRuleDetailIsApply" resultType="ScoRapply">
+		SELECT
+		<include refid="scoRuleInRapplyColumns"/>
+		FROM sco_rapply a
+		LEFT JOIN sco_rule_detail d on a.rdid = d.id and d.del_flag=0
+		LEFT JOIN sco_rule r on r.id = d.rid and r.del_flag=0
+		where a.del_flag=0 and r.id=#{id}
+	</select>
+	<select  id="ajaxFindScoDetail" resultType="ScoRapply">
+		SELECT
+		<include refid="scoRapplyDetailColumns"/>
+		FROM sco_rapply a
+		<include refid="scoRapplyDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select  id="ajaxFindCourseDetail" resultType="ScoRapply">
+		SELECT
+		<include refid="courseRapplyDetailColumns"/>
+		FROM sco_rapply a
+		<include refid="courseRapplyDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select  id="findDetailRapplyCertList" resultType="com.oseasy.scr.modules.scr.entity.ScoRapplyValid">
+		SELECT
+		<include refid="scoRuleInRapplyColumns"/>
+		FROM sco_rapply a
+		LEFT JOIN sco_rapply_cert c on a.applyCert_id = c.id
+		LEFT JOIN sys_user u on u.id = a.uid
+		where a.del_flag=0 and c.del_flag=0 and u.del_flag=0 and c.id=#{scoRapplyCert.id} and a.rdid=#{apply.rdetail.id} and a.uid =#{user.id}
+	</select>
+
+	<select  id="findDetailNameList" resultType="com.oseasy.scr.modules.scr.entity.ScoRapplyValid">
+		SELECT
+		<include refid="scoRuleInRapplyColumns"/>
+		FROM sco_rapply a
+		where a.del_flag=0  and a.`name` = #{apply.name} and a.rdid=#{apply.rdetail.id} and a.uid=#{user.id}
+		or (a.uid !=#{user.id} and a.`name`= #{apply.name} and a.del_flag=0)
+	</select>
+
+	<select  id="scoRuleInRapply" resultType="ScoRapply">
+		SELECT
+		<include refid="scoRuleInRapplyColumns"/>
+		FROM sco_rapply a
+		where a.rdid in (
+		SELECT m.id from(SELECT d.id from sco_rule r
+		LEFT JOIN sco_rule_detail d on d.rid = r.id and d.del_flag=0
+		where r.del_flag=0 and r.id= #{id} or r.parent_ids like '%${id}%' or r.parent_id=#{id})
+		m where m.id is not null) and a.del_flag=0
+	</select>
+
+	<select id="findCreditList" parameterType="com.oseasy.scr.modules.scr.vo.ScoQuery" resultType="com.oseasy.scr.modules.scr.vo.ScoQuery">
+		SELECT
+		m.id,
+		m.rid,
+		m.userId,
+		m.photo AS "user.photo",
+		m.userName AS "user.name",
+		m. NO AS "user.no",
+		m.officeName AS "user.office.name",
+		m.professName AS "user.professional",
+		m.credit,
+		m.`name`,
+		m.apply_date AS "applyDate",
+		m.auditDate,
+		m.`status`,
+		m.creditName,
+		m.className,
+		m.creditType,
+		m.typeName,
+		m.projectName
+		FROM
+		(
+		SELECT
+		a.id,
+		a.rid,
+		a.uid AS "userId",
+		u.photo,
+		u. NAME AS "userName",
+		u. NO,
+		o. NAME AS "officeName",
+		of. NAME AS "professName",
+		s.val AS "credit",
+		srd.`name`,
+		a.apply_date,
+		a.aut_date AS "auditDate",
+		a.`status`,
+		sr1.`name` AS "creditName",
+		sr2.`name` AS "className",
+		"1" AS "creditType",
+		sr3. NAME AS "typeName",
+		IFNULL(a.`name`,IFNULL(c.name,"无")) AS "projectName"
+		FROM
+		sco_rapply a
+		LEFT JOIN sco_rapply_member srm ON srm.app_id = a.id
+		AND srm.del_flag = 0
+		LEFT JOIN sco_rsum s ON s.app_id = a.id
+		AND s.del_flag = 0
+		LEFT JOIN sco_rule_detail srd ON srd.id = a.rdid
+		AND srd.del_flag = 0
+		LEFT JOIN sco_rule sr1 ON sr1.id = a.rpid
+		AND sr1.del_flag = 0
+		LEFT JOIN sco_rule sr2 ON sr2.id = a.rtid
+		AND sr2.del_flag = 0
+		LEFT JOIN sco_rule sr3 ON sr3.id = a.rid
+		AND sr3.del_flag = 0
+		LEFT JOIN sys_user u ON u.id = a.uid
+		AND u.del_flag = 0
+		LEFT JOIN sys_office o ON o.id = u.office_id
+		AND o.del_flag = 0
+		LEFT JOIN sys_office of ON of.id = u.professional
+		AND of.del_flag = 0
+		LEFT JOIN sco_rapply_cert c on c.id = a.applyCert_id and c.del_flag = 0
+		WHERE
+		a.del_flag = 0
+		AND srm.uid =#{userId}
+		and s.uid =#{userId} or (s.uid =#{userId} AND a.del_flag = 0)
+		GROUP BY
+		a.id
+		UNION
+		SELECT
+		aa.id,
+		aa.rid,
+		aa.uid AS "userId",
+		u.photo,
+		u. NAME AS "userName",
+		u. NO,
+		o. NAME AS "officeName",
+		of. NAME AS "professName",
+		s.val AS "credit",
+		srd.`name`,
+		aa.apply_date,
+		aa.aut_date AS "auditDate",
+		aa.`status`,
+		sr1.`name` AS "creditName",
+		sr2.`name` AS "className",
+		"1" AS "creditType",
+		sr3. NAME AS "typeName",
+		IFNULL(aa.`name`,IFNULL(c.name,"无")) AS "projectName"
+		FROM
+		sco_rapply aa
+		LEFT JOIN sco_rapply_member srm ON srm.app_id = aa.id
+		LEFT JOIN sco_rsum s ON s.app_id = aa.id
+		AND s.del_flag = 0
+		LEFT JOIN sco_rule_detail srd ON srd.id = aa.rdid
+		AND srd.del_flag = 0
+		LEFT JOIN sco_rule sr1 ON sr1.id = aa.rpid
+		AND sr1.del_flag = 0
+		LEFT JOIN sco_rule sr2 ON sr2.id = aa.rtid
+		AND sr2.del_flag = 0
+		LEFT JOIN sco_rule sr3 ON sr3.id = aa.rid
+		AND sr3.del_flag = 0
+		LEFT JOIN sys_user u ON u.id = aa.uid
+		AND u.del_flag = 0
+		LEFT JOIN sys_office o ON o.id = u.office_id
+		AND o.del_flag = 0
+		LEFT JOIN sys_office of ON of.id = u.professional
+		AND of.del_flag = 0
+		LEFT JOIN sco_rapply_cert c on c.id = aa.applyCert_id and c.del_flag = 0
+		WHERE  aa.`status` != 3
+		AND aa.del_flag = 0
+		AND aa.uid =#{userId}
+		or (srm.uid =#{userId} and aa.`status`!=3 AND aa.del_flag = 0)
+
+		GROUP BY
+		aa.id
+		UNION ALL
+		SELECT
+		sa.id,
+		'' AS rid,
+		sa.user_id AS "userId",
+		us.photo,
+		us. NAME AS "userName",
+		us. NO,
+		o1. NAME AS "officeName",
+		of1. NAME AS "professName",
+		sa.score AS "credit",
+		d.`name`,
+		sa.apply_date AS "applyDate",
+		sa.update_date AS "auditDate",
+		sa.audit_status AS "status",
+		sd.label AS "creditName",
+		"创新创业课程" AS "className",
+		"2" AS "creditType",
+		"" AS "typeName",
+		"" AS "projectName"
+		FROM
+		sco_apply sa
+		LEFT JOIN sco_course d ON sa.course_id = d.id
+		AND sa.del_flag = 0
+		LEFT JOIN sys_dict sd ON sd.`value` = d.type
+		AND sd.del_flag = 0
+		LEFT JOIN sys_user us ON us.id = sa.user_id
+		AND us.del_flag = 0
+		LEFT JOIN sys_office o1 ON o1.id = us.office_id
+		AND o1.del_flag = 0
+		LEFT JOIN sys_office of1 ON of1.id = us.professional
+		AND of1.del_flag = 0
+		WHERE
+		d.del_flag = 0
+		AND sa.audit_status != 0
+		AND sa.user_id =#{userId}
+		) m
+		<where>
+				1=1
+			<if test="status != null and status != ''">
+				and m.`status`=#{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY FIELD(m.`status`,'2','3','4','1'),m.apply_date desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findScoCreditQueryList" parameterType="com.oseasy.scr.modules.scr.vo.ScoQuery" resultType="com.oseasy.scr.modules.scr.vo.ScoQuery">
+		SELECT
+		a.id,
+		a.rid,
+		a.uid AS "user.id",
+		u.photo AS "user.photo",
+		u. NAME AS "user.name",
+		u. NO AS "user.no",
+		o. NAME AS "user.office.name",
+		of. NAME AS "user.professional",
+		sum(s.val) AS "credit",
+		srd.`name`,
+		a.apply_date AS "applyDate",
+		a.aut_date AS "auditDate",
+		a.`status`,
+		sr1.`name` AS "creditName",
+		sr2.`name` AS "className",
+		"1" AS "creditType",
+		sr3. NAME AS "typeName",
+		IFNULL(a.`name`,IFNULL(c.name,"无")) AS "projectName"
+		from sco_rapply a
+		<include refid="scoCreditQueryJoins"/>
+		<where>
+			a.del_flag=#{DEL_FLAG_NORMAL}
+			<if test="status != null and status != ''">
+				and a.`status` = #{status}
+			</if>
+			<if test="creditName != null and creditName != ''">
+				and a.rpid = #{creditName}
+			</if>
+			<if test="user != null">
+				<if test="user.office != null">
+					<if test="user.office.id != null and user.office.id != ''">
+						AND o.id = #{user.office.id}
+					</if>
+				</if>
+			</if>
+			<if test="auditStartDate != null and auditStartDate != ''">
+				AND a.aut_date <![CDATA[ >= #{auditStartDate} ]]>
+			</if>
+			<if test="auditEndDate != null and auditEndDate != ''">
+				AND a.aut_date <![CDATA[ <= #{auditEndDate} ]]>
+			</if>
+			<if test="keys != null and keys != ''">
+				AND (
+				   u.name like '%${keys}%'
+				OR u.no like '%${keys}%'
+				OR of.name like '%${keys}%'
+				OR srd.`name` like '%${keys}%'
+				)
+			</if>
+			GROUP BY a.id
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.aut_date DESC
+			</otherwise>
+		</choose>
+
+	</select>
+
+
+	<select id="findList" resultType="ScoRapply">
+		SELECT
+			<include refid="scoRapplyColumns"/>
+		FROM sco_rapply a
+		<include refid="scoRapplyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="scoRapplyCert != null and  scoRapplyCert.id != null and scoRapplyCert.id != ''">
+				and a.applyCert_id= #{scoRapplyCert.id}
+			</if>
+			<if test="rdetail != null and  rdetail.id != null and rdetail.id != ''">
+				and a.rdid= #{rdetail.id}
+			</if>
+			<if test="appIds != null and appIds != ''">
+				and a.appIds= #{appIds}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.status ASC, a.aut_date DESC
+			</when>
+			<otherwise>
+				ORDER BY a.status ASC, a.aut_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findProjects" resultType="ScoRapply">
+		SELECT
+			a.id AS "id",
+			a.uid AS "user.id",
+			a.rtid AS "top.id",
+			a.rpid AS "rule.id",
+			a.rid AS "lrule.id",
+			a.rdid AS "rdetail.id",
+			a.name AS "name",
+			a.status AS "status",
+			a.appIds AS "appIds",
+			rd.name AS "rdetail.name"
+		FROM sco_rapply a
+		LEFT JOIN sys_user u on u.id = a.uid and u.del_flag=0
+		LEFT JOIN sco_rule_detail rd on rd.id = a.rdid and rd.del_flag=0
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND (a.name IS NOT NULL OR a.name != '')
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="rule != null">
+				<if test="rule.id != null and rule.id != ''">
+					AND a.rpid = #{rule.id}
+				</if>
+			</if>
+			<if test="lrule != null">
+				<if test="lrule.id != null and lrule.id != ''">
+					AND a.rid = #{lrule.id}
+				</if>
+			</if>
+			<if test="rdetail != null">
+				<if test="rdetail.id != null and rdetail.id != ''">
+					AND a.rdid = #{rdetail.id}
+				</if>
+			</if>
+			<if test="appIds != null and appIds != ''">
+				AND a.appIds= #{appIds}
+			</if>
+			AND a.uid in
+			<foreach item="item" collection="uids" separator="," open="("
+				close=")">
+				#{item}
+			</foreach>
+		</where>
+
+	</select>
+
+	<select id="checkHasProject" resultType="Integer">
+		SELECT
+			COUNT(a.id)
+		FROM sco_rapply a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND a.status = '3'
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="lrule != null">
+				<if test="lrule.id != null and lrule.id != ''">
+					AND a.rid = #{lrule.id}
+				</if>
+			</if>
+			AND a.uid in
+			<foreach item="item" collection="uids" separator="," open="("
+				close=")">
+				#{item}
+			</foreach>
+		</where>
+
+	</select>
+
+	<select id="findScoProjects" resultType="ScoRapply">
+		select m.userId as "user.id" from (
+		SELECT
+		a.uid AS "userId"
+		FROM sco_rapply a
+		LEFT JOIN sco_rapply_member srm on srm.app_id = a.id and srm.del_flag=0
+		where
+		a.del_flag = '0'
+		AND (a.uid =#{userId} or srm.uid =#{userId})
+		union ALL
+		SELECT y.user_id as "userId" from sco_apply y where y.user_id=#{userId} and y.del_flag=0 )
+		m GROUP BY m.userId
+		</select>
+
+	<select id="findListByg" resultType="ScoRapply">
+		SELECT
+			<include refid="scoRapplyBygColumns"/>
+		FROM sco_rapply a
+		<include refid="scoRapplyBygJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="scoRapplyCert != null and  scoRapplyCert.id != null and scoRapplyCert.id != ''">
+				AND a.applyCert_id= #{scoRapplyCert.id}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date <![CDATA[ >= #{createDate} ]]>
+			</if>
+			<if test="createQDate != null and createQDate != ''">
+				AND a.create_date <![CDATA[ <= #{createQDate} ]]>
+			</if>
+			<if test="certDate != null and certDate != ''">
+				AND a.cert_date <![CDATA[ >= #{certDate} ]]>
+			</if>
+			<if test="certQDate != null and certQDate != ''">
+				AND a.cert_date <![CDATA[ <= #{certQDate} ]]>
+			</if>
+			<if test="applyDate != null and applyDate != ''">
+				AND a.apply_date <![CDATA[ >= #{applyDate} ]]>
+			</if>
+			<if test="applyQDate != null and applyQDate != ''">
+				AND a.apply_date <![CDATA[ <= #{applyQDate} ]]>
+			</if>
+			<if test="autDate != null and autDate != ''">
+				AND a.aut_date <![CDATA[ >= #{autDate} ]]>
+			</if>
+			<if test="autQDate != null and autQDate != ''">
+				AND a.aut_date <![CDATA[ <= #{autQDate} ]]>
+			</if>
+			<if test="appIds != null and appIds != ''">
+				AND a.appIds= #{appIds}
+			</if>
+			<if test="keys != null and keys != ''">
+				AND (u.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					 OR u.no LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					OR op.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					 OR r.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					 OR rd.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					)
+			</if>
+			<if test="top != null">
+				<if test="top.id != null and top.id != ''">
+					AND rt.id = #{top.id}
+				</if>
+				<if test="top.name != null and top.name != ''">
+					AND rt.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{top.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{top.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{top.name},'%')</if>
+				</if>
+			</if>
+			<if test="rule != null">
+				<if test="rule.id != null and rule.id != ''">
+					AND rp.id = #{rule.id}
+				</if>
+				<if test="rule.name != null and rule.name != ''">
+					AND rp.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{rule.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{rule.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{rule.name},'%')</if>
+				</if>
+			</if>
+			<if test="lrule != null">
+				<if test="lrule.id != null and lrule.id != ''">
+					AND r.id = #{lrule.id}
+				</if>
+				<if test="lrule.name != null and lrule.name != ''">
+					AND r.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{lrule.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{lrule.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{lrule.name},'%')</if>
+				</if>
+			</if>
+			<if test="rdetail != null">
+				<if test="rdetail.id != null and rdetail.id != ''">
+					AND rd.id = #{rdetail.id}
+				</if>
+				<if test="rdetail.name != null and rdetail.name != ''">
+					AND rd.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{rdetail.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{rdetail.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{rdetail.name},'%')</if>
+				</if>
+			</if>
+			<if test="user != null">
+				<if test="user.id != null and user.id != ''">
+					AND u.id = #{user.id}
+				</if>
+				<if test="user.no != null and user.no != ''">
+					AND u.no =  #{user.no}
+				</if>
+				<if test="user.name != null and user.name != ''">
+					AND u.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+				</if>
+				<if test="user.office != null">
+					<if test="user.office.id != null and user.office.id != ''">
+						AND o.id = #{user.office.id}
+					</if>
+					<if test="user.office.name != null and user.office.name != ''">
+						AND o.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{user.office.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{user.office.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{user.office.name},'%')</if>
+					</if>
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.status ASC, a.aut_date DESC
+			</when>
+			<otherwise>
+				ORDER BY  a.status ASC, a.aut_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListBygIds" resultType="ScoRapply">
+		SELECT
+			<include refid="scoRapplyBygColumns"/>
+		FROM sco_rapply a
+		<include refid="scoRapplyBygJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="ids != null and ids.size >0">
+				AND a.id in
+				<foreach item="item" collection="ids" open="(" separator=","
+					close=")">
+					#{item}
+				</foreach>
+			</if>
+
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status= #{status}
+			</if>
+			<if test="appIds != null and appIds != ''">
+				AND a.appIds= #{appIds}
+			</if>
+			<if test="scoRapplyCert != null and  scoRapplyCert.id != null and scoRapplyCert.id != ''">
+				AND a.applyCert_id= #{scoRapplyCert.id}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date <![CDATA[ >= #{createDate} ]]>
+			</if>
+			<if test="createQDate != null and createQDate != ''">
+				AND a.create_date <![CDATA[ <= #{createQDate} ]]>
+			</if>
+			<if test="certDate != null and certDate != ''">
+				AND a.cert_date <![CDATA[ >= #{certDate} ]]>
+			</if>
+			<if test="certQDate != null and certQDate != ''">
+				AND a.cert_date <![CDATA[ <= #{certQDate} ]]>
+			</if>
+			<if test="applyDate != null and applyDate != ''">
+				AND a.apply_date <![CDATA[ >= #{applyDate} ]]>
+			</if>
+			<if test="applyQDate != null and applyQDate != ''">
+				AND a.apply_date <![CDATA[ <= #{applyQDate} ]]>
+			</if>
+			<if test="autDate != null and autDate != ''">
+				AND a.aut_date <![CDATA[ >= #{autDate} ]]>
+			</if>
+			<if test="autQDate != null and autQDate != ''">
+				AND a.aut_date <![CDATA[ <= #{autQDate} ]]>
+			</if>
+			<if test="keys != null and keys != ''">
+				AND (u.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					 OR u.no LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					OR op.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					 OR r.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					 OR rd.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					)
+			</if>
+			<if test="top != null">
+				<if test="top.id != null and top.id != ''">
+					AND rt.id = #{top.id}
+				</if>
+				<if test="top.name != null and top.name != ''">
+					AND rt.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{top.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{top.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{top.name},'%')</if>
+				</if>
+			</if>
+			<if test="rule != null">
+				<if test="rule.id != null and rule.id != ''">
+					AND rp.id = #{rule.id}
+				</if>
+				<if test="rule.name != null and rule.name != ''">
+					AND rp.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{rule.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{rule.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{rule.name},'%')</if>
+				</if>
+			</if>
+			<if test="lrule != null">
+				<if test="lrule.id != null and lrule.id != ''">
+					AND r.id = #{lrule.id}
+				</if>
+				<if test="lrule.name != null and lrule.name != ''">
+					AND r.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{lrule.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{lrule.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{lrule.name},'%')</if>
+				</if>
+			</if>
+			<if test="rdetail != null">
+				<if test="rdetail.id != null and rdetail.id != ''">
+					AND rd.id = #{rdetail.id}
+				</if>
+				<if test="rdetail.name != null and rdetail.name != ''">
+					AND rd.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{rdetail.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{rdetail.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{rdetail.name},'%')</if>
+				</if>
+			</if>
+			<if test="user != null">
+				<if test="user.id != null and user.id != ''">
+					AND u.id = #{user.id}
+				</if>
+				<if test="user.no != null and user.no != ''">
+					AND u.no =  #{user.no}
+				</if>
+				<if test="user.name != null and user.name != ''">
+					AND u.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+				</if>
+				<if test="user.office != null">
+					<if test="user.office.id != null and user.office.id != ''">
+						AND o.id = #{user.office.id}
+					</if>
+					<if test="user.office.name != null and user.office.name != ''">
+						AND o.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{user.office.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{user.office.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{user.office.name},'%')</if>
+					</if>
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.status ASC, a.aut_date DESC
+			</when>
+			<otherwise>
+				ORDER BY a.status ASC, a.aut_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	<!--<select id="findListBygIdsNew" resultType="ScoRapply">
+		SELECT
+		*
+
+		FROM (
+
+		SELECT
+		*
+		FROM
+		(
+		SELECT
+		<include refid="scoRapplyBygColumns"/>
+		FROM sco_rapply a
+		<include refid="scoRapplyBygJoins"/>
+		WHERE
+		a.del_flag = 0
+		AND a.id in
+		<foreach item="item" collection="ids" open="(" separator=","
+				 close=")">
+			#{item}
+		</foreach>
+		<if test="status != null and status != ''">
+			AND a.status= #{status}
+		</if>
+		<if test="createDate != null and createDate != ''">
+			AND a.create_date <![CDATA[ >= #{createDate} ]]>
+		</if>
+		<if test="createQDate != null and createQDate != ''">
+			AND a.create_date <![CDATA[ <= #{createQDate} ]]>
+		</if>
+		<if test="keys != null and keys != ''">
+			AND (u.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR u.no LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR op.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR r.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR rd.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			)
+		</if>
+		<if test="user != null">
+			<if test="user.id != null and user.id != ''">
+				AND u.id = #{user.id}
+			</if>
+			<if test="user.no != null and user.no != ''">
+				AND u.no = #{user.no}
+			</if>
+			<if test="user.name != null and user.name != ''">
+				AND u.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+			</if>
+			<if test="user.office != null">
+				<if test="user.office.id != null and user.office.id != ''">
+					AND o.id = #{user.office.id}
+				</if>
+				<if test="user.office.name != null and user.office.name != ''">
+					AND o.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{user.office.name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{user.office.name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{user.office.name},'%')</if>
+				</if>
+			</if>
+		</if>
+		<if test="rule != null">
+			<if test="rule.id != null and rule.id != ''">
+				AND rp.id = #{rule.id}
+			</if>
+			<if test="rule.name != null and rule.name != ''">
+				AND rp.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{rule.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{rule.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{rule.name},'%')</if>
+			</if>
+		</if>
+		ORDER BY
+		a.aut_date DESC
+		LIMIT 1
+		) n
+		UNION
+		SELECT
+		*
+		FROM
+		(
+		SELECT
+		*
+		FROM
+		(
+		SELECT
+		*
+		FROM
+		(
+		SELECT
+		<include refid="scoRapplyBygColumns"/>
+		FROM sco_rapply a
+		<include refid="scoRapplyBygJoins"/>
+		WHERE
+		a.del_flag = 0
+		AND a.id in
+		<foreach item="item" collection="ids" open="(" separator=","
+				 close=")">
+			#{item}
+		</foreach>
+		<if test="status != null and status != ''">
+			AND a.status= #{status}
+		</if>
+		<if test="createDate != null and createDate != ''">
+			AND a.create_date <![CDATA[ >= #{createDate} ]]>
+		</if>
+		<if test="createQDate != null and createQDate != ''">
+			AND a.create_date <![CDATA[ <= #{createQDate} ]]>
+		</if>
+		<if test="keys != null and keys != ''">
+			AND (u.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR u.no LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR op.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR r.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR rd.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			)
+		</if>
+		<if test="user != null">
+			<if test="user.id != null and user.id != ''">
+				AND u.id = #{user.id}
+			</if>
+			<if test="user.no != null and user.no != ''">
+				AND u.no = #{user.no}
+			</if>
+			<if test="user.name != null and user.name != ''">
+				AND u.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+			</if>
+			<if test="user.office != null">
+				<if test="user.office.id != null and user.office.id != ''">
+					AND o.id = #{user.office.id}
+				</if>
+				<if test="user.office.name != null and user.office.name != ''">
+					AND o.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{user.office.name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{user.office.name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{user.office.name},'%')</if>
+				</if>
+			</if>
+		</if>
+		<if test="rule != null">
+			<if test="rule.id != null and rule.id != ''">
+				AND rp.id = #{rule.id}
+			</if>
+			<if test="rule.name != null and rule.name != ''">
+				AND rp.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{rule.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{rule.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{rule.name},'%')</if>
+			</if>
+		</if>
+		AND a.id != (
+		SELECT
+		a.id
+		FROM
+		sco_rapply a
+		<include refid="scoRapplyBygJoins"/>
+		WHERE
+		a.del_flag = 0
+		AND a.id in
+		<foreach item="item" collection="ids" open="(" separator=","
+				 close=")">
+			#{item}
+		</foreach>
+		<if test="status != null and status != ''">
+			AND a.status= #{status}
+		</if>
+		<if test="createDate != null and createDate != ''">
+			AND a.create_date <![CDATA[ >= #{createDate} ]]>
+		</if>
+		<if test="createQDate != null and createQDate != ''">
+			AND a.create_date <![CDATA[ <= #{createQDate} ]]>
+		</if>
+		<if test="keys != null and keys != ''">
+			AND (u.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR u.no LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR op.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR r.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR rd.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			)
+		</if>
+		<if test="user != null">
+			<if test="user.id != null and user.id != ''">
+				AND u.id = #{user.id}
+			</if>
+			<if test="user.no != null and user.no != ''">
+				AND u.no = #{user.no}
+			</if>
+			<if test="user.name != null and user.name != ''">
+				AND u.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+			</if>
+			<if test="user.office != null">
+				<if test="user.office.id != null and user.office.id != ''">
+					AND o.id = #{user.office.id}
+				</if>
+				<if test="user.office.name != null and user.office.name != ''">
+					AND o.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{user.office.name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{user.office.name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{user.office.name},'%')</if>
+				</if>
+			</if>
+		</if>
+		<if test="rule != null">
+			<if test="rule.id != null and rule.id != ''">
+				AND rp.id = #{rule.id}
+			</if>
+			<if test="rule.name != null and rule.name != ''">
+				AND rp.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{rule.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{rule.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{rule.name},'%')</if>
+			</if>
+		</if>
+		ORDER BY
+		a.aut_date DESC
+		LIMIT 1
+		)
+		) m
+		) i
+		ORDER BY
+		i. STATUS,
+		i.autDate DESC
+		) o
+
+		)v
+
+		ORDER BY
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				${page.orderBy} ${page.orderByType},
+			</when>
+		</choose>
+
+		v.id = (SELECT
+		a.id
+		FROM
+		sco_rapply a
+		<include refid="scoRapplyBygJoins"/>
+		WHERE
+		a.del_flag = 0
+		AND a.id in
+		<foreach item="item" collection="ids" open="(" separator=","
+				 close=")">
+			#{item}
+		</foreach>
+		<if test="status != null and status != ''">
+			AND a.status= #{status}
+		</if>
+		<if test="createDate != null and createDate != ''">
+			AND a.create_date <![CDATA[ >= #{createDate} ]]>
+		</if>
+		<if test="createQDate != null and createQDate != ''">
+			AND a.create_date <![CDATA[ <= #{createQDate} ]]>
+		</if>
+		<if test="keys != null and keys != ''">
+			AND (u.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR u.no LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR op.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR r.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR rd.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			)
+		</if>
+		<if test="user != null">
+			<if test="user.id != null and user.id != ''">
+				AND u.id = #{user.id}
+			</if>
+			<if test="user.no != null and user.no != ''">
+				AND u.no = #{user.no}
+			</if>
+			<if test="user.name != null and user.name != ''">
+				AND u.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+			</if>
+			<if test="user.office != null">
+				<if test="user.office.id != null and user.office.id != ''">
+					AND o.id = #{user.office.id}
+				</if>
+				<if test="user.office.name != null and user.office.name != ''">
+					AND o.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{user.office.name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{user.office.name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{user.office.name},'%')</if>
+				</if>
+			</if>
+		</if>
+		<if test="rule != null">
+			<if test="rule.id != null and rule.id != ''">
+				AND rp.id = #{rule.id}
+			</if>
+			<if test="rule.name != null and rule.name != ''">
+				AND rp.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{rule.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{rule.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{rule.name},'%')</if>
+			</if>
+		</if>
+		ORDER BY
+		a.aut_date DESC
+		LIMIT 1
+		) desc,
+
+
+		v. STATUS,
+		v.autDate DESC limit ${(page.pageNo-1)*10},${page.pageSize}
+	</select>
+	<select id="findListBygIdsNews" resultType="ScoRapply">
+		SELECT
+		*
+
+		FROM (
+
+		SELECT
+		*
+		FROM
+		(
+		SELECT
+		<include refid="scoRapplyBygColumns"/>
+		FROM sco_rapply a
+		<include refid="scoRapplyBygJoins"/>
+		WHERE
+		a.del_flag = 0
+		AND a.id in
+		<foreach item="item" collection="ids" open="(" separator=","
+				 close=")">
+			#{item}
+		</foreach>
+		<if test="status != null and status != ''">
+			AND a.status= #{status}
+		</if>
+		<if test="createDate != null and createDate != ''">
+			AND a.create_date <![CDATA[ >= #{createDate} ]]>
+		</if>
+		<if test="createQDate != null and createQDate != ''">
+			AND a.create_date <![CDATA[ <= #{createQDate} ]]>
+		</if>
+		<if test="keys != null and keys != ''">
+			AND (u.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR u.no LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR op.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR r.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR rd.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			)
+		</if>
+		<if test="user != null">
+			<if test="user.id != null and user.id != ''">
+				AND u.id = #{user.id}
+			</if>
+			<if test="user.no != null and user.no != ''">
+				AND u.no = #{user.no}
+			</if>
+			<if test="user.name != null and user.name != ''">
+				AND u.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+			</if>
+			<if test="user.office != null">
+				<if test="user.office.id != null and user.office.id != ''">
+					AND o.id = #{user.office.id}
+				</if>
+				<if test="user.office.name != null and user.office.name != ''">
+					AND o.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{user.office.name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{user.office.name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{user.office.name},'%')</if>
+				</if>
+			</if>
+		</if>
+		<if test="rule != null">
+			<if test="rule.id != null and rule.id != ''">
+				AND rp.id = #{rule.id}
+			</if>
+			<if test="rule.name != null and rule.name != ''">
+				AND rp.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{rule.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{rule.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{rule.name},'%')</if>
+			</if>
+		</if>
+		ORDER BY
+		a.aut_date DESC
+		LIMIT 1
+		) n
+		UNION
+		SELECT
+		*
+		FROM
+		(
+		SELECT
+		*
+		FROM
+		(
+		SELECT
+		*
+		FROM
+		(
+		SELECT
+		<include refid="scoRapplyBygColumns"/>
+		FROM sco_rapply a
+		<include refid="scoRapplyBygJoins"/>
+		WHERE
+		a.del_flag = 0
+		AND a.id in
+		<foreach item="item" collection="ids" open="(" separator=","
+				 close=")">
+			#{item}
+		</foreach>
+		<if test="status != null and status != ''">
+			AND a.status= #{status}
+		</if>
+		<if test="createDate != null and createDate != ''">
+			AND a.create_date <![CDATA[ >= #{createDate} ]]>
+		</if>
+		<if test="createQDate != null and createQDate != ''">
+			AND a.create_date <![CDATA[ <= #{createQDate} ]]>
+		</if>
+		<if test="keys != null and keys != ''">
+			AND (u.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR u.no LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR op.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR r.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR rd.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			)
+		</if>
+		<if test="user != null">
+			<if test="user.id != null and user.id != ''">
+				AND u.id = #{user.id}
+			</if>
+			<if test="user.no != null and user.no != ''">
+				AND u.no = #{user.no}
+			</if>
+			<if test="user.name != null and user.name != ''">
+				AND u.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+			</if>
+			<if test="user.office != null">
+				<if test="user.office.id != null and user.office.id != ''">
+					AND o.id = #{user.office.id}
+				</if>
+				<if test="user.office.name != null and user.office.name != ''">
+					AND o.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{user.office.name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{user.office.name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{user.office.name},'%')</if>
+				</if>
+			</if>
+		</if>
+		<if test="rule != null">
+			<if test="rule.id != null and rule.id != ''">
+				AND rp.id = #{rule.id}
+			</if>
+			<if test="rule.name != null and rule.name != ''">
+				AND rp.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{rule.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{rule.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{rule.name},'%')</if>
+			</if>
+		</if>
+		AND a.id != (
+		SELECT
+		a.id
+		FROM
+		sco_rapply a
+		<include refid="scoRapplyBygJoins"/>
+		WHERE
+		a.del_flag = 0
+		AND a.id in
+		<foreach item="item" collection="ids" open="(" separator=","
+				 close=")">
+			#{item}
+		</foreach>
+		<if test="status != null and status != ''">
+			AND a.status= #{status}
+		</if>
+		<if test="createDate != null and createDate != ''">
+			AND a.create_date <![CDATA[ >= #{createDate} ]]>
+		</if>
+		<if test="createQDate != null and createQDate != ''">
+			AND a.create_date <![CDATA[ <= #{createQDate} ]]>
+		</if>
+		<if test="keys != null and keys != ''">
+			AND (u.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR u.no LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR op.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR r.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR rd.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			)
+		</if>
+		<if test="user != null">
+			<if test="user.id != null and user.id != ''">
+				AND u.id = #{user.id}
+			</if>
+			<if test="user.no != null and user.no != ''">
+				AND u.no = #{user.no}
+			</if>
+			<if test="user.name != null and user.name != ''">
+				AND u.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+			</if>
+			<if test="user.office != null">
+				<if test="user.office.id != null and user.office.id != ''">
+					AND o.id = #{user.office.id}
+				</if>
+				<if test="user.office.name != null and user.office.name != ''">
+					AND o.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{user.office.name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{user.office.name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{user.office.name},'%')</if>
+				</if>
+			</if>
+		</if>
+		<if test="rule != null">
+			<if test="rule.id != null and rule.id != ''">
+				AND rp.id = #{rule.id}
+			</if>
+			<if test="rule.name != null and rule.name != ''">
+				AND rp.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{rule.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{rule.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{rule.name},'%')</if>
+			</if>
+		</if>
+		ORDER BY
+		a.aut_date DESC
+		LIMIT 1
+		)
+		) m
+		) i
+		ORDER BY
+		i. STATUS,
+		i.autDate DESC
+		) o
+
+		)v
+
+		ORDER BY
+
+
+		v.id = (SELECT
+		a.id
+		FROM
+		sco_rapply a
+		<include refid="scoRapplyBygJoins"/>
+		WHERE
+		a.del_flag = 0
+		AND a.id in
+		<foreach item="item" collection="ids" open="(" separator=","
+				 close=")">
+			#{item}
+		</foreach>
+		<if test="status != null and status != ''">
+			AND a.status= #{status}
+		</if>
+		<if test="createDate != null and createDate != ''">
+			AND a.create_date <![CDATA[ >= #{createDate} ]]>
+		</if>
+		<if test="createQDate != null and createQDate != ''">
+			AND a.create_date <![CDATA[ <= #{createQDate} ]]>
+		</if>
+		<if test="keys != null and keys != ''">
+			AND (u.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR u.no LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR op.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR r.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			OR rd.name LIKE
+			<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+			<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+			)
+		</if>
+		<if test="user != null">
+			<if test="user.id != null and user.id != ''">
+				AND u.id = #{user.id}
+			</if>
+			<if test="user.no != null and user.no != ''">
+				AND u.no = #{user.no}
+			</if>
+			<if test="user.name != null and user.name != ''">
+				AND u.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+			</if>
+			<if test="user.office != null">
+				<if test="user.office.id != null and user.office.id != ''">
+					AND o.id = #{user.office.id}
+				</if>
+				<if test="user.office.name != null and user.office.name != ''">
+					AND o.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{user.office.name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{user.office.name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{user.office.name},'%')</if>
+				</if>
+			</if>
+		</if>
+		<if test="rule != null">
+			<if test="rule.id != null and rule.id != ''">
+				AND rp.id = #{rule.id}
+			</if>
+			<if test="rule.name != null and rule.name != ''">
+				AND rp.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{rule.name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{rule.name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{rule.name},'%')</if>
+			</if>
+		</if>
+		ORDER BY
+		a.aut_date DESC
+		LIMIT 1
+		) desc,
+
+
+		v. STATUS,
+		v.autDate DESC
+	</select>-->
+	<select id="findAllList" resultType="ScoRapply">
+		SELECT
+			<include refid="scoRapplyColumns"/>
+		FROM sco_rapply a
+		<include refid="scoRapplyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.status ASC, a.aut_date DESC
+			</when>
+			<otherwise>
+				ORDER BY a.status ASC, a.aut_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sco_rapply(
+			id,
+			uid,
+			rtid,
+			rpid,
+			rid,
+			rdid,
+			proc_ins_id,
+			name,
+			status,
+			is_temp,
+			is_first,
+			iend,
+			iendgnid,
+			yw_id,
+			cond_val,
+			tval,
+			tcval,
+			appIds,
+			applyCert_id,
+			cert_date,
+			apply_date,
+			aut_date,
+			aut_by,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{top.id},
+			#{rule.id},
+			#{lrule.id},
+			#{rdetail.id},
+			#{procInsId},
+			#{name},
+			#{status},
+			#{isTemp},
+			#{isFirst},
+			#{iaprop.iend},
+			#{iaprop.iendgnid},
+			#{actYw.id},
+			#{condVal},
+			#{tval},
+			#{tcval},
+			#{appIds},
+			#{scoRapplyCert.id},
+			#{certDate},
+			#{applyDate},
+			#{autDate},
+			#{autBy.id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO sco_rapply(
+			id,
+			uid,
+			rtid,
+			rpid,
+			rid,
+			rdid,
+			proc_ins_id,
+			name,
+			status,
+			is_temp,
+			is_first,
+			iend,
+			iendgnid,
+			yw_id,
+			cond_val,
+			tval,
+			tcval,
+			appIds,
+			cert_date,
+			apply_date,
+			aut_date,
+			aut_by,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.uid},
+			#{item.rtid},
+			#{item.rpid},
+			#{item.rid},
+			#{item.rdid},
+			#{item.procInsId},
+			#{item.name},
+			#{item.status},
+			#{item.isTemp},
+			#{item.isFirst},
+			#{item.iaprop.iend},
+			#{item.iaprop.iendgnid},
+			#{item.actYw.id},
+			#{item.condVal},
+			#{item.tval},
+			#{item.tcval},
+			#{item.appIds},
+			#{item.certDate},
+			#{item.applyDate},
+			#{item.autDate},
+			#{item.autBy.id},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE sco_rapply SET
+			uid = #{user.id},
+			rtid = #{top.id},
+			rpid = #{rule.id},
+			rid = #{lrule.id},
+			rdid = #{rdetail.id},
+			applyCert_id=#{scoRapplyCert.id},
+			proc_ins_id = #{procInsId},
+			name = #{name},
+			status = #{status},
+			is_temp = #{isTemp},
+			is_first = #{isFirst},
+			iend = #{iaprop.iend},
+			iendgnid = #{iaprop.iendgnid},
+			yw_id = #{actYw.id},
+			cond_val = #{condVal},
+			tval = #{tval},
+			tcval = #{tcval},
+			appIds = #{appIds},
+			cert_date = #{certDate},
+			apply_date = #{applyDate},
+			aut_date = #{autDate},
+			aut_by = #{autBy.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE sco_rapply
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="uid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.uid}
+				</foreach>
+			</trim>
+			<trim prefix="rtid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rtid}
+				</foreach>
+			</trim>
+			<trim prefix="rpid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rpid}
+				</foreach>
+			</trim>
+			<trim prefix="rid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rid}
+				</foreach>
+			</trim>
+			<trim prefix="rdid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rdid}
+				</foreach>
+			</trim>
+			<trim prefix="proc_ins_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.procInsId}
+				</foreach>
+			</trim>
+			<trim prefix="name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.name}
+				</foreach>
+			</trim>
+			<trim prefix="status =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.status}
+				</foreach>
+			</trim>
+			<trim prefix="is_temp =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isTemp}
+				</foreach>
+			</trim>
+			<trim prefix="is_first =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isFirst}
+				</foreach>
+			</trim>
+			<trim prefix="iend =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.iaprop.iend}
+				</foreach>
+			</trim>
+			<trim prefix="iendgnid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.iaprop.iendgnid}
+				</foreach>
+			</trim>
+			<trim prefix="yw_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.actYw.id}
+				</foreach>
+			</trim>
+			<trim prefix="cond_val =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.condVal}
+				</foreach>
+			</trim>
+			<trim prefix="tval =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.tval}
+				</foreach>
+			</trim>
+			<trim prefix="tcval =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.tcval}
+				</foreach>
+			</trim>
+			<trim prefix="appIds =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.appIds}
+				</foreach>
+			</trim>
+			<trim prefix="cert_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.certDate}
+				</foreach>
+			</trim>
+			<trim prefix="apply_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.applyDate}
+				</foreach>
+			</trim>
+			<trim prefix="aut_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.autDate}
+				</foreach>
+			</trim>
+			<trim prefix="aut_by =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.autBy.id}
+				</foreach>
+			</trim>
+			<trim prefix="update_by =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateBy.id}
+				</foreach>
+			</trim>
+			<trim prefix="update_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateDate}
+				</foreach>
+			</trim>
+			<trim prefix="remarks =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.remarks}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+
+	<update id="delete">
+		UPDATE sco_rapply SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deletePL">
+		UPDATE sco_rapply SET
+			del_flag = #{DEL_FLAG_DELETE}
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sco_rapply WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM sco_rapply WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM sco_rapply
+	</update>
+</mapper>

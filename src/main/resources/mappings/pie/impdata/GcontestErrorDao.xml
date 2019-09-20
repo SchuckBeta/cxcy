@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.impdata.dao.GcontestErrorDao">
+    
+	<sql id="gcontestErrorColumns">
+		a.id AS "id",
+		a.imp_id AS "impId",
+		a.name AS "name",
+		a.type AS "type",
+		a.groups AS "groups",
+		a.leader AS "leader",
+		a.office AS "office",
+		a.profes AS "profes",
+		a.mobile AS "mobile",
+		a.steachers AS "steachers",
+		a.eteachers AS "eteachers",
+		a.remarks AS "remarks",
+		a.huojiang AS "huojiang",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id"
+	</sql>
+	
+	<sql id="gcontestErrorJoins">
+	</sql>
+    
+	<select id="get" resultType="GcontestError">
+		SELECT 
+			<include refid="gcontestErrorColumns"/>
+		FROM gcontest_error a
+		<include refid="gcontestErrorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GcontestError">
+		SELECT 
+			<include refid="gcontestErrorColumns"/>
+		FROM gcontest_error a
+		<include refid="gcontestErrorJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GcontestError">
+		SELECT 
+			<include refid="gcontestErrorColumns"/>
+		FROM gcontest_error a
+		<include refid="gcontestErrorJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gcontest_error(
+			id,
+			imp_id,
+			name,
+			type,
+			groups,
+			leader,
+			office,
+			profes,
+			mobile,
+			steachers,
+			eteachers,
+			remarks,
+			huojiang,
+			update_date,
+			update_by,
+			create_date,
+			create_by
+		) VALUES (
+			#{id},
+			#{impId},
+			#{name},
+			#{type},
+			#{groups},
+			#{leader},
+			#{office},
+			#{profes},
+			#{mobile},
+			#{steachers},
+			#{eteachers},
+			#{remarks},
+			#{huojiang},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gcontest_error SET 	
+			imp_id = #{impId},
+			name = #{name},
+			type = #{type},
+			groups = #{groups},
+			leader = #{leader},
+			office = #{office},
+			profes = #{profes},
+			mobile = #{mobile},
+			steachers = #{steachers},
+			eteachers = #{eteachers},
+			remarks = #{remarks},
+			huojiang=#{huojiang},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gcontest_error
+		WHERE id = #{id}
+	</update>
+		<select id="getListByImpId" resultType="java.util.HashMap"
+		parameterType="java.lang.String">
+		SELECT
+		t.*
+		FROM
+		gcontest_error t
+		WHERE
+		t.imp_id = #{impid}
+		order by
+		t.create_date
+	</select>
+	<update id="deleteByImpId" parameterType="java.lang.String">
+		DELETE FROM
+		gcontest_error
+		WHERE imp_id = #{impid}
+	</update>
+</mapper>

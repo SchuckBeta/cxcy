@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.com.pcore.modules.sys.dao.SysDao">
+	<!-- 根据数据库获取时间 -->
+	<select id="getDBCurDate" parameterType="String" resultType="Date">
+		<!-- 获取时间戳 就是日期时间 -->
+		<if test="type != null">
+			<if test="type == 0">
+				select current_timestamp
+			</if>
+			<!-- 获取当前 日期 -->
+			<if test="type == 1">
+				select current_date
+			</if>
+			<!-- 获取当前 时间 -->
+			<if test="type == 2">
+				select current_time
+			</if>
+			<!-- 获取当前 时间 -->
+			<if test="type == 9">
+				select unix_timestamp(now())
+			</if>
+		</if>
+	</select>
+
+	<!-- 根据数据库获取时间 -->
+	<select id="getDbCurLong" resultType="Long">
+		select unix_timestamp(now())
+	</select>
+</mapper>

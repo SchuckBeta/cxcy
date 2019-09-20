@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwSpaceDao">
+	<resultMap id="pwSpaceMap" type="com.oseasy.pw.modules.pw.entity.PwSpace">
+		<id property="id" column="id" />
+		<result property="parent.id" column="parent.id" />
+		<result property="parentIds" column="parentIds" />
+		<result property="name" column="name" />
+		<result property="person" column="person" />
+		<result property="type" column="type" />
+		<result property="phone" column="phone" />
+		<result property="mobile" column="mobile" />
+		<result property="openWeek" column="openWeek" />
+		<result property="amOpenStartTime" column="amOpenStartTime" />
+		<result property="amOpenEndTime" column="amOpenEndTime" />
+		<result property="pmOpenStartTime" column="pmOpenStartTime" />
+		<result property="pmOpenEndTime" column="pmOpenEndTime" />
+		<result property="floorNum" column="floorNum" />
+		<result property="area" column="area" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+		<result property="imageUrl" column="imageUrl" />
+
+		<collection property="rooms" ofType="PwRoom">
+			<id property="id" column="rooms.id" />
+			<result property="name" column="rooms.name" />
+			<result property="color" column="rooms.color" />
+			<result property="person" column="rooms.person" />
+			<result property="phone" column="rooms.phone" />
+			<result property="mobile" column="rooms.mobile" />
+			<result property="alias" column="rooms.alias" />
+			<result property="type" column="rooms.type" />
+			<result property="num" column="rooms.num" />
+			<result property="numtype" column="rooms.numtype" />
+			<result property="remaindernum" column="rooms.remaindernum" />
+			<result property="isUsable" column="rooms.isUsable" />
+			<result property="isAllowm" column="rooms.isAllowm" />
+			<result property="isAssign" column="rooms.isAssign" />
+			<result property="pwSpace.id" column="rooms.pwSpace.id" />
+			<result property="updateDate" column="rooms.updateDate" />
+			<result property="updateBy.id" column="rooms.updateBy.id" />
+			<result property="createDate" column="rooms.createDate" />
+			<result property="createBy.id" column="rooms.createBy.id" />
+			<result property="remarks" column="rooms.remarks" />
+			<result property="delFlag" column="rooms.delFlag" />
+		</collection>
+	</resultMap>
+
+	<sql id="pwSpaceColumns">
+		a.id AS "id",
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
+		a.name AS "name",
+		a.person AS "person",
+		a.type AS "type",
+		a.phone AS "phone",
+		a.mobile AS "mobile",
+		a.open_week AS "openWeek",
+		a.am_open_start_time AS "amOpenStartTime",
+		a.am_open_end_time AS "amOpenEndTime",
+		a.pm_open_start_time AS "pmOpenStartTime",
+		a.pm_open_end_time AS "pmOpenEndTime",
+		a.floor_num AS "floorNum",
+		a.area AS "area",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.image_url As "imageUrl",
+
+		p.id AS "parent.id",
+		p.parent_ids AS "parent.parentIds",
+		p.name AS "parent.name",
+		p.type AS "parent.type",
+		p.image_url AS "parent.imageUrl",
+
+		pp.id AS "parent.parent.id",
+		pp.parent_ids AS "parent.parent.parentIds",
+		pp.name AS "parent.parent.name",
+		pp.type AS "parent.parent.type",
+		pp.image_url AS "parent.parent.imageUrl"
+	</sql>
+
+	<sql id="pwSpaceRoomColumns">
+		a.id AS "id",
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
+		a.name AS "name",
+		a.person AS "person",
+		a.type AS "type",
+		a.phone AS "phone",
+		a.mobile AS "mobile",
+		a.open_week AS "openWeek",
+		a.am_open_start_time AS "amOpenStartTime",
+		a.am_open_end_time AS "amOpenEndTime",
+		a.pm_open_start_time AS "pmOpenStartTime",
+		a.pm_open_end_time AS "pmOpenEndTime",
+		a.floor_num AS "floorNum",
+		a.area AS "area",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.image_url As "imageUrl",
+
+		r.id AS "rooms.id",
+		r.name AS "rooms.name",
+		r.color AS "rooms.color",
+		r.person AS "rooms.person",
+		r.phone AS "rooms.phone",
+		r.mobile AS "rooms.mobile",
+		r.alias AS "rooms.alias",
+		r.type AS "rooms.type",
+		r.num AS "rooms.num",
+		r.num_type AS "rooms.numtype",
+		r.remainder_num AS "rooms.remaindernum",
+		r.is_usable AS "rooms.isUsable",
+		r.is_allowm AS "rooms.isAllowm",
+		r.is_assign AS "rooms.isAssign",
+		r.sid AS "rooms.pwSpace.id",
+		r.update_date AS "rooms.updateDate",
+		r.update_by AS "rooms.updateBy.id",
+		r.create_date AS "rooms.createDate",
+		r.create_by AS "rooms.createBy.id",
+		r.remarks AS "rooms.remarks",
+		r.del_flag AS "rooms.delFlag"
+	</sql>
+
+	<sql id="pwSpaceJoins">
+		LEFT JOIN pw_space p ON p.id = a.parent_id
+		LEFT JOIN pw_space pp ON pp.id = p.parent_id
+	</sql>
+	<sql id="pwSpaceRoomJoins">
+		LEFT JOIN pw_room r ON r.sid = a.id
+	</sql>
+
+	<select id="get" resultType="PwSpace">
+		SELECT
+			<include refid="pwSpaceColumns"/>
+		FROM pw_space a
+		<include refid="pwSpaceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="PwSpace">
+		SELECT
+			<include refid="pwSpaceColumns"/>
+		FROM pw_space a
+		<include refid="pwSpaceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND a.id !='1'
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="person != null and person != ''">
+				AND a.person = #{person}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="phone != null and phone != ''">
+				AND a.phone = #{phone}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND a.mobile = #{mobile}
+			</if>
+			<if test="openWeek != null and openWeek != ''">
+				AND a.open_week = #{openWeek}
+			</if>
+			<if test="amOpenStartTime != null and amOpenStartTime != ''">
+				AND a.am_open_start_time = #{amOpenStartTime}
+			</if>
+			<if test="amOpenEndTime != null and amOpenEndTime != ''">
+				AND a.am_open_end_time = #{amOpenEndTime}
+			</if>
+		</where>
+		ORDER BY a.name ASC
+	</select>
+
+	<select id="findListRooms" resultMap="pwSpaceMap">
+		SELECT
+			<include refid="pwSpaceRoomColumns"/>
+		FROM pw_space a
+		<include refid="pwSpaceRoomJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND a.id !='1'
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="person != null and person != ''">
+				AND a.person = #{person}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="phone != null and phone != ''">
+				AND a.phone = #{phone}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND a.mobile = #{mobile}
+			</if>
+			<if test="openWeek != null and openWeek != ''">
+				AND a.open_week = #{openWeek}
+			</if>
+			<if test="amOpenStartTime != null and amOpenStartTime != ''">
+				AND a.am_open_start_time = #{amOpenStartTime}
+			</if>
+			<if test="amOpenEndTime != null and amOpenEndTime != ''">
+				AND a.am_open_end_time = #{amOpenEndTime}
+			</if>
+			<!-- <if test="sparam != null">
+				<if test="sparam.num != null and sparam.num != ''">
+					AND r.remainder_num <![CDATA[ >= ]]> #{sparam.num}
+				</if>
+			</if> -->
+		</where>
+		ORDER BY a.name ASC
+	</select>
+
+	<select id="findAllList" resultType="PwSpace">
+		SELECT
+			<include refid="pwSpaceColumns"/>
+		FROM pw_space a
+		<include refid="pwSpaceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+	</select>
+
+	<select id="findByParentIdsLike" resultType="PwSpace">
+		SELECT
+		<include refid="pwSpaceColumns"/>
+		FROM pw_space a
+		<include refid="pwSpaceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE
+			<if test="dbName == 'oracle'">||#{parentIds}||'%'</if>
+			<if test="dbName == 'mssql'">#{parentIds}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT(#{parentIds}, '%')</if>
+
+		</where>
+		ORDER BY a.name ASC
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pw_space(
+			id,
+			parent_id,
+			parent_ids,
+			name,
+			person,
+			type,
+			phone,
+			mobile,
+			open_week,
+			am_open_start_time,
+			am_open_end_time,
+			pm_open_start_time,
+			pm_open_end_time,
+			floor_num,
+			area,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag,
+			image_url
+		) VALUES (
+			#{id},
+			#{parent.id},
+			#{parentIds},
+			#{name},
+			#{person},
+			#{type},
+			#{phone},
+			#{mobile},
+			#{openWeek},
+			#{amOpenStartTime},
+			#{amOpenEndTime},
+			#{pmOpenStartTime},
+			#{pmOpenEndTime},
+			#{floorNum},
+			#{area},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag},
+			#{imageUrl}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pw_space SET
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds},
+			name = #{name},
+			person = #{person},
+			type = #{type},
+			phone = #{phone},
+			mobile = #{mobile},
+			open_week = #{openWeek},
+			am_open_start_time = #{amOpenStartTime},
+			am_open_end_time = #{amOpenEndTime},
+			pm_open_start_time = #{pmOpenStartTime},
+			pm_open_end_time = #{pmOpenEndTime},
+			floor_num = #{floorNum},
+			area = #{area},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks},
+			image_url = #{imageUrl}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateParentIds">
+		UPDATE pw_space SET
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE pw_space SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE
+			<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
+			<if test="dbName == 'mssql'">'%,'+#{id}+',%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+	</update>
+
+</mapper>

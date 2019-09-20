@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.analysis.dao.GcontestAnalysisDao">
+
+	<select id="getData1" resultType="java.util.HashMap">
+		select '互联网+大赛'
+		label,o.name,count(1) cc
+		from g_contest t
+		left join sys_user u on
+		t.declare_id=u.id
+		left join sys_office o on u.office_id=o.id
+		where
+		t.del_flag='0'
+		group by o.name
+	</select>
+	<select id="getData2" resultType="java.util.HashMap">
+		select tem.label,tem.name,count(1) cc from(select (case when o.graduation &lt; SYSDATE() then '毕业学生参赛' else '在校学生参赛' end) label,s1.label name
+		from g_contest t
+		left join sys_dict
+		s1 on t.level=s1.value and
+		s1.type='gcontest_level' and
+		s1.del_flag='0'
+		left join sys_user u on t.declare_id=u.id
+		left join sys_student_expansion o on u.id=o.user_id
+		where s1.id is not null and 
+		t.del_flag='0' )tem
+		group by tem.label,tem.name
+	</select>
+	<select id="getData3" resultType="java.util.HashMap">
+		select '参赛项目数'
+		label,s1.label name,count(1) cc
+		from g_contest t
+		left join sys_dict
+		s1 on t.type=s1.value and
+		s1.type='competition_net_type' and
+		s1.del_flag='0'
+		where
+		t.del_flag='0' and s1.id is not null
+		group by s1.label
+	</select>
+	<select id="getGcontestNumFromModel" resultType="java.util.HashMap">
+			select s.label,DATE_FORMAT(t.sub_time,"%Y") year,sum(case when t.id is not null then 1 else 0 end) cc from sys_dict s
+		left join pro_model t  on t.type=s.value and t.sub_status='1' and t.pro_type='7,' and t.del_flag='0' 
+		where s.type='competition_type' and s.value!='1'  and s.del_flag='0'
+		group by s.label,DATE_FORMAT(t.sub_time,"%Y")
+	</select>
+	<select id="getGcontestNum" resultType="java.util.HashMap">
+			select s.label,DATE_FORMAT(t.sub_time,"%Y") year,sum(case when t.id is not null then 1 else 0 end) cc from sys_dict s
+		left join g_contest t  on  t.proc_ins_id is not null  and t.del_flag='0' 
+		where s.type='competition_type' and s.value='1' and s.del_flag='0'
+		group by s.label,DATE_FORMAT(t.sub_time,"%Y")
+	</select>
+	<select id="getGcontestOfficeNum" resultType="java.util.HashMap" parameterType="java.lang.String">
+			select o.name,count(1) cc from g_contest t
+		left join sys_user u on t.declare_id=u.id
+		left join sys_office o on u.office_id=o.id
+		where t.proc_ins_id is not null and t.del_flag='0'
+		<if test="year!=null and year!=''">
+		and
+		t.sub_time &gt;=str_to_date(#{year},'%Y-%m-%d %H:%i:%s')
+		and
+		t.sub_time &lt;date_add(str_to_date(#{year},'%Y-%m-%d %H:%i:%s'),
+		interval 1 year)
+		</if>
+		group by o.name
+	</select>
+	<select id="getGcontestOfficeNumFromModel" resultType="java.util.HashMap" parameterType="java.lang.String">
+			select o.name,count(1) cc from pro_model t
+		left join sys_user u on t.declare_id=u.id
+		left join sys_office o on u.office_id=o.id
+		where t.sub_status='1' and u.id is not null and t.del_flag='0' and t.pro_type='7,' 
+		<if test="type!=null and type!=''">
+		and t.type=#{type} 
+		</if>
+		<if test="year!=null and year!=''">
+		and
+		t.sub_time &gt;=str_to_date(#{year},'%Y-%m-%d %H:%i:%s')
+		and
+		t.sub_time &lt;date_add(str_to_date(#{year},'%Y-%m-%d %H:%i:%s'),
+		interval 1 year)
+		</if>
+		group by o.name
+	</select>
+	<select id="getGcontestMemNum" resultType="java.util.HashMap" parameterType="java.lang.String">
+		select s.label year,ifnull(s1.label,'在校') label,count(*) cc from team_user_relation r
+		left join g_contest t on t.team_id=r.team_id
+		left join sys_dict s on s.value='1' and s.type='competition_type'
+		left join sys_student_expansion ss on ss.user_id=r.user_id
+		left join sys_dict s1 on s1.value=ss.curr_state and s1.type='current_sate'
+		where t.proc_ins_id is not null and t.del_flag='0' and r.del_flag='0' 
+		and (r.state='0' or r.state='4') and r.user_type='1'
+		<if test="year!=null and year!=''">
+				and
+				t.sub_time &gt;=str_to_date(#{year},'%Y-%m-%d %H:%i:%s')
+				and
+				t.sub_time &lt;date_add(str_to_date(#{year},'%Y-%m-%d %H:%i:%s'),
+				interval 1 year)
+		</if>
+		group by s.label,ifnull(s1.label,'在校')
+	</select>
+	<select id="getGcontestMemNumFromModel" resultType="java.util.HashMap" parameterType="java.lang.String">
+		select s.label year,ifnull(s1.label,'在校') label,count(*) cc from team_user_relation r
+		left join pro_model t on t.team_id=r.team_id
+		left join sys_dict s on s.value=t.type and s.type='competition_type'
+		left join sys_student_expansion ss on ss.user_id=r.user_id
+		left join sys_dict s1 on s1.value=ss.curr_state and s1.type='current_sate'
+		where t.sub_status='1' and t.del_flag='0' and r.del_flag='0' 
+		and (r.state='0' or r.state='4') and r.user_type='1' and t.pro_type='7,' and t.type!='1'
+		<if test="year!=null and year!=''">
+				and
+				t.sub_time &gt;=str_to_date(#{year},'%Y-%m-%d %H:%i:%s')
+				and
+				t.sub_time &lt;date_add(str_to_date(#{year},'%Y-%m-%d %H:%i:%s'),
+				interval 1 year)
+		</if>
+		group by s.label,ifnull(s1.label,'在校')
+	</select>
+</mapper>

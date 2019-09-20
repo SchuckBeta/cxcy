@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.cms.modules.cms.dao.CmsLinkDao">
+
+	<sql id="cmsLinkColumns">
+		a.id AS "id",
+		a.linkname AS "linkname",
+		a.sitelink AS "sitelink",
+		a.sitetype AS "sitetype",
+		a.logo AS "logo",
+		a.sort AS "sort",
+		a.is_show AS "isShow",
+		a.description AS "description",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="cmsLinkJoins">
+	</sql>
+
+	<select id="get" resultType="CmsLink">
+		SELECT
+			<include refid="cmsLinkColumns"/>
+		FROM cms_link a
+		<include refid="cmsLinkJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="CmsLink">
+		SELECT
+			<include refid="cmsLinkColumns"/>
+		FROM cms_link a
+		<include refid="cmsLinkJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="linkname != null and linkname != ''">
+				AND a.linkname=#{linkname}
+			</if>
+			<if test="sitetype != null and sitetype != ''">
+				AND a.sitetype=#{sitetype}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findFrontList" resultType="CmsLink">
+		SELECT
+			<include refid="cmsLinkColumns"/>
+		FROM cms_link a
+		<include refid="cmsLinkJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and a.is_show= '1'
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.sort ASC
+			</otherwise>
+		</choose>
+
+	</select>
+
+	<select id="findAllList" resultType="CmsLink">
+		SELECT
+			<include refid="cmsLinkColumns"/>
+		FROM cms_link a
+		<include refid="cmsLinkJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cms_link(
+			linkname,
+			sitelink,
+			sitetype,
+			logo,
+			sort,
+			is_show,
+			description,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		) VALUES (
+			#{linkname},
+			#{sitelink},
+			#{sitetype},
+			#{logo},
+			#{sort},
+			#{isShow},
+			#{description},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE cms_link SET
+			linkname = #{linkname},
+			sitelink = #{sitelink},
+			sitetype = #{sitetype},
+			logo = #{logo},
+			sort = #{sort},
+			is_show = #{isShow},
+			description = #{description},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE cms_link SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delPl" parameterType="java.util.List">
+	UPDATE cms_link SET del_flag = '1'
+		where id in
+		<foreach collection="idList" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM cms_link WHERE id = #{id}
+	</update>
+
+	<update id="cmsLinkSaveSort" parameterType="java.util.List" >
+		UPDATE cms_link
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="sort =case" suffix="end,">
+				<foreach item="item" collection="cmsList" index="index">
+					when id=#{item.id} then #{item.sort}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="cmsList" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<select id="checkLinkName" resultType="Integer">
+		SELECT COUNT(1) FROM cms_link
+		<where>
+			<if test="linkname != null and linkname != ''"> AND  linkname = #{linkname}</if>
+			<if test="id != null and id != ''"> AND  id != #{id}</if>
+			AND del_flag = '0'
+		</where>
+	</select>
+</mapper>

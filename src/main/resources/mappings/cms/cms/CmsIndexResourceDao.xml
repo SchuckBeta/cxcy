@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.cms.modules.cms.dao.CmsIndexResourceDao">
+
+	<sql id="cmsIndexResourceColumns">
+		a.id AS "id",
+		a.region_type AS "regionType",
+		a.res_name AS "resName",
+		a.res_state AS "resState",
+		a.res_type AS "resType",
+		a.res_sort AS "resSort",
+		a.title AS "title",
+		a.gen_id AS "genId",
+		a.gen_json AS "genJson",
+		a.tpl AS "tpl",
+		a.tpl_json AS "tplJson",
+		a.tpl_url AS "tplUrl",
+		a.content AS "content",
+		a.botton1_name AS "botton1Name",
+		a.res_url1 AS "resUrl1",
+		a.jump_url1 AS "jumpUrl1",
+		a.botton2_name AS "botton2Name",
+		a.res_url2 AS "resUrl2",
+		a.jump_url2 AS "jumpUrl2",
+		a.botton3_name AS "botton3Name",
+		a.res_url3 AS "resUrl3",
+		a.jump_url3 AS "jumpUrl3",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.reserve1 AS "reserve1",
+		a.reserve2 AS "reserve2",
+		a.reserve3 AS "reserve3",
+		a.res_model as "resModel",
+
+		b.id AS "cmsIndexRegion.id",
+		b.region_id AS "cmsIndexRegion.regionId",
+		b.region_name AS "cmsIndexRegion.regionName",
+		b.region_type AS "cmsIndexRegion.regionType",
+		b.region_state AS "cmsIndexRegion.regionState",
+		b.region_sort AS "cmsIndexRegion.regionSort",
+		b.update_date AS "cmsIndexRegion.updateDate",
+		b.update_by AS "cmsIndexRegion.updateBy.id",
+		b.create_date AS "cmsIndexRegion.createDate",
+		b.create_by AS "cmsIndexRegion.createBy.id",
+		b.del_flag AS "cmsIndexRegion.delFlag",
+
+		c.id AS "cmsIndexRegion.category.id",
+		c.parent_id AS "cmsIndexRegion.category.parent.id",
+		c.parent_ids AS "cmsIndexRegion.category.parentIds",
+		<!-- c.office_id AS "cmsIndexRegion.category.office.id", -->
+		c.module AS "cmsIndexRegion.category.module",
+		c.name AS "cmsIndexRegion.category.name",
+		<!-- c.image AS "cmsIndexRegion.category.image", -->
+		c.href AS "cmsIndexRegion.category.href",
+		<!-- c.target AS "cmsIndexRegion.category.target",
+		c.description AS "cmsIndexRegion.category.description",
+		c.keywords AS "cmsIndexRegion.category.keywords", -->
+		c.sort AS "cmsIndexRegion.category.sort",
+		<!-- c.in_menu AS "cmsIndexRegion.category.inMenu",
+		c.in_list AS "cmsIndexRegion.category.inList", -->
+		c.show_modes AS "cmsIndexRegion.category.showModes",
+		c.allow_comment AS "cmsIndexRegion.category.allowComment",
+		c.is_audit AS "cmsIndexRegion.category.isAudit",
+		c.custom_list_view AS "cmsIndexRegion.category.customListView",
+		c.custom_content_view AS "cmsIndexRegion.category.customContentView",
+		<!-- c.view_config AS "cmsIndexRegion.category.viewConfig", -->
+		c.create_by AS "cmsIndexRegion.category.createBy.id",
+		c.create_date AS "cmsIndexRegion.category.createDate",
+		c.update_by AS "cmsIndexRegion.category.updateBy.id",
+		c.update_date AS "cmsIndexRegion.category.updateDate",
+		c.remarks AS "cmsIndexRegion.category.remarks",
+		c.del_flag AS "cmsIndexRegion.category.delFlag",
+
+		bp.name AS "cmsIndexRegion.category.parent.name",
+		bpp.id AS "cmsIndexRegion.category.parent.parent.id",
+		bpp.name AS "cmsIndexRegion.category.parent.parent.name",
+		bppp.id AS "cmsIndexRegion.category.parent.parent.parent.id",
+		bppp.name AS "cmsIndexRegion.category.parent.parent.parent.name",
+
+		d.id AS "cmsIndexRegion.category.site.id",
+		d.name AS "cmsIndexRegion.category.site.name",
+-- 		d.title AS "cmsIndexRegion.category.site.title",
+-- 		d.logo AS "cmsIndexRegion.category.site.logo",
+-- 		d.domain AS "cmsIndexRegion.category.site.domain",
+		d.description AS "cmsIndexRegion.category.site.description",
+-- 		d.keywords AS "cmsIndexRegion.category.site.keywords",
+-- 		d.theme AS "cmsIndexRegion.category.site.theme",
+		d.copyright AS "cmsIndexRegion.category.site.copyright",
+-- 		d.custom_index_view AS "cmsIndexRegion.category.site.customIndexView",
+		d.create_by AS "cmsIndexRegion.category.site.createBy.id",
+		d.create_date AS "cmsIndexRegion.category.site.createDate",
+		d.update_by AS "cmsIndexRegion.category.site.updateBy.id",
+		d.update_date AS "cmsIndexRegion.category.site.updateDate",
+-- 		d.remarks AS "cmsIndexRegion.category.site.remarks",
+		d.del_flag AS "cmsIndexRegion.category.site.delFlag"
+	</sql>
+
+	<sql id="cmsIndexResourceJoins">
+		LEFT JOIN cms_index_region b ON b.id = a.region_id
+		LEFT JOIN cms_category c ON c.id = b.category_id
+	    LEFT JOIN cms_category bp ON bp.id = c.parent_id
+	    LEFT JOIN cms_category bpp ON bpp.id = bp.parent_id
+	    LEFT JOIN cms_category bppp ON bppp.id = bpp.parent_id
+		LEFT JOIN cms_site d ON d.id = c.site_id
+	</sql>
+
+	<select id="get" resultType="CmsIndexResource">
+		SELECT
+			<include refid="cmsIndexResourceColumns"/>
+		FROM cms_index_resource a
+		<include refid="cmsIndexResourceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="CmsIndexResource">
+		SELECT
+			<include refid="cmsIndexResourceColumns"/>
+		FROM cms_index_resource a
+		<include refid="cmsIndexResourceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="cmsIndexRegion != null">
+				<if test="cmsIndexRegion.id != null and cmsIndexRegion.id != ''">
+					AND b.id = #{cmsIndexRegion.id}
+				</if>
+				<if test="cmsIndexRegion.regionName != null and cmsIndexRegion.regionName != ''">
+					AND b.region_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{cmsIndexRegion.regionName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{cmsIndexRegion.regionName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{cmsIndexRegion.regionName},'%')</if>
+				</if>
+
+				<if test="cmsIndexRegion.category != null">
+					<if test="cmsIndexRegion.category.id != null and cmsIndexRegion.category.id != ''">
+						AND c.id = #{cmsIndexRegion.category.id}
+					</if>
+					<if test="cmsIndexRegion.category.name != null and cmsIndexRegion.category.name != ''">
+						AND c.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{cmsIndexRegion.category.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{cmsIndexRegion.category.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{cmsIndexRegion.category.name},'%')</if>
+					</if>
+
+					<if test="cmsIndexRegion.category.site != null">
+						<if test="cmsIndexRegion.category.site.id != null and cmsIndexRegion.category.site.id != ''">
+							AND d.id = #{cmsIndexRegion.category.site.id}
+						</if>
+						<if test="cmsIndexRegion.category.site.name != null and cmsIndexRegion.category.site.name != ''">
+							AND d.site.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{cmsIndexRegion.category.site.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{cmsIndexRegion.category.site.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{cmsIndexRegion.category.site.name},'%')</if>
+						</if>
+					</if>
+				</if>
+			</if>
+			<if test="regionType != null and regionType != ''">
+				AND a.region_type = #{regionType}
+			</if>
+			<if test="resName != null and resName != ''">
+				AND a.res_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{resName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{resName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{resName},'%')</if>
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY bppp.parent_id,bpp.parent_id,bp.parent_id,c.parent_id, c.sort, b.region_sort, a.res_sort, a.update_date DESC, ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY bppp.parent_id,bpp.parent_id,bp.parent_id,c.parent_id, c.sort, b.region_sort, a.res_sort, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="CmsIndexResource">
+		SELECT
+			<include refid="cmsIndexResourceColumns"/>
+		FROM cms_index_resource a
+		<include refid="cmsIndexResourceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY bppp.parent_id,bpp.parent_id,bp.parent_id,c.parent_id, c.sort, b.region_sort, a.res_sort, a.update_date DESC, ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY bppp.parent_id,bpp.parent_id,bp.parent_id,c.parent_id, c.sort, b.region_sort, a.res_sort, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cms_index_resource(
+			id,
+			region_id,
+			region_type,
+			res_name,
+			res_state,
+			res_type,
+			res_sort,
+			title,
+			gen_id,
+			gen_json,
+			tpl,
+			tpl_json,
+			tpl_url,
+			content,
+			botton1_name,
+			res_url1,
+			jump_url1,
+			botton2_name,
+			res_url2,
+			jump_url2,
+			botton3_name,
+			res_url3,
+			jump_url3,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag,
+			reserve1,
+			reserve2,
+			reserve3,
+			res_model
+		) VALUES (
+			#{id},
+			#{cmsIndexRegion.id},
+			#{regionType},
+			#{resName},
+			#{resState},
+			#{resType},
+			#{resSort},
+			#{title},
+			#{genId},
+			#{genJson},
+			#{tpl},
+			#{tplJson},
+			#{tplUrl},
+			#{content},
+			#{botton1Name},
+			#{resUrl1},
+			#{jumpUrl1},
+			#{botton2Name},
+			#{resUrl2},
+			#{jumpUrl2},
+			#{botton3Name},
+			#{resUrl3},
+			#{jumpUrl3},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag},
+			#{reserve1},
+			#{reserve2},
+			#{reserve3},
+			#{resModel}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE cms_index_resource SET
+			region_id = #{cmsIndexRegion.id},
+			region_type = #{regionType},
+			res_name = #{resName},
+			res_state = #{resState},
+			res_type = #{resType},
+			res_sort = #{resSort},
+			title = #{title},
+			gen_id = #{genId},
+			gen_json = #{genJson},
+			tpl = #{tpl},
+			tpl_json = #{tplJson},
+			tpl_url = #{tplUrl},
+			content = #{content},
+			botton1_name = #{botton1Name},
+			res_url1 = #{resUrl1},
+			jump_url1 = #{jumpUrl1},
+			botton2_name = #{botton2Name},
+			res_url2 = #{resUrl2},
+			jump_url2 = #{jumpUrl2},
+			botton3_name = #{botton3Name},
+			res_url3 = #{resUrl3},
+			jump_url3 = #{jumpUrl3},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			reserve1 = #{reserve1},
+			reserve2 = #{reserve2},
+			reserve3 = #{reserve3},
+			res_model=#{resModel}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE cms_index_resource SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

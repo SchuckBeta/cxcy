@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.scr.dao.ScoRuleDetailDao">
+
+	<sql id="scoRuleDetailColumns">
+		a.id AS "id",
+		a.rid AS "rule.id",
+		a.name AS "name",
+		a.score AS "score",
+		a.sc_min AS "scMin",
+		a.sc_max AS "scMax",
+		a.level AS "level",
+		a.sort AS "sort",
+		a.is_limitm AS "isLimitm",
+		a.is_half AS "isHalf",
+		a.half_remarks AS "halfRemarks",
+		a.join_type AS "joinType",
+		a.joinmax AS "joinMax",
+		a.cond_val AS "condition",
+		a.cond_name AS "condName",
+		a.maxorsum AS "maxOrSum",
+		a.is_lowsco AS "isLowSco",
+		a.is_join AS "isJoin",
+		a.lowsco AS "lowSco",
+		a.lowscomax AS "lowScoMax",
+		a.cond_type AS "condType",
+		a.is_special AS "isSpecial",
+		a.is_condcheck AS "isCondcheck",
+		a.unit AS "unit",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+
+		b.parent_id AS "rule.parent.id",
+		b.parent_ids AS "rule.parentIds",
+		b.name AS "rule.name",
+		b.type AS "rule.type",
+		b.ptype AS "rule.ptype",
+		b.is_pb AS "rule.isPb",
+		b.is_show AS "rule.isShow",
+		b.update_date AS "rule.updateDate",
+		b.update_by AS "rule.updateBy.id",
+		b.create_date AS "rule.createDate",
+		b.create_by AS "rule.createBy.id",
+		b.remarks AS "rule.remarks",
+		b.del_flag AS "rule.delFlag"
+	</sql>
+
+	<sql id="scoRuleDetailJoins">
+		LEFT JOIN sco_rule b ON b.id = a.rid
+	</sql>
+
+	<select id="get" resultType="ScoRuleDetail">
+		SELECT
+			<include refid="scoRuleDetailColumns"/>
+		FROM sco_rule_detail a
+		<include refid="scoRuleDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ScoRuleDetail">
+		SELECT
+			<include refid="scoRuleDetailColumns"/>
+		FROM sco_rule_detail a
+		<include refid="scoRuleDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="rule != null">
+				<if test="rule.id != null and rule.id != ''">
+					AND a.rid = #{rule.id}
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="ajaxValiScrRuleDetailName" resultType="ScoRuleDetail">
+		SELECT
+		<include refid="scoRuleDetailColumns"/>
+		FROM sco_rule_detail a
+		<include refid="scoRuleDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and a.name = #{name} and a.rid= #{rule.id}
+		</where>
+	</select>
+
+	<select id="findAllList" resultType="ScoRuleDetail">
+		SELECT
+			<include refid="scoRuleDetailColumns"/>
+		FROM sco_rule_detail a
+		<include refid="scoRuleDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sco_rule_detail(
+			id,
+			rid,
+			name,
+			score,
+			sc_min,
+			sc_max,
+			level,
+
+			maxorsum,
+			is_lowsco,
+			is_join,
+			lowsco,
+			lowscomax,
+
+			is_limitm,
+			is_half,
+			half_remarks,
+			join_type,
+			joinmax,
+			cond_val,
+			cond_name,
+			cond_type,
+			is_condcheck,
+			is_special,
+			unit,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{rule.id},
+			#{name},
+			#{score},
+			#{scMin},
+			#{scMax},
+			#{level},
+
+			#{maxOrSum},
+			#{isLowSco},
+			#{isJoin},
+			#{lowSco},
+			#{lowScoMax},
+
+			#{isLimitm},
+			#{isHalf},
+			#{halfRemarks},
+			#{joinType},
+			#{joinMax},
+			#{condition},
+			#{condName},
+			#{condType},
+			#{isCondcheck},
+			#{isSpecial},
+			#{unit},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO sco_rule_detail(
+			id,
+			rid,
+			name,
+			score,
+			sc_min,
+			sc_max,
+			level,
+		maxorsum,
+		is_lowsco,
+		is_join,
+		lowsco,
+		lowscomax,
+			is_limitm,
+			is_half,
+			half_remarks,
+			join_type,
+		joinmax,
+			cond_val,
+			cond_name,
+			cond_type,
+			is_condcheck,
+		is_special,
+			unit,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.rule.id},
+			#{item.name},
+			#{item.score},
+			#{item.scMin},
+			#{item.scMax},
+			#{item.level},
+			#{item.maxOrSum},
+			#{item.isLowSco},
+			#{item.isJoin},
+			#{item.lowSco},
+			#{item.lowScoMax},
+			#{item.isLimitm},
+			#{item.isHalf},
+			#{item.halfRemarks},
+			#{item.joinType},
+			#{item.joinMax},
+			#{item.condition},
+			#{item.condName},
+			#{item.condType},
+			#{item.isCondcheck},
+			#{item.isSpecial},
+			#{item.unit},
+			#{item.updateDate},
+			#{item.updateBy.id},
+			#{item.createDate},
+			#{item.createBy.id},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE sco_rule_detail SET
+			rid = #{rule.id},
+			name = #{name},
+			score = #{score},
+			sc_min = #{scMin},
+			sc_max = #{scMax},
+			level = #{level},
+
+			maxorsum = #{maxOrSum},
+			is_lowsco = #{isLowSco},
+			is_join = #{isJoin},
+			lowsco = #{lowSco},
+			lowscomax = #{lowScoMax},
+
+			is_limitm = #{isLimitm},
+			is_half = #{isHalf},
+			half_remarks = #{halfRemarks},
+			join_type = #{joinType},
+			joinmax = #{joinMax},
+			cond_val = #{condition},
+			cond_name = #{condName},
+			cond_type = #{condType},
+			is_special = #{isSpecial},
+			is_condcheck = #{isCondcheck},
+			unit = #{unit},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE sco_rule_detail
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="rid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rule.id}
+				</foreach>
+			</trim>
+			<trim prefix="name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.name}
+				</foreach>
+			</trim>
+			<trim prefix="score =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.score}
+				</foreach>
+			</trim>
+			<trim prefix="sc_min =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.scMin}
+				</foreach>
+			</trim>
+			<trim prefix="sc_max =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.scMax}
+				</foreach>
+			</trim>
+			<trim prefix="level =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.level}
+				</foreach>
+			</trim>
+			<trim prefix="maxorsum =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.maxOrSum}
+				</foreach>
+			</trim>
+			<trim prefix="is_lowsco =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isLowSco}
+				</foreach>
+			</trim>
+			<trim prefix="is_join =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isJoin}
+				</foreach>
+			</trim>
+			<trim prefix="lowsco =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.lowSco}
+				</foreach>
+			</trim>
+			<trim prefix="lowscomax =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.lowScoMax}
+				</foreach>
+			</trim>
+
+
+
+			<trim prefix="is_limitm =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isLimitm}
+				</foreach>
+			</trim>
+			<trim prefix="is_half =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isHalf}
+				</foreach>
+			</trim>
+			<trim prefix="half_remarks =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.halfRemarks}
+				</foreach>
+			</trim>
+			<trim prefix="join_type =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.joinType}
+				</foreach>
+			</trim>
+			<trim prefix="joinmax =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.joinMax}
+				</foreach>
+			</trim>
+			<trim prefix="cond_val =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.condition}
+				</foreach>
+			</trim>
+			<trim prefix="cond_name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.condName}
+				</foreach>
+			</trim>
+			<trim prefix="cond_type =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.condType}
+				</foreach>
+			</trim>
+			<trim prefix="is_condcheck =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isCondcheck}
+				</foreach>
+			</trim>
+			<trim prefix="unit =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.unit}
+				</foreach>
+			</trim>
+			<trim prefix="update_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateDate}
+				</foreach>
+			</trim>
+			<trim prefix="update_by =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateBy.id}
+				</foreach>
+			</trim>
+			<trim prefix="remarks =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.remarks}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+
+	<update id="delete">
+		UPDATE sco_rule_detail SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<update id="updateSort">
+		UPDATE sco_rule_detail SET
+		sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	<update id="deletePL">
+		UPDATE sco_rule_detail SET
+			del_flag = #{DEL_FLAG_DELETE}
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sco_rule_detail WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM sco_rule_detail WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM sco_rule_detail
+	</update>
+
+	<update id="deleteByRid">
+		update sco_rule_detail set del_flag=1 where rid like #{rule.id}
+	</update>
+
+	<update id="updateMaxOrSumByRid">
+		update sco_rule_detail set maxorsum =#{rule.scoRuleDetailMould.maxOrSum} where rid = #{rule.id}
+	</update>
+</mapper>

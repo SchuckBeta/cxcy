@@ -1,0 +1,49 @@
+<div class="apiDetail">
+<div>
+	<h2><span>Function(event, treeId, treeNode, clickFlag)</span><span class="path">setting.callback.</span>onClick</h2>
+	<h3>姒傝堪<span class="h3_info">[ 渚濊禆 <span class="highlight_green">jquery.ztree.core</span> 鏍稿績 js ]</span></h3>
+	<div class="desc">
+		<p></p>
+		<div class="longdesc">
+			<p>鐢ㄤ簬鎹曡幏鑺傜偣琚偣鍑荤殑浜嬩欢鍥炶皟鍑芥暟</p>
+			<p class="highlight_red">濡傛灉璁剧疆浜� setting.callback.beforeClick 鏂规硶锛屼笖杩斿洖 false锛屽皢鏃犳硶瑙﹀彂 onClick 浜嬩欢鍥炶皟鍑芥暟銆�</p>
+			<p>榛樿鍊硷細null</p>
+		</div>
+	</div>
+	<h3>Function 鍙傛暟璇存槑</h3>
+	<div class="desc">
+	<h4><b>event</b><span>js event 瀵硅薄</span></h4>
+	<p>鏍囧噯鐨� js event 瀵硅薄</p>
+	<h4 class="topLine"><b>treeId</b><span>String</span></h4>
+	<p>瀵瑰簲 zTree 鐨� <b class="highlight_red">treeId</b>锛屼究浜庣敤鎴锋搷鎺�</p>
+	<h4 class="topLine"><b>treeNode</b><span>JSON</span></h4>
+	<p>琚偣鍑荤殑鑺傜偣 JSON 鏁版嵁瀵硅薄</p>
+	<h4 class="topLine"><b>clickFlag</b><span>Number</span></h4>
+	<p>鑺傜偣琚偣鍑诲悗鐨勯�変腑鎿嶄綔绫诲瀷锛岃缁嗙湅涓嬭〃</p>
+	<table style="width: 100%;"  border="0" cellspacing="1" cellpadding="0">
+		<thead><tr><td>clickFlag</td><td title="鏄惁鍏佽澶氱偣閫変腑">selectedMulti</td><td title="鏄惁鎸変笅 Ctrl 閿�">autoCancelSelected<br/>&&<br/>event.ctrlKey</td><td title="鑺傜偣褰撳墠閫夋嫨鐘舵��">isSelected</td><td>閫変腑鎿嶄綔</td></tr></thead>
+		<tbody>
+			<tr><td>1</td><td>true</td><td>false</td><td>false</td><td>鏅�氶�変腑</td></tr>
+			<tr><td>1</td><td>true</td><td>false</td><td>true</td><td>鏅�氶�変腑</td></tr>
+			<tr><td>2</td><td>true</td><td>true</td><td>false</td><td>杩藉姞閫変腑</td></tr>
+			<tr><td>0</td><td>true</td><td>true</td><td>true</td><td>鍙栨秷閫変腑</td></tr>
+			<tr><td>1</td><td>false</td><td>false</td><td>false</td><td>鏅�氶�変腑</td></tr>
+			<tr><td>1</td><td>false</td><td>false</td><td>true</td><td>鏅�氶�変腑</td></tr>
+			<tr><td>1</td><td>false</td><td>true</td><td>false</td><td>鏅�氶�変腑</td></tr>
+			<tr><td>0</td><td>false</td><td>true</td><td>true</td><td>鍙栨秷閫変腑</td></tr>
+		</tbody>
+	</table>
+	</div>
+	<h3>setting & function 涓句緥</h3>
+	<h4>1. 姣忔鐐瑰嚮鑺傜偣鍚庯紝 寮瑰嚭璇ヨ妭鐐圭殑 tId銆乶ame 鐨勪俊鎭�</h4>
+	<pre xmlns=""><code>function zTreeOnClick(event, treeId, treeNode) {
+    alert(treeNode.tId + ", " + treeNode.name);
+};
+var setting = {
+	callback: {
+		onClick: zTreeOnClick
+	}
+};
+......</code></pre>
+</div>
+</div>

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.cas.modules.cas.dao.SysCasUserDao">
+	<sql id="sysCasUserColumns">
+		a.id AS "id",
+		a.uid AS "uid",
+		a.type AS "type",
+		a.rutype AS "rutype",
+		a.rid AS "rid",
+		a.ruid AS "ruid",
+		a.rname AS "rname",
+		a.rcname AS "rcname",
+		a.rou AS "rou",
+		a.rjson AS "rjson",
+		a.rcontainerId AS "rcontainerId",
+		a.enable AS "enable",
+		a.time AS "time",
+		a.last_login_date AS "lastLoginDate",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysCasUserJoins">
+	</sql>
+
+	<select id="get" resultType="com.oseasy.cas.modules.cas.entity.SysCasUser">
+		SELECT
+			<include refid="sysCasUserColumns"/>
+		FROM sys_cas_user a
+		<include refid="sysCasUserJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="com.oseasy.cas.modules.cas.entity.SysCasUser">
+		SELECT
+			<include refid="sysCasUserColumns"/>
+		FROM sys_cas_user a
+		<include refid="sysCasUserJoins"/>
+		<where>
+			a.del_flag = '0'
+			<if test="uid != null and uid != ''">
+				AND a.uid = #{uid}
+			</if>
+			<if test="ruid != null and ruid != ''">
+				AND a.ruid = #{ruid}
+			</if>
+			<if test="rou != null and rou != ''">
+				AND a.rou = #{rou}
+			</if>
+			<if test="rcontainerId != null and rcontainerId != ''">
+				AND a.rcontainerId = #{rcontainerId}
+			</if>
+			<if test="rname != null and rname != ''">
+				AND a.rname LIKE
+					<if test="dbName == 'oracle'">'%'||#{rname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{rname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{rname},'%')</if>
+			</if>
+			<if test="rcname != null and rcname != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{rcname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{rcname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{rcname},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="com.oseasy.cas.modules.cas.entity.SysCasUser">
+		SELECT
+			<include refid="sysCasUserColumns"/>
+		FROM sys_cas_user a
+		<include refid="sysCasUserJoins"/>
+		<where>
+			a.del_flag = '0'
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_cas_user(
+			id,
+			uid,
+			type,
+			rutype,
+			rid,
+			ruid,
+			rname,
+			rcname,
+			rou,
+			rjson,
+			rcontainerId,
+			enable,
+			time,
+			last_login_date,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{uid},
+			#{type},
+			#{rutype},
+			#{rid},
+			#{ruid},
+			#{rname},
+			#{rcname},
+			#{rou},
+			#{rjson},
+			#{rcontainerId},
+			#{enable},
+			#{time},
+			#{lastLoginDate},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="savePL" >
+		INSERT INTO sys_cas_user(
+			id,
+			uid,
+			type,
+			rutype,
+			rid,
+			ruid,
+			rname,
+			rcname,
+			rou,
+			rjson,
+			rcontainerId,
+			enable,
+			time,
+			last_login_date,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES
+		<foreach collection="entitys" item="item" index="index" separator=",">
+			(
+				#{item.id},
+				#{item.uid},
+				#{item.type},
+				#{item.rutype},
+				#{item.rid},
+				#{item.ruid},
+				#{item.rname},
+				#{item.rcname},
+				#{item.rou},
+				#{item.rjson},
+				#{item.rcontainerId},
+				#{item.enable},
+				#{item.time},
+				#{item.lastLoginDate},
+				#{item.updateDate},
+				#{item.updateBy.id},
+				#{item.createDate},
+				#{item.createBy.id},
+				#{item.remarks},
+				#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+
+
+	<update id="update">
+		UPDATE sys_cas_user SET
+			uid=#{uid},
+			type=#{type},
+			rutype=#{rutype},
+			rid=#{rid},
+			ruid=#{ruid},
+			rname=#{rname},
+			rcname=#{rcname},
+			rou=#{rou},
+			rjson=#{rjson},
+			rcontainerId=#{rcontainerId},
+			enable=#{enable},
+			time=#{time},
+			last_login_date=#{lastLoginDate},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateALLEnable">
+		UPDATE sys_cas_user SET
+			enable=#{enable}
+		WHERE type = #{type}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_cas_user SET
+			del_flag = '1'
+		WHERE id = #{id}
+	</update>
+
+    <update id="deletePlwlByUid">
+            DELETE FROM sys_cas_user WHERE uid = #{uid}
+    </update>
+</mapper>

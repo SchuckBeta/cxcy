@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/WEB-INF/views">
+	<!--新版装饰页面-->
+	<decorator name="sites" page="silibs/sites.jsp"></decorator>
+	<decorator name="sites_app" page="silibs/app/app.jsp"></decorator>
+	<decorator name="sites_pc" page="silibs/pc/pca.jsp"></decorator>
+	<decorator name="site_wx" page="silibs/wx/wx.jsp"></decorator>
+
+
+	<!-- 默认装饰页面, 在需要装饰的页面增加<meta name="decorator" content="default"/> -->
+	<decorator name="blank" page="layouts/blank.jsp" />
+	<decorator name="default" page="layouts/default.jsp" />
+
+	<!--新版装饰页面-->
+	<decorator name="creative" page="layouts/website/creative.jsp"></decorator>
+
+
+	<!-- CMS基础主题装饰页面 -->
+	<decorator name="cms_default_basic" page="modules/cms/front/themes/basic/layouts/default.jsp" />
+	<decorator name="cms_default_weixin" page="modules/cms/front/themes/weixin/layouts/default.jsp" />
+
+	<!-- 学生门户 装饰器-->
+	<decorator name="site-decorator" page="layouts/website/default.jsp" />
+	<!--创业基地-->
+	<decorator name="cyjd-site-default" page="layouts/website/default-cyjd.jsp" />
+
+	<decorator name="site-decorator-student" page="layouts/website/defaultStudent.jsp" />
+
+	<decorator name="site-decoratorNew" page="layouts/website/defaultNew.jsp" />
+	<!-- 学生门户 装饰器 高版本jqery-->
+	<decorator name="site-decorator1" page="layouts/website/default-jqery.jsp" />
+
+	<!-- 后台管理装饰器-->
+	<decorator name="backPath_header" page="layouts/header.jsp" />
+	<decorator name="nprovinceBack_header" page="layouts/nprovince/header.jsp" />
+
+
+</decorators>

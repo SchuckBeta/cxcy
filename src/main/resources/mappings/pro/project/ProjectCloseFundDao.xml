@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.project.dao.ProjectCloseFundDao">
+    
+	<sql id="projectCloseFundColumns">
+		a.id AS "id",
+		a.close_id AS "closeId",
+		a.place AS "place",
+		a.count AS "count",
+		a.sort AS "sort",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="projectCloseFundJoins">
+	</sql>
+    
+	<select id="get" resultType="ProjectCloseFund">
+		SELECT 
+			<include refid="projectCloseFundColumns"/>
+		FROM project_close_fund a
+		<include refid="projectCloseFundJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByCloseId" resultType="ProjectCloseFund" parameterType="java.lang.String">
+		SELECT
+		<include refid="projectCloseFundColumns"/>
+		FROM project_close_fund a
+		WHERE close_id = #{closeId}
+		order by sort asc
+	</select>
+	
+	<select id="findList" resultType="ProjectCloseFund">
+		SELECT 
+			<include refid="projectCloseFundColumns"/>
+		FROM project_close_fund a
+		<include refid="projectCloseFundJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProjectCloseFund">
+		SELECT 
+			<include refid="projectCloseFundColumns"/>
+		FROM project_close_fund a
+		<include refid="projectCloseFundJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO project_close_fund(
+			id,
+			close_id,
+			place,
+			count,
+			sort,
+			create_date,
+			create_by,
+			update_date,
+			update_by,
+			del_flag
+		) VALUES (
+			#{id},
+			#{closeId},
+			#{place},
+			#{count},
+			#{sort},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE project_close_fund SET 	
+			close_id = #{closeId},
+			place = #{place},
+			count = #{count},
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE project_close_fund SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<!-- 根据主表id删除完成情况 -->
+	<delete id="deleteByCloseId" parameterType="java.lang.String">
+		DELETE FROM project_close_fund WHERE close_id = #{closeId}
+	</delete>
+	
+</mapper>

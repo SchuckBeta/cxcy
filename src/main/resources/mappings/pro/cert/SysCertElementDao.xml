@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.cert.dao.SysCertElementDao">
+
+	<sql id="sysCertElementColumns">
+		a.id AS "id",
+		a.cert_page_id AS "certPageId",
+		a.sort AS "sort",
+		a.element_type AS "elementType",
+		a.content AS "content",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysCertElementJoins">
+	</sql>
+
+	<select id="get" resultType="SysCertElement">
+		SELECT
+			<include refid="sysCertElementColumns"/>
+		FROM sys_cert_element a
+		<include refid="sysCertElementJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SysCertElement">
+		SELECT
+			<include refid="sysCertElementColumns"/>
+		FROM sys_cert_element a
+		<include refid="sysCertElementJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysCertElement">
+		SELECT
+			<include refid="sysCertElementColumns"/>
+		FROM sys_cert_element a
+		<include refid="sysCertElementJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_cert_element(
+			id,
+			cert_page_id,
+			sort,
+			element_type,
+			content,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{certPageId},
+			#{sort},
+			#{elementType},
+			#{content},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_cert_element SET
+			cert_page_id = #{certPageId},
+			sort = #{sort},
+			element_type = #{elementType},
+			content = #{content},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_cert_element SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sys_cert_element WHERE id = #{id}
+	</update>
+	<update id="deleteByPageid">
+		DELETE FROM sys_cert_element WHERE cert_page_id = #{pageid}
+	</update>
+	<select id="getSysCertElement" resultType="SysCertElement" >
+		select t.*
+		from sys_cert_element t 
+		where t.cert_page_id=#{pageid} and t.del_flag='0'
+		order by t.sort
+	</select>
+</mapper>

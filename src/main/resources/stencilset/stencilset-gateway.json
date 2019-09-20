@@ -1,0 +1,895 @@
+{
+	"resourceId": "c36b9022e898430097fb2f54bfa7cdd5",
+	"properties": {
+		"process_id": "gcontest",
+		"name": "互联网+大赛",
+		"documentation": "",
+		"process_author": "",
+		"process_version": "",
+		"process_namespace": "http://www.activiti.org/processdef",
+		"executionlisteners": "{\"executionListeners\":\"[]\"}",
+		"eventlisteners": "{\"eventListeners\":\"[]\"}",
+		"signaldefinitions": "\"[]\"",
+		"messagedefinitions": "\"[]\"",
+		"messages": []
+	},
+	"stencil": {
+		"id": "BPMNDiagram"
+	},
+	"childShapes": [{
+		"resourceId": "start",
+		"properties": {
+			"overrideid": "start",
+			"name": "大赛报名表单提交",
+			"documentation": "",
+			"executionlisteners": "",
+			"initiator": "",
+			"formkeydefinition": "",
+			"formproperties": ""
+		},
+		"stencil": {
+			"id": "StartNoneEvent"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-5F6CAAAA-6C85-475E-B98C-69653F907042"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 224,
+				"y": 70
+			},
+			"upperLeft": {
+				"x": 194,
+				"y": 40
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "audit1",
+		"properties": {
+			"overrideid": "audit1",
+			"name": "学院专家网上评审打分",
+			"documentation": "",
+			"asynchronousdefinition": false,
+			"exclusivedefinition": true,
+			"executionlisteners": {
+				"executionListeners": []
+			},
+			"multiinstance_type": "Parallel",
+			"multiinstance_cardinality": "",
+			"multiinstance_collection": "${collegeExperts}",
+			"multiinstance_variable": "collegeExpert",
+			"multiinstance_condition": "",
+			"isforcompensation": "false",
+			"usertaskassignment": {
+				"assignment": {
+					"assignee": "${collegeExpert}"
+				}
+			},
+			"formkeydefinition": "/gcontest/gContest/audit1",
+			"duedatedefinition": "",
+			"prioritydefinition": "",
+			"formproperties": "",
+			"tasklisteners": {
+				"taskListeners": []
+			}
+		},
+		"stencil": {
+			"id": "UserTask"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-5E2DCB0F-A751-40E9-B257-D7F2ACEE2087"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 259,
+				"y": 185
+			},
+			"upperLeft": {
+				"x": 159,
+				"y": 105
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-5F6CAAAA-6C85-475E-B98C-69653F907042",
+		"properties": {
+			"overrideid": "sid-5F6CAAAA-6C85-475E-B98C-69653F907042",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "audit1"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 209,
+				"y": 104.625
+			},
+			"upperLeft": {
+				"x": 209,
+				"y": 70.0625
+			}
+		},
+		"dockers": [{
+			"x": 15,
+			"y": 15
+		}, {
+			"x": 50,
+			"y": 40
+		}],
+		"target": {
+			"resourceId": "audit1"
+		}
+	}, {
+		"resourceId": "end",
+		"properties": {
+			"overrideid": "end",
+			"name": "结束",
+			"documentation": "",
+			"executionlisteners": ""
+		},
+		"stencil": {
+			"id": "EndNoneEvent"
+		},
+		"childShapes": [],
+		"outgoing": [],
+		"bounds": {
+			"lowerRight": {
+				"x": 619,
+				"y": 718
+			},
+			"upperLeft": {
+				"x": 591,
+				"y": 690
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "audit2",
+		"properties": {
+			"overrideid": "audit2",
+			"name": "学院秘书审核",
+			"documentation": "",
+			"asynchronousdefinition": false,
+			"exclusivedefinition": true,
+			"executionlisteners": {
+				"executionListeners": []
+			},
+			"multiinstance_type": "None",
+			"multiinstance_cardinality": "",
+			"multiinstance_collection": "",
+			"multiinstance_variable": "",
+			"multiinstance_condition": "",
+			"isforcompensation": "false",
+			"usertaskassignment": {
+				"assignment": {
+					"candidateUsers": [{
+						"value": "${collegeSec}"
+					}]
+				}
+			},
+			"formkeydefinition": "/gcontest/gContest/audit2",
+			"duedatedefinition": "",
+			"prioritydefinition": "",
+			"formproperties": "",
+			"tasklisteners": {
+				"taskListeners": []
+			}
+		},
+		"stencil": {
+			"id": "UserTask"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-0A22792B-5607-4724-883E-6F82F4EE52A4"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 259,
+				"y": 305
+			},
+			"upperLeft": {
+				"x": 159,
+				"y": 225
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "audit3",
+		"properties": {
+			"overrideid": "audit3",
+			"name": "学校专家网上评审打分",
+			"documentation": "",
+			"asynchronousdefinition": false,
+			"exclusivedefinition": true,
+			"executionlisteners": {
+				"executionListeners": []
+			},
+			"multiinstance_type": "Parallel",
+			"multiinstance_cardinality": "",
+			"multiinstance_collection": "${schoolExperts}",
+			"multiinstance_variable": "schoolExpert",
+			"multiinstance_condition": "",
+			"isforcompensation": "false",
+			"usertaskassignment": {
+				"assignment": {
+					"assignee": "${schoolExpert}"
+				}
+			},
+			"formkeydefinition": "/gcontest/gContest/audit3",
+			"duedatedefinition": "",
+			"prioritydefinition": "",
+			"formproperties": "",
+			"tasklisteners": {
+				"taskListeners": []
+			}
+		},
+		"stencil": {
+			"id": "UserTask"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-9FE930A7-67B0-4D18-BEE8-9459D47FF513"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 370,
+				"y": 420
+			},
+			"upperLeft": {
+				"x": 270,
+				"y": 340
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "audit5",
+		"properties": {
+			"overrideid": "audit5",
+			"name": "学校路演打分",
+			"documentation": "",
+			"asynchronousdefinition": false,
+			"exclusivedefinition": true,
+			"executionlisteners": {
+				"executionListeners": []
+			},
+			"multiinstance_type": "None",
+			"multiinstance_cardinality": "",
+			"multiinstance_collection": "",
+			"multiinstance_variable": "",
+			"multiinstance_condition": "",
+			"isforcompensation": "false",
+			"usertaskassignment": {
+				"assignment": {
+					"candidateUsers": [{
+						"value": "${schoolSec}"
+					}]
+				}
+			},
+			"formkeydefinition": "/gcontest/gContest/audit5",
+			"duedatedefinition": "",
+			"prioritydefinition": "",
+			"formproperties": "",
+			"tasklisteners": {
+				"taskListeners": []
+			}
+		},
+		"stencil": {
+			"id": "UserTask"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-ED225573-FEFB-44AC-86C8-C883E0BFA03C"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 655,
+				"y": 515
+			},
+			"upperLeft": {
+				"x": 555,
+				"y": 435
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "audit6",
+		"properties": {
+			"overrideid": "audit6",
+			"name": "学校录入结果",
+			"documentation": "",
+			"asynchronousdefinition": false,
+			"exclusivedefinition": true,
+			"executionlisteners": {
+				"executionListeners": []
+			},
+			"multiinstance_type": "None",
+			"multiinstance_cardinality": "",
+			"multiinstance_collection": "",
+			"multiinstance_variable": "",
+			"multiinstance_condition": "",
+			"isforcompensation": "false",
+			"usertaskassignment": {
+				"assignment": {
+					"candidateUsers": [{
+						"value": "${schoolSec}"
+					}]
+				}
+			},
+			"formkeydefinition": "/gcontest/gContest/audit6",
+			"duedatedefinition": "",
+			"prioritydefinition": "",
+			"formproperties": "",
+			"tasklisteners": {
+				"taskListeners": []
+			}
+		},
+		"stencil": {
+			"id": "UserTask"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-EAFC3364-F926-4EE1-92DC-31EA2733DE46"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 655,
+				"y": 650
+			},
+			"upperLeft": {
+				"x": 555,
+				"y": 570
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-EAFC3364-F926-4EE1-92DC-31EA2733DE46",
+		"properties": {
+			"overrideid": "sid-EAFC3364-F926-4EE1-92DC-31EA2733DE46",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "end"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 605,
+				"y": 689.78125
+			},
+			"upperLeft": {
+				"x": 605,
+				"y": 650.65625
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 14,
+			"y": 14
+		}],
+		"target": {
+			"resourceId": "end"
+		}
+	}, {
+		"resourceId": "sid-91F99DFD-D266-4009-8951-833139E422CC",
+		"properties": {
+			"overrideid": "sid-91F99DFD-D266-4009-8951-833139E422CC",
+			"name": "",
+			"documentation": "",
+			"sequencefloworder": ""
+		},
+		"stencil": {
+			"id": "ExclusiveGateway"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-753EBDD7-1434-4B5D-9108-6B46211A234D"
+		}, {
+			"resourceId": "sid-0B983743-9586-4C34-9AA8-DCC13CC726D7"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 229,
+				"y": 400
+			},
+			"upperLeft": {
+				"x": 189,
+				"y": 360
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-5E2DCB0F-A751-40E9-B257-D7F2ACEE2087",
+		"properties": {
+			"overrideid": "sid-5E2DCB0F-A751-40E9-B257-D7F2ACEE2087",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "audit2"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 209,
+				"y": 224.625
+			},
+			"upperLeft": {
+				"x": 209,
+				"y": 185.375
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 50,
+			"y": 40
+		}],
+		"target": {
+			"resourceId": "audit2"
+		}
+	}, {
+		"resourceId": "sid-C1072404-7E1D-4AC6-A27D-3005189DDA81",
+		"properties": {
+			"overrideid": "sid-C1072404-7E1D-4AC6-A27D-3005189DDA81",
+			"name": "",
+			"documentation": "",
+			"executionlisteners": ""
+		},
+		"stencil": {
+			"id": "EndNoneEvent"
+		},
+		"childShapes": [],
+		"outgoing": [],
+		"bounds": {
+			"lowerRight": {
+				"x": 133,
+				"y": 394
+			},
+			"upperLeft": {
+				"x": 105,
+				"y": 366
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "audit4",
+		"properties": {
+			"overrideid": "audit4",
+			"name": "学校管理员审核",
+			"documentation": "",
+			"asynchronousdefinition": false,
+			"exclusivedefinition": true,
+			"executionlisteners": {
+				"executionListeners": []
+			},
+			"multiinstance_type": "None",
+			"multiinstance_cardinality": "",
+			"multiinstance_collection": "",
+			"multiinstance_variable": "",
+			"multiinstance_condition": "",
+			"isforcompensation": "false",
+			"usertaskassignment": {
+				"assignment": {
+					"candidateUsers": [{
+						"value": "${schoolSec}"
+					}]
+				}
+			},
+			"formkeydefinition": "/gcontest/gContest/audit4",
+			"duedatedefinition": "",
+			"prioritydefinition": "",
+			"formproperties": "",
+			"tasklisteners": {
+				"taskListeners": []
+			}
+		},
+		"stencil": {
+			"id": "UserTask"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-5BC132B0-6A76-4CE4-9C79-95DC507C8C24"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 535,
+				"y": 420
+			},
+			"upperLeft": {
+				"x": 435,
+				"y": 340
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-9FE930A7-67B0-4D18-BEE8-9459D47FF513",
+		"properties": {
+			"overrideid": "sid-9FE930A7-67B0-4D18-BEE8-9459D47FF513",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "audit4"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 434.37109375,
+				"y": 380
+			},
+			"upperLeft": {
+				"x": 370.62890625,
+				"y": 380
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 50,
+			"y": 40
+		}],
+		"target": {
+			"resourceId": "audit4"
+		}
+	}, {
+		"resourceId": "sid-9C658504-E327-4EC0-8E77-395651C1C719",
+		"properties": {
+			"overrideid": "sid-9C658504-E327-4EC0-8E77-395651C1C719",
+			"name": "",
+			"documentation": "",
+			"sequencefloworder": ""
+		},
+		"stencil": {
+			"id": "ExclusiveGateway"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-A8009390-B6E2-4522-BF1A-E68D91A14EB8"
+		}, {
+			"resourceId": "sid-D271D1F8-860B-4118-A785-6CF37BB123F5"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 505,
+				"y": 495
+			},
+			"upperLeft": {
+				"x": 465,
+				"y": 455
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-5B59B962-D99D-4146-A731-4E1E93F17812",
+		"properties": {
+			"overrideid": "sid-5B59B962-D99D-4146-A731-4E1E93F17812",
+			"name": "",
+			"documentation": "",
+			"executionlisteners": ""
+		},
+		"stencil": {
+			"id": "EndNoneEvent"
+		},
+		"childShapes": [],
+		"outgoing": [],
+		"bounds": {
+			"lowerRight": {
+				"x": 418,
+				"y": 489
+			},
+			"upperLeft": {
+				"x": 390,
+				"y": 461
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-753EBDD7-1434-4B5D-9108-6B46211A234D",
+		"properties": {
+			"overrideid": "sid-753EBDD7-1434-4B5D-9108-6B46211A234D",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "${grade==1}",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "audit3"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 269.5703125,
+				"y": 380
+			},
+			"upperLeft": {
+				"x": 229.078125,
+				"y": 380
+			}
+		},
+		"dockers": [{
+			"x": 20,
+			"y": 20
+		}, {
+			"x": 50,
+			"y": 40
+		}],
+		"target": {
+			"resourceId": "audit3"
+		}
+	}, {
+		"resourceId": "sid-0B983743-9586-4C34-9AA8-DCC13CC726D7",
+		"properties": {
+			"overrideid": "sid-0B983743-9586-4C34-9AA8-DCC13CC726D7",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "${grade==0}",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-C1072404-7E1D-4AC6-A27D-3005189DDA81"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 189.015625,
+				"y": 380
+			},
+			"upperLeft": {
+				"x": 133.359375,
+				"y": 380
+			}
+		},
+		"dockers": [{
+			"x": 20,
+			"y": 20
+		}, {
+			"x": 14,
+			"y": 14
+		}],
+		"target": {
+			"resourceId": "sid-C1072404-7E1D-4AC6-A27D-3005189DDA81"
+		}
+	}, {
+		"resourceId": "sid-0A22792B-5607-4724-883E-6F82F4EE52A4",
+		"properties": {
+			"overrideid": "sid-0A22792B-5607-4724-883E-6F82F4EE52A4",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-91F99DFD-D266-4009-8951-833139E422CC"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 209,
+				"y": 360.1328125
+			},
+			"upperLeft": {
+				"x": 209,
+				"y": 305.53125
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 20,
+			"y": 20
+		}],
+		"target": {
+			"resourceId": "sid-91F99DFD-D266-4009-8951-833139E422CC"
+		}
+	}, {
+		"resourceId": "sid-ED225573-FEFB-44AC-86C8-C883E0BFA03C",
+		"properties": {
+			"overrideid": "sid-ED225573-FEFB-44AC-86C8-C883E0BFA03C",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "audit6"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 605,
+				"y": 569.9765625
+			},
+			"upperLeft": {
+				"x": 605,
+				"y": 515.0234375
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 50,
+			"y": 40
+		}],
+		"target": {
+			"resourceId": "audit6"
+		}
+	}, {
+		"resourceId": "sid-5BC132B0-6A76-4CE4-9C79-95DC507C8C24",
+		"properties": {
+			"overrideid": "sid-5BC132B0-6A76-4CE4-9C79-95DC507C8C24",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-9C658504-E327-4EC0-8E77-395651C1C719"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 485,
+				"y": 454.703125
+			},
+			"upperLeft": {
+				"x": 485,
+				"y": 420.3359375
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 20,
+			"y": 20
+		}],
+		"target": {
+			"resourceId": "sid-9C658504-E327-4EC0-8E77-395651C1C719"
+		}
+	}, {
+		"resourceId": "sid-A8009390-B6E2-4522-BF1A-E68D91A14EB8",
+		"properties": {
+			"overrideid": "sid-A8009390-B6E2-4522-BF1A-E68D91A14EB8",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "${grade==1}",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "audit5"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 554.3125,
+				"y": 475
+			},
+			"upperLeft": {
+				"x": 504.75,
+				"y": 475
+			}
+		},
+		"dockers": [{
+			"x": 20,
+			"y": 20
+		}, {
+			"x": 50,
+			"y": 40
+		}],
+		"target": {
+			"resourceId": "audit5"
+		}
+	}, {
+		"resourceId": "sid-D271D1F8-860B-4118-A785-6CF37BB123F5",
+		"properties": {
+			"overrideid": "sid-D271D1F8-860B-4118-A785-6CF37BB123F5",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "${grade==0}",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-5B59B962-D99D-4146-A731-4E1E93F17812"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 465.015625,
+				"y": 475
+			},
+			"upperLeft": {
+				"x": 418.921875,
+				"y": 475
+			}
+		},
+		"dockers": [{
+			"x": 20,
+			"y": 20
+		}, {
+			"x": 14,
+			"y": 14
+		}],
+		"target": {
+			"resourceId": "sid-5B59B962-D99D-4146-A731-4E1E93F17812"
+		}
+	}],
+	"bounds": {
+		"lowerRight": {
+			"x": 1200,
+			"y": 1050
+		},
+		"upperLeft": {
+			"x": 0,
+			"y": 0
+		}
+	},
+	"stencilset": {
+		"url": "stencilsets/bpmn2.0/bpmn2.0.json",
+		"namespace": "http://b3mn.org/stencilset/bpmn2.0#"
+	},
+	"ssextensions": []
+}

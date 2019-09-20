@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.sco.dao.ScoAffirmCriterionCouseDao">
+    
+	<sql id="scoAffirmCriterionCouseColumns">
+		a.id AS "id",
+		a.foreign_id AS "foreignId",
+		a.parent_id AS "parentId",
+		a.start AS "start",
+		a.end AS "end",
+		a.sort AS "sort",
+		a.score AS "score",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="scoAffirmCriterionCouseJoins">
+	</sql>
+    
+	<select id="get" resultType="ScoAffirmCriterionCouse">
+		SELECT 
+			<include refid="scoAffirmCriterionCouseColumns"/>
+		FROM sco_affirm_criterion_couse a
+		<include refid="scoAffirmCriterionCouseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ScoAffirmCriterionCouse">
+		SELECT 
+			<include refid="scoAffirmCriterionCouseColumns"/>
+		FROM sco_affirm_criterion_couse a
+		<include refid="scoAffirmCriterionCouseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ScoAffirmCriterionCouse">
+		SELECT 
+			<include refid="scoAffirmCriterionCouseColumns"/>
+		FROM sco_affirm_criterion_couse a
+		<include refid="scoAffirmCriterionCouseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sco_affirm_criterion_couse(
+			id,
+			foreign_id,
+			parent_id,
+			start,
+			end,
+			sort,
+			score,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{foreignId},
+			#{parentId},
+			#{start},
+			#{end},
+			#{sort},
+			#{score},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sco_affirm_criterion_couse SET 	
+			foreign_id = #{foreignId},
+			parent_id = #{parentId},
+			start = #{start},
+			end = #{end},
+			sort = #{sort},
+			score = #{score},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE sco_affirm_criterion_couse SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<select id="findListByFid" resultType="ScoAffirmCriterionCouse">
+		SELECT 
+			<include refid="scoAffirmCriterionCouseColumns"/>
+		FROM sco_affirm_criterion_couse a
+		<include refid="scoAffirmCriterionCouseJoins"/>
+		<where>
+			a.del_flag = '0' and a.foreign_id=#{fid}
+		</where>
+		order by a.parent_id,a.sort
+	</select>
+
+	<select id="findListByFidCouseNum" resultType="ScoAffirmCriterionCouse">
+		SELECT
+			<include refid="scoAffirmCriterionCouseColumns"/>
+		FROM sco_affirm_criterion_couse a
+		<include refid="scoAffirmCriterionCouseJoins"/>
+		<where>
+			a.del_flag = '0' and a.foreign_id=#{fid} and  a.parent_id= '0'
+		</where>
+		order by a.parent_id,a.sort
+	</select>
+
+	<select id="findListByParentId" resultType="ScoAffirmCriterionCouse">
+		SELECT
+			<include refid="scoAffirmCriterionCouseColumns"/>
+		FROM sco_affirm_criterion_couse a
+		<include refid="scoAffirmCriterionCouseJoins"/>
+		<where>
+			a.del_flag = '0' and  a.parent_id=#{parentId}
+		</where>
+		order by a.parent_id,a.sort
+	</select>
+
+	<update id="delByFid">
+		DELETE FROM sco_affirm_criterion_couse 
+		WHERE foreign_id = #{fid}
+	</update>
+</mapper>

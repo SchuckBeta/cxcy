@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.sco.dao.ScoScoreDao">
+
+	<sql id="scoScoreColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.course_id AS "courseId",
+		a.course_score AS "courseScore",
+		a.business_pro_id AS "businessProId",
+		a.business_score AS "businessScore",
+		a.innovate_pro_id AS "innovateProId",
+		a.innovate_score AS "innovateScore",
+		a.credit_id AS "creditId",
+		a.credit_score AS "creditScore",
+		a.skill_id AS "skillId",
+		a.skill_score AS "skillScore",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u2.name AS "user.name",
+		u2.no AS "user.no",
+
+		c.name AS "user.company.name",
+		c.parent_id AS "user.company.parent.id",
+		c.parent_ids AS "user.company.parentIds",
+		o.name AS "user.office.name",
+		o.id AS "user.office.id",
+		o.parent_id AS "user.office.parent.id",
+		o.parent_ids AS "user.office.parentIds"
+	</sql>
+
+	<sql id="scoScoreByGroupColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		SUM(a.course_score) AS "courseScore",
+		SUM(a.business_score) AS "businessScore",
+		SUM(a.innovate_score) AS "innovateScore",
+		SUM(a.credit_score) AS "creditScore",
+		SUM(a.skill_score) AS "skillScore",
+		IFNULL(SUM(a.course_score),0) + IFNULL(SUM(a.business_score),0) + IFNULL(SUM(a.innovate_score),0) + IFNULL(SUM(a.credit_score),0) +IFNULL(SUM(a.skill_score),0) AS "totalScore",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u2.name AS "user.name",
+		u2.no AS "user.no",
+
+		c.name AS "user.company.name",
+		c.parent_id AS "user.company.parent.id",
+		c.parent_ids AS "user.company.parentIds",
+		o.name AS "user.office.name",
+		o.parent_id AS "user.office.parent.id",
+		o.parent_ids AS "user.office.parentIds"
+	</sql>
+
+	<sql id="scoScoreJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+		LEFT JOIN sys_office c ON c.id = u2.company_id
+		LEFT JOIN sys_office o ON o.id = u2.office_id
+	</sql>
+
+	<select id="get" resultType="ScoScore">
+		SELECT
+			<include refid="scoScoreColumns"/>
+		FROM sco_score a
+		<include refid="scoScoreJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ScoScore">
+		SELECT
+			<include refid="scoScoreColumns"/>
+		FROM sco_score a
+		<include refid="scoScoreJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="user != null">
+				<if test="user.id != null and user.id != ''">
+					AND a.user_id = #{user.id}
+				</if>
+				<if test="user.name != null and user.name != ''">
+					AND u2.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+				</if>
+				<if test="user.no != null and user.no != ''">
+					AND u2.no LIKE
+						<if test="dbName == 'oracle'">'%'||#{user.no}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{user.no}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{user.no},'%')</if>
+				</if>
+
+				<if test="user.company != null">
+					<if test="user.company.id != null and user.company.id != ''">
+						AND c.company.id = #{user.company.id}
+					</if>
+					<if test="user.company.name != null and user.company.name != ''">
+						AND c.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{user.company.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{user.company.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{user.company.name},'%')</if>
+					</if>
+				</if>
+
+				<if test="user.office != null">
+					<if test="user.office.id != null and user.office.id != ''">
+						AND o.id = #{user.office.id}
+					</if>
+					<if test="user.office.name != null and user.office.name != ''">
+						AND o.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{user.office.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{user.office.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{user.office.name},'%')</if>
+					</if>
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.user_id DESC, ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.user_id DESC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListGbyUser" resultType="ScoScore">
+		SELECT
+			<include refid="scoScoreByGroupColumns"/>
+		FROM sco_score a
+		<include refid="scoScoreJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="user != null">
+				<if test="user.id != null and user.id != ''">
+					AND a.user_id = #{user.id}
+				</if>
+				<if test="user.name != null and user.name != ''">
+					AND u2.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+				</if>
+				<if test="user.no != null and user.no != ''">
+					AND u2.no LIKE
+						<if test="dbName == 'oracle'">'%'||#{user.no}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{user.no}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{user.no},'%')</if>
+				</if>
+
+				<if test="user.company != null">
+					<if test="user.company.id != null and user.company.id != ''">
+						AND c.company.id = #{user.company.id}
+					</if>
+					<if test="user.company.name != null and user.company.name != ''">
+						AND c.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{user.company.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{user.company.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{user.company.name},'%')</if>
+					</if>
+				</if>
+
+				<if test="user.office != null">
+					<if test="user.office.id != null and user.office.id != ''">
+						AND o.id = #{user.office.id}
+					</if>
+					<if test="user.office.name != null and user.office.name != ''">
+						AND o.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{user.office.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{user.office.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{user.office.name},'%')</if>
+					</if>
+				</if>
+			</if>
+			GROUP BY a.user_id
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''  ">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ScoScore">
+		SELECT
+			<include refid="scoScoreColumns"/>
+		FROM sco_score a
+		<include refid="scoScoreJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sco_score(
+			id,
+			user_id,
+			course_id,
+			course_score,
+			business_pro_id,
+			business_score,
+			innovate_pro_id,
+			innovate_score,
+			credit_id,
+			credit_score,
+			skill_id,
+			skill_score,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{courseId},
+			#{courseScore},
+			#{businessProId},
+			#{businessScore},
+			#{innovateProId},
+			#{innovateScore},
+			#{creditId},
+			#{creditScore},
+			#{skillId},
+			#{skillScore},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sco_score SET
+			user_id = #{user.id},
+			course_id = #{courseId},
+			course_score = #{courseScore},
+			business_pro_id = #{businessProId},
+			business_score = #{businessScore},
+			innovate_pro_id = #{innovateProId},
+			innovate_score = #{innovateScore},
+			credit_id = #{creditId},
+			credit_score = #{creditScore},
+			skill_id = #{skillId},
+			skill_score = #{skillScore},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="deleteProject" parameterType="java.lang.String">
+		DELETE FROM sco_score WHERE (business_pro_id= #{proId} OR innovate_pro_id= #{proId} OR credit_id= #{proId})
+	</delete>
+
+	<update id="delete">
+		UPDATE sco_score SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

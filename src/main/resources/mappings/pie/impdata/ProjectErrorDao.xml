@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.impdata.dao.ProjectErrorDao">
+
+	<sql id="projectErrorColumns">
+		a.id AS "id",
+		a.imp_id AS "impId",
+		a.approving_year AS
+		"approvingYear",
+		a.number AS "number",
+		a.name AS "name",
+		a.type AS
+		"type",
+		a.leader AS "leader",
+		a.leader_no AS "leaderNo",
+		a.team_stu_number AS "teamStuNumber",
+		a.team_stu_info AS "teamStuInfo",
+		a.teacher AS "teacher",
+		a.finance_grant AS "financeGrant",
+		a.university_grant AS "universityGrant",
+		a.total_grant AS "totalGrant",
+		a.introduction AS "introduction",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.province AS "province",
+		a.university_code AS "universityCode",
+		a.university_name AS
+		"universityName"
+	</sql>
+
+	<sql id="projectErrorJoins">
+	</sql>
+
+	<select id="get" resultType="ProjectError">
+		SELECT
+		<include refid="projectErrorColumns" />
+		FROM project_error a
+		<include refid="projectErrorJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ProjectError">
+		SELECT
+		<include refid="projectErrorColumns" />
+		FROM project_error a
+		<include refid="projectErrorJoins" />
+		<where>
+
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ProjectError">
+		SELECT
+		<include refid="projectErrorColumns" />
+		FROM project_error a
+		<include refid="projectErrorJoins" />
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO project_error(
+		id,
+		imp_id,
+		approving_year,
+		number,
+		name,
+		type,
+		leader,
+		leader_no,
+		team_stu_number,
+		team_stu_info,
+		teacher,
+		finance_grant,
+		university_grant,
+		total_grant,
+		introduction,
+		update_date,
+		update_by,
+		create_date,
+		create_by,
+		province,
+		university_code,
+		university_name
+		) VALUES (
+		#{id},
+		#{impId},
+		#{approvingYear},
+		#{number},
+		#{name},
+		#{type},
+		#{leader},
+		#{leaderNo},
+		#{teamStuNumber},
+		#{teamStuInfo},
+		#{teacher},
+		#{financeGrant},
+		#{universityGrant},
+		#{totalGrant},
+		#{introduction},
+		#{updateDate},
+		#{updateBy.id},
+		#{createDate},
+		#{createBy.id},
+		#{province},
+		#{universityCode},
+		#{universityName}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE project_error SET
+		imp_id = #{impId},
+		approving_year = #{approvingYear},
+		number = #{number},
+		name = #{name},
+		type = #{type},
+		leader = #{leader},
+		leader_no = #{leaderNo},
+		team_stu_number = #{teamStuNumber},
+		team_stu_info = #{teamStuInfo},
+		teacher = #{teacher},
+		finance_grant = #{financeGrant},
+		university_grant = #{universityGrant},
+		total_grant = #{totalGrant},
+		introduction = #{introduction},
+		update_date = #{updateDate},
+		update_by = #{updateBy.id},
+		province = #{province},
+		university_code = #{universityCode},
+		university_name = #{universityName}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM project_error
+		WHERE id = #{id}
+	</update>
+	<select id="getListByImpId" resultType="java.util.HashMap"
+		parameterType="java.lang.String">
+		SELECT
+		t.*
+		FROM
+		project_error t
+		WHERE
+		t.imp_id = #{impid}
+		order by
+		t.create_date
+	</select>
+	<update id="deleteByImpId" parameterType="java.lang.String">
+		DELETE FROM
+		project_error
+		WHERE imp_id = #{impid}
+	</update>
+</mapper>

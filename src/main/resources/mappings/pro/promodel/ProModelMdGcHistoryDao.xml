@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.promodel.dao.ProModelMdGcHistoryDao">
+
+	<sql id="proModelMdGcHistoryColumns">
+		a.id AS "id",
+		a.promodel_id AS "promodelId",
+		a.audit_id AS "auditId",
+		a.gnode_id AS "gnodeId",
+		a.result AS "result",
+		a.type AS "type",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="proModelMdGcHistoryJoins">
+	</sql>
+
+	<select id="get" resultType="ProModelMdGcHistory">
+		SELECT
+			<include refid="proModelMdGcHistoryColumns"/>
+		FROM pro_model_md_gc_history a
+		<include refid="proModelMdGcHistoryJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getProModelMdGcHistory" resultType="ProModelMdGcHistory">
+		SELECT
+			<include refid="proModelMdGcHistoryColumns"/>
+		FROM pro_model_md_gc_history a
+		<include refid="proModelMdGcHistoryJoins"/>
+		WHERE a.del_flag='0'
+		<if test="type != null and type != ''">
+			AND a.type = #{type}
+		</if>
+		<if test="gnodeId != null and gnodeId != ''">
+			AND a.gnode_id = #{gnodeId}
+		</if>
+		<if test="promodelId != null and promodelId != ''">
+			AND a.promodel_id = #{promodelId}
+		</if>
+		limit 1
+	</select>
+
+	<select id="getProModelMdGcHistoryList" resultType="ProModelMdGcHistory">
+			SELECT
+				<include refid="proModelMdGcHistoryColumns"/>
+			FROM pro_model_md_gc_history a
+			<include refid="proModelMdGcHistoryJoins"/>
+			WHERE a.del_flag='0'
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="gnodeId != null and gnodeId != ''">
+				AND a.gnode_id = #{gnodeId}
+			</if>
+			<if test="promodelId != null and promodelId != ''">
+				AND a.promodel_id = #{promodelId}
+			</if>
+		order by a.create_date
+		</select>
+
+	<select id="findList" resultType="ProModelMdGcHistory">
+		SELECT
+			<include refid="proModelMdGcHistoryColumns"/>
+		FROM pro_model_md_gc_history a
+		<include refid="proModelMdGcHistoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ProModelMdGcHistory">
+		SELECT
+			<include refid="proModelMdGcHistoryColumns"/>
+		FROM pro_model_md_gc_history a
+		<include refid="proModelMdGcHistoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pro_model_md_gc_history(
+			id,
+			promodel_id,
+			audit_id,
+			gnode_id,
+			result,
+			type,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{promodelId},
+			#{auditId},
+			#{gnodeId},
+			#{result},
+			#{type},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pro_model_md_gc_history SET
+			promodel_id = #{promodelId},
+			audit_id = #{auditId},
+			gnode_id = #{gnodeId},
+			result = #{result},
+			type = #{type},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateAward">
+		UPDATE pro_model_md_gc_history SET
+			result = #{result}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE pro_model_md_gc_history SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM pro_model_md_gc_history WHERE id = #{id}
+	</update>
+</mapper>

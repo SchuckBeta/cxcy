@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwEnterRoomDao">
+
+	<sql id="pwEnterRoomColumns">
+		a.id AS "id",
+		a.eid AS "pwEnter.id",
+		a.rid AS "rid",
+		a.num AS "num",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		r.id AS "pwRoom.id",
+		r.name AS "pwRoom.name",
+		r.color AS "pwRoom.color",
+		r.person AS "pwRoom.person",
+		r.area AS "pwRoom.area",
+		r.phone AS "pwRoom.phone",
+		r.mobile AS "pwRoom.mobile",
+		r.alias AS "pwRoom.alias",
+		r.type AS "pwRoom.type",
+		r.num AS "pwRoom.num",
+		r.num_type AS "pwRoom.numtype",
+		r.remainder_num AS "pwRoom.remaindernum",
+		r.is_usable AS "pwRoom.isUsable",
+		r.is_allowm AS "pwRoom.isAllowm",
+		r.is_assign AS "pwRoom.isAssign",
+		r.sid AS "pwRoom.pwSpace.id",
+		r.update_date AS "pwRoom.updateDate",
+		r.update_by AS "pwRoom.updateBy.id",
+		r.create_date AS "pwRoom.createDate",
+		r.create_by AS "pwRoom.createBy.id",
+		r.remarks AS "pwRoom.remarks",
+		r.del_flag AS "pwRoom.delFlag",
+
+		b.parent_id AS "pwRoom.pwSpace.parent.id",
+		b.parent_ids AS "pwRoom.pwSpace.parentIds",
+		b.name AS "pwRoom.pwSpace.name",
+		b.person AS "pwRoom.pwSpace.person",
+		b.type AS "pwRoom.pwSpace.type",
+		b.phone AS "pwRoom.pwSpace.phone",
+		b.mobile AS "pwRoom.pwSpace.mobile",
+		b.open_week AS "pwRoom.pwSpace.openWeek",
+		b.am_open_start_time AS "pwRoom.pwSpace.amOpenStartTime",
+		b.am_open_end_time AS "pwRoom.pwSpace.amOpenEndTime",
+		b.pm_open_start_time AS "pwRoom.pwSpace.pmOpenStartTime",
+		b.pm_open_end_time AS "pwRoom.pwSpace.pmOpenEndTime",
+		b.floor_num AS "pwRoom.pwSpace.floorNum",
+		b.area AS "pwRoom.pwSpace.area",
+		b.update_date AS "pwRoom.pwSpace.updateDate",
+		b.update_by AS "pwRoom.pwSpace.updateBy.id",
+		b.create_date AS "pwRoom.pwSpace.createDate",
+		b.create_by AS "pwRoom.pwSpace.createBy.id",
+		b.remarks AS "pwRoom.pwSpace.remarks",
+		b.del_flag AS "pwRoom.pwSpace.delFlag",
+
+		p.parent_id AS "pwRoom.pwSpace.parent.parent.id",
+		p.parent_ids AS "pwRoom.pwSpace.parent.parentIds",
+		p.name AS "pwRoom.pwSpace.parent.name",
+
+		pp.parent_id AS "pwRoom.pwSpace.parent.parent.parent.id",
+		pp.parent_ids AS "pwRoom.pwSpace.parent.parent.parentIds",
+		pp.name AS "pwRoom.pwSpace.parent.parent.name",
+
+		ppp.parent_id AS "pwRoom.pwSpace.parent.parent.parent.parent.id",
+		ppp.parent_ids AS "pwRoom.pwSpace.parent.parent.parent.parentIds",
+		ppp.name AS "pwRoom.pwSpace.parent.parent.parent.name",
+
+		pppp.parent_id AS "pwRoom.pwSpace.parent.parent.parent.parent.parent.id",
+		pppp.parent_ids AS "pwRoom.pwSpace.parent.parent.parent.parent.parentIds",
+		pppp.name AS "pwRoom.pwSpace.parent.parent.parent.parent.name"
+	</sql>
+
+	<sql id="pwEnterRoomJoins">
+		LEFT JOIN pw_room r ON r.id = a.rid
+		LEFT JOIN pw_space b ON b.id = r.sid
+		LEFT JOIN pw_space p ON p.id = b.parent_id
+		LEFT JOIN pw_space pp ON pp.id = p.parent_id
+		LEFT JOIN pw_space ppp ON ppp.id = pp.parent_id
+		LEFT JOIN pw_space pppp ON pppp.id = ppp.parent_id
+	</sql>
+
+	<select id="get" resultType="PwEnterRoom">
+		SELECT
+			<include refid="pwEnterRoomColumns"/>
+		FROM pw_enter_room a
+		<include refid="pwEnterRoomJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="PwEnterRoom">
+		SELECT
+			<include refid="pwEnterRoomColumns"/>
+		FROM pw_enter_room a
+		<include refid="pwEnterRoomJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+
+			<if test="useCorpModel">
+				AND r.tenant_id=#{tenantId}
+			</if>
+			<if test="pwEnter != null">
+				<if test="pwEnter.id != null and pwEnter.id != ''">
+					AND a.eid = #{pwEnter.id}
+				</if>
+			</if>
+
+			<if test="pwRoom != null">
+				<if test="pwRoom.id != null and pwRoom.id != ''">
+					AND a.rid = #{pwRoom.id}
+				</if>
+				<if test="pwRoom.numtype != null and pwRoom.numtype != ''">
+					AND r.num_type = #{pwRoom.numtype}
+				</if>
+				<if test="pwRoom.isAssign != null and pwRoom.isAssign != ''">
+					AND r.is_assign = #{pwRoom.isAssign}
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="PwEnterRoom">
+		SELECT
+			<include refid="pwEnterRoomColumns"/>
+		FROM pw_enter_room a
+		<include refid="pwEnterRoomJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="useCorpModel">
+				AND r.tenant_id=#{tenantId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByinIds" resultType="PwEnterRoom">
+		SELECT
+			<include refid="pwEnterRoomColumns"/>
+		FROM pw_enter_room a
+		<include refid="pwEnterRoomJoins"/>
+		<where>
+			a.id in
+			<foreach item="id" collection="ids" open="(" separator=","
+				close=")">
+				#{id}
+			</foreach>
+		</where>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pw_enter_room(
+			id,
+			eid,
+			rid,
+			num,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{pwEnter.id},
+			#{pwRoom.id},
+			#{num},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertPl" >
+		INSERT INTO pw_enter_room(
+			id,
+			eid,
+			rid,
+			num,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+				 separator=",">
+			(
+			#{item.id},
+			#{item.pwEnter.id},
+			#{item.pwRoom.id},
+			#{item.num},
+			#{item.updateDate},
+			#{item.updateBy.id},
+			#{item.createDate},
+			#{item.createBy.id},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE pw_enter_room SET
+			eid = #{pwEnter.id},
+			rid = #{pwRoom.id},
+			num = #{num},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE pw_enter_room SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM pw_enter_room
+		WHERE id = #{id}
+	</update>
+
+	<update id="deletePLWL">
+		DELETE FROM pw_enter_room
+		WHERE id in
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deletePLWLByErids">
+		DELETE FROM pw_enter_room
+		WHERE eid = #{eid} AND rid in
+		<foreach item="id" collection="ids" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deletePLWLByErid">
+		DELETE FROM pw_enter_room
+		WHERE eid = #{pwEnter.id} AND rid = #{pwRoom.id}
+	</update>
+
+	<update id="deletePLWLByEid">
+		DELETE FROM pw_enter_room
+		WHERE eid = #{pwEnter.id}
+	</update>
+
+	<update id="deletePLWLByRid">
+		DELETE FROM pw_enter_room
+		WHERE rid = #{pwRoom.id}
+	</update>
+</mapper>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwCategoryDao">
+
+	<sql id="pwCategoryColumns">
+		a.id AS "id",
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
+		a.name AS "name",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+
+		-- p.id AS "parent.id",
+		p.parent_id AS "parent.parent.id",
+		p.parent_ids AS "parent.parentIds",
+		p.name AS "parent.name",
+
+		f.id AS "pwFassetsnoRule.id",
+		f.fcid AS "pwFassetsnoRule.fcid",
+		f.prefix AS "pwFassetsnoRule.prefix",
+		f.format AS "pwFassetsnoRule.format",
+		f.max_value AS "pwFassetsnoRule.maxValue",
+		f.start_number AS "pwFassetsnoRule.startNumber",
+		f.number_len AS "pwFassetsnoRule.numberLen",
+		f.version AS "pwFassetsnoRule.version",
+
+		ff.id AS "parent.pwFassetsnoRule.id",
+		ff.fcid AS "parent.pwFassetsnoRule.fcid",
+		ff.prefix AS "parent.pwFassetsnoRule.prefix",
+		ff.format AS "parent.pwFassetsnoRule.format",
+		ff.max_value AS "parent.pwFassetsnoRule.maxValue",
+		ff.start_number AS "parent.pwFassetsnoRule.startNumber",
+		ff.number_len AS "parent.pwFassetsnoRule.numberLen",
+		ff.version AS "parent.pwFassetsnoRule.version"
+	</sql>
+
+	<sql id="pwCategoryJoins">
+		LEFT JOIN pw_category p ON p.id = a.parent_id
+		LEFT JOIN pw_fassetsno_rule f ON f.fcid = a.id
+		LEFT JOIN pw_fassetsno_rule ff ON ff.fcid = p.id
+	</sql>
+
+	<select id="get" resultType="PwCategory">
+		SELECT
+			<include refid="pwCategoryColumns"/>
+		FROM pw_category a
+		<include refid="pwCategoryJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="PwCategory">
+		SELECT
+			<include refid="pwCategoryColumns"/>
+		FROM pw_category a
+		<include refid="pwCategoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND a.id != '1'
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		ORDER BY p.name ASC, a.name ASC
+	</select>
+
+	<select id="findAllList" resultType="PwCategory">
+		SELECT
+			<include refid="pwCategoryColumns"/>
+		FROM pw_category a
+		<include refid="pwCategoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+	</select>
+
+	<select id="findByParentIdsLike" resultType="PwCategory">
+		SELECT
+			<include refid="pwCategoryColumns"/>
+		FROM pw_category a
+		<include refid="pwCategoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE
+			<if test="dbName == 'oracle'">||#{parentIds}||'%'</if>
+			<if test="dbName == 'mssql'">#{parentIds}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT(#{parentIds}, '%')</if>
+		</where>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pw_category(
+			id,
+			parent_id,
+			parent_ids,
+			name,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{parent.id},
+			#{parentIds},
+			#{name},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pw_category SET
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds},
+			name = #{name},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateParentIds">
+		UPDATE pw_category SET
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE pw_category SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE
+		<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
+		<if test="dbName == 'mssql'">'%,'+#{id}+',%'</if>
+		<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+	</update>
+
+	<select id="findListByParentIds" resultType="PwCategory" parameterType="java.util.List">
+		SELECT
+		<include refid="pwCategoryColumns"/>
+		FROM pw_category a
+		<include refid="pwCategoryJoins"/>
+		WHERE a.del_flag = '0' AND a.parent_id in
+		<foreach item="item" collection="parentIds" separator="," open="("
+				 close=")">
+			#{item}
+		</foreach>
+	</select>
+
+</mapper>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.oseasy.pro.modules.project.dao.ProjectWeeklyDao">
+
+	<sql id="projectWeeklyColumns">
+		a.id AS "id",
+		a.project_id AS "projectId",
+		a.plan AS "plan",
+		a.problem AS "problem",
+		a.achieved AS "achieved",
+		a.suggest AS
+		"suggest",
+		a.suggest_date AS "suggestDate",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.start_plan_date AS "startPlanDate",
+		a.end_plan_date AS "endPlanDate",
+		a.status AS "status",
+		a.create_by AS
+		"createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS
+		"updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.last_id AS "lastId"
+	</sql>
+
+	<sql id="projectWeeklyJoins">
+	</sql>
+
+	<select id="get" resultType="ProjectWeekly">
+		SELECT
+		<include refid="projectWeeklyColumns" />
+		FROM project_weekly a
+		<include refid="projectWeeklyJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ProjectWeekly">
+		SELECT
+		<include refid="projectWeeklyColumns" />
+		FROM project_weekly a
+		<include refid="projectWeeklyJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ProjectWeekly">
+		SELECT
+		<include refid="projectWeeklyColumns" />
+		FROM project_weekly a
+		<include refid="projectWeeklyJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO project_weekly(
+		id,
+		project_id,
+		plan,
+		problem,
+		achieved,
+		suggest,
+		suggest_date,
+		start_date,
+		end_date,
+		start_plan_date,
+		end_plan_date,
+		status,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks,
+		del_flag,
+		last_id
+		) VALUES (
+		#{id},
+		#{projectId},
+		#{plan},
+		#{problem},
+		#{achieved},
+		#{suggest},
+		#{suggestDate},
+		#{startDate},
+		#{endDate},
+		#{startPlanDate},
+		#{endPlanDate},
+		#{status},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{remarks},
+		#{delFlag},
+		#{lastId}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE project_weekly SET
+		project_id = #{projectId},
+		plan = #{plan},
+		problem = #{problem},
+		achieved = #{achieved},
+		start_date = #{startDate},
+		end_date = #{endDate},
+		start_plan_date = #{startPlanDate},
+		end_plan_date = #{endPlanDate},
+		status = #{status},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		remarks = #{remarks},
+		last_id=#{lastId}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE project_weekly SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<select id="getInfoByProjectId" resultType="java.util.HashMap"
+		parameterType="java.lang.String">
+		select t.id,t.project_id,
+		date_format(t.start_date,'%Y-%m-%d') start_date,
+		date_format(t.end_date,'%Y-%m-%d') end_date,
+		date_format(t.start_date,'%Y-%m-%d') create_date ,
+		t.create_by,u.name create_name
+		from project_weekly t
+		left join sys_user u on t.create_by=u.id
+		where t.del_flag='0' and t.project_id=#{pid} order by t.create_date desc
+	</select>
+	<select id="getLast" resultType="ProjectWeekly" parameterType="java.util.HashMap">
+		SELECT
+		t.*
+		FROM
+		project_weekly t
+		WHERE
+		t.del_flag = '0'
+		AND t.create_by = #{uid} and t.project_id=#{pid}
+		<if test="id!=null and id!='' ">
+			and t.id!=#{id}
+			and t.start_date&lt;(select f.start_date from project_weekly f where f.id=#{id})
+		</if>
+		order by
+		t.create_date desc limit 1
+	</select>
+
+	<update id="saveSuggest">
+		UPDATE project_weekly SET
+		suggest = #{suggest},
+		suggest_date = #{suggestDate},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+</mapper>

@@ -1,0 +1,1 @@
+${studentName?if_exists} 申请加入您的{$teamName?if_exists}团队,请登录${platformuURL?if_exists}及时处理.

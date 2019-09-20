@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.1.xsd"
+>
+    <!-- JobDetail -->
+    <!-- CAS -->
+	<bean id="casUserJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="casUserJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+	<bean id="excellentCommentJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="excellentCommentJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="excellentViewsJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="courseCommentJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="courseCommentJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="courseCommentJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+	<bean id="courseViewsJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="courseViewsJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+   	<bean id="commentLikesJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="commentLikesJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="courseLikesJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="courseLikesJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+   	<bean id="excellentLikesJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="excellentLikesJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="gcontestHotsViewsJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="gcontestHotsViewsJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="dynamicViewsJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="dynamicViewsJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="userInfoViewsJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="userInfoViewsJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="userInfoLikesJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="userInfoLikesJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="pwEnterExitJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="pwEnterExitJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="pwEnterYdqJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="pwEnterYdqJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="pwEnterExpireJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="pwEnterExpireJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="cmsDeclareNotifyViewsJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="cmsDeclareNotifyViewsJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="studentCurrStateJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="studentCurrStateJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+	<bean id="mdCertJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="mdCertJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <bean id="drCardCvoExpireJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="drCardCvoExpireJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <bean id="drGetCardRecordJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="drCardRecordStateJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <bean id="cmsPassDateDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="cmsPassDateJob"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+    <!--<bean id="drInoutRecordJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+         <property name="targetObject" ref="drInoutRecordJob"/>
+           <property name="targetObject" ref=""/>
+       <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean> -->
+
+    <!--  Trigger -->
+	<bean id="excellentViewsJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="excellentViewsJobDetail">
+        </property>
+        <property name="cronExpression">
+            <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+
+    <bean id="casUserJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="casUserJobDetail">
+        </property>
+        <property name="cronExpression">
+        	<!-- <value>0 */1 * * * ?</value> -->
+            <value>0 1 2 * * ?</value>
+        </property>
+    </bean>
+    <bean id="excellentCommentJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="excellentCommentJobDetail">
+        </property>
+        <property name="cronExpression">
+            <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+	<bean id="courseCommentJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="courseCommentJobDetail">
+        </property>
+        <property name="cronExpression">
+            <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+	<bean id="courseViewsJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="courseViewsJobDetail">
+        </property>
+        <property name="cronExpression">
+            <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+	<bean id="commentLikesJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="commentLikesJobDetail">
+        </property>
+        <property name="cronExpression">
+            <value>0/5 * * * * ?</value>
+        </property>
+    </bean>
+   	<bean id="courseLikesJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="courseLikesJobDetail">
+        </property>
+        <property name="cronExpression">
+            <value>0/5 * * * * ?</value>
+        </property>
+    </bean>
+    <bean id="excellentLikesJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="excellentLikesJobDetail">
+        </property>
+        <property name="cronExpression">
+            <value>0/5 * * * * ?</value>
+        </property>
+    </bean>
+    <bean id="gcontestHotsViewsJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="gcontestHotsViewsJobDetail">
+        </property>
+        <property name="cronExpression">
+            <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+    <bean id="dynamicViewsJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="dynamicViewsJobDetail">
+        </property>
+        <property name="cronExpression">
+            <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+    <bean id="userInfoViewsJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="userInfoViewsJobDetail">
+        </property>
+        <property name="cronExpression">
+            <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+    <!--  调度触发器 -->
+    <bean id="userInfoLikesJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="userInfoLikesJobDetail">
+        </property>
+        <property name="cronExpression">
+            <value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+    <bean id="pwEnterExitTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="pwEnterExitJobDetail"></property>
+        <property name="cronExpression">
+        	<value>0 20 */8 * * ?</value>
+        </property>
+    </bean>
+    <bean id="pwEnterYdqTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="pwEnterYdqJobDetail"></property>
+        <property name="cronExpression">
+        	<value>0 15 */8 * * ?</value>
+        </property>
+    </bean>
+    <bean id="pwEnterExpireTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="pwEnterExpireJobDetail"></property>
+        <property name="cronExpression">
+        	<value>0 10 */8 * * ?</value>
+        </property>
+    </bean>
+	<bean id="cmsDeclareNotifyViewsJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="cmsDeclareNotifyViewsJobDetail"></property>
+        <property name="cronExpression">
+        	<value>0/10 * * * * ?</value>
+        </property>
+    </bean>
+    <bean id="studentCurrStateJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="studentCurrStateJobDetail"></property>
+        <property name="cronExpression">
+        	<value>0 0 1 * * ?</value>
+        </property>
+    </bean>
+    <bean id="mdCertJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="mdCertJobDetail"></property>
+        <property name="cronExpression">
+        	<value>0 0 1 * * ?</value>
+        </property>
+    </bean>
+    <bean id="drCardCvoExpireJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="drCardCvoExpireJobDetail"></property>
+        <property name="cronExpression">
+        	<value>0 0/3 * * * ?</value>
+        </property>
+    </bean>
+    <bean id="drGetCardRecordTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="drGetCardRecordJobDetail"></property>
+        <property name="cronExpression">
+        	<!-- 每隔5分钟执行一次 -->
+        	<value>0 */5 * * * ?</value>
+        	<!-- 每天1点执行一次 -->
+            <!-- <value>0 0 1 * * ?</value> -->
+        </property>
+    </bean>
+
+    <bean id="cmsPassDateTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="cmsPassDateDetail"></property>
+        <property name="cronExpression">
+             <!--每天1点执行一次 -->
+             <value>0 0 1 * * ?</value>
+        </property>
+    </bean>
+
+<!--   <bean id="drInoutRecordJobDetailTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="drInoutRecordJobDetail"></property>
+        <property name="cronExpression">
+            <value>0 0 3 * * ?</value>
+        </property>
+    </bean>-->
+
+    <bean id="testJobsJobDetail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="testJobs"/>
+        <property name="targetMethod" value="execute"/>
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <bean id="testJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="testJobsJobDetail"></property>
+        <property name="cronExpression">
+            <!-- 每隔1分钟执行一次 -->
+            <value>0 */2 * * * ?</value>
+        </property>
+    </bean>
+
+
+    <!-- 调度工厂 -->
+    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <!--单点登录抓取学生  配置了单点登录打开-->
+                <!--<ref bean="casUserJobDetailTrigger"/>-->
+                <!--优秀展示评论-->
+                <!--<ref bean="excellentCommentJobDetailTrigger"/>-->
+                <!--优秀展示点赞-->
+                <!--<ref bean="excellentViewsJobDetailTrigger"/>-->
+                <!--名师讲堂评论-->
+                <!--<ref bean="courseCommentJobDetailTrigger"/>-->
+                <!--名师讲堂点赞-->
+                <!--<ref bean="courseViewsJobDetailTrigger"/>-->
+                <!--评论的点赞队列-->
+                <!--<ref bean="commentLikesJobDetailTrigger"/>-->
+                <!--课程点赞-->
+                <!--<ref bean="courseLikesJobDetailTrigger"/>-->
+                <!--优秀展示点赞队列-->
+                <!--<ref bean="excellentLikesJobDetailTrigger"/>-->
+                <!--大赛热点浏览队列-->
+                <!--<ref bean="gcontestHotsViewsJobDetailTrigger"/>-->
+                 <!--双创动态浏览队列-->
+                <!--<ref bean="dynamicViewsJobDetailTrigger"/>-->
+                <!--学生浏览 点赞-->
+                <!--<ref bean="userInfoViewsJobDetailTrigger"/>
+                <ref bean="userInfoLikesJobDetailTrigger"/>-->
+
+                <!--门禁-->
+                <!--<ref bean="pwEnterExitTrigger"/>
+                <ref bean="pwEnterYdqTrigger"/>
+                <ref bean="pwEnterExpireTrigger"/>-->
+                <!--处理申报通知-->
+                <!--<ref bean="cmsDeclareNotifyViewsJobDetailTrigger"/>-->
+                <!--学生现状-->
+                <!--<ref bean="studentCurrStateJobDetailTrigger"/>-->
+                <!--门禁定时任务-->
+                <!--<ref bean="drCardCvoExpireJobDetailTrigger"/>-->
+                <!--<ref bean="drGetCardRecordTrigger" />-->
+                <!--内容管理 置顶 过期 定时任务-->
+                <!--<ref bean="cmsPassDateTrigger" />-->
+                <!--  <ref bean="drInoutRecordJobDetailTrigger"/>-->
+                <!--测试定时任务  -->
+             <!--   <ref bean="testJobTrigger" />-->
+            </list>
+        </property>
+    </bean>
+</beans>

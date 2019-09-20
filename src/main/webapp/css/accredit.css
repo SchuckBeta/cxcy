@@ -1,0 +1,83 @@
+html,body{
+    font-family: "微软雅黑";
+}
+ul,li{
+    list-style: none;
+    padding:0px;
+    margin:0px;
+}
+.content-wrap{
+    padding:0px 20px;
+}
+.breadcrumbs h3{
+    height: 40px;
+    line-height: 40px;
+    background: url(../images/bread.png) no-repeat left center ;
+    color:#fff;
+    font-size: 12px;
+    padding-left: 10px;
+}
+.logo-wrap{
+    height: 61px;
+    width: 186px;
+    padding-left: 15px;
+}
+.logo-wrap img{
+    display: block;
+    height: 61px;
+    width:186px;
+}
+.product-desc{
+    margin:0;
+    padding:10px 0px;
+}
+.product-name,.product-beta,.product-own{
+    height: 30px;
+    line-height: 30px;
+}
+
+.uploadFiles-btn{
+    padding:0px 10px;
+    height: 25px;
+    line-height: 22px;
+    background: #e9442d;
+    margin-left: 40px;
+    color:#fff;
+}
+
+.uploadFiles-btn:hover{
+    background: -webkit-linear-gradient(#e8422d, #ba3424); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#e8422d, #ba3424); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#e8422d, #ba3424); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#e8422d, #ba3424); /* 标准的语法 */
+    color:#fff;
+}
+.files-list li{
+   line-height: 30px;
+   line-height: 30px;
+   width: 400px;
+   overflow: hidden; 
+}
+.files-list li a{
+    display: block;
+    float: left;
+}
+.files-list li button{
+    display: block;
+    float: right;
+    height: 25px;
+    line-height: 15px;
+    background: #ccc;
+    color:#fff;
+    border:none;
+    padding:5px 20px;
+    border-radius: 3px;
+    outline: none;
+}
+.files-list li button:hover{
+    background: -webkit-linear-gradient(#e8422d, #ba3424); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#e8422d, #ba3424); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#e8422d, #ba3424); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#e8422d, #ba3424); /* 标准的语法 */
+    color:#fff; 
+}

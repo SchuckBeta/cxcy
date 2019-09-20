@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.sco.dao.ScoAuditingDao">
+    
+	<sql id="scoAuditingColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.type AS "type",
+		a.apply_id AS "applyId",
+		a.proc_ins_id AS "procInsId",
+		a.score_val AS "scoreVal",
+		a.suggest AS "suggest",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u2.name AS "user.name"
+	</sql>
+	<sql id="scoAuditingColumnsNew">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.type AS "type",
+		a.apply_id AS "applyId",
+		a.proc_ins_id AS "procInsId",
+		a.score_val AS "scoreVal",
+		a.suggest AS "suggest",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u2.name AS "user.name",
+		p.audit_status as "auditStatus"
+	</sql>
+	<sql id="scoAuditingJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+	<sql id="scoAuditingJoinsNew">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+LEFT JOIN sco_apply p on p.id = a.apply_id
+	</sql>
+	<select id="get" resultType="ScoAuditing">
+		SELECT 
+			<include refid="scoAuditingColumns"/>
+		FROM sco_auditing a
+		<include refid="scoAuditingJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ScoAuditing">
+		SELECT 
+			<include refid="scoAuditingColumnsNew"/>
+		FROM sco_auditing a
+		<include refid="scoAuditingJoinsNew"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="applyId != null and applyId != ''">
+				AND a.apply_id = #{applyId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+
+
+	<select id="findAllList" resultType="ScoAuditing">
+		SELECT 
+			<include refid="scoAuditingColumns"/>
+		FROM sco_auditing a
+		<include refid="scoAuditingJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sco_auditing(
+			id,
+			user_id,
+			type,
+			apply_id,
+			proc_ins_id,
+			score_val,
+			suggest,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{type},
+			#{applyId},
+			#{procInsId},
+			#{scoreVal},
+			#{suggest},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sco_auditing SET 	
+			user_id = #{user.id},
+			type = #{type},
+			apply_id = #{applyId},
+			proc_ins_id = #{procInsId},
+			score_val = #{scoreVal},
+			suggest = #{suggest},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE sco_auditing SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

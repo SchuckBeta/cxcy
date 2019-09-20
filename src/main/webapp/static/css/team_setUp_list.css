@@ -1,0 +1,110 @@
+html,body{
+    font: 14px;
+    font-family: "微软雅黑";
+}
+label{
+    color:#656565;
+    font-weight: normal;
+}
+.main-wrap{
+    width: 1240px;
+    margin:30px auto 0;
+}
+.top-content{
+    border:2px solid #f1f1f1;
+    padding:42px 12px;
+    border-radius: 5px;
+}
+.mybreadcrumbs{
+    font-size: 14px;
+    color:#332c2b;
+    margin-bottom: 28px;
+    font-weight: bold;
+}
+
+.body-content{
+    padding:0;
+}
+
+.teamSet-wrap{
+    margin-bottom: 30px;
+    padding:10px 30px;
+    border:2px solid #f1f1f1;
+    border-radius: 3px;
+    position:relative;
+}
+.list-desc{
+    position: absolute;
+    left: 20px;
+    top:-14px;
+    padding:5px 10px;
+    font-size: 14px;
+    color:#656565;
+    background: #fff;
+    z-index: 998;
+}
+
+.table-wrap{
+    margin-top: 30px;
+}
+
+.table-desc{
+    position:relative;
+    padding:0px;
+    margin:0px;
+}
+
+.table-desc a{
+    position: absolute;
+    right: 0px;
+    top:1px;
+    padding:2px 11px;
+    text-decoration: none;
+    color:#fff;
+    background: #ed7468;
+}
+
+table tr th{
+    background: #f4e6d4;
+}
+table tr th,table tr td{
+    text-align: center;
+    vertical-align: middle !important;
+    font-size: 14px;
+    color:#656565;
+}
+
+.my-btn-primary{
+    padding:2px 11px;
+    background: #ed7468;
+    color:#fff;
+    text-decoration: none;
+}
+.my-btn-primary:hover,.table-desc a:hover,.my-btn-group .my-btn-default:hover{
+    background: -webkit-linear-gradient(#e8422d, #ba3424); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#e8422d, #ba3424); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#e8422d, #ba3424); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#e8422d, #ba3424); /* 标准的语法 */
+    color:#fff;
+}
+
+.stu-info{
+    background: #ececec;
+    display: inline-block;
+    padding:7px 11px;
+    border-radius: 3px 3px 0 0;
+}
+.my-btn-group{
+    overflow: hidden;
+}
+
+.my-btn-group .my-btn-default{
+    width: 80px;
+    background: #ed7468;
+    text-align: center;
+    height: 26px;
+    line-height: 12px;
+    float: right;
+    margin-left: 20px;
+    color:#fff;
+}

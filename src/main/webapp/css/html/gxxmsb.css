@@ -1,0 +1,48 @@
+
+.scinfonavigation ul li:first-child {
+	margin-top: -2px;
+}
+
+.scinfonavigation ul li {
+	float: left;
+	letter-spacing: 3px;
+	margin-left: 10px;
+}
+.title_info{
+	margin-top: 114px;
+	text-align: center;
+	
+}
+.title_info h3{
+	letter-spacing: 3px;
+	
+}
+.title_info h4{
+	letter-spacing: 3px;
+	margin-top: 27px;
+}
+.title_info p{
+	color: #D8D8D8;
+	margin-top: 34px;
+}
+
+.china{	
+	margin-top: 55px;
+	text-align: center;
+}
+
+#title{
+	border-bottom: 3px solid #DD3B0A;
+	width: 100px;
+	margin-top: 23px;
+	margin-left: 10px;
+}
+#info{
+	margin-top: 35px;
+}
+
+#info ul li{
+	float: left;
+	margin-left: 10px;
+	
+}

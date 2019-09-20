@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.sys.modules.team.dao.TeamUserHistoryDao">
+    <sql id="teamUserHistoryColumns">
+		a.id AS "id",
+-- 		a.u_type AS "utype",
+		a.user_type AS "userType",
+		a.user_id AS "user_id",
+		a.user_id AS "user.id",
+		a.team_id AS "teamId",
+		a.state AS "state",
+		a.weight_val AS "weightVal",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+
+		a.pro_id AS "proId",
+		a.pro_type AS "proType",
+		a.pro_sub_type AS "proSubType",
+		a.finish AS "finish",
+		a.del_flag AS "delFlag",
+		a.year,
+		u3.name AS "user.name"
+	</sql>
+
+
+    <sql id="teamUserHistoryJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+    <select id="getGcontestInfoByActywId" resultType="TeamUserHistory" parameterType="java.lang.String">
+        SELECT
+        <include refid="teamUserHistoryColumns"/>
+
+        FROM team_user_history a
+        LEFT JOIN sys_user u3 ON u3.id = a.user_id
+        LEFT JOIN pro_project pp ON pp.pro_type=a.pro_type and pp.type=a.pro_sub_type
+        WHERE a.team_id = #{id} and a.pro_id !=#{gcontestId} and pp.rel_id=#{actywId} and a.finish != 1
+
+    </select>
+
+    <select id="get" resultType="TeamUserHistory">
+
+        SELECT
+        <include refid="teamUserHistoryColumns"/>
+
+        FROM team_user_history a
+        <include refid="teamUserHistoryJoins"/>
+
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="getByProId" resultType="TeamUserHistory" parameterType="java.lang.String">
+
+        SELECT
+        <include refid="teamUserHistoryColumns"/>
+
+        FROM team_user_history a
+        <include refid="teamUserHistoryJoins"/>
+
+        WHERE a.pro_id = #{proId} and a.team_id = #{teamId} AND  a.del_flag='0'
+    </select>
+
+
+    <select id="findList" resultType="TeamUserHistory">
+
+        SELECT
+        <include refid="teamUserHistoryColumns"/>
+        FROM team_user_history a
+
+        <include refid="teamUserHistoryJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="userType !=null and userType!=''">
+                and a.user_type=#{userType}
+            </if>
+            <if test="proId !=null and proId!=''">
+                and a.pro_id=#{proId}
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <select id="findAllList" resultType="TeamUserHistory">
+
+        SELECT
+        <include refid="teamUserHistoryColumns"/>
+        FROM team_user_history a
+        <include refid="teamUserHistoryJoins"/>
+
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <insert id="insert">
+		INSERT INTO team_user_history(
+
+		id,
+		user_type,
+		user_id,
+		team_id,
+		state,
+		weight_val,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks,
+		pro_id,
+		pro_type,
+		pro_sub_type,
+		finish,
+		del_flag,
+		year
+		) VALUES (
+
+		#{id},
+		#{userType},
+		#{user.id},
+		#{teamId},
+		#{state},
+		#{weightVal},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{remarks},
+		#{proId},
+		#{proType},
+		#{proSubType},
+		#{finish},
+		#{delFlag},
+		#{year}
+		)
+	</insert>
+
+
+    <update id="update">
+
+		UPDATE team_user_history SET
+		user_type = #{userType},
+		user_id = #{user.id},
+		team_id = #{teamId},
+		state = #{state},
+		weight_val = #{weightVal},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		remarks = #{remarks},
+		pro_id = #{proId},
+		pro_type = #{proType},
+		pro_sub_type = #{proSubType},
+		finish = #{finish},
+		year=#{year}
+		WHERE id = #{id}
+	</update>
+
+
+    <update id="delete">
+		UPDATE team_user_history SET
+			del_flag = #{DEL_FLAG_DELETE}
+
+		WHERE id = #{id}
+	</update>
+    <update id="deleteByProId">
+		DELETE FROM team_user_history
+		WHERE pro_id = #{proId}
+	</update>
+    <select id="getTeamUserHistoryFromTUR" resultType="TeamUserHistory">
+        select
+
+        a.user_id AS "userId"
+        from team_user_relation a where a.team_id=#{tid}
+        and a.state in ('0','4')
+        <if test="userType!=null and userType!='' ">
+            and user_type=#{userType}
+        </if>
+    </select>
+    <insert id="insertAll">
+        INSERT INTO team_user_history(
+
+        id,
+        user_type,
+        user_id,
+        team_id,
+        state,
+        weight_val,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        remarks,
+        pro_id,
+        pro_type,
+        pro_sub_type,
+        finish,
+        del_flag,
+        year
+        ) VALUES
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            (
+
+            #{item.id},
+            #{item.userType},
+            #{item.user.id},
+            #{item.teamId},
+            #{item.state},
+            #{item.weightVal},
+            #{item.createBy.id},
+            #{item.createDate},
+            #{item.updateBy.id},
+            #{item.updateDate},
+            #{item.remarks},
+            #{item.proId},
+            #{item.proType},
+            #{item.proSubType},
+            #{item.finish},
+            #{item.delFlag},
+            #{item.year}
+            )
+
+        </foreach>
+    </insert>
+
+    <insert id="insertAllPw">
+        INSERT INTO team_user_history(
+
+        id,
+        user_Type,
+        user_id,
+        team_id,
+        state,
+        weight_val,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        remarks,
+        pro_id,
+        pro_type,
+        del_flag
+        ) VALUES
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+            (
+
+            #{item.id},
+            #{item.userType},
+            #{item.user.id},
+            #{item.teamId},
+            #{item.state},
+            #{item.weightVal},
+            #{item.createBy.id},
+            #{item.createDate},
+            #{item.updateBy.id},
+            #{item.updateDate},
+            #{item.remarks},
+            #{item.proId},
+            #{item.proType},
+            #{item.delFlag}
+            )
+
+        </foreach>
+    </insert>
+
+    <select id="countByCdn1" resultType="java.lang.Integer">
+        select count(1)
+        from team_user_history a
+        where a.pro_type!=#{protype} and a.user_type='1' and a.finish='0' and
+        a.del_flag='0'
+        <if test="proid!=null and proid!=''">
+            and a.pro_id!=#{proid}
+        </if>
+        <if test="tuhs!=null and tuhs.size!=0">
+            and a.user_id in
+            <foreach collection="tuhs" item="item" index="index"
+                     separator="," open="(" close=")">
+                #{item.userId}
+            </foreach>
+        </if>
+    </select>
+    <select id="countByCdn2" resultType="java.lang.Integer">
+        select count(1)
+        from team_user_history a
+        where a.pro_type=#{protype} and a.pro_sub_type!=#{subtype} and a.user_type='1' and a.finish='0' and
+        a.del_flag='0'
+        <if test="proid!=null and proid!=''">
+            and a.pro_id!=#{proid}
+        </if>
+        <if test="tuhs!=null and tuhs.size!=0">
+            and a.user_id in
+            <foreach collection="tuhs" item="item" index="index"
+                     separator="," open="(" close=")">
+                #{item.userId}
+            </foreach>
+        </if>
+    </select>
+    <select id="countByCdn3" resultType="java.lang.Integer">
+        select count(1)
+        from team_user_history a
+        where a.pro_type=#{protype} and a.pro_sub_type=#{subtype} and a.user_type='1' and a.finish='0' and
+        a.del_flag='0'
+        <if test="proid!=null and proid!=''">
+            and a.pro_id!=#{proid}
+        </if>
+        <if test="year!=null and year!=''">
+            and a.year=#{year}
+        </if>
+        <if test="tuhs!=null and tuhs.size!=0">
+            and a.user_id in
+            <foreach collection="tuhs" item="item" index="index"
+                     separator="," open="(" close=")">
+                #{item.userId}
+            </foreach>
+        </if>
+    </select>
+    <select id="getProIdByCdn" resultType="java.lang.String">
+		select a.pro_id
+		from team_user_history a
+		LEFT JOIN pro_model p on a.pro_id = p.id
+		where a.pro_type=#{protype} and a.pro_sub_type=#{subtype} and a.user_type='1' and a.finish=#{finish} and
+		a.del_flag='0' and p.del_flag = '0'
+		and a.user_id=#{uid}
+		order by a.create_date desc
+		limit 1
+	</select>
+
+    <!--更新学分配比权重-->
+    <update id="updateWeight">
+		UPDATE team_user_history SET
+		weight_val = #{weightVal}
+		WHERE  id = #{id}
+	</update>
+
+    <select id="getWeightTotalByTeamId" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT COALESCE(sum(tuh.weight_val),0) AS "weightTotal"
+		FROM team_user_history  tuh
+		WHERE tuh.team_id = #{teamId} and tuh.pro_id=#{proId}
+		GROUP BY tuh.team_id;
+	</select>
+
+    <update id="updateFinishAsClose">
+		UPDATE team_user_history SET
+		finish = '1'
+		WHERE  pro_id = #{proid}
+	</update>
+    <update id="updateDelByProid">
+		UPDATE team_user_history SET
+		del_flag = '1'
+		WHERE  pro_id = #{proid}
+	</update>
+
+    <update id="deleteByProIdAndTeamId">
+   		UPDATE team_user_history SET
+   		del_flag = '1'
+   		WHERE  pro_id = #{proId} and team_id=#{teamId}
+   	</update>
+
+    <select id="getDoingCountByTeamId" resultType="java.lang.Integer">
+		select count(1) cc from(select thu.pro_id from team_user_history thu
+		where thu.team_id=#{tid} and thu.del_flag='0' and thu.finish ='0' group by thu.pro_id) temp
+	</select>
+
+    <select id="getDoOtherByTeamId" resultType="java.lang.Integer">
+   		select count(1) cc from(select thu.pro_id from team_user_history thu
+   		where thu.team_id=#{tid} and thu.del_flag='0' and thu.pro_sub_type is not null group by thu.pro_id) temp
+   	</select>
+
+    <select id="getBuildingCountByUserId" resultType="java.lang.Integer">
+		select count(1) cc from team_user_history thu
+		where thu.user_id=#{uid} and thu.del_flag='0' and thu.finish in('0','2')
+	</select>
+
+    <select id="getBuildingTeamCountByUserId" resultType="java.lang.Integer">
+        select count(1) cc from team_user_relation thr
+        where thr.user_id=#{uid} and thr.del_flag='0' and thr.state = '0'
+    </select>
+
+    <select id="getHisByTeamId" resultType="java.lang.Integer">
+        select count(1) cc from team_user_history thu
+        where thu.team_id=#{teamId} and thu.del_flag='0' and thu.finish in('0','1')
+    </select>
+
+    <update id="updateFinishAsStart">
+		UPDATE team_user_history SET
+		finish = '0'
+		WHERE  pro_id = #{proid}
+	</update>
+    <update id="updateFinishAsSave">
+		UPDATE team_user_history SET
+		finish = '2'
+		WHERE  pro_id = #{proid}
+	</update>
+
+    <select id="getUserCurJoinByStus" resultType="com.oseasy.com.pcore.modules.sys.entity.User">
+        select thu.user_id id, GROUP_CONCAT(DISTINCT ifnull(s1.label,s2.label)) curJoin from
+        team_user_history thu
+        left join sys_dict s1 on s1.value=thu.pro_sub_type and
+        s1.type='project_style' and thu.pro_type='1,'
+        left join sys_dict s2 on s2.value=thu.pro_sub_type and
+        s2.type='competition_type' and thu.pro_type='7,'
+        where thu.del_flag='0' and thu.finish='0'
+        <if test="stus!=null and stus.size!=0">
+            and
+            <foreach collection="stus" item="item" index="index"
+                     separator=" or " open="(" close=")">
+                thu.user_id=#{item.user.id}
+            </foreach>
+        </if>
+        group by thu.user_id
+    </select>
+    <select id="getUserCurJoinByTeas" resultType="com.oseasy.com.pcore.modules.sys.entity.User">
+        select thu.user_id id, GROUP_CONCAT(DISTINCT ifnull(s1.label,s2.label)) curJoin from
+        team_user_history thu
+        left join sys_dict s1 on s1.value=thu.pro_sub_type and
+        s1.type='project_style' and thu.pro_type='1,'
+        left join sys_dict s2 on s2.value=thu.pro_sub_type and
+        s2.type='competition_type' and thu.pro_type='7,'
+        where thu.del_flag='0' and thu.finish='0'
+        <if test="teas!=null and teas.size!=0">
+            and
+            <foreach collection="teas" item="item" index="index"
+                     separator=" or " open="(" close=")">
+                thu.user_id=#{item.user.id}
+            </foreach>
+        </if>
+        group by thu.user_id
+    </select>
+    <select id="getUserCurJoinByUsers" resultType="com.oseasy.com.pcore.modules.sys.entity.User">
+        select thu.user_id id, GROUP_CONCAT(DISTINCT ifnull(s1.label,s2.label)) curJoin from
+        team_user_history thu
+        left join sys_dict s1 on s1.value=thu.pro_sub_type and
+        s1.type='project_style' and thu.pro_type='1,'
+        left join sys_dict s2 on s2.value=thu.pro_sub_type and
+        s2.type='competition_type' and thu.pro_type='7,'
+        where thu.del_flag='0' and thu.finish='0'
+        <if test="users !=null and users.size!=0">
+            and
+            <foreach collection="users" item="item" index="index"
+                     separator=" or " open="(" close=")">
+                thu.user_id=#{item.id}
+            </foreach>
+        </if>
+        group by thu.user_id
+    </select>
+
+    <select id="getCanInviteTeamIdsByStus" resultType="com.oseasy.sys.modules.sys.entity.StudentExpansion">
+        select u.id as "user.id",
+        GROUP_CONCAT(tm.id) canInviteTeamIds
+        from sys_user u
+        left join team tm on
+        not EXISTS (
+            select 1 from team_user_relation tur
+            where tur.state in('0','2','4')
+            and tur.del_flag='0' and tur.user_id=u.id and tur.team_id=tm.id
+        )
+        where tm.del_flag='0' and tm.state='0' and tm.sponsor=#{teamLeaderId}
+        <if test="stus!=null and stus.size!=0">
+            and
+            <foreach collection="stus" item="item" index="index"
+                     separator=" or " open="(" close=")">
+                u.id=#{item.user.id}
+            </foreach>
+        </if>
+        group by u.id
+    </select>
+    <select id="getCanInviteTeamIdsByTeas" resultType="com.oseasy.sys.modules.sys.entity.BackTeacherExpansion">
+        select u.id as "user.id",GROUP_CONCAT(tm.id) canInviteTeamIds
+        from sys_user u
+        left join team tm on not EXISTS (
+            select 1 from team_user_relation tur
+            where tur.state in('0','2','4')
+            and tur.del_flag='0' and tur.user_id=u.id and tur.team_id=tm.id)
+        where tm.del_flag='0' and tm.state='0' and tm.sponsor=#{teamLeaderId}
+        <if test="teas !=null and teas.size!=0">
+            and
+            <foreach collection="teas" item="item" index="index"
+                     separator=" or " open="(" close=")">
+                u.id=#{item.user.id}
+            </foreach>
+        </if>
+        group by u.id
+    </select>
+
+    <select id="findTeamStudent" resultType="java.util.HashMap" parameterType="java.lang.String">
+        SELECT
+            u.name,
+            u.no,
+            u.photo,
+            o.name org_name,
+            op.name professional,
+            ( SELECT
+                    GROUP_CONCAT(s6.label)
+                FROM sys_dict s6
+                WHERE
+                    FIND_IN_SET(s6.value,u.domain)
+                    AND s6.type='technology_field'
+            ) AS "domain",
+            u.mobile,
+            s11.label currState,
+            s1.label instudy,
+            t.user_type,
+            t.weight_val AS "weightVal",
+            t.id AS "id",
+            u.id userId
+        FROM team_user_history t
+            LEFT JOIN sys_user u ON t.user_id=u.id
+            LEFT JOIN sys_office o ON u.office_id=o.id
+            LEFT JOIN sys_office op ON u.professional=op.id
+            LEFT JOIN sys_student_expansion ss ON u.id=ss.user_id
+            LEFT JOIN sys_dict s1 ON ss.instudy=s1.value AND s1.type='degree_type'
+            LEFT JOIN sys_dict s11 ON ss.curr_state=s11.value AND s11.type='current_sate'
+        WHERE
+            t.user_type='1'
+            AND t.team_id=#{teamId}
+            AND t.pro_id=#{proId}
+            AND t.del_flag='0'
+    </select>
+    <select id="findTeamTeacher" resultType="java.util.HashMap" parameterType="java.lang.String">
+        SELECT
+            u.name AS "name",
+            ifnull(o.name,st.work_unit) AS "org_name",
+            st.technical_title AS "technical_title",
+            (SELECT
+                    GROUP_CONCAT(s6.label)
+                FROM sys_dict s6
+                WHERE FIND_IN_SET(s6.value,u.domain)
+                    AND s6.type='technology_field'
+            ) AS "domain",
+            u.mobile AS "mobile",
+            u.no AS "no",
+            u.education AS "education",
+            u.email AS "email",
+            t.user_type AS "user_type",
+            u.photo AS "photo",
+            ( SELECT
+                    GROUP_CONCAT(s1.label)
+                FROM sys_dict s1
+                WHERE FIND_IN_SET(s1.value,st.teacherType)
+                    AND s1.type='master_type'
+            ) AS "teacherType",
+            st.post_title AS "postTitle",
+            st.teacherType AS "ttv",
+            u.id AS "userId"
+        FROM team_user_history t
+            LEFT JOIN sys_user u on t.user_id=u.id
+            LEFT JOIN sys_office o on u.office_id=o.id
+            LEFT JOIN sys_teacher_expansion st on u.id=st.user_id
+        WHERE
+            t.user_type='2'
+            AND t.team_id=#{teamId}
+            AND t.pro_id=#{proId}
+            AND t.del_flag='0'
+    </select>
+
+
+
+</mapper>

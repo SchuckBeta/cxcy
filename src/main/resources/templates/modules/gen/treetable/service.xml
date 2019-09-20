@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>service</name>
+	<filePath>src/main/java/${packageName}/${moduleName}/service/${subModuleName}</filePath>
+	<fileName>${ClassName}Service.java</fileName>
+	<content><![CDATA[
+package ${packageName}.${moduleName}.service<#if subModuleName != "">.${subModuleName}</#if>;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.oseasy.com.pcore.common.service.TreeService;
+import com.oseasy.util.common.utils.StringUtil;
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
+import ${packageName}.${moduleName}.dao<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Dao;
+
+/**
+ * ${functionName}Service.
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+@Service
+@Transactional(readOnly = true)
+public class ${ClassName}Service extends TreeService<${ClassName}Dao, ${ClassName}> {
+
+	public ${ClassName} get(String id) {
+		return super.get(id);
+	}
+
+	public List<${ClassName}> findList(${ClassName} ${entityName}) {
+		if (StringUtil.isNotBlank(${entityName}.getParentIds())){
+			${entityName}.setParentIds(","+${entityName}.getParentIds()+",");
+		}
+		return super.findList(${entityName});
+	}
+
+	@Transactional(readOnly = false)
+	public void save(${ClassName} ${entityName}) {
+		if(${entityName}.getIsNewRecord()){
+	    }
+		super.save(${entityName});
+	}
+
+    @Transactional(readOnly = false)
+    public void insertPL(List<${ClassName}> ${entityName}s) {
+        dao.insertPL(${entityName}s);
+    }
+
+    @Transactional(readOnly = false)
+    public void updatePL(List<${ClassName}> ${entityName}s) {
+        dao.updatePL(${entityName}s);
+    }
+
+	<#list table.columnList as c>
+		<#if c.isUpdate?? && c.isUpdate == "1">
+			<#if c.simpleJavaField == c.javaFieldId>
+				<#if c.isUpdatePl?? && c.isUpdatePl == "1">
+	/**
+	 * 根据ID批量修改属性 ${c.javaFieldId?cap_first}.
+	 */
+    @Transactional(readOnly = false)
+    public void updatePL${c.javaFieldId?cap_first}(List<${ClassName}> ${entityName}s) {
+        dao.updatePL${c.javaFieldId?cap_first}(${entityName}s);
+    }
+				</#if>
+			</#if>
+
+
+			<#if c.simpleJavaType?? && ((c.simpleJavaType != "String") && (c.simpleJavaType != "Long") && (c.simpleJavaType != "Integer") && (c.simpleJavaType != "Double") && (c.simpleJavaType != "Date"))>
+				<#if (c.javaFieldGid != "") && c.simpleJavaField != c.javaFieldId>
+					<#if c.isUpdatePl?? && c.isUpdatePl == "1">
+	/**
+	 * 根据ID批量修改属性 ${c.simpleJavaField?cap_first}.id.
+	 */
+    @Transactional(readOnly = false)
+    public void updatePL${c.simpleJavaField?cap_first}Id(List<${ClassName}> ${entityName}s) {
+        dao.updatePL${c.simpleJavaField?cap_first}Id(${entityName}s);
+    }
+					</#if>
+				</#if>
+
+				<#if (c.javaFieldGname != "") && c.simpleJavaField != c.javaFieldName>
+					<#if c.isUpdatePl?? && c.isUpdatePl == "1">
+	/**
+	 * 根据ID批量修改属性 ${c.simpleJavaField?cap_first}.name.
+	 */
+    @Transactional(readOnly = false)
+    public void updatePL${c.simpleJavaField?cap_first}Name(List<${ClassName}> ${entityName}s) {
+        dao.updatePL${c.simpleJavaField?cap_first}Name(${entityName}s);
+    }
+					</#if>
+				</#if>
+			</#if>
+		</#if>
+	</#list>
+
+	@Transactional(readOnly = false)
+	public void delete(${ClassName} ${entityName}) {
+		super.delete(${entityName});
+	}
+
+	@Transactional(readOnly = false)
+	public void deletePL(${ClassName} ${entityName}) {
+		dao.deletePL(${entityName});
+	}
+
+  	@Transactional(readOnly = false)
+  	public void deleteWL(${ClassName} ${entityName}) {
+  	  dao.deleteWL(${entityName});
+  	}
+
+  	@Transactional(readOnly = false)
+  	public void deleteWLPL(${ClassName} ${entityName}) {
+  	  dao.deleteWLPL(${entityName});
+  	}
+}]]>
+	</content>
+</template>

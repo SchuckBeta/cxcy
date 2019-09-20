@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwSgtypeDao">
+
+	<sql id="actYwSgtypeColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.reg_type AS "regType"
+	</sql>
+
+	<sql id="actYwSgtypeJoins">
+	</sql>
+
+	<select id="get" resultType="ActYwSgtype">
+		SELECT
+			<include refid="actYwSgtypeColumns"/>
+		FROM act_yw_sgtype a
+		<include refid="actYwSgtypeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ActYwSgtype">
+		SELECT
+			<include refid="actYwSgtypeColumns"/>
+		FROM act_yw_sgtype a
+		<include refid="actYwSgtypeJoins"/>
+		<where>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwSgtype">
+		SELECT
+			<include refid="actYwSgtypeColumns"/>
+		FROM act_yw_sgtype a
+		<include refid="actYwSgtypeJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_sgtype(
+			id,
+			name,
+			reg_type
+		) VALUES (
+			#{id},
+			#{name},
+			#{regType}
+		)
+	</insert>
+
+
+	<select id="checkName" resultType="ActYwSgtype">
+		SELECT
+			<include refid="actYwSgtypeColumns"/>
+		FROM act_yw_sgtype a
+		<include refid="actYwSgtypeJoins"/>
+		<where>
+			a.name=#{name}
+			<if test="id != null and id != ''">
+				and a.id !=#{id}
+			</if>
+		</where>
+	</select>
+
+	<select id="getInuseActYwSgtype" resultType="ActYwSgtype" parameterType="java.lang.String">
+		SELECT
+			<include refid="actYwSgtypeColumns"/>
+		FROM act_yw_sgtype a
+		LEFT JOIN act_yw_status ays ON ays.gtype = a.id
+		LEFT JOIN act_yw_gstatus ga ON ga.status_id = ays.id
+		LEFT JOIN act_yw_gnode gn ON gn.id = ga.gnode_id
+		<include refid="actYwSgtypeJoins"/>
+		<where>
+			ays.del_flag ='0'
+			and a.id=#{id}
+			and gn.id is not null
+		</where>
+	</select>
+
+
+
+
+	<update id="update">
+		UPDATE act_yw_sgtype SET
+			name = #{name},
+			reg_type = #{regType}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM act_yw_sgtype
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM act_yw_sgtype WHERE id = #{id}
+	</update>
+</mapper>

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.impdata.dao.TeacherErrorDao">
+
+	<sql id="teacherErrorColumns">
+		a.id AS "id",
+		a.imp_id AS "impId",
+		a.company_id AS "companyId",
+		a.office_id AS "office",
+		a.professional AS "professional",
+		a.login_name AS "loginName",
+		a.password AS "password",
+		a.no AS "no",
+		a.name AS "name",
+		a.email AS "email",
+		a.phone AS "phone",
+		a.mobile AS "mobile",
+		a.user_type AS "userType",
+		a.login_flag AS "loginFlag",
+		a.remarks AS "remarks",
+		a.id_type AS "idType",
+		a.national AS "national",
+		a.political AS "political",
+		a.post_code AS "postCode",
+		a.birthday AS "birthday",
+		a.sex AS "sex",
+		a.country AS "country",
+		a.area AS "area",
+		a.domain AS "domain",
+		a.degree AS "degree",
+		a.education AS "education",
+		a.id_no AS "idNo",
+		a.arrangement AS "arrangement",
+		a.discipline AS "discipline",
+		a.industry AS "industry",
+		a.technical_title AS "technicalTitle",
+		a.service_intention AS "serviceIntention",
+		a.work_unit AS "workUnit",
+		a.address AS "address",
+		a.resume AS "resume",
+		a.recommended_units AS "recommendedUnits",
+		a.result AS "result",
+		a.award AS "award",
+		a.level AS "level",
+		a.review_name AS "reviewName",
+		a.join_review_time AS "joinReviewTime",
+		a.first_bank AS "firstBank",
+		a.bank_account AS "bankAccount",
+		a.is_open AS "isOpen",
+		a.teachertype AS "teachertype",
+		a.education_type AS "educationType",
+		a.mainexp AS "mainexp",
+
+		a.province AS "province",
+		a.school AS "school",
+		a.row_index AS "rowIndex",
+
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		o4.name AS "office.name"
+	</sql>
+
+	<sql id="teacherErrorJoins">
+		LEFT JOIN sys_office o4 ON o4.id = a.office_id
+	</sql>
+
+	<select id="get" resultType="TeacherError">
+		SELECT
+			<include refid="teacherErrorColumns"/>
+		FROM teacher_error a
+		<include refid="teacherErrorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="TeacherError">
+		SELECT
+			<include refid="teacherErrorColumns"/>
+		FROM teacher_error a
+		<include refid="teacherErrorJoins"/>
+		<where>
+
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="TeacherError">
+		SELECT
+			<include refid="teacherErrorColumns"/>
+		FROM teacher_error a
+		<include refid="teacherErrorJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO teacher_error(
+			id,
+			imp_id,
+			company_id,
+			office_id,
+			professional,
+			login_name,
+			password,
+			no,
+			name,
+			email,
+			phone,
+			mobile,
+			user_type,
+			login_flag,
+			remarks,
+			id_type,
+			national,
+			political,
+			post_code,
+			birthday,
+			sex,
+			country,
+			area,
+			domain,
+			degree,
+			education,
+			id_no,
+			arrangement,
+			discipline,
+			industry,
+			technical_title,
+			service_intention,
+			work_unit,
+			address,
+			resume,
+			recommended_units,
+			result,
+			award,
+			level,
+			review_name,
+			join_review_time,
+			first_bank,
+			bank_account,
+			is_open,
+			teachertype,
+			education_type,
+			mainexp,
+			province,
+			school,
+			row_index,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES (
+			#{id},
+			#{impId},
+			#{companyId},
+			#{office},
+			#{professional},
+			#{loginName},
+			#{password},
+			#{no},
+			#{name},
+			#{email},
+			#{phone},
+			#{mobile},
+			#{userType},
+			#{loginFlag},
+			#{remarks},
+			#{idType},
+			#{national},
+			#{political},
+			#{postCode},
+			#{birthday},
+			#{sex},
+			#{country},
+			#{area},
+			#{domain},
+			#{degree},
+			#{education},
+			#{idNo},
+			#{arrangement},
+			#{discipline},
+			#{industry},
+			#{technicalTitle},
+			#{serviceIntention},
+			#{workUnit},
+			#{address},
+			#{resume},
+			#{recommendedUnits},
+			#{result},
+			#{award},
+			#{level},
+			#{reviewName},
+			#{joinReviewTime},
+			#{firstBank},
+			#{bankAccount},
+			#{isOpen},
+			#{teachertype},
+			#{educationType},
+			#{mainexp},
+			#{province},
+			#{school},
+			#{rowIndex},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE teacher_error SET
+			imp_id = #{impId},
+			company_id = #{companyId},
+			office_id = #{office},
+			professional = #{professional},
+			login_name = #{loginName},
+			password = #{password},
+			no = #{no},
+			name = #{name},
+			email = #{email},
+			phone = #{phone},
+			mobile = #{mobile},
+			user_type = #{userType},
+			login_flag = #{loginFlag},
+			remarks = #{remarks},
+			id_type = #{idType},
+			national = #{national},
+			political = #{political},
+			post_code = #{postCode},
+			birthday = #{birthday},
+			sex = #{sex},
+			country = #{country},
+			area = #{area},
+			domain = #{domain},
+			degree = #{degree},
+			education = #{education},
+			id_no = #{idNo},
+			arrangement = #{arrangement},
+			discipline = #{discipline},
+			industry = #{industry},
+			technical_title = #{technicalTitle},
+			service_intention = #{serviceIntention},
+			work_unit = #{workUnit},
+			address = #{address},
+			resume = #{resume},
+			recommended_units = #{recommendedUnits},
+			result = #{result},
+			award = #{award},
+			level = #{level},
+			review_name = #{reviewName},
+			join_review_time = #{joinReviewTime},
+			first_bank = #{firstBank},
+			bank_account = #{bankAccount},
+			is_open = #{isOpen},
+			teachertype = #{teachertype},
+			education_type = #{educationType},
+			mainexp = #{mainexp},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM teacher_error
+		WHERE id = #{id}
+	</update>
+	<select id="getListByImpId" resultType="java.util.HashMap"
+		parameterType="java.lang.String">
+		SELECT
+		t.*
+		FROM
+		teacher_error t
+		WHERE
+		t.imp_id = #{impid}
+		order by
+		t.create_date
+	</select>
+	<update id="deleteByImpId"
+		parameterType="java.lang.String">
+		DELETE FROM teacher_error
+		WHERE imp_id =  #{impid}
+	</update>
+</mapper>

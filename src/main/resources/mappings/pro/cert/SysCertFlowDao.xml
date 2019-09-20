@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.cert.dao.SysCertFlowDao">
+
+	<sql id="sysCertFlowColumns">
+		a.id AS "id",
+		a.flow AS "flow",
+		a.node AS "node",
+		a.cert_id AS "certId",
+		a.results AS "results",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysCertFlowJoins">
+	</sql>
+
+	<select id="get" resultType="SysCertFlow">
+		SELECT
+			<include refid="sysCertFlowColumns"/>
+		FROM sys_cert_flow a
+		<include refid="sysCertFlowJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SysCertFlow">
+		SELECT
+			<include refid="sysCertFlowColumns"/>
+		FROM sys_cert_flow a
+		<include refid="sysCertFlowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysCertFlow">
+		SELECT
+			<include refid="sysCertFlowColumns"/>
+		FROM sys_cert_flow a
+		<include refid="sysCertFlowJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_cert_flow(
+			id,
+			flow,
+			node,
+			cert_id,
+			results,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{flow},
+			#{node},
+			#{certId},
+			#{results},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_cert_flow SET
+			flow = #{flow},
+			node = #{node},
+			cert_id = #{certId},
+			results=#{results},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_cert_flow SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteByFlow">
+		UPDATE sys_cert_flow SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE flow = #{flow} and cert_id = #{certId}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sys_cert_flow WHERE id = #{id}
+	</update>
+	<select id="findByCdn" resultType="java.lang.Integer">
+		select count(1) from
+		sys_cert_flow t
+		left join sys_cert f on t.cert_id=f.id
+		where t.flow = #{flow}
+		and t.node = #{node} and t.del_flag='0' and f.del_flag='0'
+	</select>
+	<select id="getCertFlows" resultType="SysCertFlow">
+		select t.* from
+		sys_cert_flow t
+		left join sys_cert f on t.cert_id=f.id
+		left join act_yw ay on ay.id=t.flow
+		left join act_yw_gtime g on ay.rel_id=g.project_id and t.node=g.gnode_id
+		where  t.del_flag='0' and f.del_flag='0' and f.releases='1' 
+		and date_format(date_add(g.end_date, interval 1 day),'%Y-%m-%d')=date_format(sysdate(),'%Y-%m-%d')
+		<if test="flow != null and flow != ''">
+			and t.flow = #{flow}
+		</if>
+		<if test="node != null and node != ''">
+			and t.node = #{node}
+		</if>
+	</select>
+	<select id="getCertFlowVo" resultType="com.oseasy.pro.modules.cert.vo.SysCertFlowVo">
+		select b.id,b.cert_id certId,b.flow,b.node,pp.project_name flowName,gn.name nodeName 
+		from sys_cert_flow b 
+		left join sys_cert a on a.id=b.cert_id and a.del_flag='0'
+		left join act_yw ay on b.flow=ay.id
+		LEFT JOIN pro_project pp ON pp.id = ay.rel_id
+		LEFT JOIN act_yw_gnode gn ON gn.id = b.node
+		LEFT JOIN act_yw_node n ON n.id = gn.node_id
+		where  b.id=#{id}
+	</select>
+	<select id="getCertFlowsWithCid" resultType="SysCertFlow">
+		select t.* from
+		sys_cert_flow t
+		left join sys_cert f on t.cert_id=f.id
+		where  t.del_flag='0' and f.del_flag='0' and f.releases='1'
+		<if test="flow != null and flow != ''">
+			and t.flow = #{flow}
+		</if>
+		<if test="certid != null and certid != ''">
+			and t.cert_id = #{certid}
+		</if>
+	</select>
+	
+</mapper>

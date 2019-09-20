@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwCosMaterialUhistoryDao">
+    
+	<sql id="pwCosMaterialUhistoryColumns">
+		a.id AS "id",
+		a.cmid AS "cmid",
+		a.ayname AS "ayname",
+		a.time AS "time",
+		a.phone AS "phone",
+		a.mobile AS "mobile",
+		a.num AS "num",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="pwCosMaterialUhistoryJoins">
+	</sql>
+    
+	<select id="get" resultType="PwCosMaterialUhistory">
+		SELECT 
+			<include refid="pwCosMaterialUhistoryColumns"/>
+		FROM pw_cos_material_uhistory a
+		<include refid="pwCosMaterialUhistoryJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PwCosMaterialUhistory">
+		SELECT 
+			<include refid="pwCosMaterialUhistoryColumns"/>
+		FROM pw_cos_material_uhistory a
+		<include refid="pwCosMaterialUhistoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="cmid != null and cmid != ''">
+				AND a.cmid = #{cmid}
+			</if>
+			<if test="beginAyname != null and endAyname != null and beginAyname != '' and endAyname != ''">
+				AND a.ayname BETWEEN #{beginAyname} AND #{endAyname}
+			</if>
+			<if test="time != null and time != ''">
+				AND a.time = #{time}
+			</if>
+			<if test="phone != null and phone != ''">
+				AND a.phone = #{phone}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND a.mobile = #{mobile}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PwCosMaterialUhistory">
+		SELECT 
+			<include refid="pwCosMaterialUhistoryColumns"/>
+		FROM pw_cos_material_uhistory a
+		<include refid="pwCosMaterialUhistoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pw_cos_material_uhistory(
+			id,
+			cmid,
+			ayname,
+			time,
+			phone,
+			mobile,
+			num,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{cmid},
+			#{ayname},
+			#{time},
+			#{phone},
+			#{mobile},
+			#{num},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pw_cos_material_uhistory SET 	
+			cmid = #{cmid},
+			ayname = #{ayname},
+			time = #{time},
+			phone = #{phone},
+			mobile = #{mobile},
+			num = #{num},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE pw_cos_material_uhistory SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,390 @@
+.midBox{
+	width:760px;
+	margin: 0px auto;
+	margin-top: 100px;
+	margin-bottom: 500px;
+}
+
+.midBox .rangeBox{
+	width: 100%;
+}
+
+.midBox .rangeBox .title{
+	display:block;
+	width:167px;
+	height:64px;
+	overflow: hidden;
+	background: url(../img/achievement1.png) no-repeat;
+	background-position: 0px 0px;
+	margin: 0px auto;
+	margin-bottom: 60px;
+}
+
+.midBox .rangeBox .content{
+	width: 100%;
+	position: relative;
+	color:#656565;
+	font-family: "microsoft yahei";
+	font-size:14px;
+	line-height: 26px;
+	margin-bottom: 140px;
+}
+
+.midBox .rangeBox .content small{
+	display: block;
+	width:60px;
+	height:38px;
+	overflow: hidden;
+	background: url(../img/achievement1.png) no-repeat;
+	background-position:0px -381px;
+	position: absolute;
+	top: -10px;
+	left: -70px;
+}
+
+.midBox .rangeBox .content big{
+	display: block;
+	width:60px;
+	height:38px;
+	overflow: hidden;
+	background: url(../img/achievement1.png) no-repeat;
+	background-position:-60px -381px;
+	position: absolute;
+	top: 60px;
+	right: -70px;
+}
+
+
+
+.midBox .rewardObjectBox{
+	width: 100%;
+	overflow: hidden;
+}
+
+.midBox .rewardObjectBox .title{
+	display:block;
+	width:167px;
+	height:63px;
+	overflow: hidden;
+	background: url(../img/achievement1.png) no-repeat;
+	background-position: 0px -64px;
+	margin: 0px auto;
+	margin-bottom: 44px;
+}
+
+.midBox .rewardObjectBox .content{
+	width: 100%;
+	overflow: hidden;
+	font-family: "microsoft yahei";
+	color:#656565;
+	font-size:14px;
+	line-height: 26px;
+	margin-bottom: 150px;
+}
+
+.midBox .rewardObjectBox .content h6{
+	text-align: center;
+	margin-top: 30px;
+}
+
+
+
+.midBox .declareBox{
+	width: 100%;
+	overflow: hidden;
+}
+
+.midBox .declareBox .title{
+	display:block;
+	width:167px;
+	height:63px;
+	overflow: hidden;
+	background: url(../img/achievement1.png) no-repeat;
+	background-position: 0px -127px;
+	margin: 0px auto;
+	margin-bottom: 56px;
+}
+
+.midBox .declareBox .content{
+	width:509px;
+	height:238px;
+	margin: 0 auto;
+	box-shadow: 1px 1px 1px 2px #999;
+	-webkit-box-shadow: 1px 1px 1px 2px #d3d3d3;
+	margin-bottom:140px;
+	position: relative;
+}
+
+.midBox .declareBox .content small{
+	display: block;
+	width:12px;
+	height:12px;
+	overflow: hidden;
+	background: url(../img/achievement1.png) no-repeat;
+	background-position:-120px -381px;
+	position: absolute;
+	left:40px;
+	top:18px;
+}
+
+.midBox .declareBox .content big{
+	display: block;
+	width:12px;
+	height:12px;
+	overflow: hidden;
+	background: url(../img/achievement1.png) no-repeat;
+	background-position:-120px -381px;
+	position: absolute;
+	right:40px;
+	top:18px;
+}
+
+.midBox .declareBox .content p{
+	width: 100%;
+	overflow: hidden;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	font-family: "宋体";
+	text-align: center;
+	padding:88px 20px;
+	color:#656565;
+	font-size:16px;
+	line-height: 26px;
+}
+
+.midBox .declareBox .content p strong{
+	font-size: 20px;
+	color:#e9442d;
+	font-family: "microsoft yahei";
+}
+
+
+
+
+.midBox .producerBox{
+	width: 100%;
+	overflow: hidden;
+}
+
+.midBox .producerBox .title{
+	display:block;
+	width:167px;
+	height:63px;
+	overflow: hidden;
+	background: url(../img/achievement1.png) no-repeat;
+	background-position: 0px -190px;
+	margin: 0px auto;
+	margin-bottom: 66px;
+}
+
+.midBox .producerBox ul{
+	width:100%;
+	overflow: hidden;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 0px 37px;
+	margin-bottom: 140px;
+}
+
+.midBox .producerBox ul li{
+	width: 100%;
+	height:68px;
+	margin-bottom: 12px;
+	background:#e7e7e7;
+	position: relative;
+	border-radius:34px;
+	-moz-border-radius:34px;
+	-webkit-border-radius:34px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 0px 30px;
+}
+
+.midBox .producerBox ul li span{
+	position: absolute;
+	bottom:-6px;
+	left:50%;
+	display: block;
+	width: 12px;
+	height: 6px;
+	overflow: hidden;
+	background: url(../img/achievement1.png) no-repeat;
+	background-position:-120px -393px;
+}
+
+.midBox .producerBox ul li big{
+	float: left;
+	width:100px;
+	height: 68px;
+	line-height: 68px;
+	color:#e9442d;
+	font-size:16px;
+}
+
+.midBox .producerBox ul li table{
+	height: 100%;
+	font-size: 14px;
+	color: #999;
+}
+
+
+
+
+.midBox .awardStandardBox{
+	width: 100%;
+	overflow: hidden;
+}
+
+.midBox .awardStandardBox .title{
+	display:block;
+	width:167px;
+	height:63px;
+	overflow: hidden;
+	background: url(../img/achievement1.png) no-repeat;
+	background-position: 0px -253px;
+	margin: 0px auto;
+	margin-bottom: 40px;
+}
+
+.midBox .awardStandardBox .smalltitle{
+	width: 100%;
+	overflow: hidden;
+	margin-bottom:60px;
+	color: #999;
+	font-size: 14px;
+	text-align: center;
+}
+
+.midBox .awardStandardBox .content{
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+	margin-bottom: 60px;
+}
+
+.midBox .awardStandardBox .content img{
+	float: left;
+	position: absolute;
+	left: 0px;
+	top:15px;
+}
+
+.midBox .awardStandardBox .content .right{
+	width: 100%;
+	overflow: hidden;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding-left:130px;
+}
+
+.midBox .awardStandardBox .content .right ul{
+	width: 100%;
+	overflow: hidden;
+	margin-bottom:60px;
+}
+
+.midBox .awardStandardBox .content .right ul li{
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 7px;
+}
+
+.midBox .awardStandardBox .content .right ul li span{
+	float: left;
+	width:19px;
+	height:19px;
+	overflow: hidden;
+	background:#8e8e8e;
+	border-radius:10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius:10px;
+	text-align: center;
+	line-height: 19px;
+	color: white;
+	margin-right: 6px;
+	font-size: 12px;
+}
+
+.midBox .awardStandardBox .content .right ul li p{
+	float: left;
+	width: 600px;
+	overflow: hidden;
+	font-size:12px;
+	color:#5d5d5d;
+	line-height: 20px;
+}
+
+
+
+.midBox .rewardMethod{
+	width: 100%;
+	overflow: hidden;
+}
+
+.midBox .rewardMethod .title{
+	display:block;
+	width:167px;
+	height:65px;
+	overflow: hidden;
+	background: url(../img/achievement1.png) no-repeat;
+	background-position: 0px -316px;
+	margin: 0px auto;
+	margin-bottom:64px;
+}
+
+.midBox .rewardMethod .content{
+	width:399px;
+	height:458px;
+	overflow: hidden;
+	margin: 0px auto;
+	background: url(../img/achievement4.png) no-repeat center center;
+	text-align: center;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding-top:150px;
+	padding-left:50px;
+	padding-right: 50px;
+	color: #666;
+	line-height: 30px;
+}
+
+.decorationpic5{
+	position: absolute;
+	top: 100px;
+	left: 0px;
+}
+
+.decorationpic6{
+	position: absolute;
+	top: 581px;
+	right: 0px;
+}
+
+.decorationpic7{
+	position: absolute;
+	top: 1406px;
+	left: 0px;
+}
+
+.decorationpic8{
+	position: absolute;
+	top: 2247px;
+	right: 0px;
+}
+
+.decorationpic9{
+	position: absolute;
+	top: 3822px;
+	left: 0px;
+}
+
+.decorationpic10{
+	position: absolute;
+	top: 4110px;
+	right: 0px;
+}

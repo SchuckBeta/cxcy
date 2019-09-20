@@ -1,0 +1,333 @@
+body{
+    background-color:#f7f7f7;
+}
+.Contest{
+    width: 1180px;
+    max-width: 1366px;
+    margin: 17px auto 0px auto;
+    overflow: hidden;
+}
+
+.Contest .Contest_start,.Contest_list{
+    display: inline-block;
+    height: 20px;
+    width: 85px;
+    padding: 4px 10px;
+    border-radius:7px;
+    text-align: center;
+    border:1px solid rgba(235, 197, 194, 1);
+    color:#fff;
+    font-weight: bold;
+    float: right;
+    margin-left: 20px;
+}
+
+.mar_t{
+    margin-top: 64px;
+}
+
+.Contest .Contest_start{
+    background-color: #ccc;
+}
+
+.Contest .Contest_list{
+    background-color: #f18680;
+}
+
+.Contest .Contest_table{
+    padding:30px  50px;
+    border:1px solid  #f6e5e4;
+    background-color: #fff;
+}
+
+.Contest .Contest_table h2{
+    text-align: center;
+}
+.Contest .Contest_table  .project_number{
+    text-align: right;
+    font-size: 15px;
+    margin-right: 50px;
+}
+
+.Contest .Contest_table .calendar{
+    box-shadow:0px 0px 50px #D3D3D3;
+    width:1000px;
+    margin:20px auto 20px auto;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.Contest .Contest_table .calendar ul{
+    width:13%;
+    float:left;
+}
+
+.Contest .Contest_table .calendar ul li{
+    text-align: left;
+    width:125px;
+    border-right: 1px solid #eee;
+    border-top:1px solid #eee ;
+}
+
+.Contest .Contest_table .calendar ul li a{
+    color:#A3A3A3;
+}
+
+.Contest .Contest_table .calendar ul li .number{
+    font-weight: bold;
+    font-size: 56px;
+    color: #7A7A7A;
+    text-align: center;
+    margin: 5px 0;
+}
+
+.Contest .Contest_table .calendar ul li p{
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.Contest .Contest_table .calendar ul li .col_{
+    padding-bottom: 14px;
+    text-align: center;
+}
+
+.Contest .Contest_table .calendar  .cont_items{
+    float:left;
+    margin: 35px 95px;
+}
+
+.Contest .Contest_table .calendar  .cont_items p img{
+    position: relative;
+    top: 4px;
+    margin-right: 8px;
+
+}
+
+.Contest .Contest_table .calendar  .cont_items p a{
+    text-decoration: underline !important;
+    color:blue;
+}
+
+.Contest .Contest_table .calendar .Hospital_level .Hospital_head span:first-child{
+    margin-right: 40px;
+}
+
+.Contest .Contest_table .calendar .Hospital_level table{
+    border:1px solid #CCCCCC;
+}
+
+.Contest .Contest_table .calendar .Hospital_level table th{
+    border-bottom:1px solid #CCCCCC;
+    border-left: 1px solid #CCCCCC;
+    font-size: 14px;
+    padding:5px 0;
+}
+
+.Contest .Contest_table .calendar .Hospital_level table th:first-child{
+    border-left: none;
+}
+
+.Contest .Contest_table .calendar .Hospital_level table td{
+    /*border-bottom:1px solid #CCCCCC;*/
+    border-left: 1px solid #CCCCCC;
+    text-align: center;
+     padding:5px 0;
+     font-size: 14px;
+}
+
+.Contest .Contest_table .calendar .Hospital_level table td:first-child{
+    border-left: none;
+}
+
+.Contest .Contest_table .calendar .Hospital_level table .mf_g{
+    width:495px;
+}
+
+.level{
+    width: 760px;
+    float:left;
+    margin: 0px 55px;
+    width: 760px;
+}
+
+.bgColor{
+    background-color: #f0ebea;
+    font-size: 14px;
+    padding:5px;
+}
+
+.lef_right{
+    float:right;
+}
+
+.Schoold_level table th{
+    border-bottom:1px solid #CCCCCC;
+    border-left: 1px solid #CCCCCC;
+    font-size: 14px;
+    padding:5px 0;
+    border-top: 1px solid #CCCCCC;
+}
+
+.leff{
+    margin-top:58px;
+}
+
+.legg{
+    margin-top: 25px;
+}
+
+.Schoold_level table th:last-child{
+     border-right: 1px solid #CCCCCC;
+}
+
+.Schoold_level table td{
+    border-left: 1px solid #CCCCCC;
+    text-align: center;
+    padding:5px 0;
+    font-size: 14px;
+    border-bottom:1px solid #CCCCCC;
+    white-space: nowrap;
+    word-break: break-all;
+}
+
+.Schoold_level table tr .wid{
+    border-right: 1px solid #CCCCCC;
+}
+
+.Schoold_level table tr .hef_w{
+      width:350px;
+}
+
+.province_level table th{
+    border-bottom:1px solid #CCCCCC;
+    border-left: 1px solid #CCCCCC;
+    font-size: 14px;
+    padding:5px 0;
+    border-top: 1px solid #CCCCCC;
+    font-family:'Microsoft yahei','Arial';
+}
+
+.ledd{
+    margin-top:25px;
+}
+
+.province_level table th:last-child{
+     border-right: 1px solid #CCCCCC;
+}
+
+.province_level table td{
+    border-left: 1px solid #CCCCCC;
+    text-align: center;
+     padding:5px 0;
+     font-size: 14px;
+     border-bottom:1px solid #CCCCCC;
+     white-space: nowrap;
+     word-break: break-all;
+}
+
+.province_level table .bod_l{
+    border-right: 1px solid #CCCCCC;
+}
+
+.country_level table th{
+    border-bottom:1px solid #CCCCCC;
+    border-left: 1px solid #CCCCCC;
+    font-size: 14px;
+    padding:5px 0;
+    border-top: 1px solid #CCCCCC;
+}
+
+.country_level table th:last-child{
+     border-right: 1px solid #CCCCCC;
+}
+
+.country_level table td{
+    border-left: 1px solid #CCCCCC;
+    text-align: center;
+     padding:5px 0;
+     font-size: 14px;
+     border-bottom:1px solid #CCCCCC;
+     white-space: nowrap;
+     word-break: break-all;
+}
+
+.country_level table .bod_l{
+    border-right: 1px solid #CCCCCC;
+}
+
+.leszz{
+     margin-top:15px;
+}
+
+.footer{
+    width:100%;
+}
+
+.footer img{
+     width:100%;
+     display:block;
+}
+
+.Contest .Contest_table .calendar li{
+    position:relative;
+}
+
+.Contest .Contest_table .calendar li:hover{
+    background-color:#ebc5c3;
+}
+
+.Contest .Contest_table .calendar li:hover p{
+    color:#fff;
+}
+
+.Contest .Contest_table .calendar li:hover .col_{
+    text-align: center;
+    color:#fff;
+}
+
+.Contest .Contest_table .calendar li .bor{
+    display:inline-block;
+    width:0; 
+    height:0; 
+    border-top:12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-left: 12px solid #f0ebea;
+    position:absolute;
+    left: 125px;
+    top: 57px;
+    display:none;
+}
+
+.Contest .Contest_table .calendar li span:last-child{
+    display:inline-block;
+    width: 0;
+    height: 0;
+    border-left: 11px solid #fff;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    position: absolute;
+    left: 125px;
+    top: 59px;
+    display:none;
+}
+
+.Contest .Contest_table .calendar li:hover .bor{
+    display:inline-block;
+    width:0; 
+    height:0; 
+    border-top:12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-left: 12px solid #ebc5c3;
+}
+
+.Contest .Contest_table .calendar li:hover span:last-child{
+     display:none;
+}
+
+.Contest .Contest_table .calendar li .lo{
+    display:inline-block !important;
+}
+
+.Contest .Contest_table .calendar li:first-child:hover span:last-child{
+    display:none !important;
+}

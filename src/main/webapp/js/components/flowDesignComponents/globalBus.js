@@ -1,0 +1,3 @@
+
+var gBusEvent = new Vue();
+

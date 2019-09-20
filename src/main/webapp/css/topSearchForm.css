@@ -1,0 +1,97 @@
+@charset "UTF-8";
+
+
+.form-content-box input,.form-content-box select{
+    max-width: 150px;
+    height: 20px;
+    box-sizing: content-box;
+}
+.form-content-box label{
+    margin-right: 8px;
+    font-size: 14px;
+}
+.form-content-box .left-form{
+    margin-right: 160px;
+}
+.form-content-box .form-group{
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    white-space: nowrap;
+}
+.form-lesson-box input,.form-content-box select{
+    max-width: 150px;
+    height: 20px;
+    box-sizing: content-box;
+}
+.form-lesson-box label{
+    margin-right: 8px;
+    font-size: 14px;
+}
+.form-lesson-box .left-form{
+    margin-right: 237px;
+}
+.form-lesson-box .form-group{
+    display: inline-block;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    white-space: nowrap;
+}
+
+#searchForm{
+    height: auto;
+    border: none;
+    padding-top: 0;
+    padding-right: 0;
+    margin-bottom: 15px;
+}
+
+.btn-lx-primary{
+    padding: 3px 11px;
+    background: #e5e5e5;
+    color: #666;
+    height: auto;
+    line-height: 20px;
+    margin: 0;
+    vertical-align: middle;
+}
+.btn-lx-primary:hover{
+    background: #e9432d;
+    color: #fff;
+    border-color: #e9432d;
+}
+
+.white-nowrap{
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.nav-lesson-tabs,.form-lesson-box{
+    margin-bottom: 0;
+}
+.tab-pane .form-lesson-box{
+    padding: 20px 20px 5px !important;
+    border: solid #ddd !important;
+    border-width: 0 1px !important;
+    margin-bottom: 0 !important;
+}
+.table-no-radius{
+    border-radius: 0;
+}
+.table-no-radius thead:first-child tr:first-child>th:first-child, .table-no-radius tbody:first-child tr:first-child>td:first-child, .table-no-radius tbody:first-child tr:first-child>th:first-child{
+    border-radius: 0;
+}
+
+@media (max-width: 1600px){
+    .form-content-box label{
+        width:54px;
+        text-align: right;
+    }
+}
+@media (max-width: 1600px){
+    .form-lesson-box label{
+        width:88px;
+        text-align: right;
+    }
+}
+

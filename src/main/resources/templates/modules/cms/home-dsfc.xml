@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--导师风采 -->
+<template>
+	<jsonparam>
+	<![CDATA[{
+				'url':'模块跳转链接,如：/f/page-teacherGrace',
+			    'banner': [
+			        {
+			            'name': '导师1名称',
+			            'degree': '导师1学位',
+			            'img': '导师1头像图片地址',
+			            'desc': '描述'
+			        },
+			        {
+			            'name': '导师2名称',
+			            'degree': '导师2学位',
+			            'img': '导师2头像图片地址',
+			            'desc': '描述'
+			        },
+			        {
+			            'name': '导师3名称',
+			            'degree': '导师3学位',
+			            'img': '导师3头像图片地址',
+			            'desc': '描述'
+			        }
+			    ],
+			    'list': [
+			        {
+			            'name': '导师1名称',
+			            'img': '导师1头像图片地址',
+			            'desc': '描述',
+			            'tags': ['标签1','标签2','标签3']
+			        },
+			        {
+			            'name': '导师2名称',
+			            'img': '导师2头像图片地址',
+			            'desc': '描述',
+			            'tags': ['标签4','标签5','标签6']
+			        }
+			    ]
+		}]]>
+	</jsonparam>
+	<content>
+		<![CDATA[
+			<div class="teacherGraceBox">
+				<a href="${url}"><img class="title"
+					src="/img/teacherTitle.png" alt="" /></a>
+				<div class="content">
+					<div class="left">
+						<div id="slideBox3" class="slideBox3">
+							<div class="hd">
+								<ul>
+									<#list banner as tea>
+										<li></li>
+									</#list>
+								</ul>
+							</div>
+							<div class="bd">
+								<ul>
+								<#list banner as tea>
+									<li>
+										<div class="infor">
+											<div class="people">
+												<img src="${freemarkerGetFtpUrl(tea.img)}" />
+											</div>
+											<p>
+												<strong>${tea.name}</strong>
+											</p>
+											<p>
+												<span>${tea.degree}</span>
+											</p>
+										</div>
+										<div class="intro">
+											<p>${tea.desc}</p>
+										</div>
+									</li>
+									</#list>
+								</ul>
+							</div>
+							<a class="prev" href="javascript:void(0)"></a> <a class="next"
+								href="javascript:void(0)"></a>
+						</div>
+					</div>
+
+					<ul class="right">
+						<#list list as tea>
+							<li>
+								<div class="people" style="overflow: hidden">
+									<img src="${freemarkerGetFtpUrl(tea.img)}" />
+								</div>
+								<p class="infor">
+									<b class="name" style="float: left;font-size: 18px;color: #342c2a;font-weight: normal">${tea.name}</b> 
+									<#list tea.tags as tag>
+									<span>${tag}</span>
+									</#list>
+								</p>
+								<p class="intro" id="intro">${tea.desc}</p>
+							</li>
+						</#list>
+						<i><a href="${url}">更多</a></i>
+					</ul>
+				</div>
+
+			</div>]]>
+	</content>
+</template>

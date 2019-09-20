@@ -1,0 +1,56 @@
+@charset "utf-8";
+
+
+
+
+
+
+
+
+.form-search .control-label {
+    float: left;
+    padding-left: 15px;
+    padding-right: 8px;
+    width: 82px;
+    font-weight: normal;
+}
+
+.form-search .input-box {
+    margin-left: 82px;
+    padding: 0 15px 0 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.teacher-title,.student-title {
+    height: 40px;
+    line-height: 40px;
+    font-size: 19px;
+    color: #e9432d;
+    padding-left: 10px;
+    background: #e7e7e7;
+    border-right: 1px solid #cecece;
+    border-left: 1px solid #cecece;
+    font-weight: bold;
+}
+
+.guide-teacher-wrap {
+    border: 1px solid #eee;
+    padding: 20px 15px;
+}
+

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.dr.modules.dr.dao.DrPwEnterDao">
+	<select id="getPwSpace" resultType="com.oseasy.dr.modules.dr.vo.PwSpace">
+		select t.id sid,t.name sname,t.sid pid,'' type from pw_room t where t.del_flag='0'
+		union all
+		select f.id sid,f.name sname,f.parent_id pid,f.type from pw_space f where f.del_flag='0' and f.id!='1'
+	</select>
+	<select id="getPwSpaceDoor" resultType="com.oseasy.dr.modules.dr.vo.PwSpaceDoor">
+		select t.rspace_id spaceId,t.ept_id eptId,t.dr_no drNo,t.name dname,f.status selStatus,e.no eptNo,
+		(case when f.id is null then 0 else 1 end) sel from dr_equipment_rspace t
+		left join dr_equipment e on t.ept_id=e.id
+		left join dr_card_erspace f on f.erspace_id=t.id and f.card_id=#{cardid}
+		where e.id is not null
+		order by t.rspace_id
+	</select>
+
+	<select id="getPwSpaceGitem" resultType="com.oseasy.dr.modules.dr.vo.PwSpaceGitem">
+		SELECT
+			t.id AS id,
+			t.rspace_id AS spaceId,
+			t.ept_id AS eptId,
+			t.dr_no AS drNo,
+			t.name AS dname,
+			g. NAME AS groupName,
+			e.no AS eptNo,
+			(CASE WHEN f.id is null THEN 0 ELSE 1 END) sel,
+			(CASE WHEN FIND_IN_SET(CONCAT(t.rspace_id, "-", t.dr_no),(
+				SELECT GROUP_CONCAT(er.rspace_id, "-", er.dr_no) AS rspace_id
+				FROM dr_cardre_gitem cf
+				LEFT JOIN dr_equipment_rspace er ON er.id = cf.erspace_id
+				)) THEN 0 ELSE 1 END
+			) canSel
+		FROM dr_equipment_rspace t
+			LEFT JOIN dr_equipment e ON t.ept_id = e.id
+			LEFT JOIN dr_cardre_gitem f ON f.erspace_id = t.id AND f.gid = #{gid}
+			LEFT JOIN dr_cardre_group g ON f.gid = g.id AND g.id = #{gid}
+		WHERE
+			e.id is not null
+		ORDER BY t.rspace_id
+	</select>
+</mapper>

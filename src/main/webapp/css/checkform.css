@@ -1,0 +1,35 @@
+.other table tr td,th{
+    border:1px solid #d4d4d4;
+    font-size: 14px;
+    text-align: center;
+    border-right: none;
+    border-top: none;
+    padding: 10px;
+    font-family: 'Microsoft yahei';
+    color:#636363;
+
+}
+
+.other table tr:first-child>th{
+    border-top:1px solid #d4d4d4;
+    background-color: #f4e6d4;
+    white-space: nowrap;
+}
+
+.other table tr  .tab_bo{
+    border-right:1px solid #d4d4d4;
+}
+
+ .other table tr  .ros_thr{
+     background-color: #f4e6d4;
+     font-weight: bold;
+ }
+
+.footer{
+    width:100%;
+}
+
+.footer img{
+     width:100%;
+     display: block;
+}

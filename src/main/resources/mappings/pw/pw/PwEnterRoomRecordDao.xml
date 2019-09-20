@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwEnterRoomRecordDao">
+
+	<sql id="pwEnterRoomRecordColumns">
+		a.id AS "id",
+		a.eid AS "eid",
+		a.rid AS "rid",
+		a.rcid AS "record.id",
+		a.type AS "type",
+		a.num AS "num",
+		a.is_exit AS "isExit",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="pwEnterRoomRecordJoins">
+	</sql>
+
+	<select id="get" resultType="PwEnterRoomRecord">
+		SELECT
+			<include refid="pwEnterRoomRecordColumns"/>
+		FROM pw_enter_room_record a
+		<include refid="pwEnterRoomRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="PwEnterRoomRecord">
+		SELECT
+			<include refid="pwEnterRoomRecordColumns"/>
+		FROM pw_enter_room_record a
+		<include refid="pwEnterRoomRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="PwEnterRoomRecord">
+		SELECT
+			<include refid="pwEnterRoomRecordColumns"/>
+		FROM pw_enter_room_record a
+		<include refid="pwEnterRoomRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pw_enter_room_record(
+			id,
+			eid,
+			rid,
+			rcid,
+			type,
+			num,
+			is_exit,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{eid},
+			#{rid},
+			#{record.id},
+			#{type},
+			#{num},
+			#{isExit},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO pw_enter_room_record(
+			id,
+			eid,
+			rid,
+			rcid,
+			type,
+			num,
+			is_exit,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.eid},
+			#{item.rid},
+			#{item.record.id},
+			#{item.type},
+			#{item.num},
+			#{item.isExit},
+			#{item.updateDate},
+			#{item.updateBy.id},
+			#{item.createDate},
+			#{item.createBy.id},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE pw_enter_room_record SET
+			eid = #{eid},
+			rid = #{rid},
+			rcid = #{record.id},
+			type = #{type},
+			num = #{num},
+			is_exit = #{isExit},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE pw_enter_room_record
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="eid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.eid}
+				</foreach>
+			</trim>
+			<trim prefix="rid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rid}
+				</foreach>
+			</trim>
+			<trim prefix="rcid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.record.id}
+				</foreach>
+			</trim>
+			<trim prefix="type =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.type}
+				</foreach>
+			</trim>
+			<trim prefix="num =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.num}
+				</foreach>
+			</trim>
+			<trim prefix="is_exit =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isExit}
+				</foreach>
+			</trim>
+			<trim prefix="update_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateDate}
+				</foreach>
+			</trim>
+			<trim prefix="update_by =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateBy.id}
+				</foreach>
+			</trim>
+			<trim prefix="remarks =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.remarks}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+
+	<update id="delete">
+		UPDATE pw_enter_room_record SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deletePL">
+		UPDATE pw_enter_room_record SET
+			del_flag = #{DEL_FLAG_DELETE}
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM pw_enter_room_record WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM pw_enter_room_record WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM pw_enter_room_record
+	</update>
+</mapper>

@@ -1,0 +1,20 @@
+@charset "UTF-8";
+
+.header .mid ul li:hover span{
+    background-color: #2288c8;
+}
+.header .mid ul li .secondlever{
+    background-color: rgba(34, 136, 200, .8);
+}
+
+.header .user a:hover, .header .user span:hover{
+    color: #2288c8;
+}
+
+.drop-user-info a .name{
+    color: #2288c8;
+}
+
+.notice-module{
+    background-color: #2288c8;
+}

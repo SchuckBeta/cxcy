@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.cert.dao.CertMakeInfoDao">
+
+	<sql id="certMakeInfoColumns">
+		a.id AS "id",
+		a.actywid AS "actywid",
+		a.certid AS "certid",
+		a.certname AS "certname",
+		a.total AS "total",
+		a.success AS "success",
+		a.fail AS "fail",
+		a.is_complete AS "isComplete",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.msg AS "msg",
+		a.errmsg AS "errmsg"
+	</sql>
+
+	<sql id="certMakeInfoJoins">
+	</sql>
+
+	<select id="get" resultType="CertMakeInfo">
+		SELECT
+			<include refid="certMakeInfoColumns"/>
+		FROM cert_make_info a
+		<include refid="certMakeInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="CertMakeInfo">
+		SELECT
+			<include refid="certMakeInfoColumns"/>
+		FROM cert_make_info a
+		<include refid="certMakeInfoJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="CertMakeInfo">
+		SELECT
+			<include refid="certMakeInfoColumns"/>
+		FROM cert_make_info a
+		<include refid="certMakeInfoJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cert_make_info(
+			id,
+			actywid,
+			certid,
+			certname,
+			total,
+			success,
+			fail,
+			is_complete,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			msg,
+			errmsg
+		) VALUES (
+			#{id},
+			#{actywid},
+			#{certid},
+			#{certname},
+			#{total},
+			#{success},
+			#{fail},
+			#{isComplete},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{msg},
+			#{errmsg}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE cert_make_info SET
+			actywid = #{actywid},
+			certid = #{certid},
+			certname = #{certname},
+			total = #{total},
+			success = #{success},
+			fail = #{fail},
+			is_complete = #{isComplete},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			msg = #{msg},
+			errmsg = #{errmsg}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM cert_make_info
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM cert_make_info WHERE id = #{id}
+	</update>
+	<select id="getCertMakeingNum" resultType="java.lang.Integer">
+		SELECT
+			count(1) cc
+		FROM cert_make_info a
+		WHERE a.actywid = #{actywId} and a.certid=#{certid} and is_complete='0'
+	</select>
+	
+</mapper>

@@ -1,0 +1,333 @@
+@charset "UTF-8";
+
+#dialog-message {display: none;}
+.ui-dialog {padding: 0;z-index:9999 }
+.ui-dialog .ui-widget-header {border-width: 0;background-color: #f1f1f1;border-bottom-width: 1px;border-bottom-left-radius:0;border-bottom-right-radius:0;}
+.ui-dialog .ui-widget-header .ui-button {display: none;}
+.ui-dialog p {text-align: center;margin-top:14px;}
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {float: none ;text-align: center;}
+.ui-dialog .ui-button + .ui-button {margin-left: 30px;}
+.ui-dialog .icon-ok-sign {color: #20b189;}
+.ui-dialog .icon-remove-sign {color: #FF2F2F;}
+/* 浜у搧瀹氫簡3绉嶇姸鎬佹秷鎭紝鏆傛椂鍙湁杩欎袱绉� */
+.ui-dialog .icon-ok-msg, .ui-dialog .icon-fail-msg {display:inline-block;width: 38px;height:38px;background-repeat: no-repeat;background-position: center;vertical-align: middle;}
+.ui-dialog .icon-ok-msg {background-image: url(/img/ok-msg.png);}
+.ui-dialog .icon-fail-msg {background-image: url(/img/alert-msg.png);}
+#dialog-content span {display: inline-block;padding-left:5px;vertical-align: middle;}
+.ui-dialog .ui-dialog-buttonpane {border-top-width: 0;}
+.ui-dialog .ui-button {padding-top: .3em;padding-bottom:.3em;}
+
+.dialog-message-wqt .ui-dialog-content>p{
+	width:334px;
+	margin: 0;
+	padding-top: 20px;
+	min-height: 100px;
+}
+.dialog-message-wqt .ui-dialog-buttonset{
+	margin-bottom: 15px;
+}
+.ui-dialog .ui-dialog-content{
+	margin-top: 20px;
+}
+.agree-content{
+	text-indent:2em;
+}
+.agree-actions{
+	margin-top: 20px;
+}
+
+/*.ui-dialog-buttonset button{*/
+	/*background-color: #ddd;*/
+    /*border: 1px solid #ccc;*/
+	/*color: #333;*/
+/*}*/
+
+@media print {
+	#notifyModule{
+		display: none !important;
+	}
+}
+
+/*wqt*/
+.btn-good-at{
+	display: block;
+	position: absolute;
+	right: 15px;
+	top: 0;
+	width: 20px;
+	cursor: pointer;
+}
+.btn-good-at.disabled{
+	cursor: default;
+}
+
+.btn-default-oe {
+	color: #333;
+	background-color: #fff;
+	border-color: #ccc;
+}
+.btn-default-oe:focus,
+.btn-default-oe.focus {
+	color: #333;
+	background-color: #e6e6e6;
+	border-color: #8c8c8c;
+}
+.btn-default-oe:hover {
+	color: #333;
+	background-color: #e6e6e6;
+	border-color: #adadad;
+}
+.btn-default-oe:active,
+.btn-default-oe.active,
+.open > .dropdown-toggle.btn-default-oe {
+	color: #333;
+	background-color: #e6e6e6;
+	border-color: #adadad;
+}
+.btn-default-oe:active:hover,
+.btn-default-oe.active:hover,
+.open > .dropdown-toggle.btn-default-oe:hover,
+.btn-default-oe:active:focus,
+.btn-default-oe.active:focus,
+.open > .dropdown-toggle.btn-default-oe:focus,
+.btn-default-oe:active.focus,
+.btn-default-oe.active.focus,
+.open > .dropdown-toggle.btn-default-oe.focus {
+	color: #333;
+	background-color: #d4d4d4;
+	border-color: #8c8c8c;
+}
+.btn-default-oe:active,
+.btn-default-oe.active,
+.open > .dropdown-toggle.btn-default-oe {
+	background-image: none;
+}
+.btn-default-oe.disabled:hover,
+.btn-default-oe[disabled]:hover,
+fieldset[disabled] .btn-default-oe:hover,
+.btn-default-oe.disabled:focus,
+.btn-default-oe[disabled]:focus,
+fieldset[disabled] .btn-default-oe:focus,
+.btn-default-oe.disabled.focus,
+.btn-default-oe[disabled].focus,
+fieldset[disabled] .btn-default-oe.focus {
+	background-color: #fff;
+	border-color: #ccc;
+}
+.btn-default-oe .badge {
+	color: #fff;
+	background-color: #333;
+}
+.btn-primary-oe {
+	color: #fff;
+	background-color: #e9432d;
+	border-color: #e53018;
+}
+.btn-primary-oe:focus,
+.btn-primary-oe.focus {
+	color: #fff;
+	background-color: #cd2b16;
+	border-color: #71180c;
+}
+.btn-primary-oe:hover {
+	color: #fff;
+	background-color: #cd2b16;
+	border-color: #ad2412;
+}
+.btn-primary-oe:active,
+.btn-primary-oe.active,
+.open > .dropdown-toggle.btn-primary-oe {
+	color: #fff;
+	background-color: #cd2b16;
+	border-color: #ad2412;
+}
+.btn-primary-oe:active:hover,
+.btn-primary-oe.active:hover,
+.open > .dropdown-toggle.btn-primary-oe:hover,
+.btn-primary-oe:active:focus,
+.btn-primary-oe.active:focus,
+.open > .dropdown-toggle.btn-primary-oe:focus,
+.btn-primary-oe:active.focus,
+.btn-primary-oe.active.focus,
+.open > .dropdown-toggle.btn-primary-oe.focus {
+	color: #fff;
+	background-color: #ad2412;
+	border-color: #71180c;
+}
+.btn-primary-oe:active,
+.btn-primary-oe.active,
+.open > .dropdown-toggle.btn-primary-oe {
+	background-image: none;
+}
+
+.btn-primary-oe[disabled],
+.btn-primary-oe.disabled:hover,
+.btn-primary-oe[disabled]:hover,
+fieldset[disabled] .btn-primary-oe:hover,
+.btn-primary-oe.disabled:focus,
+.btn-primary-oe[disabled]:focus,
+fieldset[disabled] .btn-primary-oe:focus,
+.btn-primary-oe.disabled.focus,
+.btn-primary-oe[disabled].focus,
+fieldset[disabled] .btn-primary-oe.focus {
+	background-color: #e9432d;
+	border-color: #e53018;
+}
+
+
+.btn-primary {
+	color: #fff;
+	background-color: #e9432d;
+	border-color: #e53018;
+}
+.btn-primary:focus,
+.btn-primary.focus {
+	color: #fff;
+	background-color: #cd2b16;
+	border-color: #71180c;
+}
+.btn-primary:hover {
+	color: #fff;
+	background-color: #cd2b16;
+	border-color: #ad2412;
+}
+.btn-primary:active,
+.btn-primary.active,
+.open > .dropdown-toggle.btn-primary {
+	color: #fff;
+	background-color: #cd2b16;
+	border-color: #ad2412;
+}
+.btn-primary:active:hover,
+.btn-primary.active:hover,
+.open > .dropdown-toggle.btn-primary:hover,
+.btn-primary:active:focus,
+.btn-primary.active:focus,
+.open > .dropdown-toggle.btn-primary:focus,
+.btn-primary:active.focus,
+.btn-primary.active.focus,
+.open > .dropdown-toggle.btn-primary.focus {
+	color: #fff;
+	background-color: #ad2412;
+	border-color: #71180c;
+}
+.btn-primary:active,
+.btn-primary.active,
+.open > .dropdown-toggle.btn-primary {
+	background-image: none;
+}
+
+.btn-primary[disabled],
+.btn-primary.disabled:hover,
+.btn-primary[disabled]:hover,
+fieldset[disabled] .btn-primary:hover,
+.btn-primary.disabled:focus,
+.btn-primary[disabled]:focus,
+fieldset[disabled] .btn-primary:focus,
+.btn-primary.disabled.focus,
+.btn-primary[disabled].focus,
+fieldset[disabled] .btn-primary.focus {
+	background-color: #e9432d;
+	border-color: #e53018;
+}
+
+
+
+
+.table-front-default-thead thead tr{
+	background-color: #b3a9a8;
+}
+
+.container-fluid-oe{
+	width: 1270px;
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+
+.front-table-title{
+	height: 40px;
+	margin: 0;
+	padding-left: 15px;
+	line-height: 40px;
+	font-weight: bold;
+	color: #e9442d;
+	background-color: #e7e7e7;
+}
+
+.front-table-wrap{
+	padding: 30px 15px;
+	border: solid #cecece;
+	border-width: 0 1px 1px;
+}
+.mgb15{
+	margin-bottom: 15px;
+}
+
+.table-responsive-big {
+	width: 100%;
+	margin-bottom: 15px;
+	overflow-y: hidden;
+	-ms-overflow-style: -ms-autohiding-scrollbar;
+	border: 1px solid #ddd;
+}
+.table-responsive-big>.table-bordered{
+	border: 0;
+}
+.table-responsive-big>.table{
+	margin-bottom: 0;
+}
+.table-responsive-big>.table>tbody>tr>td, .table-responsive-big>.table>tbody>tr>th, .table-responsive-big>.table>tfoot>tr>td, .table-responsive-big>.table>tfoot>tr>th, .table-responsive-big>.table>thead>tr>td, .table-responsive-big>.table>thead>tr>th{
+	white-space: nowrap;
+}
+
+
+.table-responsive-big::-webkit-scrollbar-thumb{
+	background-color: #6e6e6e;
+	outline: 1px solid #333;
+}
+.table-responsive-big::-webkit-scrollbar {
+	height: 6px;
+	width: 6px;
+}
+
+textarea{
+	resize: none !important;
+}
+.project-template-container{
+	max-width: 1270px;
+}
+
+span.notify-content{
+	display: inline-block;
+	width: 260px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	text-align: left;
+}
+span.notify-tr-title{
+	display: inline-block;
+	width: 230px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.table>thead>tr>th{
+	white-space: nowrap;
+	vertical-align: middle;
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+	vertical-align: middle;
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+	text-align: center;
+}
+.btn.btn-gray[disabled]{
+	background:#DEDEDE;
+	color:#7B7B7B;
+}
+.btn[disabled],input[disabled]{
+	cursor: default;
+}

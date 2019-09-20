@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwEtAssignRuleDao">
+
+	<sql id="actYwEtAssignRuleColumns">
+		a.id AS "id",
+		a.actyw_id AS "actywId",
+		a.gnode_id AS "gnodeId",
+		a.atype AS "atype",
+		a.audit_user_num AS "auditUserNum",
+		a.audit_type AS "auditType",
+		a.audit_role AS "auditRole",
+		a.audit_max AS "auditMax",
+		a.is_auto AS "isAuto"
+	</sql>
+
+	<sql id="actYwEtAssignRuleJoins">
+	</sql>
+
+	<select id="get" resultType="ActYwEtAssignRule">
+		SELECT
+			<include refid="actYwEtAssignRuleColumns"/>
+		FROM act_yw_et_assign_rule a
+		<include refid="actYwEtAssignRuleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getActYwEtAssignRuleByActywIdAndGnodeId" resultType="ActYwEtAssignRule">
+		SELECT
+			<include refid="actYwEtAssignRuleColumns"/>
+		FROM act_yw_et_assign_rule a
+		<include refid="actYwEtAssignRuleJoins"/>
+		WHERE a.actyw_id = #{actywId} and a.gnode_id = #{gnodeId}
+	</select>
+
+	<select id="findList" resultType="ActYwEtAssignRule">
+		SELECT
+			<include refid="actYwEtAssignRuleColumns"/>
+		FROM act_yw_et_assign_rule a
+		<include refid="actYwEtAssignRuleJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwEtAssignRule">
+		SELECT
+			<include refid="actYwEtAssignRuleColumns"/>
+		FROM act_yw_et_assign_rule a
+		<include refid="actYwEtAssignRuleJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="findActYwEtAssignTaskVoList" resultType="ActYwEtAssignTaskVo">
+		select distinct c.id as gnodeId, c.name as gnodeName,
+		a.id as actywId,
+		pp.project_name as actywName,
+		aye.atype as atype,
+		aye.audit_user_num as expertNum
+		from act_yw_gnode c
+		left join act_yw a on a.group_id=c.group_id
+		left join pro_project pp on a.rel_id=pp.id
+		left join act_yw_et_assign_rule aye on  aye.actyw_id= a.id and  aye.gnode_id=c.id
+		WHERE  (c.type = '150' or c.type = '250') and (c.is_assign='1' OR c.is_delegate='1')
+		and a.is_deploy = '1'
+		<if test="actywId!=null and actywId!=''">
+			and a.id=#{actywId}
+		</if>
+		<if test="proType!=null and proType!=''">
+			and pp.pro_type=#{proType}
+		</if>
+		<if test="gnodeId!=null and gnodeId!=''">
+			and c.id=#{gnodeId}
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.id  , c.id
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findQueryList" resultType="ActYwEtAssignTaskVo">
+			select distinct c.id as gnodeId, c.name as gnodeName,
+			a.id as actywId,
+			pp.project_name as actywName
+			from act_yw_gnode c
+			left join act_yw a on a.group_id=c.group_id and a.is_deploy='1'
+			left join pro_project pp on a.rel_id=pp.id
+			WHERE  (c.type = '150' or c.type = '250') and (c.is_assign='1' OR c.is_delegate='1')
+				and pp.pro_type = #{proType}
+			ORDER BY a.id  , c.id
+
+	</select>
+
+
+	<insert id="insert">
+		INSERT INTO act_yw_et_assign_rule(
+			id,
+			actyw_id,
+			gnode_id,
+			atype,
+			audit_user_num,
+			audit_type,
+			audit_role,
+			audit_max,
+			is_auto
+		) VALUES (
+			#{id},
+			#{actywId},
+			#{gnodeId},
+			#{atype},
+			#{auditUserNum},
+			#{auditType},
+			#{auditRole},
+			#{auditMax},
+			#{isAuto}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO act_yw_et_assign_rule(
+			id,
+			actyw_id,
+			gnode_id,
+			atype,
+			audit_user_num,
+			audit_type,
+			audit_role,
+			audit_max,
+			is_auto
+		) VALUES (
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.actywId},
+			#{item.gnodeId},
+			#{item.atype},
+			#{item.auditUserNum},
+			#{item.auditType},
+			#{item.auditRole},
+			#{item.auditMax},
+			#{item.isAuto}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_et_assign_rule SET
+			actyw_id = #{actywId},
+			gnode_id = #{gnodeId},
+			atype = #{atype},
+			audit_user_num = #{auditUserNum},
+			audit_type = #{auditType},
+			audit_role = #{auditRole},
+			audit_max = #{auditMax},
+			is_auto = #{isAuto}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE act_yw_et_assign_rule
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="actyw_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.actywId}
+				</foreach>
+			</trim>
+			<trim prefix="gnode_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.gnodeId}
+				</foreach>
+			</trim>
+			<trim prefix="atype =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.atype}
+				</foreach>
+			</trim>
+			<trim prefix="audit_user_num =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.auditUserNum}
+				</foreach>
+			</trim>
+			<trim prefix="audit_type =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.auditType}
+				</foreach>
+			</trim>
+			<trim prefix="audit_role =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.auditRole}
+				</foreach>
+			</trim>
+			<trim prefix="audit_max =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.auditMax}
+				</foreach>
+			</trim>
+			<trim prefix="is_auto =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isAuto}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+
+	<update id="delete">
+		DELETE FROM act_yw_et_assign_rule
+		WHERE id = #{id}
+	</update>
+
+	<update id="deletePL">
+			DELETE FROM act_yw_et_assign_rule
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM act_yw_et_assign_rule WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM act_yw_et_assign_rule WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM act_yw_et_assign_rule
+	</update>
+</mapper>

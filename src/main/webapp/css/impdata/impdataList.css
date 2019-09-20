@@ -1,0 +1,84 @@
+#loginName {
+	margin-left: 3px;
+}
+
+.btns {
+	float: right !important;
+}
+
+select {
+	height: 30px !important;
+}
+
+input {
+	height: 30px !important;
+}
+
+input {
+	outline: none !important;
+}
+
+table {
+	margin-top: 40px;
+}
+
+tr {
+	text-align: center;
+}
+
+td, th {
+	text-align: center !important;
+}
+
+th {
+	background: #f4e6d4 !important;
+}
+
+.table-page .breadcrumb {
+	border-right: none !important;
+	border-left: none !important;
+}
+
+.btn-primary {
+	background: #e9432d !important;
+}
+
+table td .btn {
+	padding: 3px 11px;
+	background: #e5e5e5;
+	color: #666;
+}
+
+table td .btn:hover {
+	background: #e9432d;
+	color: #fff;
+}
+
+.input-medium {
+	width: 119px;
+}
+
+#office {
+	width: 91px;
+}
+
+#officeName {
+	width: 104px;
+}
+
+table {
+	margin-top: 0 !important;
+}
+
+@media screen and (max-width: 1366px) {
+	.ul-form {
+		width: 1100px;
+	}
+}
+
+@media screen and (max-width: 1366px) {
+	.m-btn {
+		margin-right: 16px;
+		padding: 0px;
+	}
+}

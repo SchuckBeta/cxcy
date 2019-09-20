@@ -1,0 +1,65 @@
+html , body {
+    padding: 0px;
+    margin: 0px;
+    font-size: 14px;
+    font-family: "微软雅黑";
+}
+.container-fluid{
+    padding:0;
+}
+ul,ol,li{
+    list-style: none;
+    padding:0px;
+    margin:0px;
+}
+.row{
+    margin:0px !important;
+}
+.page_tips{
+    margin-top: 10px;
+    display: inline-block;
+    white-space: nowrap;
+}
+.page_tips div{
+    margin-top: 10px;
+}
+.pagination_list{
+    overflow: hidden;
+    float: left;
+}
+.pagination_list li{
+    float: left;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border:1px solid #ccc;
+    margin:0px 2px;
+}
+.pagination_list li.head_footer{
+    width:60px;
+}
+.modal-header .close{
+    margin-top: 6px;
+}
+.current{
+    background: #e9432d;
+}
+.current a{
+    color:#fff;
+}
+.check_table_btn{
+    background: #e5e5e5;
+    color:#666;
+}
+.check_table_btn:hover{
+    background: #aaa3a3;
+}
+.check_follow{
+    color:#e86c5b;
+}
+.check_follow:hover{
+    color:#fff;
+}
+.num_page {float: right;}
+.per_page_count {width: 60px;}

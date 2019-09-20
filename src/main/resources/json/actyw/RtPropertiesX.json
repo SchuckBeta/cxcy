@@ -1,0 +1,30 @@
+{
+	"overrideid": "",
+	"name": "",
+	"documentation": "自定义流程节点",
+	"asynchronousdefinition": false,
+	"exclusivedefinition": true,
+	"executionlisteners": {
+		"executionListeners": []
+	},
+	"multiinstance_type": "None",
+	"multiinstance_cardinality": "",
+	"multiinstance_collection": "",
+	"multiinstance_variable": "",
+	"multiinstance_condition": "",
+	"isforcompensation": "false",
+	"usertaskassignment": {
+		"assignment": {
+			"candidateUsers": [{
+				"value": ""
+			}]
+		}
+	},
+	"formkeydefinition": "",
+	"duedatedefinition": "",
+	"prioritydefinition": "",
+	"formproperties": {},
+	"tasklisteners": {
+		"taskListeners": []
+	}
+}

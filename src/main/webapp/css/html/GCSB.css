@@ -1,0 +1,832 @@
+
+.wholebox{
+	width: 1242px;
+	overflow: hidden;
+	margin: 77px auto;
+	border: 1px solid #cecece;
+}
+
+.wholebox .datenameprint{
+	width: 100%;
+	height: 30px;
+	overflow: hidden;
+	line-height: 30px;
+}
+
+.wholebox .datenameprint span{
+	margin-right: 5px;
+	font-size: 14px;
+	color: #656565;
+}
+
+.wholebox .datenameprint small{
+	margin-right: 20px;
+	color: #656565;
+	font-size: 14px;
+}
+
+.wholebox .datenameprint a{
+	float: right;
+	line-height: 30px;
+	margin-right: 10px;
+	color: #656565;
+	font-size: 14px;
+	padding-left: 24px;
+	background: url(../img/print.png) no-repeat left center;
+	cursor: pointer;
+}
+
+.wholebox .datenameprint a:hover{
+	background: url(../img/printon.png) no-repeat left center;
+}
+
+.wholebox .title{
+	width: 100%;
+	height: 40px;
+	line-height: 40px;
+	color:#e9442d;
+	font-size:20px;
+	background:#e7e7e7;
+	font-weight: bold;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding-left: 10px;
+}
+
+.content{
+	width: ;
+	overflow: hidden;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 50px 140px;	
+}
+
+.content .personalinfor{
+	width: 100%;
+	overflow: hidden;
+}
+
+.content .personalinfor li{
+	float: left;
+	width:320px;
+	height:30px;
+	margin-bottom:15px;
+	position: relative;
+}
+
+
+.content .personalinfor li label{
+	float: left;
+	width:102px;
+	color:#656565;
+	font-size:14px;
+	text-align: right;
+	margin-right:5px;
+	font-weight: normal;
+	line-height: 30px;
+}
+
+.content .personalinfor li label.error{
+	display: block;
+	overflow: hidden;
+	position: absolute;
+	top:17px;
+	left:0px;
+	font-size: 12px;
+}
+
+.content .personalinfor li label span{
+	color:#e9442d;
+	font-size:14px;
+	line-height: 30px;
+	margin-right: 5px;
+}
+
+.content .personalinfor li input{
+	width:178px;
+	height:30px;
+	border: 1px solid #cbcbcb;
+	text-indent: 5px;
+	border-radius: 3px;
+}
+
+
+
+
+
+
+.content .iteminfor{
+	width: 100%;
+	overflow: hidden;
+}
+
+.content .iteminfor .biaoti{
+	width: 100%;
+	height:30px;
+	border-bottom: 1px solid #f3d5af;
+	position: relative;
+	overflow: visible !important;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.content .iteminfor .biaoti span{
+	display: block;
+	width:100px;
+	height:30px;
+	background: white;
+	color:#343434;
+	font-size:16px;
+	line-height: 30px;
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+}
+
+.content .iteminfor p{
+	width: 100%;
+	height: 30px;
+	margin-bottom: 15px;
+}
+
+.content .iteminfor p.nocheckerror{
+	width: 100%;
+	height: 15px;
+	font-size: 12px;
+	color: red;
+	margin-bottom: 0px;
+	margin-top: -15px;
+	box-sizing:border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing:border-box;
+	padding-left:10px;
+	display: none;
+}
+
+.content .iteminfor p label{
+	float: left;
+	color:#656565;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 30px;
+}
+
+.content .iteminfor p label span{
+	float: left;
+	color: #e9442d;
+	margin-right: 5px;
+}
+
+.content .iteminfor p input[type="text"]{
+	width:345px;
+	height:30px;
+	border: 1px solid #cbcbcb;
+	text-indent: 5px;
+	border-radius: 3px;
+}
+
+.content .iteminfor p select{
+	float: left;
+	width:180px;
+	height: 30px;
+	border: 1px solid #cbcbcb;
+	border-radius: 3px;
+	margin-right: 50px;
+}
+
+.content .iteminfor p.selecbox label.error{
+	display: none !important;
+}
+
+.content .iteminfor p select:last-child{
+	margin-right: 0px;
+}
+
+.content .iteminfor p input[type="checkbox"]{
+	float: left;
+	margin-right: 0px;
+	margin-top: 8px;
+	margin-right: 5px;
+}
+
+.content .iteminfor p #two{
+	margin-left: 100px;
+}
+
+.content .iteminfor p #three{
+	margin-left: 100px;
+}
+
+
+
+
+
+
+
+
+
+.content .teaminfor{
+	width: 100%;
+	overflow: hidden;
+}
+
+.content .teaminfor p label.error{
+	display: none !important;
+}
+
+.content .teaminfor .biaoti{
+	width: 100%;
+	height:30px;
+	border-bottom: 1px solid #f3d5af;
+	position: relative;
+	overflow: visible !important;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+
+
+.content .teaminfor .biaoti span{
+	display: block;
+	width:100px;
+	height:30px;
+	background: white;
+	color:#343434;
+	font-size:16px;
+	line-height: 30px;
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+}
+
+.content .teaminfor p{
+	width: 100%;
+	height: 30px;
+	margin-bottom: 15px;
+}
+
+.content .teaminfor p label{
+	float: left;
+	color:#656565;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 30px;
+}
+
+.content .teaminfor p label span{
+	float: left;
+	color: #e9442d;
+	margin-right: 5px;
+}
+
+.content .teaminfor p select{
+	float: left;
+	width:180px;
+	height: 30px;
+	border: 1px solid #cbcbcb;
+	border-radius: 3px;
+	margin-right: 70px;
+}
+
+.content .teaminfor .studentteam{
+	width: 100%;
+	height: 28px;
+	margin-bottom: 0px;
+	
+}
+
+.content .teaminfor .studentteam span{
+	display: block;
+	width: 80px;
+	height: 28px;
+	text-align: center;
+	line-height: 28px;
+	background: #ebebeb;
+	color:#656565;
+	font-size:14px;
+	border-radius: 3px;
+}
+
+
+.content .teaminfor .studenttb{
+	width:100%;
+	border: none;
+	border-collapse: collapse;
+	border-spacing: none;
+	text-align: center;
+	margin-bottom: 25px;
+}
+
+.content .teaminfor .studenttb th,.content .teaminfor .studenttb td{
+	border: 1px solid #d4d4d4;
+	text-align: center;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 5px;
+	font-size: 14px;
+	color: #656565;
+}
+
+.content .teaminfor .studenttb th{
+	background: #f4e6d4;
+}
+
+
+.content .teaminfor .guideteacher{
+	width: 100%;
+	height: 28px;
+	margin-bottom: 0px;
+}
+
+.content .teaminfor .guideteacher span{
+	display: block;
+	width: 80px;
+	height: 28px;
+	text-align: center;
+	line-height: 28px;
+	background: #ebebeb;
+	color:#656565;
+	font-size:14px;
+	border-radius: 3px;
+}
+
+
+.content .teaminfor .teachertb{
+	width:100%;
+	border: none;
+	border-collapse: collapse;
+	border-spacing: none;
+	text-align: center;
+	margin-bottom: 25px;
+}
+
+.content .teaminfor .teachertb th,.content .teaminfor .teachertb td{
+	border: 1px solid #d4d4d4;
+	text-align: center;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 5px;
+	font-size: 14px;
+	color: #656565;
+}
+
+.content .teaminfor .teachertb th{
+	background: #f4e6d4;
+}
+
+
+
+
+
+
+
+.content .itemintro{
+	width: 100%;
+	overflow: hidden;
+}
+
+.content .itemintro .biaoti{
+	width: 100%;
+	height:30px;
+	border-bottom: 1px solid #f3d5af;
+	position: relative;
+	overflow: visible !important;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.content .itemintro .biaoti span{
+	display: block;
+	width:100px;
+	height:30px;
+	background: white;
+	color:#343434;
+	font-size:16px;
+	line-height: 30px;
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+}
+
+
+.content .itemintro p{
+	width: 100%;
+	height: 30px;
+	margin-bottom: 15px;
+}
+
+.content .itemintro p label{
+	float: left;
+	color:#656565;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 30px;
+}
+
+.content .itemintro p label span{
+	float: left;
+	color: #e9442d;
+	margin-right: 5px;
+}
+
+.content .itemintro .introarea{
+	width: 100%;
+	height: 90px;
+	border: 1px solid #d4d4d4;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding:5px 10px;
+	margin-bottom: 15px;
+}
+
+.content .itemintro .prepare{
+	width: 100%;
+	height: 90px;
+	border: 1px solid #d4d4d4;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding:5px 10px;
+	margin-bottom: 15px;
+}
+
+
+
+
+.content .itemintro .yuantb{
+	width:100%;
+	border: none;
+	border-collapse: collapse;
+	border-spacing: none;
+	text-align: center;
+	margin-bottom: 25px;
+}
+
+.content .itemintro .yuantb td.timeerrorbox label.error{
+	float: left;
+	width: 100%;
+}
+
+.content .itemintro .yuantb th,.content .itemintro .yuantb td{
+	border: 1px solid #d4d4d4;
+	text-align: center;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	font-size: 14px;
+	color: #656565;
+}
+
+.content .itemintro .yuantb th{
+	background: #f4e6d4;
+	padding: 5px;
+}
+
+.content .itemintro .yuantb td textarea{
+	width: 100%;
+	height:76px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 5px;
+}
+
+.content .itemintro .yuantb td input{
+	display: inline-block;
+	width:120px;
+	height: 30px;
+	border: 1px solid #cecece;
+	border-radius: 3px;
+}
+
+
+
+
+
+
+.content .itemintro .task{
+	width:100%;
+	border: none;
+	border-collapse: collapse;
+	border-spacing: none;
+	text-align: center;
+	margin-bottom: 25px;
+}
+
+.content .itemintro .task td.timeerrorbox label.error{
+	float: left;
+	width: 100%;
+}
+
+.content .itemintro .task th,.content .itemintro .task td{
+	border: 1px solid #d4d4d4;
+	text-align: center;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	font-size: 14px;
+	color: #656565;
+}
+
+.content .itemintro .task th{
+	background: #f4e6d4;
+	padding: 5px;
+}
+
+.content .itemintro .task td textarea{
+	width: 100%;
+	height:47px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 5px;
+}
+
+.content .itemintro .task td input{
+	display: inline-block;
+	width:120px;
+	height: 30px;
+	border: 1px solid #cecece;
+	border-radius: 3px;
+}
+
+.content .itemintro .task td a{
+	display: inline-block;
+	width:19px;
+	height:19px;
+	background: url(../img/minuse.png) no-repeat;
+}
+
+.content .itemintro .task td a:hover{
+	background: url(../img/minus2.png) no-repeat;
+}
+
+.content .itemintro .task td a.plus{
+	background: url(../img/plus.png) no-repeat;
+}
+
+.content .itemintro .task td a.plus:hover{
+	background: url(../img/plus2.png) no-repeat;
+}
+
+.content .itemintro .task tbody tr td:last-child a.plus{
+	display: none;
+}
+
+.content .itemintro .task tbody tr:last-child td:last-child a.plus{
+	display: inline-block;
+}
+
+
+
+.content .exceptresult{
+	width: 100%;
+	overflow: hidden;
+}
+
+.content .exceptresult .biaoti{
+	width: 100%;
+	height:30px;
+	border-bottom: 1px solid #f3d5af;
+	position: relative;
+	overflow: visible !important;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.content .exceptresult .biaoti span{
+	display: block;
+	width:100px;
+	height:30px;
+	background: white;
+	color:#343434;
+	font-size:16px;
+	line-height: 30px;
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+}
+
+
+.content .exceptresult p{
+	width: 100%;
+	height: 30px;
+	margin-bottom: 15px;
+}
+
+.content .exceptresult p.nocheckerror{
+	width: 100%;
+	height: 15px;
+	font-size: 12px;
+	color: red;
+	margin-bottom:20px;
+	margin-top: -15px;
+	box-sizing:border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing:border-box;
+	padding-left:10px;
+	display: none;
+}
+
+.content .exceptresult p label{
+	float: left;
+	color:#656565;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 30px;
+}
+
+
+
+.content .exceptresult p label span{
+	float: left;
+	color: #e9442d;
+	margin-right: 5px;
+}
+
+.content .exceptresult p input[type="checkbox"]{
+	float: left;
+	margin-top: 8px;
+	margin-left: 15px;
+	margin-right: 5px;
+}
+
+.content .exceptresult textarea{
+	width: 100%;
+	height: 90px;
+	overflow: hidden;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border: 1px solid #cbcbcb;
+	padding: 5px;
+}
+
+
+
+
+
+.content .exceptcost{
+	width: 100%;
+	overflow: hidden;
+}
+
+.content .exceptcost .biaoti{
+	width: 100%;
+	height:30px;
+	border-bottom: 1px solid #f3d5af;
+	position: relative;
+	overflow: visible !important;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.content .exceptcost .biaoti span{
+	display: block;
+	width:100px;
+	height:30px;
+	background: white;
+	color:#343434;
+	font-size:16px;
+	line-height: 30px;
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+}
+
+
+.content .exceptcost p{
+	width: 100%;
+	height: 30px;
+	margin-bottom: 15px;
+}
+
+.content .exceptcost p label{
+	float: left;
+	color:#656565;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 30px;
+}
+
+.content .exceptcost p label span{
+	float: left;
+	color: #e9442d;
+	margin-right: 5px;
+}
+
+.content .exceptcost textarea{
+	width: 100%;
+	height: 90px;
+	overflow: hidden;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border: 1px solid #cbcbcb;
+	padding: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+.content .other{
+	width: 100%;
+	overflow: hidden;
+}
+
+.content .other .biaoti{
+	width: 100%;
+	height:30px;
+	border-bottom: 1px solid #f3d5af;
+	position: relative;
+	overflow: visible !important;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.content .other .biaoti span{
+	display: block;
+	width:100px;
+	height:30px;
+	background: white;
+	color:#343434;
+	font-size:16px;
+	line-height: 30px;
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+}
+
+.content .other .biaoti a{
+	position: absolute;
+	right: 0px;
+	top: -5px;
+	display: block;
+	width:102px;
+	height:30px;
+	line-height: 30px;
+	color:white;
+	background:#e9442d;
+	font-size:14px;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 3px;
+}
+
+
+.content .other p{
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
+	margin: 0px;
+}
+
+.content .btngroup{
+	width: 100%;
+	height: 30px;
+	overflow: hidden;
+	margin-top: 20px;
+}
+
+.content .btngroup a{
+	float: right;
+	min-width:30px;
+	height: 30px;
+	background:#e9442d;
+	color: white;
+	font-size: 14px;
+	line-height: 30px;
+	padding: 0px 20px;
+	margin-left: 15px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.content .btngroup button{
+	float: right;
+	min-width:30px;
+	height: 30px;
+	background:#e9442d;
+	color: white;
+	font-size: 14px;
+	line-height: 30px;
+	padding: 0px 20px;
+	margin-left: 15px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.error{
+	color:red !important;}

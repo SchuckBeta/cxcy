@@ -1,0 +1,132 @@
+/*双创学生画像 css*/
+
+.student{}
+
+/*---面包屑---*/
+.student .breadcrumb{
+	background-color: #fff;
+	padding: 8px 0px;
+}
+.student .breadcrumb a{
+	color: #656565;
+}
+.student .breadcrumb>li+li:before{
+	padding: 0 5px;
+    color: #ccc;
+    content: ">";
+}
+
+/*---表单+按钮---*/
+.student form{
+	margin-bottom: 15px;
+}
+.student .form-inline span{
+	color: #e9442d;
+	padding: 5px;
+}
+.student .form-inline a{
+	background-color:#e9442d;
+	color: #fff;
+	margin-right: 15px;
+}
+/* 内容 开始 */
+.student .information{
+	border:1px solid #ccc;
+	margin-bottom: 45px;
+}
+.student .information p{
+	text-align: center;
+	padding-right: 35px;
+	margin-top: 10px;
+	font-size: 18px;
+}
+.student .stu-information{
+	border-top:1px solid #ccc; 
+	margin:0px 30px;
+}
+.student .stu-information p{
+	font-size: 14px;
+	color: #656565;
+}
+.student .stu-information span{
+	font-weight: bold;
+	color: #656565;
+}
+.student .stu-information-p, .student .stu-information-j{
+	clear:both; 
+	
+}
+.student .stu-information-p p{
+	text-align: left;
+}
+.student .stu-information-j span{
+	background-color: #e9422d;
+	color: #fff;
+	margin-right: 5px;
+	font-weight: 500;
+	padding: 3px;
+}
+.student .stu-information-th, .student .stu-information-exp{
+	color: #656565; 
+	padding: 0px;
+}
+.student .stu-information-th{
+	width: 12%;
+}
+.student .stu-information-exp p{
+	text-align: left;
+}
+.student .stu-information-exp ul{
+	list-style: none;
+	padding: 0px;
+}
+.student .stu-row{
+	margin-bottom: 15px;
+}
+.student .stu-recommend{
+	border-right:1px solid #ccc;
+	position: relative;
+}
+.student .stu-recommend span{
+	width: 10px;
+	height: 10px;
+	display: block;
+	background-color: #e9422d;
+	border-radius: 25px;
+	position: absolute;
+	top: -5px;
+	left: 50%;	
+}
+.student .stu-recommend dl{
+	padding-top: 45px;
+	padding-bottom: 15px;
+	margin: 0px;
+}
+.student .stu-recommend dt{
+	color: #e9422d;
+	font-weight: bold;
+	text-align: center;
+	font-size: 16px;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 10px;
+	margin: 0px 15px;
+}
+.student .stu-recommend dd{
+	margin-top: 5px;
+	margin-left: 15px;
+	display: flex;   
+}
+.student .stu-recommend em{
+	 white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    width: 228px;
+    font-style: inherit;
+    margin-right: 10px;
+}
+.student .stu-recommend a{
+	margin-right: 15px;
+	color: #e9422d;
+	text-decoration: underline;
+}

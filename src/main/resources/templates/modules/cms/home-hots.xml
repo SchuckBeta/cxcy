@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<jsonparam>
+	<![CDATA[{
+		    'videoImg': '视频图片链接',
+		    'videoUrl': '视频链接',
+		    'videoTitle': '视频标题',
+		    'banners':['滚动区图片1链接','滚动区图片2链接','滚动区图片3链接']
+		}]]>
+	</jsonparam>
+	<content>
+		<![CDATA[<div id="hotTopics" class="hotspotBox">
+				<!--标题-->
+				<div class="text-center" style="margin-bottom:-1px;"><a href="/f/gcontesthots/view"><img src="/img/index2.png" /></a></div>
+				<!--大赛热点内容部分-->
+				<div class="hots-container">
+					<div class="content">
+					<!--视频播放-->
+					<div class="leftVideoBox">
+						<video id="media" height="413" preload="metadata" controls="controls" poster="${freemarkerGetFtpUrl(videoImg)}">
+							<source src="${freemarkerGetFtpUrl(videoUrl)}" type="video/mp4"></source>
+							当前浏览器不支持 video直接播放，请使用高版本的浏览器查看。
+						</video>
+						<!--视频标题-->
+						<p>${videoTitle}</p>
+						<!--播放按钮-->
+						<img class="start" src="/img/start.png" />
+					</div>
+
+					<!--轮播-->
+					<div class="rightScrollBox">
+						<div id="slideBox2" class="slideBox2">
+							<div class="bd">
+								<ul>
+									<#list banners as banner>
+										<li><img src="${freemarkerGetFtpUrl(banner)}"></li>
+									</#list>
+								</ul>
+							</div>
+							<!--<a class="prev" href="javascript:void(0)"></a> <a class="next" href="javascript:void(0)"></a>-->
+						</div>
+					</div>
+				</div>
+				</div>
+			</div>]]>
+	</content>
+</template>

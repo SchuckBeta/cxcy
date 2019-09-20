@@ -1,0 +1,74 @@
+@charset "UTF-8";
+
+
+.seers{
+    padding: 0;
+    margin: 0 -5px 0 0;
+    list-style: none;
+    overflow: hidden;
+}
+
+.seers .seer{
+    float: left;
+    position: relative;
+    width: 88px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+.seers-small .seer{
+    width: 80px;
+}
+.seers .seer .seer-pic{
+    display: block;
+    width: auto;
+    max-width: 100%;
+    border-radius: 3px;
+}
+
+.seers .seer-name{
+    position: absolute;
+    right:0;
+    bottom: 24px;
+    left: 0;
+    padding: 0 4px;
+    height: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+    line-height: 24px;
+    background-image: linear-gradient(to bottom,transparent,rgba(0,0,0,.7));
+    text-align: center;
+    color: #fff;
+}
+.seers .seer>a{
+    display: block;
+    height: 88px;
+    overflow: hidden;
+}
+.seers .see-date{
+    margin-bottom: 0;
+    font-size: 12px;
+    line-height: 24px;
+    text-align: center;
+}
+
+.see-count{
+    border-top: 1px dashed #ddd;
+    overflow: hidden;
+}
+
+.see-count .see-item{
+    float: left;
+    width: 50%;
+    text-align: center;
+}
+.see-count .see-item>span{
+    display: block;
+    font-size: 12px;
+    line-height: 24px;
+}
+
+.nav-tabs-good a{
+    color: #dd4814;
+}

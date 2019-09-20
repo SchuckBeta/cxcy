@@ -1,0 +1,359 @@
+.bannerBox{
+	width: 100%;
+	position: relative;
+}
+
+.bannerBox .banner{
+	width: 100%;
+	overflow: hidden;
+}
+
+.bannerBox .banner img{
+	display: block;
+	width: 100%;
+	overflow: hidden;
+}
+
+.bannerBox .decorationPic7{
+	position: absolute;
+	left: 0px;
+	bottom:-330px;
+}
+
+.bannerBox .secondNav{
+	width: 100%;
+	height:54px;
+	overflow: hidden;
+	position: absolute;
+	bottom:-54px;
+	left:0px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border-top: 1px solid #dbdbdb;
+	border-bottom: 1px solid #dbdbdb;
+}
+
+.bannerBox .secondNav ul{
+	width: 828px;
+	margin: 0px auto;
+	height: 100%;
+	overflow: hidden;
+}
+
+.bannerBox .secondNav ul li{
+	float: left;
+	width:207px;
+	height: 100%;
+	background: white;
+	line-height: 54px;
+	color:#525252;
+	font-size:15px;
+	font-family: ;
+	text-align: center;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border-left: 1px solid #dbdbdb;
+	cursor: pointer;
+}
+
+.bannerBox .secondNav ul li:last-child{
+	border-right: 1px solid #dbdbdb;
+}
+
+.bannerBox .secondNav ul li.current{
+	color: #de3b0a;
+	border-bottom:4px solid #de3b0a;
+}
+
+.grayBgBox{
+	width:100%;
+	overflow: hidden;
+	margin: 0px auto;
+	background:#f6f6f6;
+}
+
+@media only screen and (min-width: 1600px) {
+	.grayBgBox{
+		width:1503px;
+	}
+}
+
+.grayBgBox .midBox{
+	width: 1240PX;
+	overflow: hidden;
+	margin: 0 auto;
+	background:#f6f6f6;
+	padding-top:140px;
+}
+
+.grayBgBox .midBox .procedureMap{
+	display: block;
+	margin-bottom: 60px;
+}
+
+.grayBgBox .midBox .tableBox{
+	width: 100%;
+	overflow: hidden;
+	background: white;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding:50px 25px;
+}
+
+.grayBgBox .midBox .tableBox table{
+	width: 100%;
+	border-collapse: collapse;
+	border-spacing: none;
+}
+
+.grayBgBox .midBox .tableBox table tr{
+	width: 100%;
+	text-align: center;
+}
+
+.grayBgBox .midBox .tableBox table tr td{
+	border: 1px solid #808080;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding:10px;
+}
+
+.grayBgBox .midBox .tableBox table tr:first-child td{
+	height:38px;
+	font-size: 18px;
+	color: #454545;
+}
+
+.grayBgBox .midBox .tableBox table tr:nth-child(2) td{
+	height:56px;
+	font-size: 18px;
+	color: #454545;
+}
+
+.grayBgBox .midBox .tableBox table tr td p.tal{
+	width: 100%;
+	text-align: left;
+}
+
+.grayBgBox .midBox .tableBox table tr td p.tar{
+	width: 100%;
+	text-align: right;
+}
+
+.grayBgBox .midBox .tableBox table tr:nth-child(3) td{
+	height:108px;
+	font-size: 14px;
+	color: #454545;
+	vertical-align: top;
+	text-align: left;
+}
+
+.grayBgBox .midBox .tableBox table tr:nth-child(4) td{
+	height:34px;
+	font-size: 18px;
+	color: #454545;
+}
+
+.grayBgBox .midBox .tableBox table tr:nth-child(5) td{
+	height:200px;
+	font-size: 14px;
+	color: #454545;
+	vertical-align: top;
+	text-align: left;
+}
+
+.grayBgBox .midBox .tableBox table tr:nth-child(6) td{
+	height:34px;
+	font-size: 18px;
+	color: #454545;
+}
+
+.grayBgBox .midBox .tableBox table tr:nth-child(7) td{
+	height:100px;
+	font-size: 14px;
+	color: #454545;
+	vertical-align: top;
+	text-align: left;
+}
+
+.grayBgBox .midBox .shadowPic{
+	display: block;
+	width: 100%;
+	margin-bottom:50px;
+}
+
+.grayBgBox .midBox .birefBox .title,.grayBgBox .midBox .discriptionBox .title,.grayBgBox .midBox .itemTypeBox .title,.grayBgBox .midBox .itemRequestBox .title{
+	width: 100%;
+	overflow: hidden;
+	font-size: 22px;
+	color: #de3b0a;
+	line-height: 30px;
+}
+
+.grayBgBox .midBox .birefBox .title span,.grayBgBox .midBox .discriptionBox .title span,.grayBgBox .midBox .itemTypeBox .title span,.grayBgBox .midBox .itemRequestBox .title span{
+	float: left;
+	width:15px;
+	height:16px;
+	overflow: hidden;
+	background: url(../img/teacherGraceSmallIcons.png) no-repeat;
+	background-position:-213px -67px;
+	margin-top: 7px;
+	margin-right: 10px;
+	margin-bottom: 30px;
+}
+
+.grayBgBox .midBox .birefBox .content{
+	font-size: 14px;
+	color: #666;
+	line-height: 30px;
+}
+
+.grayBgBox .midBox .birefBox img{
+	display: block;
+	margin: 50px auto;
+}
+
+.grayBgBox .midBox .discriptionBox ul{
+	width: 100%;
+	overflow: hidden;
+	padding: 70px 0px;
+}
+
+.grayBgBox .midBox .discriptionBox ul li{
+	width: 33.33333333333333%;
+	height:292px;
+	overflow: hidden;
+	float: left;
+}
+
+.grayBgBox .midBox .discriptionBox ul li .cell{
+	width:340px;
+	height:245px;
+	border: 1px solid #e6e6e6;
+	background:white;
+	margin: 0 auto;
+	margin-top: 47px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 50px 15px;
+	position: relative;
+}
+
+.grayBgBox .midBox .discriptionBox ul li .cell .mark{
+	width:94px;
+	height:94px;
+	background:rgba(222,59,10,0.2);
+	border-radius:47px;
+	-webkit-border-radius:47px;
+	-moz-border-radius:47px;
+	position: absolute;
+	top: -45px;
+	left:123px;
+}
+
+.grayBgBox .midBox .discriptionBox ul li .cell .mark span{
+	display: block;
+	width:84px;
+	height:84px;
+	margin: 5px;
+	background:rgba(222,59,10,1);
+	border-radius:42px;
+	-webkit-border-radius:42px;
+	-moz-border-radius:42px;
+	text-align: center;
+	line-height: 84px;
+	color: white;
+	font-size:20px;
+}
+
+.grayBgBox .midBox .discriptionBox ul li .cell p{
+	font-size: 14px;
+	color: #525252;
+	line-height: 26px;
+}
+
+
+.grayBgBox .midBox .itemTypeBox ul{
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 50px;
+}
+
+
+.grayBgBox .midBox .itemTypeBox ul li{
+	width: 100%;
+	height: 38px;
+	line-height: 38px;
+	margin-bottom: 20px;
+}
+
+.grayBgBox .midBox .itemTypeBox ul li span{
+	float: left;
+	width: 38px;
+	height: 38px;
+	overflow: hidden;
+	border-radius:19px;
+	-webkit-border-radius:19px;
+	-moz-border-radius:19px;
+	background: #de3b0a;
+	text-align: center;
+	line-height: 38px;
+	color: white;
+}
+
+.grayBgBox .midBox .itemTypeBox ul li a{
+	float: left;
+	background: url(../img/competition6_13.png) repeat-x;
+	color:#525252;
+	padding: 0px 30px;
+}
+
+
+
+.grayBgBox .midBox .itemRequestBox ul{
+	width: 100%;
+	overflow: hidden;
+	margin-bottom:80px;
+}
+.grayBgBox .midBox .itemRequestBox ul li{
+	width: 100%;
+	overflow: hidden;
+	line-height:30px;
+	color:#525252;
+	font-size:14px;
+}
+
+.decorationPic8{
+	position: absolute;
+	right: 0px;
+	top: 979px;
+}
+
+.decorationPic9{
+	position: absolute;
+	left: 0px;
+	top:2167px;
+}
+
+.decorationPic10{
+	position: absolute;
+	right: 0px;
+	top:2908px;
+}
+
+.decorationPic11{
+	position: absolute;
+	left: 0px;
+	top:3198px;
+}
+
+@media only screen and (max-width: 1440px) {
+	.decorationPic7,.decorationPic8,.decorationPic9,.decorationPic10,.decorationPic11{
+		display: none;
+	}
+}

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.oseasy.pro.modules.auditstandard.dao.AuditStandardFlowDao">
+
+	<sql id="auditStandardFlowColumns">
+		a.id AS "id",
+		a.flow AS "flow",
+		a.node AS "node",
+		a.audit_standard_id AS "auditStandardId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.is_escore_nodes AS "isEscoreNodes"
+	</sql>
+
+	<sql id="auditStandardFlowJoins">
+	</sql>
+
+	<select id="get" resultType="AuditStandardFlow">
+		SELECT
+		<include refid="auditStandardFlowColumns" />
+		FROM audit_standard_flow a
+		<include refid="auditStandardFlowJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="AuditStandardFlow">
+		SELECT
+		<include refid="auditStandardFlowColumns" />
+		FROM audit_standard_flow a
+		<include refid="auditStandardFlowJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="AuditStandardFlow">
+		SELECT
+		<include refid="auditStandardFlowColumns" />
+		FROM audit_standard_flow a
+		<include refid="auditStandardFlowJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO audit_standard_flow(
+		id,
+		flow,
+		node,
+		audit_standard_id,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		del_flag,
+		is_escore_nodes
+		) VALUES (
+		#{id},
+		#{flow},
+		#{node},
+		#{auditStandardId},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{delFlag},
+		#{isEscoreNodes}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE audit_standard_flow SET
+		flow = #{flow},
+		node = #{node},
+		audit_standard_id = #{auditStandardId},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		is_escore_nodes=#{isEscoreNodes}
+		WHERE id = #{id}
+	</update>
+	<update id="delete">
+		UPDATE audit_standard_flow SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<update id="delByCdn">
+		delete from audit_standard_flow where
+		audit_standard_id=#{pid} and flow = #{flow} and node = #{node}
+	</update>
+	<update id="delByPid">
+		delete from audit_standard_flow where
+		audit_standard_id=#{pid}
+	</update>
+	<select id="findByCdn" resultType="java.lang.Integer">
+		select count(1) from
+		audit_standard_flow where flow = #{flow}
+		and node = #{node} and del_flag='0'
+	</select>
+	<select id="getByDef" resultType="AuditStandardFlow">
+		SELECT
+		<include refid="auditStandardFlowColumns" />
+		FROM audit_standard_flow a
+		<include refid="auditStandardFlowJoins" />
+		WHERE a.node = #{defName}
+	</select>
+	<select id="getGnodeListByYwid" resultType="com.oseasy.pro.modules.auditstandard.vo.AsdYwGnode">
+		select
+		c.id AS "id",
+		c.icon_url AS "iconUrl",
+		c.parent_id AS "parent.id",
+		c.parent_ids AS "parentIds",
+		c.group_id AS "group.id",
+		c.name AS "name",
+		c.type AS "type",
+		c.node_id AS "node.id",
+		c.pre_id AS "preId",
+		c.is_show AS "isShow",
+		c.is_form AS "isForm",
+		c.task_type AS "taskType",
+		c.update_date AS "updateDate",
+		c.update_by AS "updateBy.id",
+		c.create_date AS "createDate",
+		c.create_by AS "createBy.id",
+		c.remarks AS "remarks",
+		c.del_flag AS "delFlag",
+
+		d.id AS "node.id",
+		d.name AS "node.name",
+		d.type AS "node.type",
+		d.is_form AS "node.isForm",
+		d.icon_url AS "node.iconUrl",
+		d.is_visible AS "node.isVisible",
+
+		d.node_type AS "node.nodeType",
+		d.node_key AS "node.nodeKey",
+		d.node_icon AS "node.nodeIcon",
+		d.node_roles AS "node.nodeRoles",
+
+		d.update_date AS "node.updateDate",
+		d.update_by AS "node.updateBy.id",
+		d.create_date AS "node.createDate",
+		d.create_by AS "node.createBy.id",
+		d.remarks AS "node.remarks",
+		d.del_flag AS "node.delFlag",
+
+		f.name AS "auditStandardName",f.id AS "auditStandardId"
+		from act_yw a
+		LEFT JOIN act_yw_gnode c ON c.group_id = a.group_id AND c.del_flag = '0'
+		left join act_yw_node d on c.node_id = d.id and d.del_flag = '0'
+		left join audit_standard_flow e on e.flow = a.id and e.node = c.id and e.del_flag = '0'
+		left join audit_standard f on e.audit_standard_id = f.id and f.del_flag = '0'
+		WHERE a.id = #{id} AND c.type in ('110', '120', '130', '140', '150', '190') and a.is_deploy='1'
+		order by c.create_date
+	</select>
+	<update id="saveChild" parameterType="AuditStandardVo">
+		update audit_standard_flow set is_escore_nodes=#{isEscoreNodes} where id=#{relationId}
+	</update>
+</mapper>

@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.impdata.dao.ProModelGcontestErrorDao">
+
+	<sql id="proModelGcontestErrorColumns">
+		a.id AS "id",
+		a.imp_id AS "impId",
+		a.name AS "name",
+		a.year AS "year",
+		a.lyear AS "lyear",
+		a.gyear AS "gyear",
+		a.stage AS "stage",
+		a.type AS "type",
+		a.groups AS "groups",
+		a.introduction AS "introduction",
+		a.hasfile AS "hasfile",
+		a.leader AS "leader",
+		a.track AS "track",
+		a.province AS "province",
+		a.lschool AS "lschool",
+		a.domain AS "domain",
+		a.members AS "members",
+		a.teachers AS "teachers",
+		a.businfos AS "businfos",
+		a.no AS "no",
+		a.profes AS "profes",
+		a.enter AS "enter",
+		a.outy AS "outy",
+		a.xueli AS "xueli",
+		a.idnum AS "idnum",
+		a.mobile AS "mobile",
+		a.email AS "email",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id"
+	</sql>
+
+	<sql id="proModelGcontestErrorJoins">
+	</sql>
+
+	<select id="get" resultType="ProModelGcontestError">
+		SELECT
+			<include refid="proModelGcontestErrorColumns"/>
+		FROM pro_model_gcontest_error a
+		<include refid="proModelGcontestErrorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ProModelGcontestError">
+		SELECT
+			<include refid="proModelGcontestErrorColumns"/>
+		FROM pro_model_gcontest_error a
+		<include refid="proModelGcontestErrorJoins"/>
+		<where>
+
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ProModelGcontestError">
+		SELECT
+			<include refid="proModelGcontestErrorColumns"/>
+		FROM pro_model_gcontest_error a
+		<include refid="proModelGcontestErrorJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pro_model_gcontest_error(
+			id,
+			imp_id,
+			name,
+			year,
+			lyear,
+			gyear,
+			stage,
+			type,
+			groups,
+			introduction,
+			hasfile,
+			leader,
+			track,
+			lschool,
+			province,
+			domain,
+			members,
+			teachers,
+			businfos,
+			no,
+			profes,
+			enter,
+			outy,
+			xueli,
+			idnum,
+			mobile,
+			email,
+			update_date,
+			update_by,
+			create_date,
+			create_by
+		) VALUES (
+			#{id},
+			#{impId},
+			#{name},
+			#{year},
+			#{lyear},
+			#{gyear},
+			#{stage},
+			#{type},
+			#{groups},
+			#{introduction},
+			#{hasfile},
+			#{leader},
+			#{track},
+			#{lschool},
+			#{province},
+			#{domain},
+			#{members},
+			#{teachers},
+			#{businfos},
+			#{no},
+			#{profes},
+			#{enter},
+			#{outy},
+			#{xueli},
+			#{idnum},
+			#{mobile},
+			#{email},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pro_model_gcontest_error SET
+			imp_id = #{impId},
+			name = #{name},
+			year = #{year},
+			lyear = #{lyear},
+			gyear = #{gyear},
+			stage=#{stage},
+			type = #{type},
+			groups = #{groups},
+			introduction = #{introduction},
+			hasfile = #{hasfile},
+			leader = #{leader},
+			track = #{track},
+			lschool = #{lschool},
+			province = #{province},
+			domain = #{domain},
+			members = #{members},
+			teachers = #{teachers},
+			businfos = #{businfos},
+			no = #{no},
+			profes = #{profes},
+			enter = #{enter},
+			outy = #{outy},
+			xueli = #{xueli},
+			idnum = #{idnum},
+			mobile = #{mobile},
+			email = #{email},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE pro_model_gcontest_error
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="imp_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.impId}
+				</foreach>
+			</trim>
+			<trim prefix="name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.name}
+				</foreach>
+			</trim>
+			<trim prefix="year =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.year}
+				</foreach>
+			</trim>
+			<trim prefix="lyear =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.lyear}
+				</foreach>
+			</trim>
+			<trim prefix="gyear =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.gyear}
+				</foreach>
+			</trim>
+			<trim prefix="stage =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.stage}
+				</foreach>
+			</trim>
+			<trim prefix="type =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.type}
+				</foreach>
+			</trim>
+			<trim prefix="groups =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.groups}
+				</foreach>
+			</trim>
+			<trim prefix="leader =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.leader}
+				</foreach>
+			</trim>
+			<trim prefix="track =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.track}
+				</foreach>
+			</trim>
+			<trim prefix="lschool =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.lschool}
+				</foreach>
+			</trim>
+			<trim prefix="province =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.province}
+				</foreach>
+			</trim>
+			<trim prefix="domain =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.domain}
+				</foreach>
+			</trim>
+			<trim prefix="introduction =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.introduction}
+				</foreach>
+			</trim>
+			<trim prefix="hasfile =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.hasfile}
+				</foreach>
+			</trim>
+			<trim prefix="no =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.no}
+				</foreach>
+			</trim>
+			<trim prefix="mobile =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.mobile}
+				</foreach>
+			</trim>
+			<trim prefix="email =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.email}
+				</foreach>
+			</trim>
+			<trim prefix="profes =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.profes}
+				</foreach>
+			</trim>
+			<trim prefix="enter =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.enter}
+				</foreach>
+			</trim>
+			<trim prefix="outy =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.outy}
+				</foreach>
+			</trim>
+			<trim prefix="xueli =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.xueli}
+				</foreach>
+			</trim>
+			<trim prefix="idnum =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.idnum}
+				</foreach>
+			</trim>
+			<trim prefix="teachers =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.teachers}
+				</foreach>
+			</trim>
+			<trim prefix="businfos =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.businfos}
+				</foreach>
+			</trim>
+			<trim prefix="members =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.members}
+				</foreach>
+			</trim>
+			<trim prefix="update_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateDate}
+				</foreach>
+			</trim>
+			<trim prefix="update_by =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateBy.id}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="delete">
+		DELETE FROM pro_model_gcontest_error
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM pro_model_gcontest_error WHERE id = #{id}
+	</update>
+	<select id="getMapByImpId" resultType="java.util.HashMap" parameterType="java.lang.String">
+		SELECT
+			<!-- <include refid="proModelGcontestErrorColumns"/> -->
+			a.*
+		FROM pro_model_gcontest_error a
+		WHERE a.imp_id = #{impid} order by a.create_date
+	</select>
+	<select id="getListByImpId" resultType="ProModelGcontestError" parameterType="java.lang.String">
+		SELECT
+		t.*
+		FROM
+		pro_model_gcontest_error t
+		WHERE
+		t.imp_id = #{impid}
+		order by
+		t.create_date
+	</select>
+	<update id="deleteByImpId" parameterType="java.lang.String">
+		DELETE FROM
+		pro_model_gcontest_error
+		WHERE imp_id = #{impid}
+	</update>
+</mapper>

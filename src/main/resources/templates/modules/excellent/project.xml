@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<content>
+		<![CDATA[&lt;style type=&quot;text/css&quot;&gt;
+        .project-template-container ul,.project-template-container li{
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .project-template-container{
+            font-family: &quot;Microsoft YaHei&quot;, &quot;Helvetica Neue&quot;, Helvetica, Arial,
+            sans-serif;
+            font-size: 14px;
+            line-height: 20px;
+            max-width: 1270px;
+        }
+        .project-template-container{
+            margin: 30px auto;
+        }
+        .bg-gray{
+            background-color: #f5f5f5;
+        }
+        .pro-tmp-detail,.pro-product-show,.pro-team-show{
+            width: 1270px;
+            padding: 30px 15px;
+            margin: 0 auto;
+        }
+        .pro-template-title{
+            margin-bottom: 15px;
+            background: url(&#x27;/img/footerline.png&#x27;) no-repeat 80px 10px;
+        }
+        .pro-template-title&gt;p{
+            font-size: 18px;
+            margin-bottom: 0;
+        }
+        .project-template-container .pro-tmp-intro{
+            margin-right: -75px;
+            overflow: hidden;
+        }
+        .pro-tmp-intro .pro-temp-intro-item{
+            float: left;
+            width: 360px;
+            margin-right: 75px;
+        }
+        .pro-tmp-intro .pro-temp-intro-item img{
+            display: block;
+            max-width: 100%;
+            width: auto;
+        }
+
+        .pro-tmp-intro .pro-temp-intro-item .pro-intro-pic{
+            height: 250px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .pro-tmp-intro .pro-temp-intro-item .pti-title{
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .pro-tmp-intro .pro-temp-intro-item .pti-text{
+            height: 60px;
+            margin-bottom: 0;
+            overflow: hidden;
+        }
+
+        .pro-product-show .product-list{
+            margin-right: -15px;
+            overflow: hidden;
+        }
+        .pro-product-show .product-item{
+            float: left;
+            height: 250px;
+            margin-right: 15px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            background-color: #f5f5f5;
+        }
+        .pro-product-show .product-item img{
+            display: block;
+            width: auto;
+            max-width: 100%;
+        }
+        .pro-product-show .product-item-w4{
+            width: 650px;
+        }
+        .pro-product-show .product-item-w1{
+            width: 280px;
+        }
+        .pro-product-show .product-item-w2{
+            width: 575px;
+        }
+        .pro-team-show .pro-member-list{
+            margin: 0 -15px;
+            overflow: hidden;
+        }
+        .pro-team-show .pro-member-list .pro-member-item{
+            float: left;
+            width: 20%;
+            margin-bottom: 15px;
+            padding: 0 15px;
+        }
+        .pro-team-show .pro-member-list .pro-member-item .member-pic{
+            height: 224px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .pro-team-show .pro-member-list .member-pic img{
+            display: block;
+            width: auto;
+            max-width: 100%;
+        }
+        .pro-team-show .pro-member-list .member-intro{
+            height: 60px;
+        }
+        .pro-team-show .pro-member-list .member-intro p{
+            margin-bottom: 0;
+        }
+    &lt;/style&gt;
+&lt;div class=&quot;project-template-container&quot;&gt;
+    &lt;div class=&quot;bg-gray&quot;&gt;
+        &lt;div class=&quot;pro-tmp-detail&quot;&gt;
+            &lt;div class=&quot;pro-template-title&quot;&gt;
+                &lt;p&gt;项目介绍&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;ul class=&quot;pro-tmp-intro&quot;&gt;
+                &lt;li class=&quot;pro-temp-intro-item&quot;&gt;
+                    &lt;p class=&quot;pti-title&quot;&gt;项目简介&lt;/p&gt;
+                    &lt;div class=&quot;pro-intro-pic&quot;&gt;
+                        &lt;img src=&quot;/img/video-default.jpg&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;pti-text&quot;&gt;本产品是一款利用红外装置识别手指运动的智能硬件，在手势控制领域有着诸多应用。 项目应用IPV6作为手势数据传输协议，将研发的手&lt;/p&gt;
+                &lt;/li&gt;
+                &lt;li class=&quot;pro-temp-intro-item&quot;&gt;
+                    &lt;p class=&quot;pti-title&quot;&gt;我们的用户&lt;/p&gt;
+                    &lt;div class=&quot;pro-intro-pic&quot;&gt;
+                        &lt;img src=&quot;/img/video-default.jpg&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;pti-text&quot;&gt;本产品是一款利用红外装置识别手指运动的智能硬件，在手势控制领域有着诸多应用。 项目应用IPV6作为手势数据传输协议，将研发的手&lt;/p&gt;
+                &lt;/li&gt;
+                &lt;li class=&quot;pro-temp-intro-item&quot;&gt;
+                    &lt;p class=&quot;pti-title&quot;&gt;我的发展方向&lt;/p&gt;
+                    &lt;div class=&quot;pro-intro-pic&quot;&gt;
+                        &lt;img src=&quot;/img/video-default.jpg&quot;&gt;
+                    &lt;/div&gt;
+                    &lt;p class=&quot;pti-text&quot;&gt;本产品是一款利用红外装置识别手指运动的智能硬件，在手势控制领域有着诸多应用。 项目应用IPV6作为手势数据传输协议，将研发的手&lt;/p&gt;
+                &lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;pro-product-show&quot;&gt;
+        &lt;div class=&quot;pro-template-title&quot;&gt;
+            &lt;p&gt;产品展示&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;ul class=&quot;product-list&quot;&gt;
+            &lt;li class=&quot;product-item product-item-w4&quot;&gt;
+                &lt;img src=&quot;/images/video-default650250.jpg&quot;&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;product-item product-item-w1&quot;&gt;
+                &lt;img src=&quot;/images/video-defaultw425425.jpg&quot;&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;product-item product-item-w1&quot;&gt;
+                &lt;img src=&quot;/images/video-defaultw425425.jpg&quot;&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;product-item product-item-w4&quot;&gt;
+                &lt;img src=&quot;/images/video-default650250.jpg&quot;&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;product-item product-item-w2&quot;&gt;
+                &lt;img src=&quot;/images/video-defaultw575250.jpg&quot;&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;pro-team-show&quot;&gt;
+        &lt;div class=&quot;pro-template-title&quot;&gt;
+            &lt;p&gt;团队风采&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;ul class=&quot;pro-member-list&quot;&gt;
+            &lt;li class=&quot;pro-member-item&quot;&gt;
+                &lt;div class=&quot;member-pic&quot;&gt;
+                    &lt;img src=&quot;/images/video-defaultw425425.jpg&quot;&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;member-intro&quot;&gt;
+                    &lt;p&gt;导师：KKK&lt;/p&gt;
+                    &lt;p&gt;年龄：21&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;pro-member-item&quot;&gt;
+                &lt;div class=&quot;member-pic&quot;&gt;
+                    &lt;img src=&quot;/images/video-defaultw425425.jpg&quot;&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;member-intro&quot;&gt;
+                    &lt;p&gt;组成员：KKK&lt;/p&gt;
+                    &lt;p&gt;年龄：21&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;pro-member-item&quot;&gt;
+                &lt;div class=&quot;member-pic&quot;&gt;
+                    &lt;img src=&quot;/images/video-defaultw425425.jpg&quot;&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;member-intro&quot;&gt;
+                    &lt;p&gt;组成员：KKK&lt;/p&gt;
+                    &lt;p&gt;年龄：21&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;pro-member-item&quot;&gt;
+                &lt;div class=&quot;member-pic&quot;&gt;
+                    &lt;img src=&quot;/images/video-defaultw425425.jpg&quot;&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;member-intro&quot;&gt;
+                    &lt;p&gt;组成员：KKK&lt;/p&gt;
+                    &lt;p&gt;年龄：21&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/li&gt;
+            &lt;li class=&quot;pro-member-item&quot;&gt;
+                &lt;div class=&quot;member-pic&quot;&gt;
+                    &lt;img src=&quot;/images/video-defaultw425425.jpg&quot;&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;member-intro&quot;&gt;
+                    &lt;p&gt;组成员：KKK&lt;/p&gt;
+                    &lt;p&gt;年龄：21&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/div&gt;]]>
+	</content>
+</template>

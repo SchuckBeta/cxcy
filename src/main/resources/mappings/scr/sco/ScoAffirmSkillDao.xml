@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.sco.dao.ScoAffirmSkillDao">
+    
+	<sql id="scoAffirmSkillColumns">
+		a.id AS "id",
+		a.proc_ins_id AS "procInsId",
+		a.item AS "item",
+		a.name AS "name",
+		a.prize_date AS "prizeDate",
+		a.category AS "category",
+		a.status AS "status",
+		a.score AS "score",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="scoAffirmSkillJoins">
+	</sql>
+    
+	<select id="get" resultType="ScoAffirmSkill">
+		SELECT 
+			<include refid="scoAffirmSkillColumns"/>
+		FROM sco_affirm_skill a
+		<include refid="scoAffirmSkillJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ScoAffirmSkill">
+		SELECT 
+			<include refid="scoAffirmSkillColumns"/>
+		FROM sco_affirm_skill a
+		<include refid="scoAffirmSkillJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ScoAffirmSkill">
+		SELECT 
+			<include refid="scoAffirmSkillColumns"/>
+		FROM sco_affirm_skill a
+		<include refid="scoAffirmSkillJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sco_affirm_skill(
+			id,
+			proc_ins_id,
+			item,
+			name,
+			prize_date,
+			category,
+			status,
+			score,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{procInsId},
+			#{item},
+			#{name},
+			#{prizeDate},
+			#{category},
+			#{status},
+			#{score},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sco_affirm_skill SET 	
+			proc_ins_id = #{procInsId},
+			item = #{item},
+			name = #{name},
+			prize_date = #{prizeDate},
+			category = #{category},
+			status = #{status},
+			score = #{score},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE sco_affirm_skill SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

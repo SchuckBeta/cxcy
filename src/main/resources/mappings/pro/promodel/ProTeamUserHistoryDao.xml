@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.promodel.dao.ProTeamUserHistoryDao">
+    <select id="findTeacherByTeamId" resultType="com.oseasy.pro.modules.workflow.vo.TeacherVo">
+        SELECT
+          u.name AS "name",
+          u.no AS "no",
+          ifnull(o.name,st.work_unit) AS "office",
+          u.mobile AS "mobile",
+          u.email AS "email",
+          st.technical_title AS "zhicheng"
+        FROM team_user_history t
+          LEFT JOIN sys_user u on t.user_id=u.id
+          LEFT JOIN sys_office o on u.office_id=o.id
+          LEFT JOIN sys_teacher_expansion st on u.id=st.user_id
+        WHERE
+          t.user_type='2'
+          AND t.team_id=#{teamId}
+          AND t.del_flag='0'
+        GROUP BY u.id
+    </select>
+
+    <select id="findStudentByTeamId" resultType="com.oseasy.pro.modules.workflow.vo.TeamVo">
+        SELECT
+          stu.name AS "name",
+          stu.no AS "no",
+          op.name AS "profes",
+          ss.enterDate AS "enter",
+          ss.graduation AS "outy",
+          sd.label AS "xueli",
+          stu.id_no AS "idnum",
+          stu.mobile AS "mobile",
+          stu.email AS "email"
+        FROM team_user_history tuh
+          LEFT JOIN sys_user stu ON tuh.user_id = stu.id
+          LEFT JOIN sys_student_expansion ss ON stu.id=ss.user_id
+          LEFT JOIN sys_office op ON op.id = stu.professional
+          LEFT JOIN sys_dict sd ON stu.education = sd.value AND sd.type = 'enducation_level'
+          WHERE tuh.user_type = 1
+        AND tuh.team_id= #{teamId}
+        AND tuh.del_flag='0'
+        AND NOT EXISTS (SELECT * FROM team WHERE team.sponsor = stu.id AND team.id = #{teamId})
+	</select>
+</mapper>

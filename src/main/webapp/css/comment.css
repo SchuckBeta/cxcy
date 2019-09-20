@@ -1,0 +1,266 @@
+@charset "UTF-8";
+a:hover{
+	color:#adadad;
+	text-decoration: none;
+}
+.comment-havelike-a {
+    cursor:text;
+}
+.comment-havelike-i {
+    color: #e9432d;
+}
+.article-like>i:hover{
+	color: #e9432d;
+}
+.article-havelike-a>i:hover{
+	color: #e9432d;
+}
+.article-like {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: #fff;
+    padding-left: 10px;
+    color: #adadad;
+}
+.article-havelike-i {
+    color: #e9432d;
+}
+.article-havelike-a {
+    cursor:text;
+}
+.comment {
+    position: relative;
+    padding-left: 40px;
+    border-bottom: 1px solid #ddd;
+}
+
+.comment .np-avatar {
+    position: absolute;
+    left: 0;
+    top: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.comment-conent {
+    padding-left: 10px;
+}
+
+.comment-header {
+    padding-top: 18px;
+    line-height: 20px;
+    font-size: 12px;
+}
+
+.comment-body {
+    line-height: 24px;
+    margin-top: 6px;
+    font-size: 14px;
+    color: #4B4B4B;
+    word-break: break-all;
+}
+
+.comment-footer {
+    margin-top: 3px;
+    padding-bottom: 15px;
+    padding-top: 10px;
+    color: #999;
+    font-size: 12px;
+}
+
+.comment .comment {
+    border: none;
+    border-top: 1px dotted #CCC;
+}
+
+.comment .comment .np-avatar {
+    width: 35px;
+    height: 35px;
+}
+
+.comment .comment .comment-conent {
+    padding-left: 20px;
+}
+
+.comment .comment-footer {
+    margin-top: 1px;
+}
+
+.comment .np-user {
+    color: #cd3c1e;
+    text-decoration: none;
+}
+
+.comment .np-user:hover {
+    color: #b7351b;
+    text-decoration: underline;
+}
+
+.comment .replay-at {
+    margin-left: 8px;
+    color: #adadad
+}
+
+.comment-footer > a {
+    color: #adadad;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+.comment-footer > a > i {
+    margin-right: 4px;
+}
+
+.comment-footer > a:hover i {
+    color: #cd3c1e;
+}
+
+.comment .replay-box-footer {
+    padding: 10px 0;
+    text-align: right;
+}
+
+.comment .btn-replay {
+    display: inline-block;
+    padding: 4px 10px;
+    text-align: center;
+    background-color: #cd3c1e;
+    color: #fff;
+    font-size: 12px;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.comment .btn-replay:hover, .comment .btn-replay:focus {
+    color: #fff;
+    background-color: #b7351b;
+    border-color: #982c16;
+}
+
+.comment-load {
+    line-height: 2.5;
+    background-color: #eae9e9;
+    text-align: center;
+    color: #333;
+}
+
+.comment-load:hover {
+    background-color: #ccc;
+}
+
+.comment-load a {
+    color: #333;
+    text-decoration: none;
+}
+
+.comment .children {
+    padding-left: 0;
+}
+
+.tab-comment-nav {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ccc;
+    list-style: none;
+}
+
+.tab-comment-nav > li {
+    float: left;
+    padding: 0 15px;
+    position: relative;
+}
+
+.tab-comment-nav > li > a {
+    display: block;
+    font-size: 16px;
+    color: #333;
+    line-height: 2.5;
+    text-decoration: none;
+}
+
+.tab-comment-nav > li.active:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    height: 2px;
+    width: 100%;
+    background-color: #e9432d;
+    z-index: 100
+}
+.tab-comment-nav > li > a:hover{
+    color: #e9432d;
+}
+.tab-comment-nav > li.active>a{
+    color: #e9432d;
+}
+
+.textarea-module {
+    margin-bottom: 20px;
+}
+
+.textarea-module .form-control {
+    margin-bottom: 15px;
+}
+
+.textarea-module .btn-submit-primary {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.textarea-module .btn {
+    width: auto;
+    height: auto;
+}
+
+.textarea-module .btn-submit-primary {
+    color: #fff;
+    background-color: #df4526;
+    border: 1px solid #982c16;
+}
+
+.textarea-module .btn-submit-primary:hover, .textarea-module .btn-submit-primary:focus {
+    color: #fff;
+    background-color: #b7351b;
+    border: 1px solid #982c16;
+}
+
+.edit-bar {
+    margin-bottom: 15px;
+}
+
+.edit-bar-left {
+    position: relative;
+}
+
+.edit-bar-left > span {
+    position: relative;
+    padding: 0 15px 0 0;
+    color: #e9432d;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 2.5;
+    background: #fff;
+    z-index: 1;
+}
+
+.edit-bar-left .line {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    right: 0;
+    border-top: 1px solid rgb(243, 213, 175);
+}
+
+.edit-bar-sm .edit-bar-left > span {
+    color: #000;
+    font-size: 16px;
+    font-weight: normal;
+}

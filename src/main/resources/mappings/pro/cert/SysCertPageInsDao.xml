@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.cert.dao.SysCertPageInsDao">
+
+	<sql id="sysCertPageInsColumns">
+		a.id AS "id",
+		a.cert_ins_id AS "certInsId",
+		a.name AS "name",
+		a.sort AS "sort",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysCertPageInsJoins">
+	</sql>
+
+	<select id="get" resultType="SysCertPageIns">
+		SELECT
+			<include refid="sysCertPageInsColumns"/>
+		FROM sys_cert_page_ins a
+		<include refid="sysCertPageInsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SysCertPageIns">
+		SELECT
+			<include refid="sysCertPageInsColumns"/>
+		FROM sys_cert_page_ins a
+		<include refid="sysCertPageInsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysCertPageIns">
+		SELECT
+			<include refid="sysCertPageInsColumns"/>
+		FROM sys_cert_page_ins a
+		<include refid="sysCertPageInsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_cert_page_ins(
+			id,
+			cert_ins_id,
+			name,
+			sort,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{certInsId},
+			#{name},
+			#{sort},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_cert_page_ins SET
+			cert_ins_id = #{certInsId},
+			name = #{name},
+			sort = #{sort},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_cert_page_ins SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sys_cert_page_ins WHERE id = #{id}
+	</update>
+	<select id="getSysCertPageIns"  resultType="com.oseasy.pro.modules.cert.vo.SysCertPageInsVo">
+		select t.name,f.url imgUrl from sys_cert_page_ins t
+		left join sys_attachment f on f.uid=t.id
+		where t.cert_ins_id=#{sci}
+		order by t.sort
+	</select>
+</mapper>

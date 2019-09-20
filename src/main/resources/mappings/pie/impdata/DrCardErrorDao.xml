@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.expdata.dao.DrCardErrorDao">
+
+	<sql id="drCardErrorColumns">
+		a.id AS "id",
+		a.imp_id AS "impId",
+		a.no AS "no",
+		a.expiry AS "expiry",
+		a.start_date AS "startDate",
+		a.company_id AS "companyId",
+		a.office_id AS "curOffice.id",
+		a.professional AS "professional",
+		a.login_name AS "loginName",
+		a.password AS "password",
+		a.name AS "tmpName",
+		a.email AS "email",
+		a.phone AS "phone",
+		a.mobile AS "tmpTel",
+		a.user_type AS "userType",
+		a.login_flag AS "loginFlag",
+		a.remarks AS "remarks",
+		a.id_type AS "idType",
+		a.national AS "national",
+		a.political AS "political",
+		a.postCode AS "post_code",
+		a.birthday AS "birthday",
+		a.sex AS "tmpSex",
+		a.country AS "country",
+		a.area AS "area",
+		a.domain AS "domain",
+		a.degree AS "degree",
+		a.education AS "education",
+		a.id_no AS "idNo",
+		a.project_experience AS "projectExperience",
+		a.contest_experience AS "contestExperience",
+		a.award AS "award",
+		a.is_open AS "isOpen",
+		a.graduation AS "graduation",
+		a.enterDate AS "enterDate",
+		a.t_class AS "tClass",
+		a.instudy AS "instudy",
+		a.temporary_date AS "temporaryDate",
+		a.address AS "address",
+		a.curr_state AS "currState",
+		a.tmp_no AS "tmpNo",
+		a.tmp_name AS "tmpName",
+		a.tmp_tel AS "tmpTel",
+		a.tmp_sex AS "tmpSex",
+		a.tmp_office AS "tmpOffice",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id"
+	</sql>
+
+	<sql id="drCardErrorJoins">
+	</sql>
+
+	<select id="get" resultType="DrCardError">
+		SELECT
+			<include refid="drCardErrorColumns"/>
+		FROM dr_card_error a
+		<include refid="drCardErrorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="DrCardError">
+		SELECT
+			<include refid="drCardErrorColumns"/>
+		FROM dr_card_error a
+		<include refid="drCardErrorJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByImpId" resultType="java.util.HashMap"
+          parameterType="java.lang.String">
+          SELECT t.* FROM
+          	dr_card_error t
+          WHERE
+          	t.imp_id = #{impid}
+          ORDER BY t.create_date
+    </select>
+
+	<select id="findAllList" resultType="DrCardError">
+		SELECT
+			<include refid="drCardErrorColumns"/>
+		FROM dr_card_error a
+		<include refid="drCardErrorJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dr_card_error(
+			id,
+			imp_id,
+			no,
+			expiry,
+			start_date,
+			company_id,
+			office_id,
+			professional,
+			login_name,
+			password,
+			name,
+			email,
+			phone,
+			mobile,
+			user_type,
+			login_flag,
+			remarks,
+			id_type,
+			national,
+			political,
+			post_code,
+			birthday,
+			sex,
+			country,
+			area,
+			domain,
+			degree,
+			education,
+			id_no,
+			project_experience,
+			contest_experience,
+			award,
+			is_open,
+			graduation,
+			enterDate,
+			t_class,
+			instudy,
+			temporary_date,
+			address,
+			curr_state,
+			tmp_no,
+			tmp_name,
+			tmp_tel,
+			tmp_sex,
+			tmp_office,
+			update_date,
+			update_by,
+			create_date,
+			create_by
+		) VALUES (
+			#{id},
+			#{impId},
+			#{no},
+			#{expiry},
+			#{startDate},
+			#{companyId},
+			#{curOffice.id},
+			#{professional},
+			#{loginName},
+			#{password},
+			#{tmpName},
+			#{email},
+			#{phone},
+			#{tmpTel},
+			#{userType},
+			#{loginFlag},
+			#{remarks},
+			#{idType},
+			#{national},
+			#{political},
+			#{postCode},
+			#{birthday},
+			#{tmpSex},
+			#{country},
+			#{area},
+			#{domain},
+			#{degree},
+			#{education},
+			#{idNo},
+			#{projectExperience},
+			#{contestExperience},
+			#{award},
+			#{isOpen},
+			#{graduation},
+			#{enterDate},
+			#{tClass},
+			#{instudy},
+			#{temporaryDate},
+			#{address},
+			#{currState},
+			#{tmpNo},
+			#{tmpName},
+			#{tmpTel},
+			#{tmpSex},
+			#{tmpOffice},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE dr_card_error SET
+			imp_id = #{impId},
+			no = #{no},
+			expiry = #{expiry},
+			start_date = #{startDate},
+			company_id = #{companyId},
+			office_id = #{curOffice.id},
+			professional = #{professional},
+			login_name = #{loginName},
+			password = #{password},
+			name = #{tmpName},
+			email = #{email},
+			phone = #{phone},
+			mobile = #{tmpTel},
+			user_type = #{userType},
+			login_flag = #{loginFlag},
+			remarks = #{remarks},
+			id_type = #{idType},
+			national = #{national},
+			political = #{political},
+			post_code = #{postCode},
+			birthday = #{birthday},
+			sex = #{tmpSex},
+			country = #{country},
+			area = #{area},
+			domain = #{domain},
+			degree = #{degree},
+			education = #{education},
+			id_no = #{idNo},
+			project_experience = #{projectExperience},
+			contest_experience = #{contestExperience},
+			award = #{award},
+			is_open = #{isOpen},
+			graduation = #{graduation},
+			enterDate = #{enterDate},
+			t_class = #{tClass},
+			instudy = #{instudy},
+			temporary_date = #{temporaryDate},
+			address = #{address},
+			curr_state = #{currState},
+			tmp_no = #{tmpNo},
+			tmp_name = #{tmpName},
+			tmp_tel = #{tmpTel},
+			tmp_sex = #{tmpSex},
+			tmp_office = #{tmpOffice},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM dr_card_error
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLByImpId">
+		DELETE FROM dr_card_error
+		WHERE imp_id = #{impId}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM dr_card_error WHERE id = #{id}
+	</update>
+</mapper>

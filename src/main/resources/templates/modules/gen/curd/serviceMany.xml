@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>service</name>
+	<filePath>src/main/java/${packageName}/${moduleName}/service/${subModuleName}</filePath>
+	<fileName>${ClassName}Service.java</fileName>
+	<content><![CDATA[
+package ${packageName}.${moduleName}.service<#if subModuleName != "">.${subModuleName}</#if>;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.oseasy.com.pcore.common.persistence.Page;
+import com.oseasy.com.pcore.common.service.CrudService;
+import com.oseasy.util.common.utils.StringUtil;
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
+import ${packageName}.${moduleName}.dao<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Dao;
+<#list table.childList as c>
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${c.className?cap_first};
+import ${packageName}.${moduleName}.dao<#if subModuleName != "">.${subModuleName}</#if>.${c.className?cap_first}Dao;
+</#list>
+
+/**
+ * ${functionName}Service.
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+@Service
+@Transactional(readOnly = true)
+public class ${ClassName}Service extends CrudService<${ClassName}Dao, ${ClassName}> {
+
+	<#list table.childList as c>
+	@Autowired
+	private ${c.className?cap_first}Dao ${c.className?uncap_first}Dao;
+	</#list>
+
+	public ${ClassName} get(String id) {
+		${ClassName} ${entityName} = super.get(id);
+		<#list table.childList as c>
+		${entityName}.set${c.className?cap_first}List(${c.className?uncap_first}Dao.findList(new ${c.className?cap_first}(${entityName})));
+		</#list>
+		return ${entityName};
+	}
+
+	public List<${ClassName}> findList(${ClassName} ${entityName}) {
+		return super.findList(${entityName});
+	}
+
+	public Page<${ClassName}> findPage(Page<${ClassName}> page, ${ClassName} ${entityName}) {
+		return super.findPage(page, ${entityName});
+	}
+
+	@Transactional(readOnly = false)
+	public void save(${ClassName} ${entityName}) {
+		if(${entityName}.getIsNewRecord()){
+	    }
+		super.save(${entityName});
+	<#list table.childList as c>
+		for (${c.className?cap_first} ${c.className?uncap_first} : ${entityName}.get${c.className?cap_first}List()){
+			if (${c.className?uncap_first}.getId() == null){
+				continue;
+			}
+			if (${c.className?cap_first}.DEL_FLAG_NORMAL.equals(${c.className?uncap_first}.getDelFlag())){
+				if (StringUtil.isBlank(${c.className?uncap_first}.getId())){
+					<#if c.parentExists>
+						<#list c.columnList as cc>
+							<#if c.parentTableFk == cc.name>
+					${c.className?uncap_first}.set${cc.simpleJavaField?cap_first}(${entityName});
+							</#if>
+						</#list>
+					</#if>
+					${c.className?uncap_first}.preInsert();
+					${c.className?uncap_first}Dao.insert(${c.className?uncap_first});
+				}else{
+					${c.className?uncap_first}.preUpdate();
+					${c.className?uncap_first}Dao.update(${c.className?uncap_first});
+				}
+			}else{
+				${c.className?uncap_first}Dao.delete(${c.className?uncap_first});
+			}
+		}
+	</#list>
+	}
+
+	@Transactional(readOnly = false)
+	public void delete(${ClassName} ${entityName}) {
+		super.delete(${entityName});
+	<#list table.childList as c>
+		${c.className?uncap_first}Dao.delete(new ${c.className?cap_first}(${entityName}));
+	</#list>
+	}
+
+	@Transactional(readOnly = false)
+	public void deletePL(${ClassName} ${entityName}) {
+		dao.deletePL(${entityName});
+	}
+
+  	@Transactional(readOnly = false)
+  	public void deleteWL(${ClassName} ${entityName}) {
+  	  dao.deleteWL(${entityName});
+  	}
+
+  	@Transactional(readOnly = false)
+  	public void deleteWLPL(${ClassName} ${entityName}) {
+  	  dao.deleteWLPL(${entityName});
+  	}
+}]]>
+	</content>
+</template>

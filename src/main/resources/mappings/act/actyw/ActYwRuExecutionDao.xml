@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwRuExecutionDao">
+
+	<sql id="actYwRuExecutionColumns">
+		a.id_ AS "id",
+		a.rev_ AS "rev",
+		a.proc_inst_id_ AS "procInstId",
+		a.business_key_ AS "businessKey",
+		a.parent_id_ AS "parentId",
+		a.proc_def_id_ AS "procDefId",
+		a.super_exec_ AS "superExec",
+		a.act_id_ AS "actId",
+		a.is_active_ AS "isActive",
+		a.is_concurrent_ AS "isConcurrent",
+		a.is_scope_ AS "isScope",
+		a.is_event_scope_ AS "isEventScope",
+		a.suspension_state_ AS "suspensionState",
+		a.cached_ent_state_ AS "cachedEntState",
+		a.tenant_id_ AS "tenantId",
+		a.name_ AS "name",
+		a.lock_time_ AS "lockTime",
+
+		p.id_ AS "parent.id",
+		p.name_ AS "parent.name",
+
+
+		b.id_ AS "hiProcinst.id",
+		b.proc_inst_id_ AS "hiProcinst.procInstId",
+		b.business_key_ AS "hiProcinst.businessKey",
+		b.proc_def_id_ AS "hiProcinst.procDefId",
+		b.start_time_ AS "hiProcinst.startTime",
+		b.end_time_ AS "hiProcinst.endTime",
+		b.duration_ AS "hiProcinst.duration",
+		b.start_user_id_ AS "hiProcinst.startUserId",
+		b.start_act_id_ AS "hiProcinst.startActId",
+		b.end_act_id_ AS "hiProcinst.endActId",
+		b.super_process_instance_id_ AS "hiProcinst.superProcessInstanceId",
+		b.delete_reason_ AS "hiProcinst.deleteReason",
+		b.tenant_id_ AS "hiProcinst.tenantId",
+
+
+		pd.id AS "projectDeclare.id",
+		pd.org_id AS "projectDeclare.orgId",
+		pd.plan_content AS "projectDeclare.planContent",
+		pd.plan_start_date AS "projectDeclare.planStartDate",
+		pd.plan_end_date AS "projectDeclare.planEndDate",
+		pd.plan_step AS "projectDeclare.planStep",
+		pd.result_type AS "projectDeclare.resultType",
+		pd.result_content AS "projectDeclare.resultContent",
+		pd.level AS "projectDeclare.level",
+		pd.type AS "projectDeclare.type",
+		pd.name AS "projectDeclare.name",
+		pd.leader AS "projectDeclare.leader",
+		pd.number AS "projectDeclare.number",
+		pd.introduction AS "projectDeclare.introduction",
+		pd.apply_time AS "projectDeclare.applyTime",
+		pd.innovation AS "projectDeclare.innovation",
+		pd.budget AS "projectDeclare.budget",
+		pd.mid_count AS "projectDeclare.midCount",
+		pd.mid_result AS "pd.midResult",
+		pd.mid_score AS "projectDeclare.midScore",
+		pd.final_score AS "projectDeclare.finalScore",
+		pd.reply_score AS "projectDeclare.replyScore",
+		pd.final_result AS "projectDeclare.finalResult",
+		pd.development AS "projectDeclare.development",
+		pd.source AS "projectDeclare.source",
+		pd.status AS "projectDeclare.status",
+		pd.update_date AS "projectDeclare.updateDate",
+		pd.update_by AS "projectDeclare.updateBy.id",
+		pd.create_date AS "projectDeclare.createDate",
+		pd.create_by AS "projectDeclare.createBy.id",
+		pd.del_flag AS "projectDeclare.delFlag",
+		pd.proc_ins_id AS "projectDeclare.procInsId",
+		pd.team_id AS "projectDeclare.teamId",
+		pd.template_id AS "projectDeclare.templateId",
+		pd.finance_grant AS "projectDeclare.financeGrant",
+		pd.university_grant AS "projectDeclare.universityGrant",
+		pd.total_grant AS "projectDeclare.totalGrant",
+		pd.province AS "projectDeclare.province",
+		pd.university_code AS "projectDeclare.universityCode",
+		pd.university_name AS "projectDeclare.universityName"
+	</sql>
+
+	<sql id="actYwRuExecutionJoins">
+		LEFT JOIN act_ru_execution p ON p.id_ = a.parent_id_
+		LEFT JOIN act_hi_procinst b ON b.id_ = a.proc_inst_id_
+		LEFT JOIN project_declare pd ON pd.proc_ins_id = b.id_
+	</sql>
+
+	<select id="get" resultType="ActYwRuExecution">
+		SELECT
+			<include refid="actYwRuExecutionColumns"/>
+		FROM act_ru_execution a
+		<include refid="actYwRuExecutionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ActYwRuExecution">
+		SELECT
+			<include refid="actYwRuExecutionColumns"/>
+		FROM act_ru_execution a
+		<include refid="actYwRuExecutionJoins"/>
+		<where>
+			1 = 1 AND pd.name != ""
+			<if test="procInstId != null and procInstId != ''">
+				AND a.proc_inst_id_ = #{procInstId}
+			</if>
+			<if test="procDefId != null and procDefId != ''">
+				AND a.proc_def_id_ = #{procDefId}
+			</if>
+			<if test="businessKey != null and businessKey != ''">
+				AND a.business_key_ = #{businessKey}
+			</if>
+			<if test="isActive != null and isActive != ''">
+				AND a.is_active_ = #{isActive}
+			</if>
+
+			<if test="projectDeclare != null">
+				<if test="projectDeclare.name != null and projectDeclare.name != ''">
+					AND pd.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{projectDeclare.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{projectDeclare.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{projectDeclare.name},'%')</if>
+				</if>
+				<if test="projectDeclare.type != null and projectDeclare.type != ''">
+					AND pd.type = #{projectDeclare.type}
+				</if>
+			</if>
+			GROUP BY b.id_
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY b.id_ desc, pd.name desc, p.parent_id_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwRuExecution">
+		SELECT
+			<include refid="actYwRuExecutionColumns"/>
+		FROM act_ru_execution a
+		<include refid="actYwRuExecutionJoins"/>
+		<where>
+			1 = 1 AND pd.name != ""
+			<if test="procInstId != null and procInstId != ''">
+				AND a.proc_inst_id_ = #{procInstId}
+			</if>
+			<if test="procDefId != null and procDefId != ''">
+				AND a.proc_def_id_ = #{procDefId}
+			</if>
+			<if test="businessKey != null and businessKey != ''">
+				AND a.business_key_ = #{businessKey}
+			</if>
+			<if test="isActive != null and isActive != ''">
+				AND a.is_active_ = #{isActive}
+			</if>
+
+			<if test="projectDeclare != null">
+				<if test="projectDeclare.name != null and projectDeclare.name != ''">
+					AND pd.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{projectDeclare.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{projectDeclare.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{projectDeclare.name},'%')</if>
+				</if>
+				<if test="projectDeclare.type != null and projectDeclare.type != ''">
+					AND pd.type = #{projectDeclare.type}
+				</if>
+			</if>
+			GROUP BY b.id_
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY b.id_ desc, pd.name desc, p.parent_id_ desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_ru_execution(
+			id_,
+			rev_,
+			proc_inst_id_,
+			business_key_,
+			parent_id_,
+			proc_def_id_,
+			super_exec_,
+			act_id_,
+			is_active_,
+			is_concurrent_,
+			is_scope_,
+			is_event_scope_,
+			suspension_state_,
+			cached_ent_state_,
+			tenant_id_,
+			name_,
+			lock_time_
+		) VALUES (
+			#{id},
+			#{rev},
+			#{procInstId},
+			#{businessKey},
+			#{parentId},
+			#{procDefId},
+			#{superExec},
+			#{actId},
+			#{isActive},
+			#{isConcurrent},
+			#{isScope},
+			#{isEventScope},
+			#{suspensionState},
+			#{cachedEntState},
+			#{tenantId},
+			#{name},
+			#{lockTime}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_ru_execution SET
+			id_ = #{id},
+			rev_ = #{rev},
+			proc_inst_id_ = #{procInstId},
+			business_key_ = #{businessKey},
+			parent_id_ = #{parentId},
+			proc_def_id_ = #{procDefId},
+			super_exec_ = #{superExec},
+			act_id_ = #{actId},
+			is_active_ = #{isActive},
+			is_concurrent_ = #{isConcurrent},
+			is_scope_ = #{isScope},
+			is_event_scope_ = #{isEventScope},
+			suspension_state_ = #{suspensionState},
+			cached_ent_state_ = #{cachedEntState},
+			tenant_id_ = #{tenantId},
+			name_ = #{name},
+			lock_time_ = #{lockTime}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM act_ru_execution
+		WHERE id = #{id}
+	</update>
+
+</mapper>

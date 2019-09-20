@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwEtAuditNumDao">
+
+	<sql id="actYwEtAuditNumColumns">
+		a.id AS "id",
+		a.atype AS "atype",
+		a.is_finish AS "isFinish",
+		a.actyw_id AS "actywId",
+		a.gnode_id AS "gnodeId",
+		a.experts AS "experts",
+		a.pro_id AS "pro_id"
+	</sql>
+
+	<sql id="actYwEtAuditNumJoins">
+	</sql>
+
+	<select id="get" resultType="ActYwEtAuditNum">
+		SELECT
+			<include refid="actYwEtAuditNumColumns"/>
+		FROM act_yw_et_audit_num a
+		<include refid="actYwEtAuditNumJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getListByRule" resultType="ActYwEtAuditNum">
+		SELECT
+			<include refid="actYwEtAuditNumColumns"/>
+		FROM act_yw_et_audit_num a
+		<include refid="actYwEtAuditNumJoins"/>
+		WHERE 1=1
+		<if test="actywId != null and actywId != ''">
+			and a.actyw_id=#{actywId}
+		</if>
+		<if test="atype != null and atype != ''">
+			and a.atype=#{atype}
+		</if>
+		<if test="isFinish != null and isFinish != ''">
+			and a.is_finish=#{isFinish}
+		</if>
+		<if test="gnodeId!=null and gnodeId!=''">
+			and a.gnode_id=#{gnodeId}
+		</if>
+		<if test="experts!=null and experts!=''">
+			and a.experts=#{experts}
+		</if>
+		<if test="proId!=null and proId!=''">
+			and a.pro_id=#{proId}
+		</if>
+	</select>
+
+	<select id="getByProId" resultType="ActYwEtAuditNum">
+		SELECT
+			<include refid="actYwEtAuditNumColumns"/>
+		FROM act_yw_et_audit_num a
+		<include refid="actYwEtAuditNumJoins"/>
+		WHERE 1=1
+		<if test="actywId!=null and actywId!=''">
+			and a.actyw_id=#{actywId}
+		</if>
+		<if test="atype != null and atype != ''">
+			and a.atype=#{atype}
+		</if>
+		<if test="isFinish != null and isFinish != ''">
+			and a.is_finish=#{isFinish}
+		</if>
+		<if test="gnodeId!=null and gnodeId!=''">
+			and a.gnode_id=#{gnodeId}
+		</if>
+		<if test="experts!=null and experts!=''">
+			and a.experts=#{experts}
+		</if>
+		<if test="proId!=null and proId!=''">
+			and a.pro_id=#{proId}
+		</if>
+		limit 1
+	</select>
+
+	<select id="findList" resultType="ActYwEtAuditNum">
+		SELECT
+			<include refid="actYwEtAuditNumColumns"/>
+		FROM act_yw_et_audit_num a
+		<include refid="actYwEtAuditNumJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwEtAuditNum">
+		SELECT
+			<include refid="actYwEtAuditNumColumns"/>
+		FROM act_yw_et_audit_num a
+		<include refid="actYwEtAuditNumJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_et_audit_num(
+			id,
+			actyw_id,
+			atype,
+			is_finish,
+			gnode_id,
+			experts,
+			pro_id
+		) VALUES (
+			#{id},
+			#{actywId},
+			#{atype},
+			#{isFinish},
+			#{gnodeId},
+			#{experts},
+			#{proId}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO act_yw_et_audit_num(
+			id,
+			actyw_id,
+			atype,
+			is_finish,
+			gnode_id,
+			experts,
+			pro_id
+		) VALUES
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.actywId},
+			#{item.atype},
+			#{item.isFinish},
+			#{item.gnodeId},
+			#{item.experts},
+			#{item.proId}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_et_audit_num SET
+			actyw_id = #{actywId},
+			atype = #{atype},
+			is_finish = #{isFinish},
+			gnode_id = #{gnodeId},
+			experts = #{experts},
+			pro_id = #{pro_id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE act_yw_et_audit_num
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="actyw_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.actywId}
+				</foreach>
+			</trim>
+			<trim prefix="atype =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.atype}
+				</foreach>
+			</trim>
+			<trim prefix="is_finish =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isFinish}
+				</foreach>
+			</trim>
+			<trim prefix="gnode_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.gnodeId}
+				</foreach>
+			</trim>
+			<trim prefix="experts =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.experts}
+				</foreach>
+			</trim>
+			<trim prefix="proid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.proid}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="deleteByProId">
+		DELETE FROM act_yw_et_audit_num WHERE 1=1
+		<if test="actywId!=null and actywId!=''">
+			and actyw_id=#{actywId}
+		</if>
+		<if test="gnodeId!=null and gnodeId!=''">
+			and gnode_id=#{gnodeId}
+		</if>
+		<if test="experts!=null and experts!=''">
+			and experts=#{experts}
+		</if>
+		<if test="proId!=null and proId!=''">
+			and pro_id=#{proId}
+		</if>
+	</update>
+
+	<update id="delete">
+		DELETE FROM act_yw_et_audit_num
+		WHERE id = #{id}
+	</update>
+
+	<update id="deletePL">
+			DELETE FROM act_yw_et_audit_num
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM act_yw_et_audit_num WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM act_yw_et_audit_num WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM act_yw_et_audit_num
+	</update>
+</mapper>

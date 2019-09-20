@@ -1,0 +1,982 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwEnterDetailDao">
+
+	<sql id="pwEnterDetailCoreColumns">
+		a.id AS "id",
+		a.eid AS "pwEnter.id",
+		a.eid AS "eid",
+		a.rid AS "rid",
+		a.type AS "type",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+
+		b.parent_id AS "pwEnter.parentId",
+		b.is_copy AS "pwEnter.isCopy",
+		b.type AS "pwEnter.type",
+		b.app_type AS "pwEnter.appType",
+		b.no AS "pwEnter.no",
+		b.applicant AS "pwEnter.declareId",
+		b.declare_photo AS "pwEnter.declarePhoto",
+		b.status AS "pwEnter.status",
+		b.restatus AS "pwEnter.restatus",
+		b.re_date AS "pwEnter.reDate",
+		b.exit_date AS "pwEnter.exitDate",
+		b.start_date AS "pwEnter.startDate",
+		b.end_date AS "pwEnter.endDate",
+		b.cursel AS "pwEnter.cursel",
+		b.is_temp AS "pwEnter.isTemp",
+		b.term AS "pwEnter.term",
+		b.term_num AS "pwEnter.termNum",
+		b.is_show AS "pwEnter.isShow",
+		b.expect_work_num AS "pwEnter.expectWorkNum",
+		b.expect_term AS "pwEnter.expectTerm",
+		b.expect_remark AS "pwEnter.expectRemark",
+		b.update_date AS "pwEnter.updateDate",
+		b.update_by AS "pwEnter.updateBy.id",
+		b.create_date AS "pwEnter.createDate",
+		b.create_by AS "pwEnter.createBy.id",
+		b.remarks AS "pwEnter.remarks",
+		b.del_flag AS "pwEnter.delFlag",
+
+		u3.name AS "pwEnter.applicant.name",
+		u3.no AS "pwEnter.applicant.no",
+		o.name AS "pwEnter.applicant.office.name"
+	</sql>
+
+	<sql id="pwEnterDetailColumns">
+		a.rid AS "rid",
+		tc.tcteam_id AS "team.id",
+		tc.tcteam_name AS "team.name",
+		CASE WHEN tc.tcid > 0 THEN tc.tcid ELSE '1' END  AS "pwEnter.teamNum",
+
+		<include refid="pwEnterDetailCoreColumns"/>
+	</sql>
+
+	<sql id="pwEnterDetailByTeamColumns">
+		<!-- a.rid AS "team.id",
+		t.name AS "team.name", -->
+
+		<include refid="pwEnterDetailColumns"/>
+	</sql>
+
+	<sql id="pwEnterDetailByQyColumns">
+		a.rid AS "pwCompany.id",
+		pc.name AS "pwCompany.name",
+
+		<include refid="pwEnterDetailColumns"/>
+	</sql>
+
+	<sql id="pwEnterDetailByXmColumns">
+		a.rid AS "project.id",
+		p.pName AS "project.name",
+
+		<include refid="pwEnterDetailColumns"/>
+	</sql>
+
+	<sql id="pwEnterDetailByAllColumns">
+		a.rid AS "team.id",
+		t.name AS "team.name",
+
+		a.rid AS "pwCompany.id",
+		pc.name AS "pwCompany.name",
+
+		a.rid AS "project.id",
+		p.pName AS "project.name",
+		<include refid="pwEnterDetailColumns"/>
+	</sql>
+
+	<sql id="pwEnterDetailJoins">
+		LEFT JOIN pw_enter b ON b.id = a.eid
+		LEFT JOIN sys_user u3 ON u3.id = b.applicant
+		LEFT JOIN sys_office o ON o.id = u3.office_id
+		<include refid="pwEnterDetailByTeamNumJoins"/>
+	</sql>
+
+	<sql id="pwEnterDetailCoreJoins">
+		LEFT JOIN pw_enter b ON b.id = a.eid
+		LEFT JOIN sys_user u3 ON u3.id = b.applicant
+		LEFT JOIN sys_office o ON o.id = u3.office_id
+
+	</sql>
+
+	<!-- 添加团队人数 -->
+	<sql id="pwEnterDetailByTeamNumJoins">
+		LEFT JOIN (
+			SELECT
+				tc.tcid AS "tcid",
+				tc.tcteam_id AS "tcteam_id",
+				tc.tcteam_name AS "tcteam_name",
+				a.id AS "id",
+				a.eid AS "eid",
+				a.rid AS "rid",
+				a.type AS "type"
+			FROM
+				pw_enter_detail a
+			LEFT JOIN (
+				SELECT
+					COUNT(tu.id) AS "tcid",
+					tu.team_id AS "tcteam_id",
+					tut.name AS "tcteam_name"
+				FROM
+					team_user_relation tu
+					LEFT JOIN team tut ON tut.id = tu.team_id
+				WHERE
+					tu.user_type = '1' AND tu.state = '0' AND tu.del_flag = '0' AND tut.del_flag = '0'
+				GROUP BY
+					tu.team_id
+			) tc ON tc.tcteam_id = a.rid
+			WHERE 1=1 AND a.type = '0'
+		) tc ON tc.eid = b.id
+	</sql>
+
+	<sql id="pwEnterDetailByTeamJoins">
+		<include refid="pwEnterDetailJoins"/>
+		LEFT JOIN team t ON t.id = a.rid
+	</sql>
+
+	<sql id="pwEnterDetailByQyJoins">
+		<include refid="pwEnterDetailJoins"/>
+		LEFT JOIN pw_company pc ON pc.id = a.rid
+	</sql>
+
+	<sql id="pwEnterDetailByXmJoins">
+		<include refid="pwEnterDetailJoins"/>
+		LEFT JOIN (
+			SELECT
+				p.id AS "id",
+				p.`name` AS "pName",
+				p.leader AS "declareId",
+				p.leader AS "deuser.id",
+				'1,' AS "proType",
+				dpp.type AS "type",
+				p.team_id AS "teamId",
+				p.actyw_id AS "actYwId",
+				p.actyw_id AS "actYw.id",
+				p.proc_ins_id AS "procInsId",
+				p.status AS "state",
+				p.introduction AS "introduction",
+				t.name AS "team.name",
+				t.state AS "team.state",
+				t.summary AS "team.summary",
+				t.enterprise_teacher_num AS "team.enterpriseTeacherNum",
+				t.school_teacher_num AS "team.schoolTeacherNum",
+				t.member_num AS "team.memberNum",
+				t.local_college AS "team.localCollege"
+			FROM project_declare p
+				LEFT JOIN team t ON t.id = p.team_id
+				LEFT JOIN act_yw day ON day.id = p.actyw_id
+				LEFT JOIN pro_project dpp ON dpp.id = day.rel_id
+			UNION ALL SELECT
+				p.id AS "id",
+				p.p_name AS "pName",
+				p.declare_id AS "declareId",
+				p.declare_id AS "deuser.id",
+				ppp.pro_type AS "proType",
+				ppp.type AS "type",
+				p.team_id AS "teamId",
+				p.actyw_id AS "actYwId",
+				p.actyw_id AS "actYw.id",
+				p.proc_ins_id AS "procInsId",
+				p.state AS "state",
+				p.introduction AS "introduction",
+				t.name AS "team.name",
+				t.state AS "team.state",
+				t.summary AS "team.summary",
+				t.enterprise_teacher_num AS "team.enterpriseTeacherNum",
+				t.school_teacher_num AS "team.schoolTeacherNum",
+				t.member_num AS "team.memberNum",
+				t.local_college AS "team.localCollege"
+			FROM pro_model p
+				LEFT JOIN team t ON t.id = p.team_id
+				LEFT JOIN act_yw pay ON pay.id = p.actyw_id
+				LEFT JOIN pro_project ppp ON ppp.id = pay.rel_id
+			UNION ALL SELECT
+				g.id AS "id",
+				g.p_name AS "pName",
+				g.declare_id AS "declareId",
+				g.declare_id AS "deuser.id",
+				'7,' AS "proType",
+				gpp.type AS "type",
+				g.team_id AS "teamId",
+				g.actyw_id AS "actYwId",
+				g.actyw_id AS "actYw.id",
+				g.proc_ins_id AS "procInsId",
+				g.audit_state AS "state",
+				g.introduction AS "introduction",
+				t.name AS "team.name",
+				t.state AS "team.state",
+				t.summary AS "team.summary",
+				t.enterprise_teacher_num AS "team.enterpriseTeacherNum",
+				t.school_teacher_num AS "team.schoolTeacherNum",
+				t.member_num AS "team.memberNum",
+				t.local_college AS "team.localCollege"
+			FROM g_contest g
+				LEFT JOIN team t ON t.id = g.team_id
+				LEFT JOIN act_yw gay ON gay.id = g.actyw_id
+				LEFT JOIN pro_project gpp ON gpp.id = gay.rel_id
+		) p ON p.id = a.rid
+	</sql>
+
+	<sql id="pwEnterDetailByAllJoins">
+		<include refid="pwEnterDetailJoins"/>
+		LEFT JOIN team t ON t.id = a.rid
+		LEFT JOIN pw_company pc ON pc.id = a.rid
+		LEFT JOIN project_declare p ON p.id = a.rid
+	</sql>
+
+	<select id="get" resultType="PwEnterDetail">
+		SELECT
+			<include refid="pwEnterDetailColumns"/>
+		FROM pw_enter_detail a
+		<include refid="pwEnterDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByTeam" resultType="PwEnterDetail">
+		SELECT
+			<include refid="pwEnterDetailByTeamColumns"/>
+		FROM pw_enter_detail a
+		<include refid="pwEnterDetailByTeamJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByQy" resultType="PwEnterDetail">
+		SELECT
+			<include refid="pwEnterDetailByQyColumns"/>
+		FROM pw_enter_detail a
+		<include refid="pwEnterDetailByQyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByXm" resultType="PwEnterDetail">
+		SELECT
+			<include refid="pwEnterDetailByXmColumns"/>
+		FROM pw_enter_detail a
+		<include refid="pwEnterDetailByXmJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByAll" resultType="PwEnterDetail">
+		SELECT
+			<include refid="pwEnterDetailByAllColumns"/>
+		FROM pw_enter_detail a
+		<include refid="pwEnterDetailByAllJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="PwEnterDetail">
+		SELECT
+			<include refid="pwEnterDetailColumns"/>
+		FROM pw_enter_detail a
+		<include refid="pwEnterDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="pwEnter != null">
+				<if test="pwEnter.keys != null and pwEnter.keys != ''">
+					AND (u3.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{pwEnter.keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{pwEnter.keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{pwEnter.keys},'%')</if>
+						OR tc.tcteam_name LIKE
+							<if test="dbName == 'oracle'">'%'||#{pwEnter.keys}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{pwEnter.keys}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{pwEnter.keys},'%')</if>
+						)
+				</if>
+				<if test="pwEnter.id != null and pwEnter.id != ''">
+					AND a.eid = #{pwEnter.id}
+				</if>
+				<if test="pwEnter.no != null and pwEnter.no != ''">
+					AND b.no = #{pwEnter.no}
+				</if>
+				<if test="pwEnter.isTemp != null and pwEnter.isTemp != ''">
+					AND b.is_temp = #{pwEnter.isTemp}
+				</if>
+				<if test="pwEnter.applicant != null">
+					<if test="pwEnter.applicant.no != null and pwEnter.applicant.no != ''">
+						AND u3.no = #{pwEnter.applicant.no}
+					</if>
+					<if test="pwEnter.applicant.name != null and pwEnter.applicant.name != ''">
+						AND u3.name LIKE
+								<if test="dbName == 'oracle'">'%'||#{pwEnter.applicant.name}||'%'</if>
+								<if test="dbName == 'mssql'">'%'+#{pwEnter.applicant.name}+'%'</if>
+								<if test="dbName == 'mysql'">concat('%',#{pwEnter.applicant.name},'%')</if>
+					</if>
+					<if test="pwEnter.applicant.office != null">
+						<if test="pwEnter.applicant.office.name != null and pwEnter.applicant.office.name != ''">
+							AND o.name LIKE
+								<if test="dbName == 'oracle'">'%'||#{pwEnter.applicant.office.name}||'%'</if>
+								<if test="dbName == 'mssql'">'%'+#{pwEnter.applicant.office.name}+'%'</if>
+								<if test="dbName == 'mysql'">concat('%',#{pwEnter.applicant.office.name},'%')</if>
+						</if>
+					</if>
+				</if>
+				<if test="pwEnter.exitDate != null and pwEnter.exitDate != ''">
+					AND b.exit_date <![CDATA[ <= #{pwEnter.exitDate} ]]>
+				</if>
+				<if test="pwEnter.exitQDate != null and pwEnter.exitQDate != ''">
+					AND b.exit_date <![CDATA[ >= #{pwEnter.exitQDate} ]]>
+				</if>
+				<if test="pwEnter.reDate != null and pwEnter.reDate != ''">
+					AND b.re_date <![CDATA[ <= #{pwEnter.reDate} ]]>
+				</if>
+				<if test="pwEnter.reQDate != null and pwEnter.reQDate != ''">
+					AND b.re_date <![CDATA[ >= #{pwEnter.reQDate} ]]>
+				</if>
+				<if test="pwEnter.startDate != null and pwEnter.startDate != ''">
+					AND b.start_date <![CDATA[ <= #{pwEnter.startDate} ]]>
+				</if>
+				<if test="pwEnter.startQDate != null and pwEnter.startQDate != ''">
+					AND b.start_date <![CDATA[ >= #{pwEnter.startQDate} ]]>
+				</if>
+				<if test="pwEnter.endDate != null and pwEnter.endDate != ''">
+					AND b.end_date <![CDATA[ <= #{pwEnter.endDate} ]]>
+				</if>
+				<if test="pwEnter.endQDate != null and pwEnter.endQDate != ''">
+					AND b.end_date <![CDATA[ >= #{pwEnter.endQDate} ]]>
+				</if>
+			</if>
+			<if test="team != null">
+				<if test="team.name != null and team.name != ''">
+					AND t.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{team.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{team.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{team.name},'%')</if>
+				</if>
+			</if>
+			<if test="rid != null and rid != ''">
+				AND a.rid = #{rid}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.eid ASC, a.type DESC
+			</when>
+			<otherwise>
+				ORDER BY a.eid ASC, a.type DESC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByTeam" resultType="PwEnterDetail">
+		SELECT
+			<include refid="pwEnterDetailByTeamColumns"/>
+		FROM pw_enter_detail a
+		<include refid="pwEnterDetailByTeamJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND b.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="pwEnter != null">
+				<if test="pwEnter.keys != null and pwEnter.keys != ''">
+					AND (u3.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{pwEnter.keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{pwEnter.keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{pwEnter.keys},'%')</if>
+						OR tc.tcteam_name LIKE
+							<if test="dbName == 'oracle'">'%'||#{pwEnter.keys}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{pwEnter.keys}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{pwEnter.keys},'%')</if>
+						)
+				</if>
+				<if test="pwEnter.id != null and pwEnter.id != ''">
+					AND a.eid = #{pwEnter.id}
+				</if>
+				<if test="pwEnter.no != null and pwEnter.no != ''">
+					AND b.no = #{pwEnter.no}
+				</if>
+				<if test="pwEnter.status != null and pwEnter.status != ''">
+					AND b.status = #{pwEnter.status}
+				</if>
+				<if test="pwEnter.pstatuss != null">
+					AND b.status in
+					<foreach item="pstatus" collection="pwEnter.pstatuss" open="(" separator="," close=")">
+						#{pstatus}
+					</foreach>
+				</if>
+				<if test="pwEnter.isTemp != null and pwEnter.isTemp != ''">
+					AND b.is_temp = #{pwEnter.isTemp}
+				</if>
+				<if test="pwEnter.applicant != null">
+					<if test="pwEnter.applicant.no != null and pwEnter.applicant.no != ''">
+						AND u3.no = #{pwEnter.applicant.no}
+					</if>
+					<if test="pwEnter.applicant.name != null and pwEnter.applicant.name != ''">
+						AND u3.name LIKE
+								<if test="dbName == 'oracle'">'%'||#{pwEnter.applicant.name}||'%'</if>
+								<if test="dbName == 'mssql'">'%'+#{pwEnter.applicant.name}+'%'</if>
+								<if test="dbName == 'mysql'">concat('%',#{pwEnter.applicant.name},'%')</if>
+					</if>
+					<if test="pwEnter.applicant.office != null">
+						<if test="pwEnter.applicant.office.name != null and pwEnter.applicant.office.name != ''">
+							AND o.name LIKE
+								<if test="dbName == 'oracle'">'%'||#{pwEnter.applicant.office.name}||'%'</if>
+								<if test="dbName == 'mssql'">'%'+#{pwEnter.applicant.office.name}+'%'</if>
+								<if test="dbName == 'mysql'">concat('%',#{pwEnter.applicant.office.name},'%')</if>
+						</if>
+					</if>
+				</if>
+				<if test="pwEnter.exitDate != null and pwEnter.exitDate != ''">
+					AND b.exit_date <![CDATA[ <= #{pwEnter.exitDate} ]]>
+				</if>
+				<if test="pwEnter.exitQDate != null and pwEnter.exitQDate != ''">
+					AND b.exit_date <![CDATA[ >= #{pwEnter.exitQDate} ]]>
+				</if>
+				<if test="pwEnter.reDate != null and pwEnter.reDate != ''">
+					AND b.re_date <![CDATA[ <= #{pwEnter.reDate} ]]>
+				</if>
+				<if test="pwEnter.reQDate != null and pwEnter.reQDate != ''">
+					AND b.re_date <![CDATA[ >= #{pwEnter.reQDate} ]]>
+				</if>
+				<if test="pwEnter.startDate != null and pwEnter.startDate != ''">
+					AND b.start_date <![CDATA[ <= #{pwEnter.startDate} ]]>
+				</if>
+				<if test="pwEnter.startQDate != null and pwEnter.startQDate != ''">
+					AND b.start_date <![CDATA[ >= #{pwEnter.startQDate} ]]>
+				</if>
+				<if test="pwEnter.endDate != null and pwEnter.endDate != ''">
+					AND b.end_date <![CDATA[ <= #{pwEnter.endDate} ]]>
+				</if>
+				<if test="pwEnter.endQDate != null and pwEnter.endQDate != ''">
+					AND b.end_date <![CDATA[ >= #{pwEnter.endQDate} ]]>
+				</if>
+			</if>
+			<if test="team != null">
+				<if test="team.id != null and team.id != ''">
+					AND a.rid = #{team.id}
+				</if>
+				<if test="team.name != null and team.name != ''">
+					AND t.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{team.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{team.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{team.name},'%')</if>
+				</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.eid DESC, a.type ASC
+			</when>
+			<otherwise>
+				ORDER BY a.eid DESC, a.type ASC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByQy" resultType="PwEnterDetail">
+		SELECT
+			<include refid="pwEnterDetailByQyColumns"/>
+		FROM pw_enter_detail a
+		<include refid="pwEnterDetailByQyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND b.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="pwEnter != null">
+				<if test="pwEnter.keys != null and pwEnter.keys != ''">
+					AND (u3.name LIKE concat('%',#{pwEnter.keys},'%')
+						OR tc.tcteam_name LIKE concat('%',#{pwEnter.keys},'%')
+						OR pc.name LIKE concat('%',#{pwEnter.keys},'%')
+						)
+				</if>
+				<if test="pwEnter.id != null and pwEnter.id != ''">
+					AND a.eid = #{pwEnter.id}
+				</if>
+				<if test="pwEnter.no != null and pwEnter.no != ''">
+					AND b.no = #{pwEnter.no}
+				</if>
+				<if test="pwEnter.status != null and pwEnter.status != ''">
+					AND b.status = #{pwEnter.status}
+				</if>
+				<if test="pwEnter.pstatuss != null">
+					AND b.status in
+					<foreach item="pstatus" collection="pwEnter.pstatuss" open="(" separator="," close=")">
+						#{pstatus}
+					</foreach>
+				</if>
+				<if test="pwEnter.isTemp != null and pwEnter.isTemp != ''">
+					AND b.is_temp = #{pwEnter.isTemp}
+				</if>
+				<if test="pwEnter.applicant != null">
+					<if test="pwEnter.applicant.no != null and pwEnter.applicant.no != ''">
+						AND u3.no = #{pwEnter.applicant.no}
+					</if>
+					<if test="pwEnter.applicant.name != null and pwEnter.applicant.name != ''">
+						AND u3.name LIKE
+								<if test="dbName == 'oracle'">'%'||#{pwEnter.applicant.name}||'%'</if>
+								<if test="dbName == 'mssql'">'%'+#{pwEnter.applicant.name}+'%'</if>
+								<if test="dbName == 'mysql'">concat('%',#{pwEnter.applicant.name},'%')</if>
+					</if>
+					<if test="pwEnter.applicant.office != null">
+						<if test="pwEnter.applicant.office.name != null and pwEnter.applicant.office.name != ''">
+							AND o.name LIKE
+								<if test="dbName == 'oracle'">'%'||#{pwEnter.applicant.office.name}||'%'</if>
+								<if test="dbName == 'mssql'">'%'+#{pwEnter.applicant.office.name}+'%'</if>
+								<if test="dbName == 'mysql'">concat('%',#{pwEnter.applicant.office.name},'%')</if>
+						</if>
+					</if>
+				</if>
+				<if test="pwEnter.exitDate != null and pwEnter.exitDate != ''">
+					AND b.exit_date <![CDATA[ <= #{pwEnter.exitDate} ]]>
+				</if>
+				<if test="pwEnter.exitQDate != null and pwEnter.exitQDate != ''">
+					AND b.exit_date <![CDATA[ >= #{pwEnter.exitQDate} ]]>
+				</if>
+				<if test="pwEnter.reDate != null and pwEnter.reDate != ''">
+					AND b.re_date <![CDATA[ <= #{pwEnter.reDate} ]]>
+				</if>
+				<if test="pwEnter.reQDate != null and pwEnter.reQDate != ''">
+					AND b.re_date <![CDATA[ >= #{pwEnter.reQDate} ]]>
+				</if>
+				<if test="pwEnter.startDate != null and pwEnter.startDate != ''">
+					AND b.start_date <![CDATA[ <= #{pwEnter.startDate} ]]>
+				</if>
+				<if test="pwEnter.startQDate != null and pwEnter.startQDate != ''">
+					AND b.start_date <![CDATA[ >= #{pwEnter.startQDate} ]]>
+				</if>
+				<if test="pwEnter.endDate != null and pwEnter.endDate != ''">
+					AND b.end_date <![CDATA[ <= #{pwEnter.endDate} ]]>
+				</if>
+				<if test="pwEnter.endQDate != null and pwEnter.endQDate != ''">
+					AND b.end_date <![CDATA[ >= #{pwEnter.endQDate} ]]>
+				</if>
+			</if>
+			<if test="pwCompany != null">
+				<if test="pwCompany.id != null and pwCompany.id != ''">
+					AND a.rid = #{pwCompany.id}
+				</if>
+				<if test="pwCompany.name != null and pwCompany.name != ''">
+					AND pc.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{pwCompany.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{pwCompany.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{pwCompany.name},'%')</if>
+				</if>
+			</if>
+			<if test="team != null">
+				<if test="team.name != null and team.name != ''">
+					AND t.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{team.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{team.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{team.name},'%')</if>
+				</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.eid DESC, a.type ASC
+			</when>
+			<otherwise>
+				ORDER BY a.eid DESC, a.type ASC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByXm" resultType="PwEnterDetail">
+		SELECT
+			<include refid="pwEnterDetailByXmColumns"/>
+		FROM pw_enter_detail a
+		<include refid="pwEnterDetailByXmJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND b.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="pwEnter != null">
+				<if test="pwEnter.keys != null and pwEnter.keys != ''">
+					AND (u3.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{pwEnter.keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{pwEnter.keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{pwEnter.keys},'%')</if>
+						OR tc.tcteam_name LIKE
+							<if test="dbName == 'oracle'">'%'||#{pwEnter.keys}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{pwEnter.keys}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{pwEnter.keys},'%')</if>
+						OR p.pName LIKE
+							<if test="dbName == 'oracle'">'%'||#{pwEnter.keys}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{pwEnter.keys}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{pwEnter.keys},'%')</if>
+						)
+				</if>
+				<if test="pwEnter.id != null and pwEnter.id != ''">
+					AND a.eid = #{pwEnter.id}
+				</if>
+				<if test="pwEnter.no != null and pwEnter.no != ''">
+					AND b.no = #{pwEnter.no}
+				</if>
+				<if test="pwEnter.status != null and pwEnter.status != ''">
+					AND b.status = #{pwEnter.status}
+				</if>
+				<if test="pwEnter.pstatuss != null">
+					AND b.status in
+					<foreach item="pstatus" collection="pwEnter.pstatuss" open="(" separator="," close=")">
+						#{pstatus}
+					</foreach>
+				</if>
+				<if test="pwEnter.isTemp != null and pwEnter.isTemp != ''">
+					AND b.is_temp = #{pwEnter.isTemp}
+				</if>
+				<if test="pwEnter.applicant != null">
+					<if test="pwEnter.applicant.no != null and pwEnter.applicant.no != ''">
+						AND u3.no = #{pwEnter.applicant.no}
+					</if>
+					<if test="pwEnter.applicant.name != null and pwEnter.applicant.name != ''">
+						AND u3.name LIKE
+								<if test="dbName == 'oracle'">'%'||#{pwEnter.applicant.name}||'%'</if>
+								<if test="dbName == 'mssql'">'%'+#{pwEnter.applicant.name}+'%'</if>
+								<if test="dbName == 'mysql'">concat('%',#{pwEnter.applicant.name},'%')</if>
+					</if>
+					<if test="pwEnter.applicant.office != null">
+						<if test="pwEnter.applicant.office.name != null and pwEnter.applicant.office.name != ''">
+							AND o.name LIKE
+								<if test="dbName == 'oracle'">'%'||#{pwEnter.applicant.office.name}||'%'</if>
+								<if test="dbName == 'mssql'">'%'+#{pwEnter.applicant.office.name}+'%'</if>
+								<if test="dbName == 'mysql'">concat('%',#{pwEnter.applicant.office.name},'%')</if>
+						</if>
+					</if>
+				</if>
+				<if test="pwEnter.exitDate != null and pwEnter.exitDate != ''">
+					AND b.exit_date <![CDATA[ <= #{pwEnter.exitDate} ]]>
+				</if>
+				<if test="pwEnter.exitQDate != null and pwEnter.exitQDate != ''">
+					AND b.exit_date <![CDATA[ >= #{pwEnter.exitQDate} ]]>
+				</if>
+				<if test="pwEnter.reDate != null and pwEnter.reDate != ''">
+					AND b.re_date <![CDATA[ <= #{pwEnter.reDate} ]]>
+				</if>
+				<if test="pwEnter.reQDate != null and pwEnter.reQDate != ''">
+					AND b.re_date <![CDATA[ >= #{pwEnter.reQDate} ]]>
+				</if>
+				<if test="pwEnter.startDate != null and pwEnter.startDate != ''">
+					AND b.start_date <![CDATA[ <= #{pwEnter.startDate} ]]>
+				</if>
+				<if test="pwEnter.startQDate != null and pwEnter.startQDate != ''">
+					AND b.start_date <![CDATA[ >= #{pwEnter.startQDate} ]]>
+				</if>
+				<if test="pwEnter.endDate != null and pwEnter.endDate != ''">
+					AND b.end_date <![CDATA[ <= #{pwEnter.endDate} ]]>
+				</if>
+				<if test="pwEnter.endQDate != null and pwEnter.endQDate != ''">
+					AND b.end_date <![CDATA[ >= #{pwEnter.endQDate} ]]>
+				</if>
+			</if>
+			<if test="project != null">
+				<if test="project.id != null and project.id != ''">
+					AND a.rid = #{project.id}
+				</if>
+				<if test="project.name != null and project.name != ''">
+					AND p.pName LIKE
+						<if test="dbName == 'oracle'">'%'||#{project.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{project.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{project.name},'%')</if>
+				</if>
+			</if>
+			<if test="team != null">
+				<if test="team.name != null and team.name != ''">
+					AND t.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{team.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{team.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{team.name},'%')</if>
+				</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.eid DESC, a.type ASC
+			</when>
+			<otherwise>
+				ORDER BY a.eid DESC, a.type ASC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByAll" resultType="PwEnterDetail">
+		SELECT
+			<include refid="pwEnterDetailByAllColumns"/>
+		FROM pw_enter_detail a
+		<include refid="pwEnterDetailByAllJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="pwEnter != null">
+				<if test="pwEnter.keys != null and pwEnter.keys != ''">
+					AND (u3.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{pwEnter.keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{pwEnter.keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{pwEnter.keys},'%')</if>
+						OR tc.tcteam_name LIKE
+							<if test="dbName == 'oracle'">'%'||#{pwEnter.keys}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{pwEnter.keys}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{pwEnter.keys},'%')</if>
+
+						)
+				</if>
+				<if test="pwEnter.id != null and pwEnter.id != ''">
+					AND a.eid = #{pwEnter.id}
+				</if>
+				<if test="pwEnter.no != null and pwEnter.no != ''">
+					AND b.no = #{pwEnter.no}
+				</if>
+				<if test="pwEnter.status != null and pwEnter.status != ''">
+					AND b.status = #{pwEnter.status}
+				</if>
+				<if test="pwEnter.pstatuss != null">
+					AND b.status in
+					<foreach item="pstatus" collection="pwEnter.pstatuss" open="(" separator="," close=")">
+						#{pstatus}
+					</foreach>
+				</if>
+				<if test="pwEnter.isTemp != null and pwEnter.isTemp != ''">
+					AND b.is_temp = #{pwEnter.isTemp}
+				</if>
+				<if test="pwEnter.applicant != null">
+					<if test="pwEnter.applicant.no != null and pwEnter.applicant.no != ''">
+						AND u3.no = #{pwEnter.applicant.no}
+					</if>
+					<if test="pwEnter.applicant.name != null and pwEnter.applicant.name != ''">
+						AND u3.name LIKE
+								<if test="dbName == 'oracle'">'%'||#{pwEnter.applicant.name}||'%'</if>
+								<if test="dbName == 'mssql'">'%'+#{pwEnter.applicant.name}+'%'</if>
+								<if test="dbName == 'mysql'">concat('%',#{pwEnter.applicant.name},'%')</if>
+					</if>
+					<if test="pwEnter.applicant.office != null">
+						<if test="pwEnter.applicant.office.name != null and pwEnter.applicant.office.name != ''">
+							AND o.name LIKE
+								<if test="dbName == 'oracle'">'%'||#{pwEnter.applicant.office.name}||'%'</if>
+								<if test="dbName == 'mssql'">'%'+#{pwEnter.applicant.office.name}+'%'</if>
+								<if test="dbName == 'mysql'">concat('%',#{pwEnter.applicant.office.name},'%')</if>
+						</if>
+					</if>
+				</if>
+				<if test="pwEnter.exitDate != null and pwEnter.exitDate != ''">
+					AND b.exit_date <![CDATA[ <= #{pwEnter.exitDate} ]]>
+				</if>
+				<if test="pwEnter.exitQDate != null and pwEnter.exitQDate != ''">
+					AND b.exit_date <![CDATA[ >= #{pwEnter.exitQDate} ]]>
+				</if>
+				<if test="pwEnter.reDate != null and pwEnter.reDate != ''">
+					AND b.re_date <![CDATA[ <= #{pwEnter.reDate} ]]>
+				</if>
+				<if test="pwEnter.reQDate != null and pwEnter.reQDate != ''">
+					AND b.re_date <![CDATA[ >= #{pwEnter.reQDate} ]]>
+				</if>
+				<if test="pwEnter.startDate != null and pwEnter.startDate != ''">
+					AND b.start_date <![CDATA[ <= #{pwEnter.startDate} ]]>
+				</if>
+				<if test="pwEnter.startQDate != null and pwEnter.startQDate != ''">
+					AND b.start_date <![CDATA[ >= #{pwEnter.startQDate} ]]>
+				</if>
+				<if test="pwEnter.endDate != null and pwEnter.endDate != ''">
+					AND b.end_date <![CDATA[ <= #{pwEnter.endDate} ]]>
+				</if>
+				<if test="pwEnter.endQDate != null and pwEnter.endQDate != ''">
+					AND b.end_date <![CDATA[ >= #{pwEnter.endQDate} ]]>
+				</if>
+			</if>
+			<if test="team != null">
+				<if test="team.id != null and team.id != ''">
+					AND a.rid = #{team.id}
+				</if>
+				<if test="team.name != null and team.name != ''">
+					AND t.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{team.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{team.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{team.name},'%')</if>
+				</if>
+			</if>
+			<if test="pwCompany != null">
+				<if test="pwCompany.id != null and pwCompany.id != ''">
+					AND a.rid = #{pwCompany.id}
+				</if>
+				<if test="pwCompany.name != null and pwCompany.name != ''">
+					AND pc.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{pwCompany.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{pwCompany.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{pwCompany.name},'%')</if>
+				</if>
+			</if>
+			<if test="project != null">
+				<if test="project.id != null and project.id != ''">
+					AND a.rid = #{project.id}
+				</if>
+				<if test="project.name != null and project.name != ''">
+					AND p.pName LIKE
+						<if test="dbName == 'oracle'">'%'||#{project.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{project.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{project.name},'%')</if>
+				</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.eid ASC, a.type DESC
+			</when>
+			<otherwise>
+				ORDER BY a.eid ASC, a.type DESC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="PwEnterDetail">
+		SELECT
+			<include refid="pwEnterDetailColumns"/>
+		FROM pw_enter_detail a
+		<include refid="pwEnterDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.eid ASC, a.type DESC, ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.eid ASC, a.type DESC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getByPwEnterIdAndType" resultType="PwEnterDetail">
+		SELECT
+			<include refid="pwEnterDetailCoreColumns"/>
+		FROM pw_enter_detail a
+		<include refid="pwEnterDetailCoreJoins"/>
+		<where>
+			a.del_flag = '0' and a.eid= #{eid} and a.type=#{type}
+		</where>
+	</select>
+
+	<select id="getByPwEnterXmIdAndType" resultType="PwEnterDetail">
+		SELECT
+			<include refid="pwEnterDetailCoreColumns"/>
+		FROM pw_enter_detail a
+		<include refid="pwEnterDetailCoreJoins"/>
+		<where>
+			a.del_flag = '0' and a.eid= #{eid} and a.type=#{type}
+		</where>
+	</select>
+
+	<select id="checkPwEnterTeam" resultType="PwEnterDetail">
+		SELECT
+			<include refid="pwEnterDetailColumns"/>
+		FROM pw_enter_detail a
+		<include refid="pwEnterDetailJoins"/>
+		<where>
+			a.del_flag = '0' and a.rid= #{rid} and a.type= #{type}
+			and b.status != '60' AND b.del_flag = '0' AND b.is_copy = '0'
+			<if test="eid != null and eid != ''">
+				and a.eid != #{eid}
+			</if>
+		</where>
+	</select>
+
+	<select id="checkPwEnterByTeamId" resultType="java.lang.Integer">
+			SELECT
+				count(1)
+			FROM pw_enter_detail a
+			<include refid="pwEnterDetailJoins"/>
+			<where>
+				a.del_flag = '0' and a.rid= #{teamId}  AND b.del_flag = '0'
+			</where>
+		</select>
+
+	<insert id="insert">
+		INSERT INTO pw_enter_detail(
+			id,
+			eid,
+			rid,
+			type,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{eid},
+			#{rid},
+			#{type},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pw_enter_detail SET
+			eid = #{pwEnter.id},
+			rid = #{rid},
+			type = #{type},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE pw_enter_detail SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM pw_enter_detail WHERE id = #{id}
+	</update>
+
+	<update id="deleteByEid">
+		UPDATE pw_enter_detail SET
+			del_flag = '1'
+		WHERE eid = #{eid}
+	</update>
+
+	<update id="deleteByEidAndType">
+		UPDATE pw_enter_detail SET
+			del_flag = '1'
+		WHERE eid = #{eid} and type = #{type}
+	</update>
+
+
+	<insert id="saveAll" parameterType="java.util.List">
+	insert into pw_enter_detail (
+			id,
+			eid,
+			rid,
+			type,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(#{item.id},
+			#{item.eid},
+			#{item.rid},
+			#{item.type},
+			sysdate(),
+			#{item.updateBy.id},
+			sysdate(),
+			#{item.createBy.id},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+</mapper>

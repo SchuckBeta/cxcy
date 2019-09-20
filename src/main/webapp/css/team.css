@@ -1,0 +1,123 @@
+@charset "utf-8";
+
+.container,.container-fluid {
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.edit-bar {
+    margin-bottom: 15px;
+}
+
+.edit-bar-left {
+    position: relative;
+}
+
+.edit-bar-left > span {
+    position: relative;
+    padding: 0 15px 0 0;
+    color: #e9432d;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 2.5;
+    background: #fff;
+    z-index: 1;
+}
+
+.edit-bar-left .line {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    right: 0;
+    border-top: 1px solid rgb(243, 213, 175);
+}
+
+.edit-bar-sm .edit-bar-left > span {
+    color: #000;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.team-info {
+    border: 1px solid #efefef;
+    border-radius: 5px;
+}
+
+.team-title {
+    padding: 5px 0;
+    margin: 0;
+    color: #333;
+    line-height: 30px;
+    height: auto;
+    font-size: 16px;
+    font-weight: 700;
+    background-color: #f4e6d4;
+    text-indent: 10px;
+}
+
+.team-info .wrap {
+    padding: 50px 30px;
+}
+
+.team-info-group {
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.ti-label {
+    float: left;
+    width: 124px;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: right;
+}
+
+.ti-label > i {
+    color: red;
+    margin-right: 4px;
+}
+
+.team-info-group .ti-box {
+    margin-left: 124px;
+}
+
+.team-info-group .ti-box > p {
+    margin-bottom: 0;
+}
+
+.team-table-title{
+    overflow: hidden;
+}
+.team-status{
+    display: block;
+    float: right;
+    padding: 6px 0;
+    color: #e9432d;
+}
+.team-name{
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #ebebeb;
+    color: #616161;
+    border-radius: 5px 5px 0 0;
+}
+.back-box{
+    margin-bottom: 30px;
+    text-align: center;
+}
+.btn-back-w{
+    color: #fff;
+    height: auto;
+    background-color: #e9442d;
+}
+.btn-back-w:focus,.btn-back-w:hover{
+    color: #fff;
+}
+button:hover{
+    border: 1px solid transparent;
+}
+
+.table-team-type>thead>tr{
+    background-color: #f4e6d4;
+}

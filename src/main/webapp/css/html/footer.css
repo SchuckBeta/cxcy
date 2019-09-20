@@ -1,0 +1,9 @@
+.footerBox {position: relative;background: #222222;margin-top: 1.6em;}
+.footerBox .banner {background: #FFF url(../img/footerbg.png) no-repeat bottom;background-size: cover;height: 106px;padding-bottom: 80px;}
+.footerBox .title {position: absolute; top: 111px; right: 40px;padding-left: 35px;background: url(../img/footerline.png) no-repeat left center;color: #FFF;}
+.footerBox .frend-links {max-width: 1024px; margin: 0 auto;}
+.footerBox .frend-links .cl {clear: left;}
+.footerBox .frend-links img {float: left; }
+.footerBox .frend-links img + img {margin-left: 45px;}
+.footerBox .footerline {height:0px;line-height: 0px;border-top: 1px solid #bdbdbd;margin: 10px 50px;clear: both;}
+.footerBox .copyright {color: #ccc;padding: 80px 0 30px 0; text-align: center;font-size: 16px;}

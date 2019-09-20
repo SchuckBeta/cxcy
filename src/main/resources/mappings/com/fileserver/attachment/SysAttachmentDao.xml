@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.com.fileserver.modules.attachment.dao.SysAttachmentDao">
+    <resultMap id="resultMap" type="SysAttachment">
+	  <id property="id" column="id" />
+	  <result property="type" column="type"  typeHandler="com.oseasy.com.pcore.common.handler.EnumTypeHandler"/>
+	  <result property="fileStep" column="fileStep" typeHandler="com.oseasy.com.pcore.common.handler.EnumTypeHandler"/>
+	  <result property="uid" column="uid"/>
+	  <result property="url" column="url"/>
+	  <result property="gnodeId" column="gnodeId"/>
+	  <result property="name" column="name"/>
+	  <result property="userName" column="userName"/>
+	  <result property="size" column="size"/>
+	  <result property="suffix" column="suffix"/>
+	  <result property="updateDate" column="updateDate"/>
+	  <result property="updateBy.id" column="updateBy.id"/>
+	  <result property="createDate" column="createDate"/>
+	  <result property="createBy.id" column="createBy.id"/>
+
+	  <result property="createBy.name" column="createBy.name"/>
+	  <result property="createBy.no" column="createBy.no"/>
+
+	  <result property="createBy.office.id" column="createBy.office.id"/>
+	  <result property="createBy.office.name" column="createBy.office.name"/>
+	</resultMap>
+	<sql id="sysAttachmentColumns">
+		a.id AS "id",
+		a.type AS "type",
+		a.file_step AS "fileStep",
+		a.uid AS "uid",
+		a.url AS "url",
+		a.name AS "name",
+		a.size AS "size",
+		a.gnode_id AS "gnodeId",
+		a.suffix AS "suffix",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id"
+	</sql>
+
+	<sql id="sysAttachmentInIdsColumns">
+			a.id AS "id",
+			a.file_step AS "fileStep",
+			a.type AS "type",
+			a.uid AS "uid",
+			a.url AS "url",
+			a.name AS "name",
+			a.size AS "size",
+			a.gnode_id AS "gnodeId",
+			a.suffix AS "suffix",
+			a.update_date AS "updateDate",
+			a.update_by AS "updateBy.id",
+			a.create_date AS "createDate",
+			a.create_by AS "createBy.id",
+			u.name AS "userName",
+			u.name AS "createBy.name",
+			u.no AS "createBy.no",
+			o6.id AS "createBy.office.id",
+			o6.name AS "createBy.office.name"
+		</sql>
+
+	<sql id="sysAttachmentInIdsJoins">
+		LEFT JOIN sys_user u ON u.id = a.create_by
+		LEFT JOIN sys_office o6 ON o6.id = u.office_id
+	</sql>
+
+	<sql id="sysAttachmentInIdsByPpgJoins">
+		LEFT JOIN (
+				SELECT
+					pd.id AS "id",
+					pd.`name` AS "name",
+					pd.leader AS "leader"
+				FROM
+					project_declare pd
+				UNION ALL SELECT
+					pm.id AS "id",
+					pm.p_name AS "name",
+					pm.declare_id AS "leader"
+				FROM
+					pro_model pm
+				UNION ALL SELECT
+					gc.id AS "id",
+					gc.p_name AS "name",
+					gc.declare_id AS "leader"
+				FROM
+					g_contest gc
+		) ppg ON ppg.id = a.uid
+		LEFT JOIN sys_user u ON u.id = ppg.leader
+		LEFT JOIN sys_office o6 ON o6.id = u.office_id
+	</sql>
+
+	<sql id="sysAttachmentJoins">
+	</sql>
+
+	<select id="findAttListByUid" resultMap="resultMap">
+		select
+		<include refid="sysAttachmentInIdsColumns"/>
+		from sys_attachment a
+		<include refid="sysAttachmentInIdsJoins"/>
+		where a.uid=#{uid}
+		order by a.create_date ASC
+	</select>
+
+	<select id="get" resultMap="resultMap">
+		SELECT
+			<include refid="sysAttachmentColumns"/>
+		FROM sys_attachment a
+		<include refid="sysAttachmentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultMap="resultMap">
+		SELECT
+			<include refid="sysAttachmentColumns"/>
+		FROM sys_attachment a
+		<include refid="sysAttachmentJoins"/>
+		<where>
+			<if test="uid != null and uid != ''">
+				AND a.uid =#{uid}
+			</if>
+			<if test="gnodeId != null and gnodeId != ''">
+				AND a.gnode_id =#{gnodeId}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type =#{type.value}
+			</if>
+			<if test="fileSteps != null and fileSteps != ''">
+				AND a.file_step in
+				<foreach item="fileStep" collection="fileSteps" open="(" separator="," close=")">
+		            #{fileStep}
+		        </foreach>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListInIds" resultMap="resultMap">
+		SELECT
+			<include refid="sysAttachmentInIdsColumns"/>
+		FROM sys_attachment a
+		<include refid="sysAttachmentInIdsJoins"/>
+		<where>
+			<if test="uids != null and uids != ''">
+				AND a.uid in
+				<foreach item="id" collection="uids" open="(" separator="," close=")">
+		            #{id}
+		        </foreach>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type =#{type.value}
+			</if>
+			<if test="fileSteps != null and fileSteps != ''">
+				AND a.file_step in
+				<foreach item="fileStep" collection="fileSteps" open="(" separator="," close=")">
+		            #{fileStep}
+		        </foreach>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListInIdsByPpg" resultMap="resultMap">
+		SELECT
+			<include refid="sysAttachmentInIdsColumns"/>
+		FROM sys_attachment a
+		<include refid="sysAttachmentInIdsByPpgJoins"/>
+		<where>
+			<if test="uids != null and uids != ''">
+				AND a.uid in
+				<foreach item="id" collection="uids" open="(" separator="," close=")">
+		            #{id}
+		        </foreach>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type =#{type.value}
+			</if>
+			<if test="fileSteps != null and fileSteps != ''">
+				AND a.file_step in
+				<foreach item="fileStep" collection="fileSteps" open="(" separator="," close=")">
+		            #{fileStep}
+		        </foreach>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultMap="resultMap">
+		SELECT
+			<include refid="sysAttachmentColumns"/>
+		FROM sys_attachment a
+		<include refid="sysAttachmentJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_attachment(
+			id,
+			type,
+			file_step,
+			uid,
+			url,
+			gnode_id,
+			name,
+			size,
+			suffix,
+			update_date,
+			update_by,
+			create_date,
+			create_by
+		) VALUES (
+			#{id},
+			#{type.value},
+			#{fileStep.value},
+			#{uid},
+			#{url},
+			#{gnodeId},
+			#{name},
+			#{size},
+			#{suffix},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_attachment SET
+			type = #{type.value},
+			file_step = #{fileStep.value},
+			uid = #{uid},
+			url = #{url},
+			gnode_id=#{gnodeId},
+			name = #{name},
+			size = #{size},
+			suffix = #{suffix},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+
+
+	<update id="updateAtt">
+		UPDATE sys_attachment SET
+
+			uid = #{gid}
+
+		WHERE uid = #{oldGidId}
+	</update>
+
+	<update id="delete">
+		DELETE FROM sys_attachment
+		WHERE id = #{id}
+	</update>
+	<select id="getFileInfo" resultType="java.util.Map" parameterType="java.util.Map">
+		select t.id, t.name arrName,t.url arrUrl,date_format(t.create_date,'%Y-%m-%d') create_date,t.suffix from sys_attachment t
+		where t.uid=#{uid}
+		<if test="file_step != null and file_step != ''">  <!--如果为空查找所有步骤的-->
+		and t.file_step=#{file_step}
+		</if>
+		<if test="type != null and type != ''">
+			and t.type=#{type}
+		</if>
+		order by t.create_date
+	</select>
+	<select id="getFiles" resultMap="resultMap">
+		select
+		<include refid="sysAttachmentInIdsColumns"/>
+		from sys_attachment a
+		<include refid="sysAttachmentInIdsJoins"/>
+		where a.uid=#{uid}
+		<if test="fileStep != null and fileStep != ''">  <!--如果为空查找所有步骤的-->
+		and a.file_step=#{fileStep.value}
+		</if>
+		<if test="type != null and type != ''">
+			and a.type=#{type.value}
+		</if>
+		<if test="gnodeId != null and gnodeId != ''">
+			and a.gnode_id=#{gnodeId}
+		</if>
+		order by a.create_date ASC
+	</select>
+	<delete id="deleteByUid" parameterType="java.lang.String">
+		DELETE FROM sys_attachment
+		WHERE uid = #{uid}
+	</delete>
+	<delete id="deleteByCdn" >
+		DELETE FROM sys_attachment
+		WHERE 1=1
+		<if test="uid != null and uid != ''">
+			and uid=#{uid}
+		</if>
+		<if test="type != null and type != ''">
+			and type=#{type.value}
+		</if>
+		<if test="fileStep != null and fileStep != ''">
+			and file_step=#{fileStep.value}
+		</if>
+	</delete>
+	<select id="getFilesNotInSet" resultMap="resultMap">
+		select <include refid="sysAttachmentColumns"/> from sys_attachment a
+		where a.uid=#{sa.uid}
+		<if test="sa.fileStep != null and sa.fileStep != ''">  <!--如果为空查找所有步骤的-->
+			and a.file_step=#{sa.fileStep.value}
+		</if>
+		<if test="sa.type != null and sa.type != ''">
+			and a.type=#{sa.type.value}
+		</if>
+		<if test="urls != null and urls.size >0 ">
+			and a.url not in
+			<foreach collection="urls" item="value" open="(" close=")" separator=",">
+				#{value}
+			</foreach>
+		</if>
+	</select>
+	<delete id="deleteByCdnNotInSet" >
+		DELETE FROM sys_attachment
+		WHERE  uid=#{sa.uid}
+		<if test="sa.type != null and sa.type != ''">
+			and type=#{sa.type.value}
+		</if>
+		<if test="sa.fileStep != null and sa.fileStep != ''">
+			and file_step=#{sa.fileStep.value}
+		</if>
+		<if test="urls != null and urls.size >0 ">
+			and url not in
+			<foreach collection="urls" item="value" open="(" close=")" separator=",">
+				#{value}
+			</foreach>
+		</if>
+	</delete>
+
+	<select id="getByUrl" resultMap="resultMap">
+		SELECT
+			<include refid="sysAttachmentColumns"/>
+		FROM sys_attachment a
+		<include refid="sysAttachmentJoins"/>
+		WHERE a.url = #{url}
+	</select>
+
+	<select id="checkHasFile" resultType="java.lang.String">
+		SELECT CASE WHEN COUNT(id) > 0 THEN '是' ELSE '否' END hasFile FROM sys_attachment WHERE uid = #{id}
+	</select>
+
+	<select id="getLogoByProModelId" resultType="java.lang.String">
+		SELECT a.url FROM sys_attachment a WHERE a.uid = #{uid} and a.file_step ='1101'
+	</select>
+
+	<select id="getProvinceDoc" resultMap="resultMap">
+		select
+		<include refid="sysAttachmentColumns"/>
+		FROM sys_attachment a
+		LEFT JOIN act_yw_pscrel ps on a.uid = ps.province_actyw_id
+		where ps.school_actyw_id = #{actYwId} and ps.del_flag ='0' and ps.ispushed ='1' and a.tenant_id = #{provinceTenantId}
+		  and a.file_step =#{fileStep}
+	</select>
+</mapper>

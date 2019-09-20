@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.sco.dao.ScoCourseDao">
+    
+	<sql id="scoCourseColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.name AS "name",
+		a.type AS "type",
+		a.nature AS "nature",
+		a.professional AS "professional",
+		a.plan_score AS "planScore",
+		a.plan_time AS "planTime",
+		a.over_score AS "overScore",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="scoCourseJoins">
+	</sql>
+    
+	<select id="get" resultType="ScoCourse">
+		SELECT 
+			<include refid="scoCourseColumns"/>
+		FROM sco_course a
+		<include refid="scoCourseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ScoCourse">
+		SELECT 
+			<include refid="scoCourseColumns"/>
+		FROM sco_course a
+		<include refid="scoCourseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="findscoCourseVoList" parameterType="com.oseasy.scr.modules.sco.vo.ScoCourseVo"
+				resultType="com.oseasy.scr.modules.sco.vo.ScoCourseVo">
+		SELECT
+				a.id AS "scoCourse.id",
+				a.code AS "scoCourse.code",
+				a.name AS "scoCourse.name",
+				a.type AS "scoCourse.type",
+				a.nature AS "scoCourse.nature",
+				a.professional AS "scoCourse.professional",
+				a.plan_score AS "scoCourse.planScore",
+				a.plan_time AS "scoCourse.planTime",
+				a.over_score AS "scoCourse.overScore",
+				a.create_by AS "scoCourse.createBy.id",
+				a.create_date AS "scoCourse.createDate",
+				a.update_by AS "scoCourse.updateBy.id",
+				a.update_date AS "scoCourse.updateDate",
+				a.remarks AS "scoCourse.remarks",
+				a.del_flag AS "scoCourse.delFlag",
+				su.no AS "user.no",
+				su.name AS "user.name",
+				su.photo AS "user.photo",
+				su.professional AS "user.professional",
+				so.id AS "office.id",
+				so.name AS "office.name",
+				sa.id AS "scoApply.id",
+				sa.proc_ins_id AS "scoApply.procInsId",
+				sa.user_id AS "scoApply.userId",
+				sa.real_time AS "scoApply.realTime",
+				sa.real_score AS "scoApply.realScore",
+				sa.score AS "scoApply.score",
+				sa.course_status AS "scoApply.courseStatus",
+				sa.audit_status AS "scoApply.auditStatus",
+				IF(sa.audit_status = '2', '0',sa.audit_status) AS "orderState",
+				sa.del_flag AS "scoApply.delFlag"
+		FROM sco_course a
+		left JOIN  sco_apply sa on sa.course_id = a.id
+		inner join sys_user su on su.id=sa.user_id
+		inner join sys_office so on so.id=su.office_id
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and sa.del_flag = #{DEL_FLAG_NORMAL} and sa.audit_status != 0
+			<if test="keyWord != null and keyWord != ''">
+				AND (a.name LIKE concat('%',#{keyWord},'%')
+				or a.code LIKE concat('%',#{keyWord},'%')
+				or su.no LIKE concat('%',#{keyWord},'%')
+				)
+			</if>
+			<if test="user!=null and user.no != null and user.no != ''">
+				AND su.no LIKE
+					<if test="dbName == 'oracle'">'%'||#{user.no}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{user.no}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{user.no},'%')</if>
+			</if>
+			<if test="office!=null and office.id != null and  office.id != ''">
+				AND so.id =#{ office.id}
+			</if>
+			<if test="user!=null and user.professional != null and  user.professional != ''">
+				AND su.professional =#{user.professional }
+			</if>
+
+			<if test="scoCourse!=null and scoCourse.code != null and  scoCourse.code!= ''">
+				AND a.code =#{scoCourse.code}
+			</if>
+
+			<if test="scoCourse!=null and scoCourse.type!= null and scoCourse.type!= ''">
+				AND a.type=#{scoCourse.type}
+			</if>
+
+			<if test="scoApply!=null and scoApply.auditStatus != null and  scoApply.auditStatus!= ''">
+				AND sa.audit_status =#{scoApply.auditStatus}
+			</if>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY orderState
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 根据课程名或者课程代码查询学分课程 -->
+	<select id="findListByNameOrCode" parameterType="java.lang.String" resultType="ScoCourse">
+		   SELECT a.id AS "id",
+				a.code AS "code",
+				a.name AS "name",
+				a.plan_score AS "planScore",
+				a.plan_time AS "planTime",
+				a.over_score AS "overScore",
+				a.type AS "type",
+				a.nature AS "nature",
+				a.professional AS "professional"
+			FROM sco_course a
+		<where>
+			a.del_flag = '0'
+			<if test="keyword != null and keyword != ''">
+				and (a.code like concat('%',#{keyword},'%') OR
+					  a.name like concat('%',#{keyword},'%')
+					)
+			</if>
+		</where>
+			limit 10
+	</select>
+
+
+	<select id="findCourseList"  resultType="ScoCourse">
+ 			SELECT a.id AS "id",
+				a.code AS "code",
+				a.name AS "name",
+				a.plan_score AS "planScore",
+				a.plan_time AS "planTime",
+				a.over_score AS "overScore"
+			FROM sco_course a
+		<where>
+			a.del_flag = '0'
+			<if test="keyword != null and keyword != ''">
+				and (a.code like concat('%',#{keyword},'%') OR
+				a.name like concat('%',#{keyword},'%')
+				)
+			</if>
+			<!--课程类型-->
+			<if test="type != null and type != ''">
+				and a.type = #{type}
+			</if>
+			<!--课程性质-->
+			<if test="nature != null and nature != ''">
+				and a.nature = #{nature}
+			</if>
+			<!--专业科别-->
+			<if test="professionalList!=null and professionalList.size>0">
+				and
+				<foreach collection="professionalList" item="value" open="(" close=")" separator="or">
+					 FIND_IN_SET(#{value},a.professional)
+				</foreach>
+			</if>
+		</where>
+		 limit 10
+	</select>
+
+	
+	<select id="findAllList" resultType="ScoCourse">
+		SELECT 
+			<include refid="scoCourseColumns"/>
+		FROM sco_course a
+		<include refid="scoCourseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sco_course(
+			id,
+			code,
+			name,
+			type,
+			nature,
+			professional,
+			plan_score,
+			plan_time,
+			over_score,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{code},
+			#{name},
+			#{type},
+			#{nature},
+			#{professional},
+			#{planScore},
+			#{planTime},
+			#{overScore},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sco_course SET 	
+			code = #{code},
+			name = #{name},
+			type = #{type},
+			nature = #{nature},
+			professional = #{professional},
+			plan_score = #{planScore},
+			plan_time = #{planTime},
+			over_score = #{overScore},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE  sco_course set del_flag = 1
+		WHERE id = #{id}
+	</update>
+	
+	<select id="checkName" resultType="java.lang.Integer">
+		select count(1) from
+		sco_course a
+		where a.del_flag='0' and a.name=#{name}
+		<if test=" id != null and id != '' ">
+			and a.id!=#{id}
+		</if>
+	</select>
+	<select id="checkCode" resultType="java.lang.Integer">
+		select count(1) from
+		sco_course a
+		where a.del_flag='0' and a.code=#{code}
+		<if test=" id != null and id != '' ">
+			and a.id!=#{id}
+		</if>
+	</select>
+</mapper>

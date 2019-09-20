@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.dr.modules.dr.dao.DrCardRuleDao">
+
+	<sql id="DrCardRuleColumns">
+		a.id AS "id",
+		a.is_warm AS "isWarm",
+		a.warm_time AS "warmTime",
+		a.is_enter AS "isEnter",
+		a.enter_time AS "enterTime",
+		a.is_out AS "isOut",
+		a.is_time_limit AS "isTimeLimit",
+		a.out_time AS "outTime",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.begin_time AS "beginTime",
+		a.end_time AS "endTime",
+		a.is_open as "isOpen"
+	</sql>
+
+	<sql id="DrCardRuleJoins">
+	</sql>
+
+	<select id="get" resultType="DrCardRule">
+		SELECT
+			<include refid="DrCardRuleColumns"/>
+		FROM dr_card_rule a
+		<include refid="DrCardRuleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getDrCardRule" resultType="DrCardRule">
+		SELECT
+			<include refid="DrCardRuleColumns"/>
+		FROM dr_card_rule a
+		<include refid="DrCardRuleJoins"/>
+		limit 1
+	</select>
+
+	<select id="findList" resultType="DrCardRule">
+		SELECT
+			<include refid="DrCardRuleColumns"/>
+		FROM dr_card_rule a
+		<include refid="DrCardRuleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="DrCardRule">
+		SELECT
+			<include refid="DrCardRuleColumns"/>
+		FROM dr_card_rule a
+		<include refid="DrCardRuleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dr_card_rule(
+			id,
+			is_warm,
+			warm_time,
+			is_enter,
+			enter_time,
+			is_out,
+			is_time_limit,
+			out_time,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag,
+			begin_time,
+			end_time
+		) VALUES (
+			#{id},
+			#{isWarm},
+			#{warmTime},
+			#{isEnter},
+			#{enterTime},
+			#{isOut},
+			#{isTimeLimit},
+			#{outTime},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag},
+			#{beginTime},
+			#{endTime}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE dr_card_rule SET
+			is_warm = #{isWarm},
+			warm_time = #{warmTime},
+			is_enter = #{isEnter},
+			enter_time = #{enterTime},
+			is_out = #{isOut},
+			is_time_limit = #{isTimeLimit},
+			out_time = #{outTime},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks},
+			begin_time = #{beginTime},
+			end_time = #{endTime},
+			is_open = #{isOpen}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE dr_card_rule SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM dr_card_rule WHERE id = #{id}
+	</update>
+</mapper>

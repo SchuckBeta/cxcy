@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwGroupDao">
+	<resultMap id="actYwGroupResult" type="com.oseasy.act.modules.actyw.entity.ActYwGroup">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="status" column="status" />
+		<result property="type" column="type" />
+		<result property="ntype" column="ntype" />
+		<result property="isPush" column="isPush" />
+		<result property="flowType" column="flowType" />
+		<result property="keyss" column="keyss" />
+		<result property="theme" column="theme" />
+		<result property="temp" column="temp" />
+		<result property="author" column="author" />
+		<result property="version" column="version" />
+		<result property="flowId" column="flowId" />
+		<result property="sort" column="sort" />
+		<result property="uiJson" column="uiJson" typeHandler="com.oseasy.com.pcore.common.handler.BlobHandler"/>
+		<result property="uiHtml" column="uiHtml" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<collection property="actYws" ofType="ActYw">
+			<id property="id" column="actYws.id" />
+			<result property="relId" column="actYws.relId" />
+			<result property="groupId" column="actYws.groupId" />
+			<result property="flowId" column="actYws.flowId" />
+			<result property="deploymentId" column="actYws.deploymentId" />
+			<result property="isDeploy" column="actYws.isDeploy" />
+			<result property="isShowAxis" column="actYws.isShowAxis" />
+			<result property="status" column="actYws.status" />
+			<result property="showTime" column="actYws.showTime" />
+		</collection>
+	</resultMap>
+
+	<sql id="actYwGroupColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.status AS "status",
+		a.type AS "type",
+		a.ntype AS "ntype",
+		a.is_push AS "isPush",
+		a.flow_type AS "flowType",
+		a.theme AS "theme",
+		a.temp AS "temp",
+		a.keyss AS "keyss",
+		a.author AS "author",
+		a.version AS "version",
+		a.flow_id AS "flowId",
+		a.sort AS "sort",
+		a.ui_json AS "uiJson",
+		a.ui_html AS "uiHtml",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.tenant_id AS "tenantId",
+		count(b.id) AS "ywsize"
+	</sql>
+
+	<sql id="actYwGroupRelationColumns">
+		a.id AS "id",
+		a.name AS "name",
+		re.model_group_id AS "relationId",
+		model.name AS "relationName",
+
+		ast.id AS "actYwStepId",
+		ast.step AS "step",
+
+		a.status AS "status",
+		a.type AS "type",
+		a.ntype AS "ntype",
+		a.is_push AS "isPush",
+		a.flow_type AS "flowType",
+		a.theme AS "theme",
+		a.temp AS "temp",
+		a.keyss AS "keyss",
+		a.author AS "author",
+		a.version AS "version",
+		a.flow_id AS "flowId",
+		a.sort AS "sort",
+		a.ui_json AS "uiJson",
+		a.ui_html AS "uiHtml",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.tenant_id AS "tenantId",
+		count(b.id) AS "ywsize"
+	</sql>
+
+	<sql id="actYwGroupBygColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.status AS "status",
+		a.type AS "type",
+		a.ntype AS "ntype",
+		a.is_push AS "isPush",
+		a.flow_type AS "flowType",
+		a.theme AS "theme",
+		a.temp AS "temp",
+		a.keyss AS "keyss",
+		a.author AS "author",
+		a.version AS "version",
+		a.flow_id AS "flowId",
+		a.sort AS "sort",
+		a.ui_json AS "uiJson",
+		a.ui_html AS "uiHtml",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+
+		b.id AS "actYws.id",
+		b.rel_id AS "actYws.relId",
+		b.group_id AS "actYws.groupId",
+		b.flow_id AS "actYws.flowId",
+		b.deployment_id AS "actYws.deploymentId",
+		b.is_deploy AS "actYws.isDeploy",
+		b.is_pre_release AS "actYws.isPreRelease",
+		b.is_show_axis AS "actYws.isShowAxis",
+		b.status  AS  "actYws.status",
+		b.show_time AS "actYws.showTime",
+		b.key_type AS "actYws.keyType"
+	</sql>
+
+	<sql id="actYwGroupJoins">
+		LEFT JOIN act_yw b ON b.group_id = a.id
+	</sql>
+
+	<sql id="actYwGroupRelationJoins">
+		LEFT JOIN act_yw b ON b.group_id = a.id
+		LEFT JOIN act_yw_group_relation re ON re.prov_group_id = a.id
+		LEFT JOIN act_yw_group model ON re.model_group_id = model.id
+		LEFT JOIN act_yw_step ast ON ast.prov_group_id = a.id
+
+	</sql>
+
+	<select id="get" resultMap="actYwGroupResult">
+		SELECT
+		<include refid="actYwGroupBygColumns"/>
+		FROM act_yw_group a
+		<include refid="actYwGroupJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+
+	<select id="getByTenant" resultMap="actYwGroupResult">
+		SELECT
+		<include refid="actYwGroupBygColumns"/>
+		FROM act_yw_group a
+		<include refid="actYwGroupJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByKeyss" resultMap="actYwGroupResult">
+		SELECT
+			<include refid="actYwGroupBygColumns"/>
+		FROM act_yw_group a
+		<include refid="actYwGroupJoins"/>
+		WHERE a.del_flag = '0' AND a.keyss = #{keyss}
+	</select>
+
+	<select id="findList" resultMap="actYwGroupResult">
+		SELECT
+			<include refid="actYwGroupBygColumns"/>
+		FROM act_yw_group a
+		<include refid="actYwGroupJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type LIKE
+				<if test="dbName == 'oracle'">'%'||#{type}||',%'</if>
+				<if test="dbName == 'mssql'">'%'+#{type}+',%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{type},',%')</if>
+			</if>
+			<if test="ntype != null and ntype != ''">
+				AND a.ntype = #{ntype}
+			</if>
+			<if test="isPush != null and isPush != ''">
+				AND a.is_push = #{isPush}
+			</if>
+
+			<if test="flowType != null and flowType != ''">
+				AND a.flow_type = #{flowType}
+			</if>
+			<if test="theme != null">
+				AND a.theme = #{theme}
+			</if>
+			<if test="temp != null and temp != ''">
+				AND a.temp = #{temp}
+			</if>
+			<if test="keyss != null and keyss != ''">
+				AND a.keyss = #{keyss}
+			</if>
+			<if test="author != null and author != ''">
+				AND a.author = #{author}
+			</if>
+			<if test="version != null and version != ''">
+				AND a.version = #{version}
+			</if>
+			<if test="flowId != null and flowId != ''">
+				AND a.flow_id = #{flowId}
+			</if>
+			<if test="sort != null and sort != ''">
+				AND a.sort = #{sort}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC, a.theme DESC, a.type ASC, a.keyss ASC, a.sort ASC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findModelList" resultType="actYwGroup">
+		SELECT
+			<include refid="actYwGroupColumns"/>
+		FROM act_yw_group a
+		<include refid="actYwGroupJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND a.tenant_id = '10' AND b.is_deploy = '1'
+
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="ntype != null and ntype != ''">
+				AND a.ntype = #{ntype}
+			</if>
+			<if test="isPush != null and isPush != ''">
+				AND a.is_push = #{isPush}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		GROUP BY a.id
+	</select>
+
+	<select id="findListByCount" resultType="actYwGroup">
+		SELECT
+			<include refid="actYwGroupRelationColumns"/>
+		FROM act_yw_group a
+		<include refid="actYwGroupRelationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type LIKE
+					<if test="dbName == 'oracle'">'%'||#{type}||',%'</if>
+					<if test="dbName == 'mssql'">'%'+#{type}+',%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{type},',%')</if>
+			</if>
+			<if test="ntype != null and ntype != ''">
+				AND a.ntype = #{ntype}
+			</if>
+			<if test="isPush != null and isPush != ''">
+				AND a.is_push = #{isPush}
+			</if>
+			<if test="flowType != null and flowType != ''">
+				AND a.flow_type = #{flowType}
+			</if>
+			<if test="theme != null">
+				AND a.theme = #{theme}
+			</if>
+			<if test="temp != null and temp != ''">
+				AND a.temp = #{temp}
+			</if>
+			<if test="keyss != null and keyss != ''">
+				AND a.keyss = #{keyss}
+			</if>
+			<if test="author != null and author != ''">
+				AND a.author = #{author}
+			</if>
+			<if test="version != null and version != ''">
+				AND a.version = #{version}
+			</if>
+			<if test="flowId != null and flowId != ''">
+				AND a.flow_id = #{flowId}
+			</if>
+			<if test="sort != null and sort != ''">
+				AND a.sort = #{sort}
+			</if>
+		</where>
+		GROUP BY a.id
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC, a.theme DESC, a.type ASC, a.keyss ASC, a.sort ASC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findCount" resultType="Long">
+		SELECT count(a.id) FROM act_yw_group a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type LIKE
+					<if test="dbName == 'oracle'">'%'||#{type}||',%'</if>
+					<if test="dbName == 'mssql'">'%'+#{type}+',%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{type},',%')</if>
+			</if>
+			<if test="ntype != null and ntype != ''">
+				AND a.ntype = #{ntype}
+			</if>
+			<if test="isPush != null and isPush != ''">
+				AND a.is_push = #{isPush}
+			</if>
+			<if test="flowType != null and flowType != ''">
+				AND a.flow_type = #{flowType}
+			</if>
+			<if test="theme != null">
+				AND a.theme = #{theme}
+			</if>
+			<if test="temp != null and temp != ''">
+				AND a.temp = #{temp}
+			</if>
+			<if test="keyss != null and keyss != ''">
+				AND a.keyss = #{keyss}
+			</if>
+			<if test="author != null and author != ''">
+				AND a.author = #{author}
+			</if>
+			<if test="version != null and version != ''">
+				AND a.version = #{version}
+			</if>
+			<if test="flowId != null and flowId != ''">
+				AND a.flow_id = #{flowId}
+			</if>
+			<if test="sort != null and sort != ''">
+				AND a.sort = #{sort}
+			</if>
+		</where>
+	</select>
+
+	<select id="findAllList" resultMap="actYwGroupResult">
+		SELECT
+			<include refid="actYwGroupBygColumns"/>
+		FROM act_yw_group a
+		<include refid="actYwGroupJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC, a.theme DESC, a.type ASC, a.keyss ASC, a.sort ASC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_group(
+			id,
+			name,
+			status,
+			type,
+			ntype,
+			is_push,
+			flow_type,
+			theme,
+			temp,
+			keyss,
+			author,
+			version,
+			flow_id,
+			sort,
+			ui_json,
+			ui_html,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{status},
+			#{type},
+			#{ntype},
+			#{isPush},
+			#{flowType},
+			#{theme},
+			#{temp},
+			#{keyss},
+			#{author},
+			#{version},
+			#{flowId},
+			#{sort},
+			#{uiJson},
+			#{uiHtml},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_group SET
+			name = #{name},
+			status = #{status},
+			type = #{type},
+			ntype = #{ntype},
+			is_push = #{isPush},
+			flow_type = #{flowType},
+			theme = #{theme},
+			temp = #{temp},
+			keyss = #{keyss},
+			author = #{author},
+			version = #{version},
+			flow_id = #{flowId},
+			sort = #{sort},
+			ui_json = #{uiJson},
+			ui_html = #{uiHtml},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE act_yw_group SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

@@ -1,0 +1,830 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.sys.modules.sys.dao.BackTeacherExpansionDao">
+
+	<sql id="backTeacherExpansionColumns">
+		DISTINCT a.id AS "id",
+		a.arrangement AS "arrangement",
+		a.discipline AS "discipline",
+		a.industry AS "industry",
+		a.technical_title AS "technicalTitle",
+		a.service_intention AS "serviceIntention",
+		a.work_unit AS "workUnit",
+		a.address AS "address",
+		a.resume AS "resume",
+		a.recommended_units AS "recommendedUnits",
+		a.result AS "result",
+		a.award AS "award",
+		a.role_type AS "roleType",
+		a.level AS "level",
+		a.review_name AS "reviewName",
+		a.join_review_time AS "joinReviewTime",
+		a.first_bank AS "firstBank",
+		a.bank_account AS "bankAccount",
+		a.mainExp AS "mainExp",
+		a.post_title AS "postTitle",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.teacherType AS "teachertype",
+		a.expert_type AS "expertType",
+		a.education_type AS "educationType",
+		a.is_open AS "isOpen",
+		a.first_show AS "firstShow",
+		a.site_show AS "siteShow",
+		a.top_show AS "topShow",
+		a.category AS "category",
+		a.work_unit_type AS "workUnitType",
+		u.id AS "user.id",
+		u.name AS "user.name",
+		u.company_id AS "user.company.id",
+		u.office_id AS "user.office.id",
+		u.login_name AS "user.loginName",
+		u.password AS "user.password",
+		u.no AS "user.no",
+		u.email AS "user.email",
+		u.phone AS "user.phone",
+		u.mobile AS "user.mobile",
+		u.user_type AS "user.userType",
+		u.login_ip AS "user.loginIp",
+		u.photo AS "user.photo",
+		u.login_date AS "user.loginDate",
+		u.login_flag AS "user.loginFlag",
+		u.create_by AS "user.createBy",
+		u.create_date AS "user.createDate",
+		u.update_by AS "user.updateBy",
+		u.update_date AS "user.updateDate",
+		u.del_flag AS "user.delFlag",
+		u.national AS "user.national",
+		u.political AS "user.political",
+		u.professional AS "user.professional",
+		u.id_type AS "user.idType",
+		u.birthday AS "user.birthday",
+		u.sex AS "user.sex",
+		u.country AS "user.country",
+		u.area AS "user.area",
+		u.domain AS "user.domain",
+		u.degree AS "user.degree",
+		u.education AS "user.education",
+		u.id_no AS "user.idNumber",
+		u.post_code AS "user.postCode",
+		u.likes AS "user.likes",
+		u.views AS "user.views",
+		so.name AS "user.office.name"<!-- ,
+		tur.team_id AS "team.id",
+	    tur.id AS "teamUserRelation.id",
+		tur.user_type AS "teamUserRelation.userType",
+		tur.user_id AS "teamUserRelation.user.id",
+		tur.team_id AS "teamUserRelation.teamId",
+		tur.create_date AS "teamUserRelation.createDate",
+		tur.create_by AS "teamUserRelation.createBy",
+		tur.del_flag AS "teamUserRelation.delFlag",
+		tur.state AS "teamUserRelation.state",
+		tm.project_name AS "team.projectName" -->
+
+	</sql>
+
+	<sql id="backTeacherExpansionJoins">
+		LEFT JOIN sys_user u ON u.id = a.user_id
+	</sql>
+
+	<sql id="nowProjectColumn">
+		(select 	count(userId) from 	 (select  p1.id,p1.name,p1.team_id,p1.status,r1.user_id as userId from project_declare p1
+		left join team t1 on p1.team_id=t1.id and t1.state='1'
+		left join team_user_relation r1 on r1.team_id=t1.id
+		where p1.status in (1,2,3,4,5,6,7) and p1.del_flag='0' ) user_view where userId=a.user_id
+		)
+	</sql>
+
+	<sql id="topPriseColumn" >
+		( SELECT s.label FROM sys_dict s WHERE
+		s.type='competition_college_prise'
+
+		AND s.value=
+		(SELECT MAX(g.award) FROM g_contest_award g
+		WHERE g.del_flag=0 AND g.contest_id IN (
+		SELECT DISTINCT(e.id)
+		FROM g_contest e
+		WHERE e.del_flag=0 AND e.declare_id IN(
+		SELECT t.sponsor FROM team t WHERE t.del_flag=0 AND t.id IN(
+		SELECT tur.team_id FROM team_user_relation tur WHERE tur.user_id=a.user_id )
+		)
+		)
+		)
+		) AS  "topPrise"
+	</sql>
+
+
+	<sql id="domainsColumn">
+		(SELECT GROUP_CONCAT(v.label) FROM
+		(SELECT u2.id,d.label FROM sys_user u2 LEFT JOIN sys_dict d ON  FIND_IN_SET(d.value,u2.domain) AND d.TYPE = "technology_field"   ORDER BY u2.id) v  where v.id=u.id GROUP BY v.id
+		)
+	</sql>
+
+	<select id="get" resultType="BackTeacherExpansion">
+		SELECT
+			<include refid="backTeacherExpansionColumns"/>
+		FROM sys_teacher_expansion a
+		LEFT JOIN sys_user u ON u.id = a.user_id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+		WHERE a.id = #{id} and u.del_flag='0'
+	</select>
+	<select id="getByUserId" resultType="BackTeacherExpansion">
+		SELECT
+			<include refid="backTeacherExpansionColumns"/>
+		FROM sys_teacher_expansion a
+		LEFT JOIN sys_user u ON u.id = a.user_id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+		WHERE a.user_id = #{uid}
+	</select>
+
+	<select id="findTeacherByTopShow" resultType="BackTeacherExpansion">
+		SELECT
+			<include refid="backTeacherExpansionColumns"/>
+		FROM sys_teacher_expansion a
+		LEFT JOIN sys_user u ON u.id = a.user_id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+		<!-- LEFT JOIN team_user_relation tur ON tur.user_id = u.id
+		LEFT JOIN team tm ON tm.id = tur.team_id -->
+		WHERE a.top_show = '1' and find_in_set('0',a.role_type)>0
+		<if test="useCorpModel">
+			and u.tenant_id=#{tenantId}
+		</if>
+		<if test="teachertype != null and teachertype != ''">
+			AND a.teachertype = #{teachertype}
+		</if>
+	</select>
+
+	<select id="findTeacherByUserId" resultType="BackTeacherExpansion">
+		SELECT a.* FROM sys_teacher_expansion a
+		WHERE a.user_id = #{userId}
+	</select>
+	<select id="findTeacherByUserIdAndType" resultType="BackTeacherExpansion">
+		SELECT
+			a.*
+		FROM sys_teacher_expansion a
+		WHERE a.user_id = #{userId} and a.teachertype=#{type} and a.del_flag='0'
+	</select>
+
+	<select id="getServiceIntention" resultType="BackTeacherExpansion">
+		select a.user_id as "user.id",GROUP_CONCAT(s8.label) serviceIntentionStr from sys_teacher_expansion a
+		left join sys_dict s8 on s8.type='master_help' and s8.del_flag='0' and find_in_set(s8.value,a.service_intention)
+		where 1=1
+		<if test="teas!=null and teas.size!=0">
+			and
+			<foreach collection="teas" item="item" index="index"
+				separator=" or " open="(" close=")">
+				a.user_id=#{item.user.id}
+			</foreach>
+		</if>
+		group by a.user_id
+	</select>
+
+	<!-- 导师列表查询 -->
+	<select id="findList" resultType="BackTeacherExpansion">
+		SELECT
+			<include refid="backTeacherExpansionColumns"/>,
+		   <include refid="topPriseColumn"/>
+		FROM sys_teacher_expansion a
+		LEFT JOIN sys_user u ON u.id = a.user_id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+		LEFT JOIN sys_user_role sur ON sur.user_id = u.id
+		LEFT JOIN sys_role role on role.id = sur.role_id
+		<where>
+			a.del_flag = 0  and role.rtype=50
+			<if test="useCorpModel">
+				and a.tenant_id=#{tenantId}
+			</if>
+			<!-- 是否有在研项目 -->
+			<if test="nowProject !=null and nowProject != ''">
+				AND <include refid="nowProjectColumn"/> = #{nowProject}
+			</if>
+
+			<!--学院 -->
+			<if test="user != null and user.office != null and user.office.id != null and user.office.id != ''">
+				AND u.office_id = #{user.office.id}
+			</if>
+
+			<!-- 专业 -->
+			<if test="user != null and user.professional != null and user.professional != ''">
+				AND u.professional = #{user.professional}
+			</if>
+			<!-- 导师来源 -->
+			<if test="teachertype != null and teachertype != ''">
+				AND a.teachertype = #{teachertype}
+			</if>
+			<if test="workUnitType != null and workUnitType != ''">
+				AND a.work_unit_type = #{workUnitType}
+			</if>
+			<if test="recommendedUnits != null and recommendedUnits != ''">
+				AND a.recommended_units = #{recommendedUnits}
+			</if>
+			<!--姓名 -->
+			<if test="user != null and user.name != null and user.name != ''">
+				AND u.name like
+				CONCAT('%', #{user.name}, '%')
+			</if>
+
+			<!-- 后台 服务意向 -->
+			<if test="serviceIntentionIds != null and serviceIntentionIds.size != 0">
+				AND (
+				<foreach collection="serviceIntentionIds" item="cj" index="index" separator=" or ">
+					find_in_set(#{cj},a.service_intention)
+				</foreach>
+				)
+			</if>
+
+
+			<!--后台 学历-->
+			<if  test="user != null and user.education != null and user.education != ''">
+				AND u.education = #{user.education}
+			</if>
+
+			<!--后台 学位-->
+			<if test="user != null and user.degree != null and user.degree != ''">
+				AND u.degree = #{user.degree}
+			</if>
+			<if test="user != null and user.domain != null and user.domain != ''">
+				AND u.domain like  concat('%',#{user.domain},'%')
+			</if>
+
+			<!--前台关键字 查询范围 姓名 技术领域  职务 职称-->
+			<if test="myFind!=null and myFind!=''">
+				AND (u.name like  concat('%',#{myFind},'%')
+				or  u.no like  concat('%',#{myFind},'%')
+				or  a.post_title like  concat('%',#{myFind},'%')
+				or a.technical_title like  concat('%',#{myFind},'%')
+				OR  (SELECT GROUP_CONCAT(v.label) FROM
+				(SELECT u2.id,d.label FROM sys_user u2 LEFT JOIN sys_dict d ON  FIND_IN_SET(d.value,u2.domain) AND d.TYPE = 'technology_field' ) v  where v.id=u.id GROUP BY v.id
+				)  like  concat('%',#{myFind},'%')
+				)
+			</if>
+
+			<if test="technicalTitle != null and technicalTitle != ''">
+				AND a.technical_title = #{technicalTitle}
+			</if>
+
+			<!--后台关键字 查询范围 职工号 姓名 职务  职称-->
+			<if test="keyWords!=null and keyWords!=''">
+				AND ( u.no like concat('%',#{keyWords},'%')
+				  or  u.name like concat('%',#{keyWords},'%')
+				or  a.industry like concat('%',#{keyWords},'%')
+				or  a.recommended_units like concat('%',#{keyWords},'%')
+				or  a.work_unit like concat('%',#{keyWords},'%')
+				  or  a.post_title like concat('%',#{keyWords},'%')
+				  or a.technical_title like concat('%',#{keyWords},'%')
+				)
+			</if>
+
+			<if test="currentId != null and currentId != '' ">
+				AND u.id  != #{currentId}
+			</if>
+
+			<if test="category != null and category != ''">
+				AND a.category = #{category}
+			</if>
+
+			<if test="educationType != null and educationType != ''">
+				AND a.education_type = #{educationType}
+			</if>
+			<if test="postTitle != null and postTitle != ''">
+				AND a.post_title = #{postTitle}
+			</if>
+			<if test="industry != null and industry != ''">
+				AND a.industry = #{industry}
+			</if>
+
+			<if test="isOpen != null and isOpen != ''">
+				AND a.is_open = #{isOpen}
+			</if>
+
+			<if test="firstShow != null and firstShow != ''">
+				AND a.first_show = #{firstShow}
+			</if>
+
+			<if test="siteShow != null and siteShow != ''">
+				AND a.site_show = #{siteShow}
+			</if>
+			<if test="curJoinParam!=null">
+		and a.user_id in( select xx.user_id from team_user_history xx where
+			<foreach collection="curJoinParam" item="cj" index="index" open="(("
+					close="))" separator=") or (">
+					xx.pro_type=CONCAT(#{cj.pType}, ',') and xx.pro_sub_type=#{cj.psType} and xx.del_flag='0' and  xx.finish='0'
+			</foreach>
+			)
+		</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY  a.update_date desc,u.no DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 专家列表查询 -->
+	<select id="findExpertList" resultType="BackTeacherExpansion">
+		SELECT
+			<include refid="backTeacherExpansionColumns"/>
+		FROM sys_user u
+		LEFT JOIN sys_teacher_expansion a ON u.id = a.user_id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+		LEFT JOIN sys_user_role sur ON sur.user_id = u.id
+		<where>
+			u.del_flag = 0
+			<if test="roleId != null and roleId != ''">
+				and sur.role_id =#{roleId}
+			</if>
+
+			<if test="useCorpModel">
+				 and u.tenant_id=#{tenantId}
+			</if>
+			<!--学院 -->
+			<if test="officeId != null and officeId != ''">
+				AND ( u.office_id = #{officeId} or u.professional = #{officeId})
+			</if>
+
+			<if test="curJoinParam!=null">
+			and a.user_id in( select DISTINCT art.assignee_
+					from act_ru_task art
+					left JOIN pro_model xx on art.PROC_INST_ID_= xx.proc_ins_id
+					left JOIN act_yw acy on acy.id = xx.actyw_id
+					LEFT JOIN pro_project pp on pp.id=acy.rel_id
+					where
+				<foreach collection="curJoinParam" item="cj" index="index" open="(("
+						close="))" separator=") or (">
+					pp.pro_type=CONCAT(#{cj.pType}, ',') and pp.type=#{cj.psType}
+				</foreach>
+				)
+			</if>
+
+			<if test="user != null and user.domain != null and user.domain != ''">
+				AND u.domain like  concat('%',#{user.domain},'%')
+			</if>
+			<if test="recommendedUnits != null and recommendedUnits != ''">
+				AND a.recommended_units = #{recommendedUnits}
+			</if>
+			<!-- 专家类型 -->
+			<if test="expertId != null and expertId != ''">
+				AND sur.role_id = #{expertId}
+			</if>
+
+			<!-- 导师来源 -->
+			<if test="teachertype != null and teachertype != ''">
+				AND a.teachertype = #{teachertype}
+			</if>
+
+			<if test="expertType != null and expertType != ''">
+				AND a.expert_type like concat('%',#{expertType},'%')
+			</if>
+			<if test="workUnitType != null and workUnitType != ''">
+				AND a.work_unit_type = #{workUnitType}
+			</if>
+			<!--姓名 -->
+			<if test="user != null and user.name != null and user.name != ''">
+				AND u.name like
+				CONCAT('%', #{user.name}, '%')
+			</if>
+
+			<!--后台 学历-->
+			<if  test="user != null and user.education != null and user.education != ''">
+				AND u.education = #{user.education}
+			</if>
+
+			<!--后台 学位-->
+			<if test="user != null and user.degree != null and user.degree != ''">
+				AND u.degree = #{user.degree}
+			</if>
+			<!-- 后台 服务意向 -->
+			<if test="serviceIntentionIds != null and serviceIntentionIds.size != 0">
+				AND (
+				<foreach collection="serviceIntentionIds" item="cj" index="index" separator=" or ">
+					find_in_set(#{cj},a.service_intention)
+				</foreach>
+				)
+			</if>
+			<!--后台关键字 查询范围 职工号 姓名 职务  职称-->
+			<if test="queryStr!=null and queryStr!=''">
+				AND ( u.no like concat('%',#{queryStr},'%')
+				or  u.name like concat('%',#{queryStr},'%')
+				or  a.industry like concat('%',#{queryStr},'%')
+				or  a.recommended_units like concat('%',#{queryStr},'%')
+				or  a.work_unit like concat('%',#{queryStr},'%')
+				or  a.post_title like concat('%',#{queryStr},'%')
+				or a.technical_title like concat('%',#{queryStr},'%')
+				)
+			</if>
+
+			<if test="technicalTitle != null and technicalTitle != '' ">
+				AND a.technical_title  = #{technicalTitle}
+			</if>
+			<if test="postTitle != null and postTitle != ''">
+				AND a.post_title = #{postTitle}
+			</if>
+			<if test="industry != null and industry != ''">
+				AND a.industry = #{industry}
+			</if>
+			<if test="currentId != null and currentId != '' ">
+				AND u.id  != #{currentId}
+			</if>
+
+			<if test="category != null and category != ''">
+				AND a.category = #{category}
+			</if>
+
+			<if test="educationType != null and educationType != ''">
+				AND a.education_type = #{educationType}
+			</if>
+
+			<if test="firstShow != null and firstShow != ''">
+				AND a.first_show = #{firstShow}
+			</if>
+
+			<if test="siteShow != null and siteShow != ''">
+				AND a.site_show = #{siteShow}
+			</if>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY  a.update_date desc,u.no DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findIndexTeacherList" resultType="BackTeacherExpansion">
+		SELECT
+		<include refid="backTeacherExpansionColumns"/>,
+		<include refid="topPriseColumn"/>
+		FROM sys_teacher_expansion a
+		LEFT JOIN sys_user u ON u.id = a.user_id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+		LEFT JOIN sys_user_role sur ON sur.user_id = u.id
+		LEFT JOIN sys_role r on r.id = sur.role_id
+		<where>
+			a.del_flag = 0
+			and a.tenant_id=#{tenantId}
+			and
+			(
+				r.rtype = '50'
+				OR r.rtype IN (
+				'40'
+				)
+			)
+			<if test="isOpen != null and isOpen != ''">
+				AND a.is_open = #{isOpen}
+			</if>
+			<if test="firstShow != null and firstShow != ''">
+				AND a.first_show = #{firstShow}
+			</if>
+			<if test="siteShow != null and siteShow != ''">
+				AND a.site_show = #{siteShow}
+			</if>
+
+			<if test="isOpen != null and isOpen != ''">
+				AND a.is_open = #{isOpen}
+			</if>
+			<if test="firstShow != null and firstShow != ''">
+				AND a.first_show = #{firstShow}
+			</if>
+			<if test="siteShow != null and siteShow != ''">
+				AND a.site_show = #{siteShow}
+			</if>
+			<choose>
+				<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+					ORDER BY ${page.orderBy} ${page.orderByType}
+				</when>
+				<otherwise>
+					ORDER BY  a.update_date desc,u.no DESC
+				</otherwise>
+			</choose>
+		</where>
+	</select>
+
+	<select id="findTeacherList" resultType="BackTeacherExpansion">
+		SELECT
+			<include refid="backTeacherExpansionColumns"/>
+		FROM sys_teacher_expansion a
+		LEFT JOIN sys_user u ON u.id = a.user_id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+
+		<where>
+			a.del_flag = 0 AND a.site_show = 1 and find_in_set('0',a.role_type)>0
+			<if test="teachertype != null and teachertype != ''">
+				AND a.teacherType = #{teachertype}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY u.no, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="findProvinceTeacherList" resultType="BackTeacherExpansion">
+		SELECT
+		<include refid="backTeacherExpansionColumns"/>
+		FROM sys_teacher_expansion a
+		LEFT JOIN sys_user u ON u.id = a.user_id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+
+		<where>
+			a.del_flag = 0 AND a.site_show = 1 and find_in_set('1',a.role_type)>0
+			<if test="teachertype != null and teachertype != ''">
+				AND a.teacherType = #{teachertype}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY u.no, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="BackTeacherExpansion">
+		SELECT
+			<include refid="backTeacherExpansionColumns"/>
+		FROM sys_teacher_expansion a
+		<include refid="backTeacherExpansionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY u.no, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findTeamById" resultType="Team"  parameterType="java.lang.String">
+		SELECT
+			tm.id AS "id",
+			tm.name AS "name",
+			tm.sponsor AS "sponsor",
+			tm.state AS "state",
+			tm.project_name AS "projectName",
+			tm.project_introduction AS "projectIntroduction",
+			tm.create_by AS "createBy.id"
+		FROM team sur
+		<where>
+			sur.del_flag = '0'
+				AND sur.user_id  = #{userId}
+		</where>
+	</select>
+
+	<select id="getExpertAuditPro" resultType="java.lang.String"  parameterType="java.lang.String">
+		SELECT DISTINCT pp.project_name
+		FROM  pro_project pp
+		LEFT join act_yw acy on acy.rel_id=pp.id
+		LEFT join act_yw_gassign acg on acg.yw_id=acy.id
+		<where>
+			acg.rev_user_id=#{userId}
+		</where>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_teacher_expansion(
+			id,
+			user_id,
+			arrangement,
+			discipline,
+			industry,
+			technical_title,
+			service_intention,
+			work_unit,
+			address,
+			resume,
+			recommended_units,
+			result,
+			award,
+			level,
+			review_name,
+			join_review_time,
+			first_bank,
+			bank_account,
+			mainExp,
+			post_title,
+			role_type,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag,
+			teacherType,
+			expert_type,
+			education_type,
+			is_open,
+			first_show,
+			site_show,
+			top_show,
+			category,
+			work_unit_type
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{arrangement},
+			#{discipline},
+			#{industry},
+			#{technicalTitle},
+			#{serviceIntention},
+			#{workUnit},
+			#{address},
+			#{resume},
+			#{recommendedUnits},
+			#{result},
+			#{award},
+			#{level},
+			#{reviewName},
+			#{joinReviewTime},
+			#{firstBank},
+			#{bankAccount},
+			#{mainExp},
+			#{postTitle},
+			#{roleType},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag},
+			#{teachertype},
+			#{expertType},
+			#{educationType},
+			#{isOpen},
+			#{firstShow},
+			#{siteShow},
+			#{topShow},
+			#{category},
+			#{workUnitType}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_teacher_expansion SET
+			arrangement = #{arrangement},
+			discipline = #{discipline},
+			industry = #{industry},
+			technical_title = #{technicalTitle},
+			service_intention = #{serviceIntention},
+			work_unit = #{workUnit},
+			address = #{address},
+			resume = #{resume},
+			recommended_units = #{recommendedUnits},
+			result = #{result},
+			award = #{award},
+			level = #{level},
+			review_name = #{reviewName},
+			join_review_time = #{joinReviewTime},
+			first_bank = #{firstBank},
+			mainExp = #{mainExp},
+			post_title = #{postTitle},
+			bank_account = #{bankAccount},
+			role_type = #{roleType},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			create_date = #{createDate},
+			create_by = #{createBy.id},
+			teacherType = #{teachertype},
+			expert_type = #{expertType},
+			education_type = #{educationType},
+			is_open = #{isOpen},
+			first_show = #{firstShow},
+			site_show = #{siteShow},
+			top_show = #{topShow},
+			category=#{category},
+			work_unit_type=#{workUnitType}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateExpertChange">
+		UPDATE sys_teacher_expansion SET
+			role_type = #{roleType}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateExpertType">
+		UPDATE sys_teacher_expansion SET
+			expert_type = #{expertType}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateType">
+		UPDATE sys_teacher_expansion SET
+			teacherType = #{teachertype}
+		WHERE id = #{id}
+	</update>
+
+
+	<update id="delete">
+		UPDATE sys_teacher_expansion SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteByUserId">
+		UPDATE sys_teacher_expansion SET
+			del_flag = '1'
+		WHERE user_id = #{userId}
+	</update>
+
+	<!-- 查询获奖信息 -->
+	<select id="findTeacherAward" resultType="BackTeacherExpansion" parameterType="java.lang.String">
+	    SELECT a.award_level AS "awardLevel",
+	    a.create_date AS "awardTime",
+	    a.award AS "result"
+	    FROM g_contest_award a WHERE a.contest_id
+		IN (SELECT g.id FROM g_contest g WHERE g.team_id IN (SELECT t.team_id FROM `team_user_relation` t WHERE user_id=#{userId}))
+	</select>
+
+	<select id="getQYTeacher" resultType="BackTeacherExpansion" parameterType="java.lang.String">
+		SELECT
+			<include refid="backTeacherExpansionColumns"/>
+		FROM
+		sys_teacher_expansion a
+		LEFT JOIN team_user_relation t ON t.user_id = a.user_id
+		LEFT JOIN sys_user u ON t.user_id = u.id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+		WHERE
+		t.team_id = #{id} and (t.state='0' or t.state='4')
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=u.id and sr.biz_type='2' and sr.del_flag='0'
+				) and a.teacherType='2'
+	</select>
+
+	<select id="getXYTeacher" resultType="BackTeacherExpansion" parameterType="java.lang.String">
+		SELECT
+			<include refid="backTeacherExpansionColumns"/>
+		FROM
+		sys_teacher_expansion a
+		LEFT JOIN team_user_relation t ON t.user_id = a.user_id
+		LEFT JOIN sys_user u ON t.user_id = u.id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+		WHERE  t.team_id = #{id} and (t.state='0' or t.state='4')
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=u.id and sr.biz_type='2' and sr.del_flag='0'
+				) and a.teacherType='1'
+	</select>
+
+	<select id="getKeys" resultType="java.lang.String" >
+	select t.keyword from teacher_keyword t where t.teacher_id=#{tid} and t.del_flag='0'
+	</select>
+
+
+	<!--<select id="findAllExpertList" resultType="java.lang.String">-->
+		<!--SELECT-->
+			<!--a.user_id-->
+		<!--FROM sys_teacher_expansion a-->
+		<!--LEFT JOIN sys_user u ON a.user_id = u.id-->
+		<!--WHERE a.del_flag = 0 and find_in_set('1',a.role_type)>0 and u.del_flag='0'-->
+	<!--</select>-->
+
+	<select id="findAllExpertList" resultType="java.lang.String">
+		SELECT u.id FROM sys_user u
+		LEFT JOIN sys_user_role sur ON sur.user_id = u.id
+		WHERE sur.role_id IN ( '5989c28a34024f6f93e309d673709897') and u.del_flag='0'
+	</select>
+
+
+	<select id="findAllExpertListById" resultType="java.lang.String">
+		SELECT a.id FROM sys_user a
+							 LEFT JOIN sys_user_role sur ON sur.user_id = a.id
+		WHERE sur.role_id =#{id} and a.del_flag='0'
+	</select>
+
+
+	<select id="findCollegeExpertListByPro" resultType="java.lang.String">
+		SELECT u.id FROM sys_user u
+		LEFT JOIN sys_user_role sur ON sur.user_id = u.id
+		WHERE u.del_flag='0' AND sur.role_id ='ef8b7924557747e2ac71fe5b52771c08'
+		 and u.office_id=(
+			select pu.office_id from sys_user pu
+			LEFT JOIN pro_model pro ON pro.declare_id= pu.id
+			where pro.id=#{proId}
+		)
+	</select>
+
+	<select id="findExpertListByType" resultType="java.lang.String">
+		SELECT u.id FROM sys_user u
+		LEFT JOIN sys_user_role sur ON sur.user_id = u.id
+		LEFT JOIN sys_teacher_expansion ste ON ste.user_id = u.id
+		WHERE u.del_flag= 0 and sur.role_id ='5989c28a34024f6f93e309d673709897'
+		and ste.expert_type like  concat('%',#{auditRole},'%')
+	</select>
+</mapper>

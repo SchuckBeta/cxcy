@@ -1,0 +1,102 @@
+body
+	color:#666666;
+}
+p{
+	font-size:17px!important;
+}
+a:hover{
+	color: #000000!important;
+	text-decoration: none!important;
+}
+h5{
+	color: #9C9C9C!important;
+}
+a{
+	color: #000!important;
+}
+h6{
+	font-size:15px;
+	
+}
+ul li{
+	list-style:none;
+}
+
+.scinfonavigation ul li{
+	float: left;
+	padding-left: 5px;
+}
+.dsrdinfo{
+	margin-top: 112px;
+}
+
+.dsrdinfo h3{
+	text-align: center;
+}
+.dsrdinfo h6{
+	text-align: center;
+	margin-top: 34px;
+	color: #66666!important;
+}
+.dsrdinfo h5{
+	text-align: center;
+	margin-top: 94px;
+	color: #BCBCBC;
+}
+.m {
+	width: 696px;
+	height: 322px;
+	margin-top: 37px;
+	margin: auto;
+	margin-top: 80px;
+}
+
+.video_info {
+	float: left;
+	margin-top: 60px;
+}
+
+.video_info .class {
+	font-size: 15px;
+}
+
+.video_info .teach_info {
+	margin-top: 70px;
+}
+
+.teach_info span {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.video_info h4 {
+	font-weight: bold;
+}
+
+.gj_info{
+	margin-top: 96px;
+}
+.more h3{
+	margin-top: 112px;
+	border-bottom: 3px solid red;
+	width: 100px;
+	padding-bottom: 10px;
+	float: left;
+}
+
+.gj_info p{
+	color: #66666;
+	padding-top: 28px;
+	 text-indent:2em;
+}
+.dsimg{
+	color: #9C9C9C;
+	width: 521px;
+	height: 363px;
+	margin:89px auto;
+}
+
+.newinfo ul li {
+	float: left;
+	margin-left: 10px;
+}

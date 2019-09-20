@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.cms.modules.cms.dao.CmsConmmentLikesDao">
+
+	<sql id="cmsConmmentLikesColumns">
+		a.id AS "id",
+		a.uid AS "user.id",
+		a.pid AS "parent.id"
+	</sql>
+
+	<sql id="cmsConmmentLikesJoins">
+		LEFT JOIN sys_user u1 ON u1.id = a.uid
+		LEFT JOIN sys_user u2 ON u2.id = a.pid
+	</sql>
+
+	<select id="get" resultType="CmsConmmentLikes">
+		SELECT
+			<include refid="cmsConmmentLikesColumns"/>
+		FROM cms_conmment_likes a
+		<include refid="cmsConmmentLikesJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="CmsConmmentLikes">
+		SELECT
+			<include refid="cmsConmmentLikesColumns"/>
+		FROM cms_conmment_likes a
+		<include refid="cmsConmmentLikesJoins"/>
+		<where>
+
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.uid = #{user.id}
+			</if>
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.pid = #{parent.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="CmsConmmentLikes">
+		SELECT
+			<include refid="cmsConmmentLikesColumns"/>
+		FROM cms_conmment_likes a
+		<include refid="cmsConmmentLikesJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cms_conmment_likes(
+			uid,
+			pid
+		) VALUES (
+			#{user.id},
+			#{parent.id}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE cms_conmment_likes SET
+			uid = #{user.id},
+			pid = #{parent.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM cms_conmment_likes
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM cms_conmment_likes WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM cms_conmment_likes WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+</mapper>

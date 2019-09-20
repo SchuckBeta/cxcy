@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.auditstandard.dao.AuditStandardDao">
+
+	<sql id="auditStandardColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.is_escore AS "isEscore",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.total_score AS "totalScore"
+	</sql>
+
+	<sql id="auditStandardJoins">
+	</sql>
+
+	<select id="get" resultType="AuditStandard">
+		SELECT
+			<include refid="auditStandardColumns"/>
+		FROM audit_standard a
+		<include refid="auditStandardJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="AuditStandard">
+		SELECT
+			<include refid="auditStandardColumns"/>
+		FROM audit_standard a
+		<include refid="auditStandardJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findListVo" resultType="AuditStandardVo">
+		SELECT
+			<include refid="auditStandardColumns"/>
+			,b.flow,b.node,pp.project_name flowName,gn.name nodeName,b.is_escore_nodes isEscoreNodes,b.id relationId
+		FROM audit_standard_flow b
+		<include refid="auditStandardJoins"/>
+		left join audit_standard a on a.id=b.audit_standard_id and b.del_flag='0'
+		left join act_yw g on b.flow=g.id
+		LEFT JOIN pro_project pp ON pp.id = g.rel_id
+		LEFT JOIN act_yw_gnode gn ON gn.id = b.node
+		LEFT JOIN act_yw_node n ON n.id = gn.node_id
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findAllList" resultType="AuditStandard">
+		SELECT
+			<include refid="auditStandardColumns"/>
+		FROM audit_standard a
+		<include refid="auditStandardJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO audit_standard(
+			id,
+			name,
+			is_escore,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			total_score
+		) VALUES (
+			#{id},
+			#{name},
+			#{isEscore},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{totalScore}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE audit_standard SET
+			name = #{name},
+			is_escore = #{isEscore},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			total_score = #{totalScore}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		delete from  audit_standard
+		WHERE id = #{id}
+	</update>
+	<select id="checkName" resultType="java.lang.Integer">
+		select count(1) from
+		audit_standard a
+		where a.del_flag='0' and a.name=#{name}
+		<if test=" id != null and id != '' ">
+			and a.id!=#{id}
+		</if>
+	</select>
+	<select id="getSelfNodes" resultType="java.util.HashMap" parameterType="java.util.List">
+		select distinct a.id flow, c.id node, c.id, c.name from act_yw_gnode c
+		left join act_yw a on a.group_id=c.group_id
+		WHERE  c.type = '150' and
+		<foreach collection="param" item="value" open="(" close=")" separator=" or ">
+			c.id=#{value.node}
+		</foreach>
+		order by c.level
+	</select>
+	<select id="getChildNodes" resultType="java.util.HashMap" parameterType="java.util.List">
+		select distinct a.id flow, c.parent_id node, c.id, c.name from act_yw_gnode c
+		left join act_yw a on a.group_id=c.group_id
+		WHERE  c.type = '250' and 
+		<foreach collection="param" item="value" open="(" close=")" separator=" or ">
+			c.parent_id=#{value.node}
+		</foreach>
+		order by c.level
+	</select>
+</mapper>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwStatusDao">
+
+	<sql id="actYwStatusColumns">
+		a.id AS "id",
+		a.status AS "status",
+		a.alias AS "alias",
+		a.gtype AS "gtype",
+		a.state AS "state",
+		g.reg_type AS "regType",
+		g.name AS "name",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.sign
+
+	</sql>
+
+	<sql id="actYwStatusJoins">
+	        LEFT JOIN act_yw_sgtype g ON g.id = a.gtype
+	</sql>
+
+	<select id="get" resultType="ActYwStatus">
+		SELECT
+			<include refid="actYwStatusColumns"/>
+		FROM act_yw_status a
+		<include refid="actYwStatusJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ActYwStatus">
+		SELECT
+			<include refid="actYwStatusColumns"/>
+		FROM act_yw_status a
+		<include refid="actYwStatusJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				and a.id !=#{id}
+			</if>
+			<if test="state != null and state != ''">
+				and a.state=#{state}
+			</if>
+			<if test="alias != null and alias != ''">
+				and a.alias=#{alias}
+			</if>
+			<if test="status != null and status != ''">
+				and a.status=#{status}
+			</if>
+			<if test="gtype != null and gtype != ''">
+				and a.gtype=#{gtype}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.gtype,a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="checkState" resultType="ActYwStatus">
+		SELECT
+			<include refid="actYwStatusColumns"/>
+		FROM act_yw_status a
+		<include refid="actYwStatusJoins"/>
+		<where>
+			a.del_flag = '0'
+			<if test="id != null and id != ''">
+				and a.id !=#{id}
+			</if>
+			<if test="state != null and state != ''">
+				and a.state=#{state}
+			</if>
+			<if test="gtype != null and gtype != ''">
+				and a.gtype=#{gtype}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="getAllStateByGnodeId" resultType="ActYwStatus" parameterType="java.lang.String">
+		SELECT
+			<include refid="actYwStatusColumns"/>
+		FROM act_yw_status a
+		LEFT JOIN act_yw_gstatus ga ON ga.status_id = a.id
+		LEFT JOIN act_yw_gnode gn ON gn.id = ga.gnode_id
+		<include refid="actYwStatusJoins"/>
+		<where>
+			a.del_flag ='0'
+			and ga.gnode_id=#{gnodeId}
+		</where>
+		ORDER BY a.update_date DESC
+	</select>
+
+	<select id="getInuseStateById" resultType="ActYwStatus" parameterType="java.lang.String">
+		SELECT
+			<include refid="actYwStatusColumns"/>
+		FROM act_yw_status a
+		LEFT JOIN act_yw_gstatus ga ON ga.status_id = a.id
+		LEFT JOIN act_yw_gnode gn ON gn.id = ga.gnode_id
+		<include refid="actYwStatusJoins"/>
+		<where>
+			a.del_flag ='0'
+			and ga.status_id=#{statusId}
+			and gn.id is not null
+			<if test="gnodeId!=null and gnodeId!=''">
+			and ga.gnode_id !=#{gnodeId}
+			</if>
+		</where>
+	</select>
+
+
+
+	<select id="getInuseState" resultType="ActYwStatus" parameterType="java.lang.String">
+		SELECT
+			<include refid="actYwStatusColumns"/>
+		FROM act_yw_status a
+		LEFT JOIN act_yw_gstatus ga ON ga.status_id = a.id
+		LEFT JOIN act_yw_gnode gn ON gn.id = ga.gnode_id
+		<include refid="actYwStatusJoins"/>
+		<where>
+			a.del_flag ='0'
+			and ga.status_id=#{statusId}
+			and gn.id is not null
+		</where>
+	</select>
+
+
+
+	<select id="findAllList" resultType="ActYwStatus">
+		SELECT
+			<include refid="actYwStatusColumns"/>
+		FROM act_yw_status a
+		<include refid="actYwStatusJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_status(
+			id,
+			status,
+			alias,
+			gtype,
+			state,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag,
+			sign
+		) VALUES (
+			#{id},
+			#{status},
+			#{alias},
+			#{gtype},
+			#{state},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag},
+			#{sign}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_status SET
+			status = #{status},
+			alias = #{alias},
+			gtype = #{gtype},
+			state = #{state},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks},
+			sign = #{sign}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE act_yw_status SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM act_yw_status WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLBySgtypeId">
+		DELETE FROM act_yw_status WHERE gtype = #{gtypeId}
+	</update>
+</mapper>

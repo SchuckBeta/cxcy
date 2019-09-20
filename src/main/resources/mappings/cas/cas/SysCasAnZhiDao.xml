@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.cas.modules.cas.dao.anzhi.SysCasAnZhiDao">
+	<sql id="sysCasAnZhiColumns">
+		a.id AS "id",
+		a.ruid AS "ruid",
+		a.rutype AS "rutype",
+		a.rname AS "rname",
+		a.rcname AS "rcname",
+		a.idNumber AS "idNumber",
+		a.sex AS "sex",
+		a.birthday AS "birthday",
+		a.rarray AS "rarray",
+		a.rou AS "rou",
+		a.rcontainerId AS "rcontainerId",
+		a.rjson AS "rjson",
+		a.enable AS "enable",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysCasAnZhiJoins">
+	</sql>
+
+	<select id="get" resultType="com.oseasy.cas.modules.cas.entity.SysCasAnZhi">
+		SELECT
+			<include refid="sysCasAnZhiColumns"/>
+		FROM sys_cas_anzhi a
+		<include refid="sysCasAnZhiJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="com.oseasy.cas.modules.cas.entity.SysCasAnZhi">
+		SELECT
+			<include refid="sysCasAnZhiColumns"/>
+		FROM sys_cas_anzhi a
+		<include refid="sysCasAnZhiJoins"/>
+		<where>
+			a.del_flag = '0'
+			<if test="enable != null and enable != ''">
+				AND a.enable = #{enable}
+			</if>
+			<if test="rutype != null and rutype != ''">
+				AND a.rutype = #{rutype}
+			</if>
+			<if test="ruid != null and ruid != ''">
+				AND a.ruid = #{ruid}
+			</if>
+			<if test="rname != null and rname != ''">
+				AND a.rname LIKE
+					<if test="dbName == 'oracle'">'%'||#{rname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{rname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{rname},'%')</if>
+			</if>
+			<if test="rcname != null and rcname != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{rcname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{rcname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{rcname},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="com.oseasy.cas.modules.cas.entity.SysCasAnZhi">
+		SELECT
+			<include refid="sysCasAnZhiColumns"/>
+		FROM sys_cas_anzhi a
+		<include refid="sysCasAnZhiJoins"/>
+		<where>
+			a.del_flag = '0'
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_cas_anzhi(
+			id,
+			ruid,
+			rutype,
+			rname,
+			rcname,
+			idNumber,
+			sex,
+			birthday,
+			rarray,
+			rou,
+			rcontainerId,
+			rjson,
+			enable,
+			del_flag
+		) VALUES (
+			#{id},
+			#{ruid},
+			#{rutype},
+			#{rname},
+			#{rcname},
+			#{idNumber},
+			#{sex},
+			#{birthday},
+			#{rarray},
+			#{rou},
+			#{rcontainerId},
+			#{rjson},
+			#{enable},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_cas_anzhi SET
+			ruid=#{ruid},
+			rutype=#{rutype},
+			rname=#{rname},
+			rcname=#{rcname},
+			idNumber=#{idNumber},
+			sex=#{sex},
+			birthday=#{birthday},
+			rarray=#{rarray},
+			rou=#{rou},
+			rcontainerId = #{rcontainerId},
+			rjson = #{rjson},
+			enable = #{enable}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateByPlEnable" parameterType="java.util.List" >
+		UPDATE sys_cas_anzhi SET enable = #{enable} WHERE id in
+		<foreach item="id" collection="ids" separator="," open="("
+			close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="updateByPlDelFlag" parameterType="java.util.List" >
+		UPDATE sys_cas_anzhi SET del_flag = #{delFlag} WHERE id in
+		<foreach item="id" collection="ids" separator="," open="("
+			close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="delete">
+		UPDATE sys_cas_anzhi SET
+			del_flag = '1'
+		WHERE id = #{id}
+	</update>
+</mapper>

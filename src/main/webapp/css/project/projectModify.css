@@ -1,0 +1,208 @@
+@charset "utf-8";
+
+.prj-plan span {
+	margin-right: 20px;
+}
+
+.prj-plan span input[type="checkbox"] {
+	position: relative;
+	top: 2px;
+	margin-right: 5px;
+}
+/*.my-form-horizontal{*/
+/*margin-bottom: 15px;*/
+/*}*/
+.form-horizontal .star, .prj_introduce .star, .star {
+	position: relative;
+	top: 2px;
+	height: 6px;
+	width: 6px;
+	color: red;
+	margin-right: 3px;
+}
+
+.form-horizontal span select {
+	width: 176px !important;
+	height: 26px;
+}
+
+.prj_desc {
+	width: 100%;
+	color: #666;
+	height: 75px;
+	resize: none;
+}
+
+.prj-change-wrap {
+	width: 100%;
+	/*border:1px solid red;*/
+	margin: 0 auto;
+}
+
+.my-textarea {
+	
+	resize: none;
+	border: 1px solid #ddd;
+}
+
+table tr td, table thead tr th {
+	vertical-align: middle !important;
+	text-align: center !important;
+}
+
+.Wdate {
+	height: 26px;
+	padding: 2px;
+	width: 120px;
+	background-position: 92px center;
+	background-size: 21px 20px;
+	border: 1px solid #ddd;
+}
+
+.change-budget {
+	width: 100%;
+	height: 75px;
+	overflow-y: auto;
+	border: 1px solid #ddd;
+	resize: none;
+}
+
+.prj_common_info {
+	margin: 20px 0px 0px 0px;
+}
+
+.prj_file_list p img {
+	margin-right: 3px;
+}
+
+/*上传附件样式*/
+.prj_file_list p span {
+	display: none;
+}
+
+.prj_file_list p i {
+	top: -5px;
+	position: relative;
+	font-size: 12px;
+	left: 3px;
+	color: red;
+}
+
+.prj_file_list p:hover {
+	background: #cecece;
+}
+
+.prj_file_list p:hover span {
+	display: inline-block;
+	cursor: pointer;
+}
+
+.checkRecord_wrap td select, .checkRecord_wrap td input {
+	width: 122px;
+	border: 1px solid #ddd !important;
+}
+/*错误信息*/
+table td {
+	padding: 12px !important;
+}
+
+label.error {
+	background-position: 0 3px;
+}
+
+.tips-wrap {
+	position: relative;
+}
+
+.name-err-tips {
+	position: absolute;
+	left: -10px;
+	top: 22px;
+	color: red;
+	font-size: 10px;
+}
+
+.tname-err-tips {
+	position: absolute;
+	left: 3px;
+	top: 56px;
+	color: red;
+	font-size: 10px;
+}
+
+.start-time {
+	left: 50px;
+	top: 52px;
+}
+
+.end-time {
+	left: 192px;
+	top: 52px;
+}
+
+.tstart-time, .tend-time {
+	position: absolute;
+	left: 42px;
+	top: 52px;
+}
+
+.tend-time {
+	left: 186px;
+}
+
+.result-desc {
+	left: 4px;
+	top: 102px;
+}
+
+.prj-record-tips {
+	position: absolute;
+	left: 3px;
+	top: 52px;
+}
+
+/*2017-04-26 样式修改*/
+.col-xs-5 {
+	width: 29%;
+}
+
+.prj_common_info h3 {
+	font-weight: bold;
+}
+
+.my-form-horizontal {
+	margin-bottom: 20px;
+}
+
+.m-table-th-h {
+	background-color: #f9f9f9;
+}
+
+.table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
+	border-bottom-width: 1px;;
+}
+
+.prj_introduce h5 {
+	margin-left: -15px;
+}
+
+.ui-dialog-buttonset button {
+	width: auto;
+	height: auto;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+	background: none;
+}
+
+.minus {
+	display: inline-block;
+	width: 19px;
+	height: 19px;
+	background: url(/img/minuse.png) no-repeat;
+}
+
+.minus:hover {
+	background: url(/img/minus2.png) no-repeat;
+	cursor: pointer;
+}

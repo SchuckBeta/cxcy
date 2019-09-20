@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.interactive.dao.SysLikesDao">
+
+	<sql id="sysLikesColumns">
+		a.id AS "id",
+		a.foreign_id AS "foreignId",
+		a.user_id AS "userId",
+		a.ip AS "ip",
+		a.token AS "token",
+		a.create_date AS "createDate",
+		a.del_flag AS "delFlag",
+		u3.name AS "user.name"
+	</sql>
+
+	<sql id="sysLikesJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+
+	<select id="get" resultType="SysLikes">
+		SELECT
+			<include refid="sysLikesColumns"/>
+		FROM sys_likes a
+		<include refid="sysLikesJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SysLikes">
+		SELECT
+			<include refid="sysLikesColumns"/>
+		FROM sys_likes a
+		<include refid="sysLikesJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysLikes">
+		SELECT
+			<include refid="sysLikesColumns"/>
+		FROM sys_likes a
+		<include refid="sysLikesJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_likes(
+			id,
+			foreign_id,
+			user_id,
+			ip,
+			token,
+			create_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{foreignId},
+			#{userId},
+			#{ip},
+			#{token},
+			#{createDate},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_likes SET
+			foreign_id = #{foreignId},
+			user_id = #{userId},
+			ip = #{ip},
+			token = #{token}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_likes SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<select id="getExistsLike" resultType="java.lang.Integer">
+		select count(1) from sys_likes where foreign_id = #{foreignId}
+		<if test="userId != '-9999' ">
+			and user_id = #{userId}
+		</if>
+		<if test="userId == '-9999' ">
+			<if test="ip != 'unknown' ">
+				and ip = #{ip}
+			</if>
+			<if test="ip == 'unknown' ">
+				<if test="token != 'null' and token!='' ">
+					and token = #{token}
+				</if>
+			</if>
+		</if>
+	</select>
+	<select id="getAllExistsLike" resultType="java.util.Map">
+		select foreign_id,count(1) cc from sys_likes where foreign_id in
+		<foreach collection="foreignIds" item="foreignId" open="(" separator="," close=")">
+			#{foreignId}
+		</foreach>
+		<if test="userId != '-9999' ">
+			and user_id = #{userId}
+		</if>
+		<if test="userId == '-9999' ">
+			<if test="ip != 'unknown' ">
+				and ip = #{ip}
+			</if>
+			<if test="ip == 'unknown' ">
+				<if test="token != 'null' and token!='' ">
+					and token = #{token}
+				</if>
+			</if>
+		</if>
+		group by foreign_id
+	</select>
+</mapper>

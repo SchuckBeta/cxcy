@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.com.pcore.modules.sys.dao.OfficeDao">
+
+	<sql id="officColumns">
+		a.id,
+		a.parent_id AS "parent.id",
+		a.parent_ids,
+		a.area_id AS "area.id",
+		a.code AS "code",
+		a.city_code,
+		a.school_code,
+		a.name,
+		a.rid,
+		a.regval,
+		a.sort,
+		a.type,
+		a.grade,
+		a.address,
+		a.zip_code,
+		a.master,
+		a.phone,
+		a.fax,
+		a.email,
+		a.remarks,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.useable AS useable,
+		a.primary_person AS "primaryPerson.id",
+		a.deputy_person AS "deputyPerson.id"
+	</sql>
+
+	<sql id="officeColumns">
+		<include refid="officColumns" />,
+		p.name AS "parent.name",
+		p.code AS "parent.code",
+		ar.name AS
+		"area.name",
+		ar.parent_ids AS "area.parentIds",
+		pp.name AS
+		"primaryPerson.name",
+		dp.name AS "deputyPerson.name"
+	</sql>
+
+	<sql id="officeJoins">
+		LEFT JOIN sys_office p ON p.id = a.parent_id
+		LEFT JOIN
+		sys_area ar ON ar.id = a.area_id
+		LEFT JOIN sys_user pp ON pp.id =
+		a.primary_person
+		LEFT JOIN sys_user dp ON dp.id = a.deputy_person
+	</sql>
+
+	<select id="get" resultType="Office">
+		SELECT
+		<include refid="officeColumns" />
+		FROM sys_office a
+		<include refid="officeJoins" />
+		WHERE a.id = #{id} and a.del_flag='0'
+	</select>
+
+	<select id="getRoot" resultType="Office">
+		SELECT
+		<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		WHERE a.parent_id = #{parent.id}
+		<if test="rid != null and rid != ''">
+			AND a.rid = #{rid}
+		</if>
+	</select>
+
+	<select id="findList" resultType="Office">
+		SELECT
+		<include refid="officeColumns" />
+		FROM sys_office a
+		<include refid="officeJoins" />
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="qfilters != null and qfilters.size >0">
+			AND a.id NOT IN
+			<foreach item="id" collection="qfilters" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+
+		ORDER BY a.code
+	</select>
+
+	<select id="findListByTenant" resultType="Office">
+		SELECT
+		<include refid="officeColumns" />
+		FROM sys_office a
+		<include refid="officeJoins" />
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.tenant_id = #{tenantId}
+		<if test="qfilters != null and qfilters.size >0">
+			AND a.id NOT IN
+			<foreach item="id" collection="qfilters" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+
+		ORDER BY a.code
+	</select>
+
+
+	<select id="findByParentIds" resultType="Office">
+		SELECT
+		<include refid="officColumns" />
+		FROM sys_office a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE
+			<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+			<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%', #{parentIds}, '%')</if>
+			<if test="tenantId != null and tenantId != ''">
+				AND a.tenant_id = #{tenantId}
+			</if>
+		ORDER BY a.code
+	</select>
+
+	<select id="findAllList" resultType="Office">
+		SELECT
+		<include refid="officeColumns" />
+		FROM sys_office a
+		<include refid="officeJoins" />
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY a.code
+	</select>
+
+
+	<select id="findAllListByTenant" resultType="Office">
+		SELECT
+		<include refid="officeColumns" />
+		FROM sys_office a
+		<include refid="officeJoins" />
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.tenant_id = #{tenantId}
+		<if test="qfilters != null and qfilters.size >0">
+			AND a.id NOT IN
+			<foreach item="id" collection="qfilters" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+
+		ORDER BY a.code
+	</select>
+
+
+	<select id="findByParentIdsLike" resultType="Office">
+		SELECT
+		<include refid="officeColumns" />
+		FROM sys_office a
+		<include refid="officeJoins" />
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids LIKE
+		#{parentIds}
+		ORDER BY a.code
+	</select>
+
+
+	<select id="findProfessionByParentIdsLike" resultType="Office">
+		SELECT
+		<include refid="officeColumns" />
+		FROM sys_office a
+		<include refid="officeJoins" />
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids LIKE
+		#{parentIds} AND a.grade = '3'
+		ORDER BY a.code
+	</select>
+
+	<!--查找学院 addBy zhangzheng -->
+	<select id="findColleges" resultType="Office">
+		SELECT
+		<include refid="officeColumns" />
+		FROM sys_office a
+		<include refid="officeJoins" />
+		WHERE a.del_flag = '0' and a.grade='2'
+	</select>
+
+	<!--根据学院id 查找其下面的专业 addBy zhangzheng -->
+	<select id="findProfessionals" parameterType="java.lang.String"
+		resultType="Office">
+		SELECT
+		<include refid="officeColumns" />
+		FROM sys_office a
+		<include refid="officeJoins" />
+		WHERE a.del_flag = '0' and a.parent_id= #{parentId}
+	</select>
+
+
+	<select id="findProfessionByParentIds" resultType="Office">
+		SELECT
+		<include refid="officeColumns" />
+		FROM sys_office a
+		<include refid="officeJoins" />
+		WHERE a.del_flag = 0 AND a.grade = '3'
+		<if test="officeIds != null and officeIds != ''">
+			AND a.parent_id in (${officeIds})
+		</if>
+		ORDER BY a.code
+	</select>
+
+	<select id="checkNameByParent" resultType="Integer">
+		SELECT count(id) FROM sys_office where parent_id = #{parentId} AND name = #{name} AND del_flag = '0'
+	</select>
+
+	<select id="checkByNameAndId" resultType="Integer">
+		SELECT count(id) FROM sys_office where parent_id = #{parentId} AND name = #{name} AND del_flag = '0'
+		and id != #{id}
+	</select>
+
+
+
+	<select id="selectOfficeIdByParentId"  resultType="string">
+		select id from sys_office a where a.parent_id =#{parentId} and a.del_flag = '0'
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_office(
+		id,
+		parent_id,
+		parent_ids,
+		area_id,
+		code,
+		rid,
+		regval,
+		name,
+		sort,
+		type,
+		grade,
+		address,
+		zip_code,
+		city_code,
+		school_code,
+		master,
+		phone,
+		fax,
+		email,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks,
+		del_flag,
+		useable,
+		primary_person,
+		deputy_person
+		) VALUES (
+		#{id},
+		#{parent.id},
+		#{parentIds},
+		#{area.id},
+		#{code},
+		#{rid},
+		#{regval},
+		#{name},
+		#{sort},
+		#{type},
+		#{grade},
+		#{address},
+		#{zipCode},
+		#{cityCode},
+		#{schoolCode},
+		#{master},
+		#{phone},
+		#{fax},
+		#{email},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{remarks},
+		#{delFlag},
+		#{useable},
+		#{primaryPerson.id},
+		#{deputyPerson.id}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO sys_office(
+		id,
+		parent_id,
+		parent_ids,
+		area_id,
+		code,
+		rid,
+		regval,
+		name,
+		sort,
+		type,
+		grade,
+		address,
+		zip_code,
+		city_code,
+		school_code,
+		master,
+		phone,
+		fax,
+		email,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		remarks,
+		del_flag,
+		useable,
+		primary_person,
+		deputy_person
+		) VALUES
+		<foreach collection="entitys" item="item" index="index"
+				 separator=",">
+			(
+			#{item.id},
+			#{item.parent.id},
+			#{item.parentIds},
+			#{item.area.id},
+			#{item.code},
+			#{item.rid},
+			#{item.regval},
+			#{item.name},
+			#{item.sort},
+			#{item.type},
+			#{item.grade},
+			#{item.address},
+			#{item.zipCode},
+			#{item.cityCode},
+			#{item.schoolCode},
+			#{item.master},
+			#{item.phone},
+			#{item.fax},
+			#{item.email},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag},
+			#{item.useable},
+			#{item.primaryPerson.id},
+			#{item.deputyPerson.id}
+			)
+		</foreach>
+	</insert>
+
+	<update id="deleteWLByParentIds">
+		DELETE FROM sys_office
+		WHERE a.parent_ids LIKE
+		<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+		<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+		<if test="dbName == 'mysql'">CONCAT('%', #{parentIds}, '%')</if>
+		<if test="tenantId != null and tenantId != ''">
+			AND a.tenant_id = #{tenantId}
+		</if>
+	</update>
+
+	<update id="update">
+		UPDATE sys_office SET
+		parent_id = #{parent.id},
+		parent_ids = #{parentIds},
+		area_id = #{area.id},
+		code = #{code},
+		rid =#{rid},
+		regval =#{regval},
+		name =#{name},
+		type = #{type},
+		grade = #{grade},
+		address = #{address},
+		zip_code = #{zipCode},
+
+		city_code = #{cityCode},
+		school_code = #{schoolCode},
+
+		master = #{master},
+		phone = #{phone},
+		fax = #{fax},
+		email =
+		#{email},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		remarks = #{remarks},
+		useable=#{useable},
+		primary_person=#{primaryPerson.id},
+		deputy_person=#{deputyPerson.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateParentIds">
+		UPDATE sys_office SET
+		parent_id = #{parent.id},
+		parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateSpace">
+		UPDATE pw_space SET
+			name = #{name}
+		WHERE parent_id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_office SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR
+		parent_ids LIKE
+		<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
+		<if test="dbName == 'mssql'">'%,'+#{id}+',%'</if>
+		<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+	</update>
+
+
+	<select id="selelctParentId" resultType="java.lang.String">
+		SELECT
+		a.parent_id
+		FROM
+		sys_office a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getProfessionalByName" resultType="Office">
+		select t.* from
+		sys_office t
+		left join sys_office p on p.id=t.parent_id and
+		p.del_flag='0' and
+		p.name=#{oname}
+		where t.grade='3' and t.del_flag='0'
+		and t.name=#{pname} and p.id is not
+		null
+	</select>
+	<select id="getProfessionalByPName" resultType="Office">
+		select t.* from
+		sys_office t
+		where t.grade='3' and t.del_flag='0'
+		and t.name=#{pname}
+	</select>
+	<select id="getOfficeByName" resultType="Office">
+		select t.* from
+		sys_office t
+		where t.grade='2' and t.del_flag='0' and t.name=#{oname}
+	</select>
+	<select id="getOrgByName" resultType="Office">
+		select t.* from
+		sys_office t
+		where (t.grade='1' or t.grade='2') and t.del_flag='0' and t.name=#{oname}
+	</select>
+	<select id="getSchool" resultType="Office">
+		select t.* from
+		sys_office t
+		where t.grade='1' and t.del_flag='0'
+	</select>
+</mapper>

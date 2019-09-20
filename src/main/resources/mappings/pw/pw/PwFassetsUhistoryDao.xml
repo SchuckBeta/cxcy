@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwFassetsUhistoryDao">
+    
+	<sql id="pwFassetsUhistoryColumns">
+		a.id AS "id",
+		a.resp_name AS "respName",
+		a.resp_phone AS "respPhone",
+		a.resp_mobile AS "respMobile",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+
+		f.id AS "pwFassets.id",
+		f.name AS "pwFassets.name",
+
+		c.id AS "pwFassets.pwCategory.id",
+		c.name AS "pwFassets.pwCategory.name",
+
+		cc.id AS "pwFassets.pwCategory.parent.id",
+		cc.name AS "pwFassets.pwCategory.parent.name",
+
+		r.id AS "pwRoom.id",
+		r.name AS "pwRoom.name",
+		-- b.name AS "pwRoom.pwSpace.name",
+		-- p.name AS "pwRoom.pwSpace.parent.name",
+		-- pp.name AS "pwRoom.pwSpace.parent.parent.name"
+		b.parent_id AS "pwRoom.pwSpace.parent.id", b.parent_ids AS "pwRoom.pwSpace.parentIds",
+b.name AS "pwRoom.pwSpace.name", b.person AS "pwRoom.pwSpace.person", b.type AS "pwRoom.pwSpace.type", b.phone AS "pwRoom.pwSpace.phone", b.mobile AS "pwRoom.pwSpace.mobile", b.open_week AS "pwRoom.pwSpace.openWeek",
+ b.am_open_start_time AS "pwRoom.pwSpace.amOpenStartTime", b.am_open_end_time AS "pwRoom.pwSpace.amOpenEndTime", b.pm_open_start_time AS "pwRoom.pwSpace.pmOpenStartTime", b.pm_open_end_time AS "pwRoom.pwSpace.pmOpenEndTime",
+ b.floor_num AS "pwRoom.pwSpace.floorNum", b.area AS "pwRoom.pwSpace.area", b.update_date AS "pwRoom.pwSpace.updateDate", b.update_by AS "pwRoom.pwSpace.updateBy.id", b.create_date AS "pwRoom.pwSpace.createDate",
+b.create_by AS "pwRoom.pwSpace.createBy.id", b.remarks AS "pwRoom.pwSpace.remarks", b.del_flag AS "pwRoom.pwSpace.delFlag", p.parent_id AS "pwRoom.pwSpace.parent.parent.id", p.parent_ids AS "pwRoom.pwSpace.parent.parentIds",
+p.name AS "pwRoom.pwSpace.parent.name", pp.parent_id AS "pwRoom.pwSpace.parent.parent.parent.id", pp.parent_ids AS "pwRoom.pwSpace.parent.parent.parentIds", pp.name AS "pwRoom.pwSpace.parent.parent.name"
+	</sql>
+	
+	<sql id="pwFassetsUhistoryJoins">
+		LEFT JOIN pw_fassets f ON f.id = a.faid
+		LEFT JOIN pw_category c ON c.id = f.cid
+		LEFT JOIN pw_category cc on cc.id = c.parent_id
+		LEFT JOIN pw_room r ON r.id = a.rid
+		LEFT JOIN pw_space b ON b.id = r.sid
+		LEFT JOIN pw_space p ON p.id = b.parent_id
+		LEFT JOIN pw_space pp ON pp.id = p.parent_id
+	</sql>
+    
+	<select id="get" resultType="PwFassetsUhistory">
+		SELECT 
+			<include refid="pwFassetsUhistoryColumns"/>
+		FROM pw_fassets_uhistory a
+		<include refid="pwFassetsUhistoryJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PwFassetsUhistory">
+		SELECT 
+			<include refid="pwFassetsUhistoryColumns"/>
+		FROM pw_fassets_uhistory a
+		<include refid="pwFassetsUhistoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="pwFassets !=null and pwFassets.name != null and pwFassets.name != ''">
+				AND f.name = #{pwFassets.name}
+			</if>
+			<if test="pwRoom != null">
+				<if test="pwRoom.id != null and pwRoom.id != ''">
+					AND a.rid = #{pwRoom.id}
+				</if>
+				<if test="pwRoom.name != null and pwRoom.name != ''">
+					AND r.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{pwRoom.name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{pwRoom.name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{pwRoom.name},'%')</if>
+				</if>
+			</if>
+			<if test="pwFassets != null and pwFassets.pwCategory != null and pwFassets.pwCategory.id != null and pwFassets.pwCategory.id != ''">
+				AND c.id = #{pwFassets.pwCategory.id}
+			</if>
+			<if test="pwFassets != null and pwFassets.pwCategory != null and pwFassets.pwCategory.parent != null and pwFassets.pwCategory.parent.id != null and pwFassets.pwCategory.parent.id != ''">
+				AND cc.id = #{pwFassets.pwCategory.parent.id}
+			</if>
+			<if test="respName != null and respName != ''">
+				AND a.resp_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{respName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{respName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{respName},'%')</if>
+			</if>
+			<if test="respPhone != null and respPhone != ''">
+				AND a.resp_phone = #{respPhone}
+			</if>
+			<if test="respMobile != null and respMobile != ''">
+				AND a.resp_mobile = #{respMobile}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date = #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.end_date = #{endDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PwFassetsUhistory">
+		SELECT 
+			<include refid="pwFassetsUhistoryColumns"/>
+		FROM pw_fassets_uhistory a
+		<include refid="pwFassetsUhistoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pw_fassets_uhistory(
+			id,
+			rid,
+			faid,
+			resp_name,
+			resp_phone,
+			resp_mobile,
+			start_date,
+			end_date,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{pwRoom.id},
+			#{pwFassets.id},
+			#{respName},
+			#{respPhone},
+			#{respMobile},
+			#{startDate},
+			#{endDate},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pw_fassets_uhistory SET 	
+			rid = #{rid},
+			faid = #{faid},
+			resp_name = #{respName},
+			resp_phone = #{respPhone},
+			resp_mobile = #{respMobile},
+			start_date = #{startDate},
+			end_date = #{endDate},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE pw_fassets_uhistory SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteByFassetsIds" parameterType="java.util.List">
+		UPDATE pw_fassets_uhistory SET
+			del_flag = '1'
+		WHERE faid IN
+		<foreach item="item" collection="fassetsIds" separator="," open="("
+				 close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<update id="deleteByRoomIds" parameterType="java.util.List">
+		UPDATE pw_fassets_uhistory SET
+			del_flag = '1'
+		WHERE rid IN
+		<foreach item="item" collection="roomIds" separator="," open="("
+				 close=")">
+			#{item}
+		</foreach>
+	</update>
+	
+</mapper>

@@ -1,0 +1,105 @@
+html , body {
+    padding: 0px;
+    margin: 0px;
+    font-size: 14px;
+    font-family: "微软雅黑";
+}
+a{
+    color:#A29C9C;
+}
+.nav-tabs>li.active>a{
+    /*font-weight:bold;*/
+    color:#e9432d;
+}
+
+.nav-tabs>.active>a{
+    color:#eee;
+}
+.container-fluid{
+    padding:0;
+}
+ul,li{
+    list-style: none;
+}
+.row{
+    margin:0px !important;
+}
+.check_row{
+    margin-bottom: 20px;
+    height: 40px;
+    padding-top: 16px;
+}
+.check_row .check_select{
+    height:26px;
+    border-raduis:3px;
+}
+.check_select_desc{
+    font-size:14px;
+    margin-top: 2px;
+    padding-left:10px;
+}
+.check_ipt{
+    display:inline-block;
+    height: 26px !important;
+}
+.check_btn{
+    height: 26px;
+    width:60px;
+    line-height: 15px;
+    text-align:center;
+    background: #e9432d;
+    border:none;
+}
+.check_btn:hover{
+    background: #cb5d4d;
+}
+.check_table_head th{
+    background: #f4e6d4;
+    text-align:center;
+}
+.check_table_head  td{
+    text-align: center;
+}
+.page_tips{
+    margin-top: 10px;
+}
+.page_tips div{
+    margin-top: 10px;
+}
+.pagination_list{
+    overflow: hidden;
+}
+.pagination_list li{
+    float: left;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border:1px solid #ccc;
+    margin:0px 2px;
+}
+.pagination_list li.head_footer{
+    width:60px;
+}
+.modal-header .close{
+    margin-top: 6px;
+}
+.current{
+    background: #e9432d;
+}
+.current a{
+    color:#fff;
+}
+.check_table_btn{
+    background: #e5e5e5;
+    color:#666;
+}
+.check_table_btn:hover{
+    background: #aaa3a3;
+}
+.check_follow{
+    color:#e86c5b;
+}
+.check_follow:hover{
+    color:#fff;
+}

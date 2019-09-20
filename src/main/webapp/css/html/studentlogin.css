@@ -1,0 +1,237 @@
+.wholebox{
+	width:100%;
+	height:658px;
+	background:url(../img/studentloginbg_02.png) no-repeat center center;
+	overflow: hidden;
+}
+
+.wholebox .content{
+	width: 1240px;
+	overflow: hidden;
+	margin: 0 auto;
+}
+
+.wholebox .content .mainbox{
+	float: right;
+	width:484px;
+	overflow: hidden;
+}
+
+.wholebox .content .mainbox h5{
+	text-align: center;
+	font-size:28px;
+	color:#1b1b1b;
+	font-weight: normal;
+	margin-top:88px;
+	line-height: 60px;
+}
+
+.wholebox .content .mainbox .box{
+	width: 100%;
+	overflow: hidden;
+	border-radius: 5px;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	border: 1px solid #e3e3e3;
+	min-height: 100px;
+	background: white;
+}
+
+.wholebox .content .mainbox .box .redtop{
+	width: 100%;
+	height:4px;
+	background:#de3b0a;
+}
+
+.wholebox .content .mainbox .box ul{
+	width:338px;
+	height:45px;
+	margin: 0 auto;
+	margin-top:32px;
+	margin-bottom:21px;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	border-bottom: 2px solid #a1a1a1;
+}
+
+.wholebox .content .mainbox .box ul li{
+	float: left;
+	width: 50%;
+	height: 45px;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	line-height: 45px;
+	font-size:18px;
+	color:#1b1b1b;
+	cursor: pointer;
+	text-align: center;
+}
+
+.wholebox .content .mainbox .box ul li.current{
+	border-bottom: 2px solid #de3b0a;
+}
+
+.wholebox .content .mainbox .box .fillboxone{
+	width:338px;
+	overflow: hidden;
+	margin: 0 auto;
+}
+
+.wholebox .content .mainbox .box .fillboxone label.error{
+	color: red;
+	display: block;
+	text-align: right;
+	margin-top: -15px;
+}
+
+.wholebox .content .mainbox .box .fillboxone input{
+	width: 100%;
+	height:52px;
+	margin-bottom:18px;
+	border: none;
+	border-bottom: 1px solid #dbdbdb;
+	font-size: 14px;
+}
+
+
+.wholebox .content .mainbox .box .fillboxone p{
+	width: 100%;
+	height:52px;
+	margin-bottom:9px;
+}
+
+.wholebox .content .mainbox .box .fillboxone p a{
+	float: right;
+	color:#1b1b1b;
+	font-size:15px;
+	cursor: pointer;
+}
+
+
+.wholebox .content .mainbox .box .fillboxone button{
+	width: 100%;
+	height:45px;
+	margin-bottom:13px;
+	text-align: center;
+	line-height: 40px;
+	background:#696969;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	color: white;
+	font-size:19px;
+	cursor: pointer;
+}
+
+.wholebox .content .mainbox .box .fillboxone button:last-child{
+	background: white;
+	border: 1px solid #696969;
+	color:#696969;
+	margin-bottom:56px;
+}
+
+.wholebox .content .mainbox .box .fillboxtwo{
+	width:338px;
+	overflow: hidden;
+	margin: 0 auto;
+	display: none;
+}
+
+.wholebox .content .mainbox .box .fillboxtwo input{
+	width: 100%;
+	height:52px;
+	margin-bottom:18px;
+	border: none;
+	border-bottom: 1px solid #dbdbdb;
+	font-size: 14px;
+}
+
+.wholebox .content .mainbox .box .fillboxtwo .mutip{
+	width: 100%;
+	overflow: hidden;
+	margin-bottom:18px;
+}
+
+.wholebox .content .mainbox .box .fillboxtwo .mutip input.password{
+	border: none;
+	border-bottom: 1px solid #dbdbdb;
+	width: 260px;
+	float: left;
+	font-size: 14px;
+}
+
+.wholebox .content .mainbox .box .fillboxtwo .mutip a{
+	float: right;
+	font-size: 15px;
+	margin-top:30px;
+	cursor: pointer;
+}
+
+.wholebox .content .mainbox .box .fillboxtwo .mutip input.yanzhengma{
+	border: none;
+	border-bottom: 1px solid #dbdbdb;
+	width:185px;
+	margin-right: 8px;
+	float:left;
+	font-size: 14px;
+}
+
+.wholebox .content .mainbox .box .fillboxtwo .mutip span{
+	display: block;
+	float: right;
+	width:90px;
+	height:33px;
+	border: 1px solid #dbdbdb;
+	margin-top:18px;
+}
+
+.wholebox .content .mainbox .box .fillboxtwo button{
+	width: 100%;
+	height:45px;
+	margin-top: 34px;
+	margin-bottom:13px;
+	text-align: center;
+	line-height: 40px;
+	background:#696969;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	color: white;
+	font-size:19px;
+	cursor: pointer;
+}
+
+.wholebox .content .mainbox .box .fillboxtwo label.error{
+	color: red;
+	display: block;
+	width: 100%;
+	overflow: hidden;
+	text-align: right;
+	margin-top: -15px;
+}
+
+.wholebox .content .mainbox .box .fillboxtwo .mutip label.error{
+	color: red;
+	float: left;
+	width: 100%;
+	overflow: hidden;
+	text-align: right;
+	margin-top: -15px;
+}
+
+.wholebox .content .mainbox .box .fillboxtwo button:last-child{
+	background: white;
+	border: 1px solid #696969;
+	color:#696969;
+	margin-bottom:52px;
+	margin-top: 0px;
+}
+
+.wholebox, #content{
+    overflow: visible;
+    height: 760px;
+    background-size:cover;
+}

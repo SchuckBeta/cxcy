@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwCompanyDao">
+
+	<sql id="pwCompanyColumns">
+		a.id AS "id",
+		a.no AS "no",
+		a.name AS "name",
+		a.phone AS "phone",
+		a.mobile AS "mobile",
+		a.address AS "address",
+		a.reg_money AS "regMoney",
+		a.reg_mtype AS "regMtype",
+		a.reg_person AS "regPerson",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="pwCompanyJoins">
+	</sql>
+
+	<select id="get" resultType="PwCompany">
+		SELECT
+			<include refid="pwCompanyColumns"/>
+		FROM pw_company a
+		<include refid="pwCompanyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByEid" resultType="PwCompany">
+		SELECT
+			<include refid="pwCompanyColumns"/>
+		FROM pw_company a
+		LEFT JOIN pw_enter_detail ped on a.id= ped.rid
+		<include refid="pwCompanyJoins"/>
+		WHERE ped.eid = #{eid} and ped.del_flag='0' and a.del_flag='0'
+	</select>
+
+	<select id="findList" resultType="PwCompany">
+		SELECT
+			<include refid="pwCompanyColumns"/>
+		FROM pw_company a
+		<include refid="pwCompanyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE concat('%',#{name},'%')
+			</if>
+			<if test="phone != null and phone != ''">
+				AND a.phone = #{phone}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND a.mobile = #{mobile}
+			</if>
+			<if test="regMtype != null and regMtype != ''">
+				AND a.reg_mtype LIKE
+					<if test="dbName == 'oracle'">'%'||#{regMtype}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{regMtype}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{regMtype},'%')</if>
+			</if>
+			<if test="regPerson != null and regPerson != ''">
+				AND a.reg_person LIKE
+					<if test="dbName == 'oracle'">'%'||#{regPerson}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{regPerson}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{regPerson},'%')</if>
+			</if>
+			<if test="createBy != null">
+				<if test="createBy.id != null and createBy.id != ''">
+					AND a.create_by = #{createBy.id}
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByPwCompany" resultType="PwCompany">
+		SELECT
+			<include refid="pwCompanyColumns"/>
+		FROM pw_company a
+		<include refid="pwCompanyJoins"/>
+		LEFT JOIN pw_enter_detail ped ON ped.rid=a.id
+		LEFT JOIN pw_enter b ON b.id = ped.eid and ped.type='2'
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and b.status != '60' AND b.del_flag = '0' AND b.is_copy = '0'
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="no != null and no != ''">
+				AND a.no = #{no}
+			</if>
+		</where>
+	</select>
+
+	<select id="findAllList" resultType="PwCompany">
+		SELECT
+			<include refid="pwCompanyColumns"/>
+		FROM pw_company a
+		<include refid="pwCompanyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pw_company(
+			id,
+			no,
+			name,
+			phone,
+			mobile,
+			address,
+			reg_money,
+			reg_mtype,
+			reg_person,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{no},
+			#{name},
+			#{phone},
+			#{mobile},
+			#{address},
+			#{regMoney},
+			#{regMtype},
+			#{regPerson},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pw_company SET
+			no = #{no},
+			name = #{name},
+			phone = #{phone},
+			mobile = #{mobile},
+			address = #{address},
+			reg_money = #{regMoney},
+			reg_mtype = #{regMtype},
+			reg_person = #{regPerson},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE pw_company SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

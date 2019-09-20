@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.sco.dao.ScoAffirmCriterionDao">
+    
+	<sql id="scoAffirmCriterionColumns">
+		a.id AS "id",
+		a.affirm_conf_id AS "affirmConfId",
+		a.category AS "category",
+		a.result AS "result",
+		a.score AS "score",
+		a.sort AS "sort",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="scoAffirmCriterionJoins">
+	</sql>
+    
+	<select id="get" resultType="ScoAffirmCriterion">
+		SELECT 
+			<include refid="scoAffirmCriterionColumns"/>
+		FROM sco_affirm_criterion a
+		<include refid="scoAffirmCriterionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ScoAffirmCriterion">
+		SELECT 
+			<include refid="scoAffirmCriterionColumns"/>
+		FROM sco_affirm_criterion a
+		<include refid="scoAffirmCriterionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ScoAffirmCriterion">
+		SELECT 
+			<include refid="scoAffirmCriterionColumns"/>
+		FROM sco_affirm_criterion a
+		<include refid="scoAffirmCriterionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sco_affirm_criterion(
+			id,
+			affirm_conf_id,
+			category,
+			result,
+			score,
+			sort,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{affirmConfId},
+			#{category},
+			#{result},
+			#{score},
+			#{sort},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sco_affirm_criterion SET 	
+			affirm_conf_id = #{affirmConfId},
+			category = #{category},
+			result = #{result},
+			score = #{score},
+			sort = #{sort},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE sco_affirm_criterion SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<!-- 根据 type（学分类型)、item（学分项）、category（课程、项目、大赛、技能大类）、subdivision（课程、项目、大赛小类）、
+	   category2 (项目级别）result(项目等级) 获得标准认定学分分值-->
+	<select id="findCriter" parameterType="com.oseasy.scr.modules.sco.vo.ScoAffrimCriterionVo"
+								resultType="com.oseasy.scr.modules.sco.vo.ScoAffrimCriterionVo" >
+		SELECT
+		a.type AS "type",
+		a.item AS "item",
+		a.category AS "category",
+		a.subdivision AS "subdivision",
+		b.category AS "category2",
+		b.result AS "result",
+		b.score  AS "score"
+		FROM  sco_affirm_conf a
+		INNER JOIN sco_affirm_criterion b ON b.affirm_conf_id = a.id
+		WHERE a.del_flag='0' AND b.del_flag='0'
+		<if test="type!=null and type!=''">
+			AND a.type = #{type}
+		</if>
+		<if test="item!=null and item!=''">
+			AND a.item = #{item}
+		</if>
+		<if test="category!=null and category!=''">
+			AND a.category = #{category}
+		</if>
+		<if test="subdivision!=null and subdivision!=''">
+			AND a.subdivision = #{subdivision}
+		</if>
+		<if test="category2!=null and category2!=''">
+			AND b.category = #{category2}
+		</if>
+		<if test="result!=null and result!=''">
+			AND b.result = #{result}
+		</if>
+	</select>
+	
+	<select id="findListByConfid" resultType="ScoAffirmCriterion">
+		SELECT 
+			<include refid="scoAffirmCriterionColumns"/>
+		FROM sco_affirm_criterion a
+		<include refid="scoAffirmCriterionJoins"/>
+		<where>
+			a.del_flag = '0' and a.affirm_conf_id=#{confid}
+		</where>
+	</select>
+	<update id="delByConfid">
+		DELETE FROM sco_affirm_criterion 
+		WHERE affirm_conf_id = #{confid}
+	</update>
+	
+</mapper>

@@ -1,0 +1,451 @@
+@charset "UTF-8";
+ul,li{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.header {
+    position: relative;
+    width: 100%;
+    height: 100px;
+    background: #f3f3f3;
+    z-index: 1;
+}
+
+.mid {
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
+.header .mid {
+    height: 100%;
+    /*position: relative;*/
+}
+
+.logo-box {
+    float: left;
+    width: 250px;
+    height: 76px;
+    margin-top: 10px;
+    margin-right: 35px;
+    overflow: hidden;
+    font-size: 0;
+}
+
+.logo-box > img {
+
+}
+
+.header .mid {
+    z-index: 100;
+}
+
+.header .mid ul {
+    margin-bottom: 0;
+    height: 100%;
+    list-style: none;
+    padding: 0;
+    float: left;
+}
+
+.header .mid ul li {
+    float: left;
+    width: 105px;
+    height: 100%;
+}
+
+.header .mid ul li a {
+    text-decoration: none;
+}
+
+.header .mid ul li span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 100px;
+    color: #222;
+    overflow: hidden;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.header .mid ul li .secondlever {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    display: none;
+    background-color: rgba(232, 54, 44, .7);
+    z-index: 1;
+}
+
+.header .mid ul li .secondlever p {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    overflow: hidden;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.header .mid ul li .secondlever p a {
+    color: #fff;
+    padding: 0 15px;
+    font-size:14px;
+}
+
+.header .mid ul li .secondlever p a:hover {
+    font-weight: bold;
+}
+
+.header .mid ul li:hover span {
+    background: #e9442d;
+    color: white;
+}
+
+.header .mid ul li:hover .secondlever {
+    display: block;
+}
+
+.header .mid .user {
+    font-size: 14px;
+    color: #656565;
+    overflow: hidden;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
+
+.header .mid .user span {
+    float: right;
+    margin-left: 15px;
+    height: 31px;
+    background-position: 0px -155px;
+    cursor: pointer;
+}
+
+.header .mid .user a {
+    float: right;
+    margin-left: 10px;
+    cursor: pointer;
+    color: #656565;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    text-decoration: none;
+
+}
+
+.header .mid .user a:hover {
+    color: #df4526;
+}
+
+.header .mid .user a i {
+    margin-right: 3px;
+}
+
+.header .mid .user small {
+    float: right;
+}
+
+.affix-sidebar {
+    position: fixed;
+    right: 0;
+    top: 40%;
+    width: 32px;
+    height: 32px;
+    z-index: 1000;
+}
+
+.affix-sidebar .icon-help {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    margin-left: 2px;
+    vertical-align: middle;
+    background: url('/images/icon-help.png') no-repeat center/cover;
+    transition: all .15s linear;
+}
+
+.affix-item-help {
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.affix-item-help .text {
+    display: block;
+    position: absolute;
+    right: 150%;
+    top: 0;
+    width: 80px;
+    line-height: 28px;
+    color: #fff;
+    text-align: center;
+    background-color: #e9432d;
+    transition: all .15s linear;
+}
+
+.affix-item-help:hover .text {
+    right: 100%;
+    background-color: #e9432d;
+}
+
+.affix-item-help:hover {
+    background-color: #e9432d;
+    overflow: visible;
+}
+
+.affix-item-help:hover .icon-help {
+    background-image: url('/images/icon-help-white.png');
+
+}
+
+.header .user-wrap {
+    position: relative;
+    width: 1240px;
+    margin: 0 auto;
+}
+
+.header .user {
+    position: absolute;
+    right: 40px;
+    bottom: 0;
+    height: 30px;
+}
+
+.header .user:after, .header .user:before {
+    content: '';
+    display: table;
+}
+
+.header .user:after {
+    clear: both;
+}
+
+.header .user > a {
+    float: left;
+}
+
+.header .form-signin {
+    height: 30px;
+}
+
+.header .user a, .header .user span {
+    margin-left: 10px;
+    cursor: pointer;
+    color: #656565;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    text-decoration: none;
+    line-height: 30px;
+    font-style: normal;
+    font-size: 12px;
+}
+
+.header .form-login-reg {
+    font-size: 0;
+    line-height: 30px;
+}
+
+.header .form-signin a {
+    /*margin: 0;*/
+    /*padding: 0 10px;*/
+}
+
+.header .form-login-reg a {
+    line-height: 14px;
+    padding: 0 10px;
+    font-size: 12px;
+    vertical-align: middle;
+    margin: 0;
+    border-left: 1px solid #656565;
+}
+
+.header .form-login-reg a:first-child {
+    border-left: 0;
+}
+
+.header .user a i, .header .user span i {
+    font-style: normal;
+    margin-right: 4px;
+}
+
+.header .user a:hover, .header .user span:hover {
+    color: #df4526;
+}
+
+.scroll-top {
+    display: none;
+    position: fixed;
+    right: 10px;
+    bottom: 30px;
+    width: 44px;
+    height: 42px;
+    font-size: 12px;
+    line-height: 18px;
+    padding: 4px 10px;
+    border-radius: 5px;
+    background-color: rgba(233, 68, 45, .9);
+    overflow: hidden;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.scroll-top > a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+}
+.scroll-top > a:hover{
+    color: #fff;
+}
+
+.user-profiles {
+    width: 40px;
+    height: 30px;
+    position: relative;
+    z-index: 1000;
+}
+
+.user-profiles .user-pic-box {
+    position: relative;
+    height: 30px;
+    cursor: pointer;
+}
+
+.user-profiles .user-pic-box > a {
+    padding: 3px 0;
+}
+
+.user-profiles .user-pic {
+    display: block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.user-profiles .arrow-right, .user-profiles .arrow-down {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -6px;
+}
+
+.user-profiles .arrow-right {
+    display: block;
+    width: 12px;
+    cursor: pointer;
+}
+
+.user-profiles .arrow-down {
+    display: none;
+    width: 12px;
+}
+
+.user-profiles:hover .arrow-right {
+    display: none;
+}
+
+.user-profiles:hover .arrow-down {
+    display: block;
+}
+
+.drop-user-back {
+    width: 220px;
+    position: absolute;
+    top: 100%;
+    /*padding-top: 14px;*/
+    right: -24px;
+    display: none;
+    z-index: 1000;
+}
+
+.drop-user-back ul {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.drop-user-back .drop-user-info {
+    position: relative;
+    background: #fff;
+    border-radius: 5px;
+    border: 1px solid #eee;
+    box-shadow: 4px 4px 3px rgba(0, 0, 0, .2);
+    overflow: hidden;
+}
+
+.drop-user-back .drop-user-info > a {
+    display: block;
+    padding: 10px 15px;
+    overflow: hidden;
+}
+
+.drop-user-back .drop-user-info .user-pic-big {
+    display: block;
+    float: left;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.drop-user-info .arrow-up {
+    width: 12px;
+    position: absolute;
+    right: 23px;
+    top: -10px;
+    display: none;
+}
+
+.user-profiles:hover .drop-user-back {
+    display: block;
+}
+
+.user-profiles:hover .arrow-up {
+    display: block;
+}
+
+.drop-user-back .drop-user-info .name, .drop-user-back .drop-user-info .detail {
+    display: block;
+    line-height: 20px;
+    margin-left: 75px;
+}
+
+.drop-user-back .drop-user-info .name {
+    margin-top: 10px;
+}
+
+.drop-user-info a .name {
+    color: #e9432d;
+}
+
+.drop-user-info a:hover .name {
+    text-decoration: underline;
+}
+
+.drop-user-info ul {
+    padding: 0 8px;
+    margin: 0;
+}
+
+.drop-user-info ul li {
+    list-style: none;
+    font-size: 14px;
+    height: 30px;
+    padding-left: 20px;
+}
+
+.drop-user-info ul li:last-child {
+    border-top: 1px solid #eee;
+}
+
+.drop-user-info ul li a {
+    text-decoration: none;
+    color: #333333;
+}

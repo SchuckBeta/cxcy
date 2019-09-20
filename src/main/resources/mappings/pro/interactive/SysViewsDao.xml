@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.interactive.dao.SysViewsDao">
+
+	<sql id="sysViewsColumns">
+		a.id AS "id",
+		a.foreign_id AS "foreignId",
+		a.user_id AS
+		"userId",
+		a.ip AS "ip",
+		a.token AS "token",
+		a.create_date AS
+		"createDate",
+		a.del_flag AS "delFlag",
+		u3.name AS "user.name"
+	</sql>
+
+	<sql id="sysViewsJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+
+	<select id="get" resultType="SysViews">
+		SELECT
+		<include refid="sysViewsColumns" />
+		FROM sys_views a
+		<include refid="sysViewsJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SysViews">
+		SELECT
+		<include refid="sysViewsColumns" />
+		FROM sys_views a
+		<include refid="sysViewsJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="userId!=null and userId!=''">
+				and a.user_id=#{userId}
+			</if>
+			<if test="foreignId!=null and foreignId!=''">
+				and a.foreign_id=#{foreignId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysViews">
+		SELECT
+		<include refid="sysViewsColumns" />
+		FROM sys_views a
+		<include refid="sysViewsJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_views(
+		id,
+		foreign_id,
+		user_id,
+		ip,
+		token,
+		create_date,
+		del_flag
+		) VALUES (
+		#{id},
+		#{foreignId},
+		#{userId},
+		#{ip},
+		#{token},
+		#{createDate},
+		#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_views SET
+		foreign_id = #{foreignId},
+		user_id = #{userId},
+		ip = #{ip},
+		token = #{token}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_views SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<insert id="insertBatch" parameterType="java.util.List">
+		INSERT INTO sys_views(
+		id,
+		foreign_id,
+		user_id,
+		ip,
+		token,
+		create_date,
+		del_flag
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.id},
+			#{item.foreignId},
+			#{item.userId},
+			#{item.ip},
+			#{item.token},
+			#{item.createDate},
+			#{item.delFlag})
+		</foreach>
+	</insert>
+	<select id="getVisitors" resultType="java.util.Map">
+		select
+		tem.*,(case when st.user_id is null then '2' else '1' end) user_type,st.id st_id,te.id te_id,u.photo,u.name from (select
+		t.foreign_id,t.user_id,max(t.create_date) create_date
+		from sys_views t where t.foreign_id=#{uid}
+		group by t.foreign_id,t.user_id) tem
+		left join sys_user u on tem.user_id=u.id
+		left join sys_student_expansion st on  u.id=st.user_id
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=u.id and sr.biz_type='1' and sr.del_flag='0'
+				)
+		left join sys_teacher_expansion te on u.id=te.user_id
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=u.id and sr.biz_type='2' and sr.del_flag='0'
+				)
+		order by tem.create_date desc limit 10
+	</select>
+
+
+	<select id="getBrowse" resultType="java.util.Map">
+		select
+		tem.*,(case when st.user_id is null then '2' else '1' end) user_type,st.id st_id,te.id te_id,u.photo,u.name from (select
+		t.foreign_id,t.user_id,max(t.create_date) create_date
+		from sys_views t where t.user_id=#{uid}
+		group by t.foreign_id,t.user_id) tem
+		left join sys_user u on tem.foreign_id=u.id
+		left join sys_student_expansion st on u.id=st.user_id
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=u.id and sr.biz_type='1' and sr.del_flag='0'
+				)
+		left join sys_teacher_expansion te on u.id=te.user_id
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=u.id and sr.biz_type='2' and sr.del_flag='0'
+				)
+		order by tem.create_date desc limit 10
+	</select>
+</mapper>

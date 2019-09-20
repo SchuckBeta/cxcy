@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>dao</name>
+	<filePath>src/main/java/${packageName}/${moduleName}/dao/${subModuleName}</filePath>
+	<fileName>${ClassName}${RclassName}Dao.java</fileName>
+	<content><![CDATA[
+package ${packageName}.${moduleName}.dao<#if subModuleName != "">.${subModuleName}</#if>;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.oseasy.com.pcore.common.persistence.CrudDao;
+import com.oseasy.com.pcore.common.persistence.annotation.MyBatisDao;
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
+
+/**
+ * ${functionName}DAO接口.
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+@MyBatisDao
+public interface ${ClassName}Dao extends CrudDao<${ClassName}> {
+    /**
+     * 批量新增.
+     * @param ${entityName}s
+     */
+    public void insertPL(@Param("${entityName}s") List<${ClassName}> ${entityName}s);
+
+    /**
+     * 批量修改.
+     * @param ${entityName}s
+     */
+    public void updatePL(@Param("${entityName}s") List<${ClassName}> ${entityName}s);
+
+	<#list table.columnList as c><#if c.isUpdate?? && c.isUpdate == "1"><#if c.simpleJavaField == c.javaFieldId><#if c.isUpdatePl?? && c.isUpdatePl == "1">
+	/**
+	 * 根据ID批量修改属性 ${c.javaFieldId?cap_first}.
+   	 * @param ${entityName}s
+	 */
+    public void updatePL${c.javaFieldId?cap_first}(@Param("${entityName}s") List<${ClassName}> ${entityName}s);
+			</#if></#if>
+
+			<#if c.simpleJavaType?? && ((c.simpleJavaType != "String") && (c.simpleJavaType != "Long") && (c.simpleJavaType != "Integer") && (c.simpleJavaType != "Double") && (c.simpleJavaType != "Date"))>
+				<#if (c.javaFieldGid != "") && c.simpleJavaField != c.javaFieldId>
+					<#if c.isUpdatePl?? && c.isUpdatePl == "1">
+	/**
+	 * 根据ID批量修改属性 ${c.simpleJavaField?cap_first}.id.
+   	 * @param ${entityName}s
+	 */
+    public void updatePL${c.simpleJavaField?cap_first}Id(@Param("${entityName}s") List<${ClassName}> ${entityName}s);
+					</#if>
+				</#if>
+
+				<#if (c.javaFieldGname != "") && c.simpleJavaField != c.javaFieldName>
+					<#if c.isUpdatePl?? && c.isUpdatePl == "1">
+	/**
+	 * 根据ID批量修改属性 ${c.simpleJavaField?cap_first}.name.
+   	 * @param ${entityName}s
+	 */
+    public void updatePL${c.simpleJavaField?cap_first}Name(@Param("${entityName}s") List<${ClassName}> ${entityName}s);
+		</#if></#if></#if></#if>
+	</#list>
+
+  	/**
+   	 * 物理删除.
+   	 * @param ${entityName}
+   	 */
+  	public void deleteWL(${ClassName} ${entityName});
+
+   	/**
+   	 * 批量状态删除.
+   	 * @param ${entityName}
+   	 */
+  	public void deletePL(${ClassName} ${entityName});
+
+    /**
+   	 * 批量物理删除.
+   	 * @param ${entityName}
+   	 */
+  	public void deleteWLPL(${ClassName} ${entityName});
+
+    /**
+     * 清空表.
+     */
+    public void deleteWLAll();
+}]]>
+	</content>
+</template>

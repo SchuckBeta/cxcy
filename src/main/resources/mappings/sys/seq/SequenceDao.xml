@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.sys.modules.seq.dao.SequenceDao">
+
+	<sql id="sequenceColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.current_value AS "currentValue",
+		a.increment AS "increment"
+	</sql>
+
+	<sql id="sequenceJoins">
+	</sql>
+
+	<select id="get" resultType="Sequence">
+		SELECT
+			<include refid="sequenceColumns"/>
+		FROM sequence a
+		<include refid="sequenceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="Sequence">
+		SELECT
+			<include refid="sequenceColumns"/>
+		FROM sequence a
+		<include refid="sequenceJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="Sequence">
+		SELECT
+			<include refid="sequenceColumns"/>
+		FROM sequence a
+		<include refid="sequenceJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sequence(
+			id,
+			name,
+			current_value,
+			increment
+		) VALUES (
+			#{id},
+			#{name},
+			#{currentValue},
+			#{increment}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO sequence(
+			id,
+			name,
+			current_value,
+			increment
+		) VALUES (
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.name},
+			#{item.currentValue},
+			#{item.increment}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE sequence SET
+			name = #{name},
+			current_value = #{currentValue},
+			increment = #{increment}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE sequence
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.name}
+				</foreach>
+			</trim>
+			<trim prefix="current_value =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.currentValue}
+				</foreach>
+			</trim>
+			<trim prefix="increment =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.increment}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+
+	<update id="delete">
+		DELETE FROM sequence
+		WHERE id = #{id}
+	</update>
+
+	<update id="deletePL">
+			DELETE FROM sequence
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sequence WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM sequence WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM sequence
+	</update>
+
+	<insert id="addSequence" parameterType="java.util.Map">
+		INSERT INTO sequence VALUES (#{seqName},${startNum},${updateNum})
+	</insert>
+
+	<select id="nextSequence" resultType="java.lang.String" parameterType="java.lang.String">
+		select nextval(#{seqName})
+	</select>
+
+
+</mapper>

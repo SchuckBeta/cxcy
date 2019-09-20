@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwYearDao">
+
+	<sql id="actYwYearColumns">
+		a.id AS "id",
+		a.rid AS "rid",
+		a.node_start_date AS "nodeStartDate",
+		a.node_end_date AS "nodeEndDate",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.year AS "year",
+		a.actyw_id AS "actywId"
+	</sql>
+
+	<sql id="actYwYearJoins">
+	</sql>
+
+	<select id="get" resultType="ActYwYear">
+		SELECT
+			<include refid="actYwYearColumns"/>
+		FROM act_yw_year a
+		<include refid="actYwYearJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByActywIdAndYear" resultType="ActYwYear">
+		SELECT
+			<include refid="actYwYearColumns"/>
+		FROM act_yw_year a
+		<include refid="actYwYearJoins"/>
+		WHERE a.actyw_id = #{actywId} and a.year=#{year} limit 1
+	</select>
+
+	<select id="findListByActywId" resultType="ActYwYear">
+		SELECT
+			<include refid="actYwYearColumns"/>
+		FROM act_yw_year a
+		<include refid="actYwYearJoins"/>
+		WHERE a.actyw_id = #{actywId}
+		ORDER BY a.year
+	</select>
+
+
+	<select id="findOverYear" resultType="ActYwYear">
+		SELECT
+			<include refid="actYwYearColumns"/>
+		FROM act_yw_year a
+		<include refid="actYwYearJoins"/>
+		WHERE a.actyw_id = #{actywId}
+			<if test="#{year} !=null ">
+			and a.year <![CDATA[ <>  ]]>  #{year}
+			</if>
+		AND
+		(
+		( a.node_start_date <![CDATA[  >= ]]> #{nodeStartDate} AND a.node_start_date <![CDATA[ <= ]]> #{nodeEndDate} ) OR
+		(a.node_start_date  <![CDATA[ <=	]]> #{nodeStartDate} AND a.node_end_date <![CDATA[ >= ]]> #{nodeEndDate} ) OR
+		(a.node_end_date <![CDATA[ >= ]]> #{nodeStartDate} AND a.node_end_date <![CDATA[ <= ]]> #{nodeEndDate}) OR
+		(a.node_start_date <![CDATA[ >= ]]> #{nodeStartDate} AND a.node_end_date <![CDATA[ <= ]]> #{nodeEndDate})
+		)
+		ORDER BY a.year
+	</select>
+
+
+	<select id="findList" resultType="ActYwYear">
+		SELECT
+			<include refid="actYwYearColumns"/>
+		FROM act_yw_year a
+		<include refid="actYwYearJoins"/>
+		<where>
+			a.actyw_id = #{actywId}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwYear">
+		SELECT
+			<include refid="actYwYearColumns"/>
+		FROM act_yw_year a
+		<include refid="actYwYearJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_year(
+			id,
+			rid,
+			year,
+			start_date,
+			end_date,
+			node_start_date,
+			node_end_date,
+			actyw_id
+		) VALUES (
+			#{id},
+			#{rid},
+			#{year},
+			#{startDate},
+			#{endDate},
+			#{nodeStartDate},
+			#{nodeEndDate},
+			#{actywId}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_year SET
+			rid = #{rid},
+			year = #{year},
+			start_date = #{startDate},
+			end_date = #{endDate},
+			node_start_date = #{nodeStartDate},
+			node_end_date = #{nodeEndDate},
+			actyw_id = #{actywId}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM act_yw_year
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM act_yw_year WHERE id = #{id}
+	</update>
+
+	<select id="checkYearTimeByActYw" resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM act_yw_year ayy
+		LEFT JOIN act_yw ay ON ayy.actyw_id=ay.id
+		WHERE ay.id = #{actywId} and ayy.node_start_date is not NULL and ayy.node_end_date is not null
+	</select>
+
+	<select id="checkYearByActYw" resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM act_yw_year ayy
+		LEFT JOIN act_yw ay ON ayy.actyw_id=ay.id
+		WHERE ay.id = #{actywId}
+	</select>
+
+</mapper>

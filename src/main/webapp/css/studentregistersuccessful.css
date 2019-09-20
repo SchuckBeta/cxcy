@@ -1,0 +1,92 @@
+.wholebox{
+	width:100%;
+	height:658px;
+	background:url(../img/studentloginbg_02.png) no-repeat center center;
+	overflow: hidden;
+}
+
+.wholebox .content{
+	width: 1240px;
+	overflow: hidden;
+	margin: 0 auto;
+}
+
+.wholebox .content .mainbox{
+	float: right;
+	width:484px;
+	overflow: hidden;
+}
+
+.wholebox .content .mainbox h5{
+	text-align: center;
+	font-size:28px;
+	color:#1b1b1b;
+	font-weight: normal;
+	margin-top:88px;
+	line-height: 60px;
+}
+
+.wholebox .content .mainbox .box{
+	width: 100%;
+	overflow: hidden;
+	border-radius: 5px;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	border: 1px solid #e3e3e3;
+	min-height: 100px;
+	background: white;
+}
+
+.wholebox .content .mainbox .box .redtop{
+	width: 100%;
+	height:4px;
+	background:#de3b0a;
+}
+
+
+.wholebox .content .mainbox .box .fillboxone{
+	width:338px;
+	overflow: hidden;
+	margin: 0 auto;
+	margin-top:52px;
+	text-align: center;
+}
+
+.wholebox .content .mainbox .box .fillboxone img{
+	display: inline-block;
+	margin-top: 13px;
+	margin-bottom: 20px;
+}
+
+.wholebox .content .mainbox .box .fillboxone p{
+	font-size: 22px;
+	color: #1b1b1b;
+	font-weight: lighter;
+	margin-bottom: 60px;
+}
+
+
+
+.wholebox .content .mainbox .box .fillboxone button{
+	width: 100%;
+	height:45px;
+	margin-top: 10px;
+	margin-bottom:57px;
+	text-align: center;
+	line-height: 40px;
+	background:#de3b0a;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	color: white;
+	font-size:19px;
+	cursor: pointer;
+}
+
+.wholebox, #content{
+    overflow: visible;
+    height: 760px;
+    background-size:cover;
+}
+

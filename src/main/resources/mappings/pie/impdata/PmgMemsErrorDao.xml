@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.impdata.dao.PmgMemsErrorDao">
+
+	<sql id="pmgMemsErrorColumns">
+		a.id AS "id",
+		a.imp_id AS "impId",
+		a.pmge_id AS "pmgeId",
+		a.name AS "name",
+		a.no AS "no",
+		a.profes AS "profes",
+		a.enter AS "enter",
+		a.outy AS "outy",
+		a.xueli AS "xueli",
+		a.idnum AS "idnum",
+		a.mobile AS "mobile",
+		a.email AS "email",
+		a.sort AS "sort",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id"
+	</sql>
+
+	<sql id="pmgMemsErrorJoins">
+	</sql>
+
+	<select id="get" resultType="PmgMemsError">
+		SELECT
+			<include refid="pmgMemsErrorColumns"/>
+		FROM pmg_mems_error a
+		<include refid="pmgMemsErrorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="PmgMemsError">
+		SELECT
+			<include refid="pmgMemsErrorColumns"/>
+		FROM pmg_mems_error a
+		<include refid="pmgMemsErrorJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="PmgMemsError">
+		SELECT
+			<include refid="pmgMemsErrorColumns"/>
+		FROM pmg_mems_error a
+		<include refid="pmgMemsErrorJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pmg_mems_error(
+			id,
+			imp_id,
+			pmge_id,
+			name,
+			no,
+			profes,
+			enter,
+			outy,
+			xueli,
+			idnum,
+			mobile,
+			email,
+			sort,
+			update_date,
+			update_by,
+			create_date,
+			create_by
+		) VALUES (
+			#{id},
+			#{impId},
+			#{pmgeId},
+			#{name},
+			#{no},
+			#{profes},
+			#{enter},
+			#{outy},
+			#{xueli},
+			#{idnum},
+			#{mobile},
+			#{email},
+			#{sort},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pmg_mems_error SET
+			imp_id=#{impId},
+			pmge_id = #{pmgeId},
+			name = #{name},
+			no = #{no},
+			profes = #{profes},
+			enter = #{enter},
+			outy = #{outy},
+			xueli = #{xueli},
+			idnum = #{idnum},
+			mobile = #{mobile},
+			email = #{email},
+			sort = #{sort},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM pmg_mems_error
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM pmg_mems_error WHERE id = #{id}
+	</update>
+	<select id="getListByImpId" resultType="PmgMemsError"
+		parameterType="java.lang.String">
+		SELECT
+		t.*
+		FROM
+		pmg_mems_error t
+		WHERE
+		t.imp_id = #{impid}
+		order by
+		t.sort
+	</select>
+	<update id="deleteByImpId" parameterType="java.lang.String">
+		DELETE FROM
+		pmg_mems_error
+		WHERE imp_id = #{impid}
+	</update>
+</mapper>

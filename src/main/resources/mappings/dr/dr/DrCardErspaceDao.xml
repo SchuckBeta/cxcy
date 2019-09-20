@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.dr.modules.dr.dao.DrCardErspaceDao">
+
+	<sql id="drCardErspaceColumns">
+		a.id AS "id",
+		a.status AS "status",
+		a.version AS "version",
+		a.card_id AS "card.id",
+		a.erspace_id AS "erspace.id"
+	</sql>
+
+	<sql id="drCardErspaceBygColumns">
+		a.id AS "id",
+		a.status AS "status",
+		a.version AS "version",
+		a.card_id AS "card.id",
+		a.erspace_id AS "erspace.id",
+
+		b.ept_id AS "erspace.epment.id",
+		b.rsp_type AS "erspace.rspType",
+		b.rspace_id AS "erspace.rspace",
+		b.dr_no AS "erspace.drNo",
+
+		c.no AS "erspace.epment.no",
+		c.name AS "erspace.epment.name",
+		c.psw AS "erspace.epment.psw",
+		c.ip AS "erspace.epment.ip",
+		c.type AS "erspace.epment.type",
+		c.port AS "erspace.epment.port",
+		c.dr_no AS "erspace.epment.drNo",
+		c.tindex AS "erspace.epment.tindex",
+
+		d.id AS "card.id",
+		d.uid AS "card.user.id",
+		d.no AS "card.no",
+		d.password AS "card.password",
+		d.expiry AS "card.expiry",
+		d.status AS "card.status",
+		d.open_times AS "card.openTimes",
+		d.privilege AS "card.privilege",
+		d.holiday_use AS "card.holidayUse",
+		d.warnning AS "card.warnning",
+		d.is_cancel AS "card.isCancel",
+		d.card_type AS "card.cardType",
+		d.tmp_no AS "card.tmpNo",
+		d.tmp_name AS "card.tmpName",
+		d.tmp_tel AS "card.tmpTel",
+		u2.name AS "card.user.name"
+	</sql>
+
+	<sql id="drCardErspaceJoins">
+	</sql>
+
+	<sql id="drCardErspaceBygJoins">
+        LEFT JOIN dr_card d ON d.id = a.card_id
+        LEFT JOIN dr_equipment_rspace b ON b.id = a.erspace_id
+        LEFT JOIN dr_equipment c ON c.id = b.ept_id
+		LEFT JOIN sys_user u2 ON u2.id = d.uid
+	</sql>
+
+	<select id="get" resultType="DrCardErspace">
+		SELECT
+			<include refid="drCardErspaceColumns"/>
+		FROM dr_card_erspace a
+		<include refid="drCardErspaceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByg" resultType="DrCardErspace">
+		SELECT
+			<include refid="drCardErspaceBygColumns"/>
+		FROM dr_card_erspace a
+		<include refid="drCardErspaceBygJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="DrCardErspace">
+		SELECT
+			<include refid="drCardErspaceColumns"/>
+		FROM dr_card_erspace a
+		<include refid="drCardErspaceJoins"/>
+		<where> 1 = 1
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="ids != null and ids.size >0">
+                AND a.id IN
+               <foreach item="item" collection="ids" separator="," open="("
+                        close=")">
+                   #{item}
+               </foreach>
+           	</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="version != null and version != ''">
+				AND a.version = #{version}
+			</if>
+			<if test="card != null">
+				<if test="card.ids != null">
+                  AND a.card_id IN
+	                <foreach item="item" collection="card.ids" separator="," open="("
+	                         close=")">
+	                    #{item}
+	                </foreach>
+	            </if>
+				<if test="card.id != null and card.id != ''">
+					AND a.card_id = #{card.id}
+				</if>
+			</if>
+			<if test="erspace != null">
+				<if test="erspace.id != null and erspace.id != ''">
+					AND a.erspace_id = #{erspace.id}
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByg" resultType="DrCardErspace">
+		SELECT
+			<include refid="drCardErspaceBygColumns"/>
+		FROM dr_card_erspace a
+		<include refid="drCardErspaceBygJoins"/>
+		<where> 1 = 1
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="ids != null and ids.size >0">
+                AND a.id IN
+               <foreach item="item" collection="ids" separator="," open="("
+                        close=")">
+                   #{item}
+               </foreach>
+           	</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="version != null and version != ''">
+				AND a.version = #{version}
+			</if>
+			<if test="card != null">
+				<if test="card.ids != null">
+                  AND a.card_id IN
+	                <foreach item="item" collection="card.ids" separator="," open="("
+	                         close=")">
+	                    #{item}
+	                </foreach>
+	            </if>
+				<if test="card.id != null and card.id != ''">
+					AND d.id = #{card.id}
+				</if>
+				<if test="card.no != null and card.no != ''">
+					AND d.no = #{card.no}
+				</if>
+				<if test="card.status != null and card.status != ''">
+					AND d.status = #{card.status}
+				</if>
+				<if test="card.openTimes != null and card.openTimes != ''">
+					AND d.open_times = #{card.openTimes}
+				</if>
+				<if test="card.privilege != null and card.privilege != ''">
+					AND d.privilege = #{card.privilege}
+				</if>
+				<if test="card.warnning != null and card.warnning != ''">
+					AND d.warnning = #{card.warnning}
+				</if>
+				<if test="card.isCancel != null and card.isCancel != ''">
+					AND d.is_cancel = #{card.isCancel}
+				</if>
+				<if test="card.cardType != null and card.cardType != ''">
+					AND d.card_type = #{card.cardType}
+				</if>
+				<if test="card.tmpName != null and card.tmpName != ''">
+					AND d.tmp_name = #{card.tmpName}
+				</if>
+				<if test="card.tmpTel != null and card.tmpTel != ''">
+					AND d.tmp_tel = #{card.tmpTel}
+				</if>
+
+				<if test="card.holidayUse != null and card.holidayUse != ''">
+					AND d.holiday_use = #{card.holidayUse}
+				</if>
+				<if test="card.expiry != null and card.expiry != ''">
+					AND d.expiry <![CDATA[  >= ]]> #{card.expiry}
+				</if>
+				<if test="card.user != null">
+					<if test="card.user.id != null and card.user.id != ''">
+						AND d.uid = #{card.user.id}
+					</if>
+					<if test="card.user.name != null and card.user.name != ''">
+						AND u2.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{card.user.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{card.user.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{card.user.name},'%')</if>
+					</if>
+				</if>
+			</if>
+			<if test="erspace != null">
+				<if test="erspace.id != null and erspace.id != ''">
+					AND a.erspace_id = #{erspace.id}
+				</if>
+				<if test="erspace.rspace != null and  erspace.rspace != ''">
+					AND b.rspace_id = #{erspace.rspace}
+				</if>
+				<if test="erspace.drNo != null and erspace.drNo != ''">
+					AND b.dr_no = #{erspace.drNo}
+				</if>
+				<if test="erspace.epment != null">
+					<if test="erspace.epment.id != null and erspace.epment.id != ''">
+						AND c.id = #{erspace.epment.id}
+					</if>
+					<if test="erspace.epment.no != null and erspace.epment.no != ''">
+						AND c.no = #{erspace.epment.no}
+					</if>
+					<if test="erspace.epment.name != null and erspace.epment.name != ''">
+						AND c.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{erspace.epment.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{erspace.epment.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{erspace.epment.name},'%')</if>
+					</if>
+					<if test="erspace.epment.ip != null and erspace.epment.ip != ''">
+						AND c.ip = #{erspace.epment.ip}
+					</if>
+					<if test="erspace.epment.port != null and erspace.epment.port != ''">
+						AND c.port = #{erspace.epment.port}
+					</if>
+					<if test="erspace.epment.type != null and erspace.epment.type != ''">
+						AND c.type = #{erspace.epment.type}
+					</if>
+					<if test="erspace.epment.drNo != null and erspace.epment.drNo != ''">
+						AND c.dr_no LIKE
+							<if test="dbName == 'oracle'">'%'||#{erspace.epment.drNo}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{erspace.epment.drNo}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{erspace.epment.drNo},'%')</if>
+					</if>
+					<!-- <if test="erspace.epment.tindex != null and erspace.epment.tindex != ''">
+						AND c.tindex <![CDATA[  >= ]]> #{erspace.epment.tindex}
+					</if> -->
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="DrCardErspace">
+		SELECT
+			<include refid="drCardErspaceColumns"/>
+		FROM dr_card_erspace a
+		<include refid="drCardErspaceJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllListByg" resultType="DrCardErspace">
+		SELECT
+			<include refid="drCardErspaceBygColumns"/>
+		FROM dr_card_erspace a
+		<include refid="drCardErspaceBygJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findDrEmentNosByCid" resultType="DrEmentNo">
+		SELECT
+			b.ept_id AS "etId",
+			b.dr_no AS "drNo",
+			c.no AS "etNo"
+		FROM
+			dr_card_erspace a
+		LEFT JOIN dr_equipment_rspace b ON b.id = a.erspace_id
+		LEFT JOIN dr_equipment c ON c.id = b.ept_id
+		WHERE a.card_id = #{cid}
+	</select>
+
+	<select id="findDrEmentNosByCids" resultType="DrEmentNo">
+		SELECT
+			b.ept_id AS "etId",
+			b.dr_no AS "drNo",
+			c.no AS "etNo"
+		FROM
+			dr_card_erspace a
+		LEFT JOIN dr_equipment_rspace b ON b.id = a.erspace_id
+		LEFT JOIN dr_equipment c ON c.id = b.ept_id
+		WHERE a.card_id in
+		<foreach item="cid" collection="cids" open="(" separator="," close=")">
+			#{cid}
+		</foreach>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dr_card_erspace(
+			id,
+			status,
+			version,
+			card_id,
+			erspace_id
+		) VALUES (
+			#{id},
+			#{status},
+			#{version},
+			#{card.id},
+			#{erspace.id}
+		)
+	</insert>
+
+	<insert id="savePl" >
+		INSERT INTO dr_card_erspace(
+			id,
+			status,
+			version,
+			card_id,
+			erspace_id
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+				 separator=",">
+			(
+				#{item.id},
+				#{item.status},
+				#{item.version},
+				#{item.card.id},
+				#{item.erspace.id}
+			)
+		</foreach>
+	</insert>
+
+	<update id="updateByPl" parameterType="java.util.List" >
+		UPDATE dr_card_erspace
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="status =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.status}
+				</foreach>
+			</trim>
+			<trim prefix="version =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.version}
+				</foreach>
+			</trim>
+			<trim prefix="card_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.card.id}
+				</foreach>
+			</trim>
+			<trim prefix="erspace_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.erspace.id}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="updateStatusByPl" parameterType="java.util.List" >
+		UPDATE dr_card_erspace
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="status =case" suffix="end,">
+				<foreach item="item" collection="cids" index="index">
+					when id=#{id} then #{status}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="id" collection="ids" separator="," open="("
+			close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="updateStatusByCid" parameterType="java.util.List" >
+		UPDATE dr_card_erspace SET
+			status = #{status}
+		WHERE card_id in
+		<foreach item="cid" collection="cids" separator="," open="("
+			close=")">
+			#{cid}
+		</foreach>
+	</update>
+
+	<update id="update">
+		UPDATE dr_card_erspace SET
+			id = #{id},
+			status = #{status},
+			version = #{version},
+			card_id = #{card.id},
+			erspace_id = #{erspace.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM dr_card_erspace
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM dr_card_erspace WHERE id = #{id}
+	</update>
+
+	<update id="deletePlwl">
+		DELETE FROM dr_card_erspace WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+    <update id="deletePlwlByCard">
+            DELETE FROM dr_card_erspace WHERE card_id = #{cardId}
+    </update>
+</mapper>

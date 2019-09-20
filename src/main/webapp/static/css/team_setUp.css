@@ -1,0 +1,209 @@
+html,body{
+    font: 14px;
+    font-family: "微软雅黑";
+}
+label{
+    color:#656565;
+    font-weight: normal;
+}
+.main-wrap{
+    width: 1240px;
+    margin:30px auto 0;
+}
+.top-content{
+    border:2px solid #f1f1f1;
+    padding:42px 12px;
+    border-radius: 5px;
+}
+.mybreadcrumbs{
+    font-size: 14px;
+    color:#332c2b;
+    margin-bottom: 22px;
+    font-weight: bold;
+}
+.mybreadcrumbs i{
+    font-size: 15px;
+}
+.head-desc label{
+    color:#656565;
+    font-weight: normal;
+}
+.head-desc label span,.row label span{
+    color:#ed7468;
+    height: 6px;
+    width:6px;
+    margin-right: 3px;
+}
+.head-desc .number-count{
+    width: 55px;
+    border-radius: 3px;
+    height: 28px;
+    border:1px solid #cecece;
+    outline: none;
+}
+
+.team-name +input{
+    width:152px;
+    border:1px solid #cecece;
+    outline: none;
+    height: 28px;
+    border-radius: 3px;
+}
+
+.date-ipt{
+    width:110px;
+    border:1px solid #cecece;
+    outline: none; 
+    height: 28px;
+    border-radius: 3px;
+}
+.Wdate{
+   border:1px solid #cecece !important;
+   height:28px !important;
+   background-position: 84px center !important;
+}
+.need-person,.need-teacher{
+    margin-left: -20px;
+}
+
+.form-wrap{
+    margin:30px 0px;
+}
+
+.form-wrap label{
+    vertical-align: top;
+}
+
+.form-wrap label i{
+    color:#ed7468;
+    height: 6px;
+    width:6px;
+    margin-right: 5px;
+}
+
+.members-ablity,.prj-summary{
+    width: 504px;
+    border:1px solid #cecece;
+    border-radius: 5px;
+    height: 92px;
+    overflow-y:auto; 
+    resize:none;
+    outline: none;
+    padding-left: 5px;
+}
+
+.prj-summary{
+    margin-left: 4px;
+    width:482px;
+}
+
+.team-introduce{
+    width: 1113px;
+    border:1px solid #cecece;
+    border-radius: 5px;
+    height: 92px;
+    max-height:92px;
+    overflow-y:auto; 
+    resize:none;
+    outline: none;
+    padding-left: 5px; 
+}
+
+.btn-team{
+    text-align: right;
+    padding:0px 30px;
+}
+.btn-team a{
+    height: 29px;
+    line-height: 29px;
+    background: #bbb;
+    padding:7px 23px;
+    color:#fff;
+    text-decoration: none;
+    border-radius: 3px;
+
+}
+.btn-team a.active{
+    background: #e9442d;
+}
+
+.team-lsit-desc{
+    height: 60px;
+    line-height: 60px;
+    position: relative;
+    margin-top: 32px;
+}
+
+.team-lsit-desc span{
+    position: absolute;
+    z-index: 999;
+    background: #fff;
+    padding-right: 20px;
+    font-size: 15px;
+    color:#656565;
+}
+
+.team-lsit-desc p{
+    position: absolute;
+    left: 0;
+    top:29px;
+    width: 100%;
+    height:1px;
+    background: #f3d5af;
+}
+
+table th{
+    background-color:#f4e6d4;
+    color:#656565;
+}
+table th,table tr td{
+    text-align: center;
+    font-size: 14px;
+    color:#656565;
+    vertical-align:middle !important;
+}
+
+.my-btn-group a{
+    background:#e5e5e5 ;
+    padding:7px 11px;
+    margin-bottom: 5px;
+    color:#656565;
+}
+
+.my-btn-default{
+    background:#e9442d ;
+    border:1px solid #e9442d;
+    color:#fff;
+    padding:0px;
+}
+
+.my-btn-default:hover{
+    background: -webkit-linear-gradient(#e8422d, #ba3424); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#e8422d, #ba3424); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#e8422d, #ba3424); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#e8422d, #ba3424); /* 标准的语法 */
+    color:#fff;
+}
+.dropdown-menu a{
+    background: #fff;
+}
+
+.open>.dropdown-toggle.btn-default:focus,.open>.dropdown-toggle.btn-default:hover{
+    background: #e9442d;
+    color:#fff;
+    border:1px solid #e9442d;
+}
+.dropdown-menu{
+    left: -75px;
+}
+
+.my-btn-default:focus,
+.my-btn-default:active:focus,
+.my-btn-default.active:focus,
+.my-btn-default.focus,
+.my-btn-default:active.focus,
+.my-btn-default.active.focus {
+    outline: none;
+    color:#fff !important;
+    background: #e9432d !important;
+}

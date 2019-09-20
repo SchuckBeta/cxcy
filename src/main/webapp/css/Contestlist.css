@@ -1,0 +1,217 @@
+html,body{
+    font-family: "微软雅黑";
+    font-size: 12px;
+}
+.content{
+    width: 1242px;
+    margin: 100px auto;
+}
+
+#form{
+
+    position:relative;
+}
+._btn{
+    text-align: right;
+    margin-top: -33px;
+    margin-bottom:4px;
+}
+
+._btn a{
+    display:inline-block;
+    padding: 5px 10px;
+    background-color: #bebebe;
+    color:#fff;
+    border-radius: 3px;
+    margin-left: 5px;
+
+}
+
+._btn a:hover{
+
+}
+
+._btn a:last-child{
+    background-color:#e9442d;
+}
+
+.head{
+    background-color:#e7e7e7;
+    height: 40px;
+    line-height:40px;
+    padding-left: 10px;
+    font-size: 19px;
+    color:#e9442d;
+    font-weight: bold;
+
+}
+#form table thead tr td{
+    color:#969696;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+#form table thead tr{
+    height:35px;
+}
+
+#form table thead tr th{
+    font-size: 14px;
+    white-space:nowrap;
+    color:#fff;
+    background: #b3a9a8;
+}
+
+#form table tbody tr td{
+     font-size: 14px;
+     text-align: center;
+    color:#656565;
+}
+
+#form table tbody tr td .buttom{
+    display:inline-block;
+    padding:3px 10px;
+    border:1px solid #C4C4C4;
+    border-radius: 4px;
+    margin: 15px 0 20px 0;
+    color:#969696;
+}
+
+#form table tbody tr td .col{
+    color:#696969;
+}
+
+.pages,ul{
+    overflow:hidden;
+}
+
+.pages ul {
+     float: left;
+}
+.pages ul li{
+    float: left;
+    padding: 3px 5px;
+    border: 1px solid #000;
+    margin:5px 10px;
+    background-color:#D3D3D3;
+    cursor:pointer;
+}
+
+.pages .page_info{
+    float:right;
+    font-size: 14px;
+    line-height: 39px;
+    margin-right: 10px;
+}
+
+.footer{
+    width:100%;
+    cursor: pointer;
+}
+
+.footer img{
+    display:block;
+      width:100%;
+}
+
+.layer{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+    z-index: 999;
+
+}
+
+.auditRecord{
+    width:1046px;
+    position:relative;
+    left:50%;
+    top: 50%;
+    margin-left: -523px;
+    display:none;
+    background-color: #fff;
+}
+
+.auditRecord .head .Record{
+    position:relative;
+    left:-123px;
+    top: -10px;
+    color:#fff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.auditRecord .head .return{
+   float:right;
+   line-height: 28px;
+   font-size: 14px;
+   color:#fff;
+   font-weight: bold;
+   margin-right: 15px;
+   cursor:pointer;
+}
+
+.auditRecord table thead tr th{
+    font-size: 15px;
+    border: 1px solid #ececec;
+    padding:10px ;
+    background-color: #b3a9a8;
+    color:#3D3D3D;
+}
+
+.auditRecord table tbody tr td{
+    font-size: 15px;
+    font-family:'Microsoft yahei','Arial';
+    border: 1px solid #666666;
+    border-left: none;
+    border-top: none;
+    padding:10px ;
+    color:#3D3D3D;
+}
+
+.auditRecord table tbody tr .bd_col{
+    background-color: #f2f2f2;
+}
+
+
+.auditRecord table tbody tr td:first-child{
+     border-left: 1px solid #666666;
+}
+
+.auditRecord table tbody tr  .clea_bord{
+     border-left: none !important;
+}
+
+
+.copt-table-list{
+    padding:30px 20px;
+    border:1px solid #cecece;
+    border-top:none;
+}
+
+.my-copt-table{
+    border:1px solid #cecece !important;
+}
+
+.my-copt-table tr td{
+    border:1px solid #cecece;
+    border-bottom:none;
+    border-left:none;
+}
+
+.my-copt-table tr td.border-right{
+    border-right: none;
+}
+.border-right a.btn{
+    padding:2px 10px;
+}
+.border-right a.btn:hover{
+    background: #df4526;
+    color:#fff !important;
+    border:1px solid #fff !important;
+}

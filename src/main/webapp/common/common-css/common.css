@@ -1,0 +1,36 @@
+
+
+/*------------------------公用页面重置样式-----------------*/
+
+
+*{
+	margin:0;
+	padding: 0;
+	font-family: "microsoft yahei";
+}
+
+li{
+	list-style: none;
+}
+
+a{
+	text-decoration: none;
+	font-size: 14px;
+}
+
+img{
+	border: none;
+}
+
+button:hover,img:hover{
+	outline: none;
+	border: none;
+}
+
+textarea{
+	resize: none !important;
+}
+
+.project-template-container{
+	max-width: 1270px;
+}

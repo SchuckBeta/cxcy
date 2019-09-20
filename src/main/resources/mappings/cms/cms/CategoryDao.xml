@@ -1,0 +1,732 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.cms.modules.cms.dao.CategoryDao">
+
+	<sql id="cmsCategoryDaoColumns">
+		a.id AS "id",
+		a.tenant_id AS "tenantId",
+		a.parent_id AS "parentId",
+		a.parent_ids AS "parentIds",
+		a.module AS "module",
+		a.name AS "name",
+		a.site_id AS "site.id",
+		a.href AS "href",
+		a.is_newtab AS "isNewtab",
+		a.is_show AS "isShow",
+		a.sort AS "sort",
+		a.is_Sys AS "isSys",
+		a.publishCategory AS "publishCategory",
+		a.show_modes AS "showModes",
+		a.contenttype AS "contenttype",
+		a.allow_comment AS "allowComment",
+		a.is_audit AS "isAudit",
+		a.is_contentstatic AS "isContentstatic",
+		a.likes AS "likes",
+		a.description AS "description",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.ltype AS "ltype",
+		c.name AS "parent.name",
+		<!-- c.view_config AS "parent.viewConfig", -->
+		<!-- o.name AS "office.name", -->
+ 		s.theme AS "site.theme"
+	</sql>
+
+	<sql id="cmsCategoryDaoJoins">
+	    LEFT JOIN cms_category c ON c.id = a.parent_id
+		LEFT JOIN sys_user u ON u.id = a.create_by
+		LEFT JOIN cms_site s ON a.site_id = s.id
+	</sql>
+
+	<select id="get" resultType="Category">
+		SELECT
+			a.id AS "id",
+			a.parent_id AS "parentId",
+			a.parent_ids AS "parentIds",
+			a.module AS "module",
+			a.name AS "name",
+			a.site_id AS "site.id",
+			a.href AS "href",
+			a.is_newtab AS "isNewtab",
+			a.is_show AS "isShow",
+			a.publishCategory AS "publishCategory",
+			a.sort AS "sort",
+			a.is_Sys AS "isSys",
+			a.show_modes AS "showModes",
+			a.contenttype AS "contenttype",
+			a.allow_comment AS "allowComment",
+			a.is_audit AS "isAudit",
+			a.is_contentstatic AS "isContentstatic",
+			a.likes AS "likes",
+			a.description AS "description",
+			a.create_by AS "createBy.id",
+			a.create_date AS "createDate",
+			a.update_by AS "updateBy.id",
+			a.update_date AS "updateDate",
+			a.del_flag AS "delFlag",
+			a.ltype AS "ltype"
+		FROM cms_category a
+				 LEFT JOIN sys_user u ON u.id = a.create_by
+		WHERE
+			a.id  = #{id}
+
+
+	</select>
+
+	<select id="getByPublishCategory" resultType="Category">
+		SELECT
+			a.id AS "id",
+			a.parent_id AS "parentId",
+			a.parent_ids AS "parentIds",
+			a.module AS "module",
+			a.name AS "name",
+			a.site_id AS "site.id",
+			a.href AS "href",
+			a.is_newtab AS "isNewtab",
+			a.is_show AS "isShow",
+			a.publishCategory AS "publishCategory",
+			a.sort AS "sort",
+			a.is_Sys AS "isSys",
+			a.show_modes AS "showModes",
+			a.contenttype AS "contenttype",
+			a.allow_comment AS "allowComment",
+			a.is_audit AS "isAudit",
+			a.is_contentstatic AS "isContentstatic",
+			a.likes AS "likes",
+			a.description AS "description",
+			a.create_by AS "createBy.id",
+			a.create_date AS "createDate",
+			a.update_by AS "updateBy.id",
+			a.update_date AS "updateDate",
+			a.ltype AS "ltype",
+			a.del_flag AS "delFlag"
+		FROM cms_category a
+				 LEFT JOIN sys_user u ON u.id = a.create_by
+		WHERE
+			a.publishCategory  = #{publishCategory}
+			and a.site_id = #{site.id}
+			and a.del_flag = 0
+
+	</select>
+
+	<select id="findCategoryByTenantId" resultType="Category">
+		SELECT
+		a.id AS "id",
+		a.parent_id AS "parentId",
+		a.parent_ids AS "parentIds",
+		a.module AS "module",
+		a.name AS "name",
+		a.site_id AS "site.id",
+		a.href AS "href",
+		a.is_newtab AS "isNewtab",
+		a.is_show AS "isShow",
+		a.publishCategory AS "publishCategory",
+		a.sort AS "sort",
+		a.is_Sys AS "isSys",
+		a.show_modes AS "showModes",
+		a.contenttype AS "contenttype",
+		a.allow_comment AS "allowComment",
+		a.is_audit AS "isAudit",
+		a.is_contentstatic AS "isContentstatic",
+		a.likes AS "likes",
+		a.description AS "description",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.ltype AS "ltype",
+		a.del_flag AS "delFlag"
+		FROM cms_category a
+		LEFT JOIN sys_user u ON u.id = a.create_by
+		<where>
+			a.del_flag ='0' and  a.id  = #{parentId}
+			<if test="useCorpModel">
+				AND a.tenant_id  = #{tenantId}
+			</if>
+		</where>
+
+
+	</select>
+
+
+	<select id="getListBySiteId" resultType="Category">
+		SELECT
+			a.id AS "id",
+			a.parent_id AS "parentId",
+			a.parent_ids AS "parentIds",
+			a.module AS "module",
+			a.name AS "name",
+			a.site_id AS "site.id",
+			a.href AS "href",
+			a.is_newtab AS "isNewtab",
+			a.is_show AS "isShow",
+			a.publishCategory AS "publishCategory",
+			a.sort AS "sort",
+			a.is_Sys AS "isSys",
+			a.show_modes AS "showModes",
+			a.contenttype AS "contenttype",
+			a.allow_comment AS "allowComment",
+			a.is_audit AS "isAudit",
+			a.is_contentstatic AS "isContentstatic",
+			a.likes AS "likes",
+			a.description AS "description",
+			a.create_by AS "createBy.id",
+			a.create_date AS "createDate",
+			a.update_by AS "updateBy.id",
+			a.update_date AS "updateDate",
+		a.ltype AS "ltype",
+			a.del_flag AS "delFlag"
+		FROM cms_category a
+		<include refid="cmsCategoryDaoJoins"/>
+		<where>
+			a.del_flag ='0' AND a.site_id  = #{site.id}
+		</where>
+	</select>
+
+
+
+
+	<select id="find" resultType="Category">
+		SELECT
+			<include refid="cmsCategoryDaoJoins"/>
+		FROM cms_category a
+		<include refid="cmsCategoryDaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findCategoryByTenantAndName" resultType="Category">
+		SELECT
+		a.id AS "id",
+		a.tenant_id AS "tenantId",
+		a.parent_id AS "parentId",
+		a.parent_ids AS "parentIds",
+		a.module AS "module",
+		a.name AS "name",
+		a.site_id AS "site.id",
+		a.href AS "href",
+		a.is_newtab AS "isNewtab",
+		a.is_show AS "isShow",
+		a.publishCategory AS "publishCategory",
+		a.sort AS "sort",
+		a.is_Sys AS "isSys",
+		a.show_modes AS "showModes",
+		a.contenttype AS "contenttype",
+		a.allow_comment AS "allowComment",
+		a.is_audit AS "isAudit",
+		a.is_contentstatic AS "isContentstatic",
+		a.likes AS "likes",
+		a.description AS "description",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.ltype AS "ltype",
+		a.del_flag AS "delFlag"
+		FROM cms_category a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.tenant_id  = #{tenantId}
+			AND a.name=#{name}
+			<if test="site != null and site.id != null and site.id != ''">
+				AND a.site_id  = #{site.id}
+			</if>
+		</where>
+
+	</select>
+	<select id="findListByTenant" resultType="Category">
+		SELECT
+	a.id AS "id",
+		a.tenant_id AS "tenantId",
+	a.parent_id AS "parentid",
+	a.parent_ids AS "parentids",
+	a.module AS "module",
+	a. NAME AS "name",
+	a.site_id AS "site.id",
+	a.href AS "href",
+	a.is_newtab AS "isnewtab",
+	a.is_show AS "isshow",
+	a.sort AS "sort",
+	a.is_sys AS "issys",
+	a.publishcategory AS "publishcategory",
+	a.show_modes AS "showmodes",
+	a.contenttype AS "contenttype",
+	a.allow_comment AS "allowcomment",
+	a.is_audit AS "isaudit",
+	a.is_contentstatic AS "iscontentstatic",
+	a.likes AS "likes",
+	a.description AS "description",
+	a.create_by AS "createby.id",
+	a.create_date AS "createdate",
+	a.update_by AS "updateby.id",
+	a.update_date AS "updatedate",
+	a.del_flag AS "delflag",
+		a.ltype AS "ltype",
+	c. NAME AS "parent.name",
+	s.theme AS "site.theme"
+FROM
+	cms_category a
+LEFT JOIN cms_category c ON c.id = a.parent_id
+LEFT JOIN sys_user u ON u.id = a.create_by
+LEFT JOIN cms_site s ON a.site_id = s.id
+		<where>
+		a.del_flag = #{delFlag}
+			<if test="useCorpModel">
+				AND a.tenant_id  = #{tenantId}
+			</if>
+		</where>
+ORDER BY
+	a.sort
+
+	</select>
+
+
+	<select id="findList" resultType="Category">
+		SELECT
+			<include refid="cmsCategoryDaoColumns"/>
+		FROM cms_category a
+		<include refid="cmsCategoryDaoJoins"/>
+		<where>
+			a.del_flag = #{delFlag} and s.is_currentsite = 1
+			<if test="site != null and site.id != null and site.id != ''">
+				AND a.site_id  = #{site.id}
+			</if>
+
+			<if test="isShow != null ">
+				AND a.is_show  = #{isShow}
+			</if>
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id  = #{parent.id}
+			</if>
+			<if test="module!=null and module!=''">
+				AND a.module = #{module}
+			</if>
+			<if test="publishCategory!=null and publishCategory!=''">
+				AND a.publishCategory = #{publishCategory}
+			</if>
+			${sqlMap.dsf}
+		</where>
+			ORDER BY a.sort
+	</select>
+
+	<select id="findModule" resultType="Category">
+		SELECT
+			<include refid="cmsCategoryDaoColumns"/>
+		FROM cms_category a
+		<include refid="cmsCategoryDaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="site != null and site.id != null and site.id != ''">
+				AND a.site_id  = #{site.id}
+			</if>
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id  = #{parent.id}
+			</if>
+			<!-- <if test="inMenu != null and inMenu != '' ">
+				AND a.in_menu  = #{inMenu}
+			</if> -->
+			${sqlMap.dsf}
+		</where>
+			ORDER BY a.site_id,a.sort ASC
+	</select>
+
+	<select id="findAllList" resultType="Category">
+		SELECT
+			<include refid="cmsCategoryDaoColumns"/>
+		FROM cms_category a
+		<include refid="cmsCategoryDaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		<selectKey resultType="String" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		INSERT INTO cms_category(
+			parent_id,
+			parent_ids,
+			name,
+			module,
+			site_id,
+			href,
+			is_newtab,
+			is_show,
+			sort,
+			is_sys,
+			show_modes,
+			contenttype,
+			allow_comment,
+			is_audit,
+			is_contentstatic,
+			likes,
+			publishCategory,
+			description,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+		ltype
+		) VALUES (
+			#{parentId},
+			#{parentIds},
+			#{name},
+			#{module},
+			#{site.id},
+			#{href},
+			#{isNewtab},
+			#{isShow},
+			#{sort},
+			#{isSys},
+			#{showModes},
+			#{contenttype},
+			#{allowComment},
+			#{isAudit},
+			#{isContentstatic},
+			#{likes},
+			#{publishCategory},
+			#{description},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+		#{ltype}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE cms_category SET
+
+
+
+		<if test="parentId!=null and parentId!=''">
+			parent_id = #{parentId},
+		</if>
+		<if test="parentIds!=null and parentIds!=''">
+			parent_ids = #{parentIds},
+		</if>
+		<if test="name!=null and name!=''">
+			name = #{name},
+		</if>
+		<if test="module!=null and module!=''">
+			module = #{module},
+		</if>
+		<if test="href!=null">
+			href = #{href},
+		</if>
+		<if test="isNewtab!=null ">
+			is_newtab = #{isNewtab},
+		</if>
+		<if test="isShow!=null ">
+			is_show = #{isShow},
+		</if>
+		<if test="publishCategory!=null ">
+			publishCategory = #{publishCategory},
+		</if>
+		<if test="sort!=null and sort!=''">
+			sort = #{sort},
+		</if>
+		<if test="showModes!=null">
+			show_modes = #{showModes},
+		</if>
+
+		<if test="contenttype!=null and contenttype!=''">
+			contenttype = #{contenttype},
+		</if>
+		<if test="allowComment!=null">
+			allow_comment = #{allowComment},
+		</if>
+		<if test="isAudit!=null ">
+			is_audit = #{isAudit},
+		</if>
+
+		<if test="isContentstatic!=null ">
+			is_contentstatic = #{isContentstatic},
+		</if>
+		<if test="isAudit!=null ">
+			is_audit = #{isAudit},
+		</if>
+		<if test="ltype!=null ">
+			ltype = #{ltype},
+		</if>
+		description = #{description},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<insert id="saveList">
+		INSERT INTO cms_category(
+		parent_id,
+		parent_ids,
+		name,
+		module,
+		site_id,
+		href,
+		is_newtab,
+		is_show,
+		sort,
+		show_modes,
+		contenttype,
+		allow_comment,
+		is_audit,
+		is_contentstatic,
+		likes,
+		publishCategory,
+		description,
+		create_by,
+		create_date,
+		update_by,
+		update_date,
+		del_flag,
+		ltype
+		) VALUES
+		<foreach collection="cmsCategoryList" item="item" index="index"
+				 separator=",">
+			(
+			#{item.parentId},
+			#{item.parentIds},
+			#{item.name},
+			#{item.module},
+			#{item.site.id},
+			#{item.href},
+			#{item.isNewtab},
+			#{item.isShow},
+			#{item.sort},
+			#{item.showModes},
+			#{item.contenttype},
+			#{item.allowComment},
+			#{item.isAudit},
+			#{item.isContentstatic},
+			#{item.likes},
+			#{item.publishCategory},
+			#{item.description},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.delFlag},
+			#{item.ltype}
+			)
+		</foreach>
+	</insert>
+
+	<update id="updateOrder" parameterType="java.util.List">
+		UPDATE cms_category
+		<trim prefix="set" suffixOverrides=",">
+		<trim prefix="sort =case" suffix="end,">
+			<foreach item="item" collection="cmsCategoryList" index="index">
+				when id=#{item.id} then #{item.sort}
+			</foreach>
+		</trim>
+	</trim>
+		WHERE id in
+		<foreach item="item" collection="cmsCategoryList" separator="," open="("
+				 close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="updateList" parameterType="java.util.List">
+		UPDATE cms_category
+		<trim prefix="set" suffixOverrides=",">
+		<trim prefix="parent_id =case" suffix="end,">
+			<foreach item="item" collection="cmsCategoryList" index="index">
+				when id=#{item.id} then #{item.parentId}
+			</foreach>
+		</trim>
+	</trim>
+		WHERE id in
+		<foreach item="item" collection="cmsCategoryList" separator="," open="("
+				 close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="updateShow">
+		update cms_category set is_show = #{isShow} where id=#{id}
+	</update>
+
+	<update id="updateParentIds">
+		UPDATE cms_category SET
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE cms_category SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE
+					<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
+					<if test="dbName == 'mssql'">'%,'+#{id}+',%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+	</update>
+
+	<update id="delBySiteId">
+		UPDATE cms_category SET
+		del_flag = '1'
+		WHERE site_id = #{siteId}
+	</update>
+
+	<update id="delByTenantId">
+		UPDATE cms_category SET
+		del_flag = '1'
+		WHERE tenant_id = #{tenantId}
+	</update>
+
+	<select id="findByParentIdAndSiteId" resultType="Category">
+		SELECT
+			<include refid="cmsCategoryDaoColumns"/>
+		FROM cms_category a
+		<include refid="cmsCategoryDaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test=" site != null">
+				<if test=" site.id != null and site.id != ''">
+					AND a.site_id  = #{site.id}
+				</if>
+			</if>
+			<if test="parent.id != null and parent.id != ''">
+				AND a.parent_id  = #{parent.id}
+			</if>
+		</where>
+		order by a.sort
+	</select>
+
+	<select id="getByParentId" resultType="Category">
+		SELECT
+			<include refid="cmsCategoryDaoColumns"/>
+		FROM cms_category a
+		<include refid="cmsCategoryDaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="parent.id != null and parent.id != ''">
+				AND a.parent_id  = #{parent.id}
+			</if>
+		</where>
+		order by a.site_id, a.sort
+	</select>
+
+	<select id="getCategoryByName" resultType="Category">
+		SELECT
+			<include refid="cmsCategoryDaoColumns"/>
+		FROM cms_category a
+		<include refid="cmsCategoryDaoJoins"/>
+		<where>
+			a.del_flag = '0'
+			AND a.name  = #{name}
+		</where>
+		order by a.create_date DESC
+		limit 1
+	</select>
+
+	<select id="getByIdAndType" resultType="Category">
+			SELECT
+				<include refid="cmsCategoryDaoColumns"/>
+			FROM cms_category a
+			<include refid="cmsCategoryDaoJoins"/>
+			<where>
+				a.del_flag = '0'
+				AND a.site_id  = #{siteId}
+				AND a.publishCategory  = #{type}
+			</where>
+		</select>
+
+
+	<select id="findByParentIdsLike" resultType="Category">
+		SELECT
+			<include refid="cmsCategoryDaoColumns"/>
+		FROM cms_category a
+		<include refid="cmsCategoryDaoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and s.is_currentsite = 1
+			AND a.parent_ids LIKE
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{parentIds}, '%')</if>
+
+			<!-- <if test="inMenu != null and inMenu != ''">
+				AND a.in_menu  = #{inMenu}
+			</if> -->
+			<if test="module != null and module != ''">
+				AND a.module  = #{module}
+			</if>
+			<if test="isShow != null and isShow != ''">
+				AND a.is_show  = #{isShow}
+			</if>
+
+
+			<!-- <if test="office != null">
+				<if test="office.id != null and office.id != ''">
+					AND a.office_id  = #{office.id}
+				</if>
+			</if> -->
+		</where>
+		order by  a.sort
+	</select>
+
+	<select id="findStats" resultType="java.util.Map" parameterType="java.util.Map">
+		select max(c.id) as categoryId,
+		       max(c.name) as name,
+		       max(cp.id) as categoryParentId,
+		       max(cp.name) as categoryParentName,
+		       count(*) as cnt,
+		       sum(a.hits) as hits,
+		       max(a.updateDate) as updateDate
+		       <!-- ,
+		       max(o.id) as officeId,
+		       max(o.name) as officeName, -->
+		  from cms_article a
+		  JOIN cms_category c ON c.id = a.category_id
+		  JOIN cms_category cp ON c.parent_id = cp.id
+		  <!-- JOIN sys_office o ON o.id = c.office_id -->
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.category_id
+			AND c.site_id =
+			AND c.id = :id or c.parent_ids LIKE
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{parentIds}, '%')</if>
+			group by cp.sort, cp.id, c.sort, c.id
+			order by cp.sort, cp.id, c.sort, c.id
+		</where>
+	</select>
+
+	<select id="getProCategoryByActywId" resultType="Dict">
+		select s.* from sys_dict s
+		where s.type='project_type' and s.del_flag='0' and FIND_IN_SET(s.value ,(select t.pro_category from pro_project t
+		left join act_yw a on t.id=a.rel_id
+		where a.id=#{actywId}))
+	</select>
+
+	<update id="updateHref">
+		UPDATE cms_category SET
+			href = #{href}
+		WHERE id = #{id}
+	</update>
+</mapper>

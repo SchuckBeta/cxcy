@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.interactive.dao.SysCommentDao">
+
+	<sql id="sysCommentColumns">
+		a.id AS "id",
+		a.likes AS "likes",
+		a.foreign_id AS
+		"foreignId",
+		a.content AS "content",
+		a.user_id AS "userId",
+		a.ip AS
+		"ip",
+		a.create_date AS "createDate",
+		a.audit_state AS "auditState",
+		a.audit_user_id AS "auditUserId",
+		a.audit_date AS "auditDate",
+		a.del_flag AS "delFlag",
+		u5.name AS "user.name"
+	</sql>
+
+	<sql id="sysCommentJoins">
+		LEFT JOIN sys_user u5 ON u5.id = a.user_id
+	</sql>
+
+	<select id="get" resultType="SysComment">
+		SELECT
+		<include refid="sysCommentColumns" />
+		FROM sys_comment a
+		<include refid="sysCommentJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SysComment">
+		SELECT
+		<include refid="sysCommentColumns" />
+		FROM sys_comment a
+		<include refid="sysCommentJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysComment">
+		SELECT
+		<include refid="sysCommentColumns" />
+		FROM sys_comment a
+		<include refid="sysCommentJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_comment(
+		id,
+		likes,
+		foreign_id,
+		content,
+		user_id,
+		ip,
+		create_date,
+		audit_state,
+		audit_user_id,
+		audit_date,
+		del_flag
+		)
+		VALUES (
+		#{id},
+		#{likes},
+		#{foreignId},
+		#{content},
+		#{userId},
+		#{ip},
+		#{createDate},
+		#{auditState},
+		#{auditUserId},
+		#{auditDate},
+		#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_comment SET
+		likes = #{likes},
+		foreign_id =
+		#{foreignId},
+		content = #{content},
+		user_id = #{userId},
+		ip = #{ip},
+		audit_state = #{auditState},
+		audit_user_id = #{auditUserId},
+		audit_date
+		= #{auditDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_comment SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<insert id="insertBatch" parameterType="java.util.List">
+		INSERT INTO sys_comment(
+		id,
+		likes,
+		foreign_id,
+		content,
+		user_id,
+		ip,
+		create_date,
+		audit_state,
+		audit_user_id,
+		audit_date,
+		del_flag
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.id},
+			#{item.likes},
+			#{item.foreignId},
+			#{item.content},
+			#{item.userId},
+			#{item.ip},
+			#{item.createDate},
+			#{item.auditState},
+			#{item.auditUserId},
+			#{item.auditDate},
+			#{item.delFlag})
+		</foreach>
+	</insert>
+	<update id="updateLikes" parameterType="java.util.Map">
+		UPDATE sys_comment SET likes = CASE id
+		<foreach collection="param.keys" item="key" separator=" ">
+			WHEN
+			#{key} THEN ifnull(likes,0)+#{param[${key}]}
+		</foreach>
+		END
+		where id in
+		<foreach collection="param.keys" item="key" open="(" separator="," close=")">
+			#{key}
+		</foreach>
+	</update>
+	<select id="getMyComments" resultType="java.lang.Integer">
+		select count(1) from
+		sys_comment t where t.foreign_id=#{fid} and t.user_id=#{uid} and
+		t.del_flag='0'
+	</select>
+	<select id="getPageList" resultType="java.util.HashMap">
+		select u.photo,u.name,ifnull(st.is_open,te.is_open) is_open,
+		date_format(t.create_date,'%Y-%m-%d %H:%i:%s')
+		create_date,t.likes,t.content,t.id,ifnull(st.id,te.id) user_id,(case when st.user_id is null then '2' else '1' end) user_type
+		from sys_comment t
+		left join sys_user u on t.user_id=u.id
+		left join sys_student_expansion st on u.id=st.user_id
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=u.id and sr.biz_type='1' and sr.del_flag='0'
+				)
+		and st.del_flag='0'
+		left join sys_teacher_expansion te on u.id=te.user_id
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=u.id and sr.biz_type='2' and sr.del_flag='0'
+				)
+		and te.del_flag='0'
+		where t.del_flag='0' and t.audit_state='1' and t.foreign_id=#{foreignId}
+		<if test="userid != null and userid !='' ">
+		and t.user_id=#{userid}
+		</if>
+		order by t.likes desc,t.create_date limit
+		#{offset},#{pageSize}
+	</select>
+</mapper>

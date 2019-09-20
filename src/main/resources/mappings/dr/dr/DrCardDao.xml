@@ -1,0 +1,1250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.dr.modules.dr.dao.DrCardDao">
+	<resultMap id="drCardBygErspacesMap" type="com.oseasy.dr.modules.dr.entity.DrCard">
+		<id property="id" column="id" />
+		<result property="no" column="no" />
+		<result property="password" column="password" />
+		<result property="isExpiry" column="isExpiry"/>
+		<result property="expiry" column="expiry"/>
+		<result property="status" column="status" />
+		<result property="dealStatus" column="dealStatus" />
+		<result property="dealVersion" column="dealVersion" />
+		<result property="openTimes" column="openTimes" />
+		<result property="privilege" column="privilege" />
+		<result property="holidayUse" column="holidayUse" />
+		<result property="warnning" column="warnning" />
+		<result property="isCancel" column="isCancel" />
+		<result property="cardType" column="cardType" />
+		<result property="tmpNo" column="tmpNo" />
+		<result property="tmpName" column="tmpName" />
+		<result property="tmpTel" column="tmpTel" />
+		<result property="tmpSex" column="tmpSex" />
+		<result property="tmpOffice" column="tmpOffice" />
+		<result property="tmpOfficeBm" column="tmpOfficeBm" />
+		<result property="tmpOfficeXy" column="tmpOfficeXy" />
+		<result property="tmpOfficeZy" column="tmpOfficeZy" />
+		<result property="tmpOfficeXyId" column="tmpOfficeXyId" />
+		<result property="tmpOfficeZyId" column="tmpOfficeZyId" />
+		<result property="tmpOfficeBj" column="tmpOfficeBj" />
+		<result property="user.id" column="user.id" />
+		<result property="user.name" column="user.name" />
+
+		<collection property="erspaces" ofType="DrEquipmentRspace">
+			<id property="id" column="erspaces.id" />
+			<result property="status" column="erspaces.status" />
+			<result property="version" column="erspaces.version" />
+			<result property="epment.id" column="erspaces.epment.id" />
+			<result property="rspType" column="erspaces.rspType" />
+			<result property="rspace" column="erspaces.rspace" />
+			<result property="drNo" column="erspaces.drNo" />
+			<result property="epment.no" column="erspaces.epment.no" />
+			<result property="epment.name" column="erspaces.epment.name" />
+			<result property="epment.psw" column="erspaces.epment.psw" />
+			<result property="epment.ip" column="erspaces.epment.ip" />
+			<result property="epment.type" column="erspaces.epment.type" />
+			<result property="epment.port" column="erspaces.epment.port" />
+			<result property="epment.drNo" column="erspaces.epment.drNo" />
+			<result property="epment.tindex" column="erspaces.epment.tindex" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="drCardUserByErspacesMap" type="com.oseasy.dr.modules.dr.entity.DrCard">
+		<id property="id" column="id" />
+		<result property="no" column="no" />
+		<result property="password" column="password" />
+		<result property="isExpiry" column="isExpiry"/>
+		<result property="expiry" column="expiry"/>
+		<result property="status" column="status" />
+		<result property="dealStatus" column="dealStatus" />
+		<result property="dealVersion" column="dealVersion" />
+		<result property="openTimes" column="openTimes" />
+		<result property="privilege" column="privilege" />
+		<result property="holidayUse" column="holidayUse" />
+		<result property="warnning" column="warnning" />
+		<result property="isCancel" column="isCancel" />
+		<result property="cardType" column="cardType" />
+		<result property="tmpNo" column="tmpNo" />
+		<result property="tmpName" column="tmpName" />
+		<result property="tmpTel" column="tmpTel" />
+		<result property="tmpSex" column="tmpSex" />
+		<result property="tmpOffice" column="tmpOffice" />
+		<result property="tmpOfficeBm" column="tmpOfficeBm" />
+		<result property="tmpOfficeXy" column="tmpOfficeXy" />
+		<result property="tmpOfficeZy" column="tmpOfficeZy" />
+		<result property="tmpOfficeBj" column="tmpOfficeBj" />
+		<result property="tmpOfficeXyId" column="tmpOfficeXyId" />
+		<result property="tmpOfficeZyId" column="tmpOfficeZyId" />
+		<result property="user.id" column="user.id" />
+		<result property="user.name" column="user.name" />
+		<result property="user.no" column="user.no" />
+		<result property="user.sex" column="user.sex" />
+		<result property="user.email" column="user.email" />
+		<result property="user.mobile" column="user.mobile" />
+		<result property="user.phone" column="user.phone" />
+		<result property="user.loginName" column="user.loginName" />
+		<result property="user.updateDate" column="user.updateDate" />
+		<result property="user.delFlag" column="user.delFlag" />
+		<result property="user.company.id" column="user.company.id" />
+		<result property="user.office.id" column="user.office.id" />
+		<result property="user.office.name" column="user.office.name" />
+	</resultMap>
+
+	<resultMap id="drCardUserBygErspacesMap" type="com.oseasy.dr.modules.dr.entity.DrCard">
+		<id property="id" column="id" />
+		<result property="no" column="no" />
+		<result property="password" column="password" />
+		<result property="isExpiry" column="isExpiry"/>
+		<result property="expiry" column="expiry"/>
+		<result property="status" column="status" />
+		<result property="dealStatus" column="dealStatus" />
+		<result property="dealVersion" column="dealVersion" />
+		<result property="openTimes" column="openTimes" />
+		<result property="privilege" column="privilege" />
+		<result property="holidayUse" column="holidayUse" />
+		<result property="warnning" column="warnning" />
+		<result property="isCancel" column="isCancel" />
+		<result property="cardType" column="cardType" />
+		<result property="tmpNo" column="tmpNo" />
+		<result property="tmpName" column="tmpName" />
+		<result property="tmpTel" column="tmpTel" />
+		<result property="tmpSex" column="tmpSex" />
+		<result property="tmpOffice" column="tmpOffice" />
+		<result property="tmpOfficeBm" column="tmpOfficeBm" />
+		<result property="tmpOfficeXy" column="tmpOfficeXy" />
+		<result property="tmpOfficeZy" column="tmpOfficeZy" />
+		<result property="tmpOfficeBj" column="tmpOfficeBj" />
+		<result property="tmpOfficeXyId" column="tmpOfficeXyId" />
+		<result property="tmpOfficeZyId" column="tmpOfficeZyId" />
+		<result property="user.id" column="user.id" />
+		<result property="user.name" column="user.name" />
+		<result property="user.no" column="user.no" />
+		<result property="user.sex" column="user.sex" />
+		<result property="user.email" column="user.email" />
+		<result property="user.mobile" column="user.mobile" />
+		<result property="user.phone" column="user.phone" />
+		<result property="user.loginName" column="user.loginName" />
+		<result property="user.updateDate" column="user.updateDate" />
+		<result property="user.delFlag" column="user.delFlag" />
+		<result property="user.company.id" column="user.company.id" />
+		<result property="user.office.id" column="user.office.id" />
+		<result property="user.office.name" column="user.office.name" />
+
+		<collection property="erspaces" ofType="DrEquipmentRspace">
+			<id property="id" column="erspaces.id" />
+			<result property="status" column="erspaces.status" />
+			<result property="version" column="erspaces.version" />
+			<result property="epment.id" column="erspaces.epment.id" />
+			<result property="rspType" column="erspaces.rspType" />
+			<result property="rspace" column="erspaces.rspace" />
+			<result property="drNo" column="erspaces.drNo" />
+			<result property="epment.no" column="erspaces.epment.no" />
+			<result property="epment.name" column="erspaces.epment.name" />
+			<result property="epment.psw" column="erspaces.epment.psw" />
+			<result property="epment.ip" column="erspaces.epment.ip" />
+			<result property="epment.type" column="erspaces.epment.type" />
+			<result property="epment.port" column="erspaces.epment.port" />
+			<result property="epment.drNo" column="erspaces.epment.drNo" />
+			<result property="epment.tindex" column="erspaces.epment.tindex" />
+		</collection>
+	</resultMap>
+
+	<sql id="drCardColumns">
+		a.id AS "id",
+		a.uid AS "user.id",
+		a.no AS "no",
+		a.password AS "password",
+		(a.expiry <![CDATA[  >= ]]> now()) AS "isExpiry",
+		a.expiry AS "expiry",
+		a.status AS "status",
+		a.deal_status AS "dealStatus",
+		a.deal_version AS "dealVersion",
+		a.open_times AS "openTimes",
+		a.privilege AS "privilege",
+		a.holiday_use AS "holidayUse",
+		a.warnning AS "warnning",
+		a.is_cancel AS "isCancel",
+		a.card_type AS "cardType",
+		a.tmp_no AS "tmpNo",
+		a.tmp_name AS "tmpName",
+		a.tmp_tel AS "tmpTel",
+		a.tmp_sex AS "tmpSex",
+		a.tmp_office AS "tmpOffice",
+		a.tmp_office_bm AS "tmpOfficeBm",
+		a.tmp_office_xy AS "tmpOfficeXy",
+		a.tmp_office_zy AS "tmpOfficeZy",
+		a.tmp_office_xyid AS "tmpOfficeXyId",
+		a.tmp_office_zyid AS "tmpOfficeZyId",
+		a.tmp_office_bj AS "tmpOfficeBj",
+		u.name AS "user.name"
+	</sql>
+
+	<sql id="drCardBygErspacesColumns">
+		a.id AS "id",
+		a.uid AS "user.id",
+		a.no AS "no",
+		a.password AS "password",
+		(a.expiry <![CDATA[  >= ]]> now()) AS "isExpiry",
+		a.expiry AS "expiry",
+		a.status AS "status",
+		a.deal_status AS "dealStatus",
+		a.deal_version AS "dealVersion",
+		a.open_times AS "openTimes",
+		a.privilege AS "privilege",
+		a.holiday_use AS "holidayUse",
+		a.warnning AS "warnning",
+		a.is_cancel AS "isCancel",
+		a.card_type AS "cardType",
+		a.tmp_no AS "tmpNo",
+		a.tmp_name AS "tmpName",
+		a.tmp_tel AS "tmpTel",
+		a.tmp_sex AS "tmpSex",
+		a.tmp_office AS "tmpOffice",
+		a.tmp_office_bm AS "tmpOfficeBm",
+		a.tmp_office_xy AS "tmpOfficeXy",
+		a.tmp_office_zy AS "tmpOfficeZy",
+		a.tmp_office_xyid AS "tmpOfficeXyId",
+		a.tmp_office_zyid AS "tmpOfficeZyId",
+		a.tmp_office_bj AS "tmpOfficeBj",
+		u.name AS "user.name",
+
+		ce.id AS "erspaces.id",
+		ce.status AS "erspaces.status",
+		ce.version AS "erspaces.version",
+		b.ept_id AS "erspaces.epment.id",
+		b.rsp_type AS "erspaces.rspType",
+		b.rspace_id AS "erspaces.rspace",
+		b.dr_no AS "erspaces.drNo",
+
+		c.no AS "erspaces.epment.no",
+		c.name AS "erspaces.epment.name",
+		c.psw AS "erspaces.epment.psw",
+		c.ip AS "erspaces.epment.ip",
+		c.type AS "erspaces.epment.type",
+		c.port AS "erspaces.epment.port",
+		c.dr_no AS "erspaces.epment.drNo",
+		c.tindex AS "erspaces.epment.tindex"
+	</sql>
+
+	<sql id="drCardUserByErspacesColumns">
+		DISTINCT(a.id) AS "id",
+		a.no AS "no",
+		a.password AS "password",
+		(a.expiry <![CDATA[  >= ]]> now()) AS "isExpiry",
+		a.expiry AS "expiry",
+		a.status AS "status",
+		a.deal_status AS "dealStatus",
+		a.deal_version AS "dealVersion",
+		a.open_times AS "openTimes",
+		a.privilege AS "privilege",
+		a.holiday_use AS "holidayUse",
+		a.warnning AS "warnning",
+		a.is_cancel AS "isCancel",
+		a.card_type AS "cardType",
+		a.tmp_no AS "tmpNo",
+		a.tmp_name AS "tmpName",
+		a.tmp_tel AS "tmpTel",
+		a.tmp_sex AS "tmpSex",
+		a.tmp_office AS "tmpOffice",
+		a.tmp_office_bm AS "tmpOfficeBm",
+		a.tmp_office_xy AS "tmpOfficeXy",
+		a.tmp_office_zy AS "tmpOfficeZy",
+		a.tmp_office_xyid AS "tmpOfficeXyId",
+		a.tmp_office_zyid AS "tmpOfficeZyId",
+		a.tmp_office_bj AS "tmpOfficeBj",
+		u.id AS "user.id",
+		u.no AS "user.no",
+		u.name AS "user.name",
+		u.sex AS "user.sex",
+		u.email AS "user.email",
+		u.mobile AS "user.mobile",
+		u.phone AS "user.phone",
+		u.company_id AS "user.company.id",
+		u.login_name AS "user.loginName",
+		u.office_id AS "user.office.id",
+		u.update_date AS "user.updateDate",
+		u.del_flag AS "user.delFlag",
+		o.name AS "user.office.name"
+	</sql>
+
+	<sql id="drCardUserBygErspacesColumns">
+		<include refid="drCardBygErspacesColumns"/>,
+		u.no AS "user.no",
+		u.sex AS "user.sex",
+		u.email AS "user.email",
+		u.mobile AS "user.mobile",
+		u.phone AS "user.phone",
+		u.company_id AS "user.company.id",
+		u.login_name AS "user.loginName",
+		u.office_id AS "user.office.id",
+		u.update_date AS "user.updateDate",
+		u.del_flag AS "user.delFlag",
+		o.name AS "user.office.name"
+	</sql>
+
+	<sql id="drCardJoins">
+		LEFT JOIN sys_user u ON u.id = a.uid
+	</sql>
+
+	<sql id="drCardBygErspacesJoins">
+        LEFT JOIN dr_card_erspace ce ON ce.card_id = a.id
+        LEFT JOIN dr_equipment_rspace b ON b.id = ce.erspace_id
+        LEFT JOIN dr_equipment c ON c.id = b.ept_id
+		LEFT JOIN sys_user u ON u.id = a.uid
+	</sql>
+
+	<select id="get" resultType="DrCard">
+		SELECT
+			<include refid="drCardColumns"/>
+		FROM dr_card a
+		<include refid="drCardJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByNo" resultType="DrCard">
+		SELECT
+			<include refid="drCardColumns"/>
+		FROM dr_card a
+		<include refid="drCardJoins"/>
+		WHERE a.no = #{no}
+	</select>
+
+	<select id="getByg" resultMap="drCardBygErspacesMap">
+		SELECT
+			<include refid="drCardBygErspacesColumns"/>
+		FROM dr_card a
+		<include refid="drCardBygErspacesJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="DrCard">
+		SELECT
+			<include refid="drCardColumns"/>
+		FROM dr_card a
+		<include refid="drCardJoins"/>
+		<where>
+			<if test="ids != null and ids.size >0">
+                  AND a.id IN
+                <foreach item="item" collection="ids" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="no != null and no != ''">
+				AND a.no LIKE
+					<if test="dbName == 'oracle'">'%'||#{no}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{no}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{no},'%')</if>
+			</if>
+			<if test="status != null">
+				AND a.status = #{status}
+			</if>
+			<if test="dealStatus != null and dealStatus != ''">
+				AND a.deal_status = #{dealStatus}
+			</if>
+			<if test="dealVersion != null and dealVersion != ''">
+				AND a.deal_version = #{dealVersion}
+			</if>
+			<if test="openTimes != null and openTimes != ''">
+				AND a.open_times = #{openTimes}
+			</if>
+			<if test="privilege != null and privilege != ''">
+				AND a.privilege = #{privilege}
+			</if>
+			<if test="warnning != null and warnning != ''">
+				AND a.warnning = #{warnning}
+			</if>
+			<if test="isCancel != null and isCancel != ''">
+				AND a.is_cancel = #{isCancel}
+			</if>
+			<if test="cardType != null and cardType != ''">
+				AND a.card_type = #{cardType}
+			</if>
+			<if test="tmpNo != null and tmpNo != ''">
+				AND a.tmp_no LIKE
+					<if test="dbName == 'oracle'">'%'||#{tmpNo}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{tmpNo}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{tmpNo},'%')</if>
+			</if>
+			<if test="tmpTel != null and tmpTel != ''">
+				AND a.tmp_tel = #{tmpTel}
+			</if>
+
+			<if test="holidayUse != null and holidayUse != ''">
+				AND a.holiday_use = #{holidayUse}
+			</if>
+			<if test="expiry != null and expiry != ''">
+				AND a.expiry <![CDATA[  >= ]]> #{expiry}
+			</if>
+			<if test="user != null">
+				<if test="user.id != null and user.id != ''">
+					AND a.uid = #{user.id}
+				</if>
+				<if test="user.name != null and user.name != ''">
+					AND (u.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+						OR a.tmp_name LIKE
+						<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+					)
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListCardByNameOrNOorMobile" resultType="DrCard">
+		SELECT
+			<include refid="drCardColumns"/>
+		FROM dr_card a
+		LEFT JOIN sys_user u ON u.id = a.uid
+		<where>
+			a.no = #{param}
+			OR a.tmp_no = #{param}
+			OR u.name = #{param}
+			OR u.no = #{param}
+			OR u.mobile = #{param}
+		</where>
+	</select>
+
+	<select id="findListByg" resultMap="drCardBygErspacesMap">
+		SELECT
+			<include refid="drCardBygErspacesColumns"/>
+		FROM dr_card a
+		<include refid="drCardBygErspacesJoins"/>
+		<where>
+			<if test="ids != null and ids.size >0">
+                  AND a.id IN
+                <foreach item="item" collection="ids" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="no != null and no != ''">
+				AND a.no LIKE
+					<if test="dbName == 'oracle'">'%'||#{no}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{no}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{no},'%')</if>
+			</if>
+			<if test="status != null">
+				AND a.status = #{status}
+			</if>
+			<if test="dealStatus != null and dealStatus != ''">
+				AND a.deal_status = #{dealStatus}
+			</if>
+			<if test="dealVersion != null and dealVersion != ''">
+				AND a.deal_version = #{dealVersion}
+			</if>
+			<if test="openTimes != null and openTimes != ''">
+				AND a.open_times = #{openTimes}
+			</if>
+			<if test="privilege != null and privilege != ''">
+				AND a.privilege = #{privilege}
+			</if>
+			<if test="warnning != null and warnning != ''">
+				AND a.warnning = #{warnning}
+			</if>
+			<if test="isCancel != null and isCancel != ''">
+				AND a.is_cancel = #{isCancel}
+			</if>
+			<if test="cardType != null and cardType != ''">
+				AND a.card_type = #{cardType}
+			</if>
+			<if test="tmpNo != null and tmpNo != ''">
+				AND a.tmp_no LIKE
+					<if test="dbName == 'oracle'">'%'||#{tmpNo}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{tmpNo}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{tmpNo},'%')</if>
+			</if>
+			<if test="tmpTel != null and tmpTel != ''">
+				AND a.tmp_tel = #{tmpTel}
+			</if>
+
+			<if test="holidayUse != null and holidayUse != ''">
+				AND a.holiday_use = #{holidayUse}
+			</if>
+			<if test="expiry != null and expiry != ''">
+				AND a.expiry <![CDATA[  >= ]]> #{expiry}
+			</if>
+			<if test="user != null">
+				<if test="user.id != null and user.id != ''">
+					AND a.uid = #{user.id}
+				</if>
+				<if test="user.name != null and user.name != ''">
+					AND (u.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+						OR a.tmp_name LIKE
+						<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+					)
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="DrCard">
+		SELECT
+			<include refid="drCardColumns"/>
+		FROM dr_card a
+		<include refid="drCardJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllListByg" resultMap="drCardBygErspacesMap">
+		SELECT
+			<include refid="drCardBygErspacesColumns"/>
+		FROM dr_card a
+		<include refid="drCardBygErspacesJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllUserList" resultType="User">
+		SELECT
+			u.id AS "user.id",
+			u.no AS "user.no",
+			u.name AS "user.name",
+			u.sex AS "user.sex",
+			u.email AS "user.email",
+			u.mobile AS "user.mobile",
+			u.phone AS "user.phone",
+			u.company_id AS "user.company.id",
+			u.login_name AS "user.loginName",
+			u.office_id AS "user.office.id",
+			u.update_date AS "user.updateDate",
+			u.del_flag AS "user.delFlag",
+			o.name AS "user.office.name"
+		FROM (
+			SELECT
+				DISTINCT(u3.id) AS "id",
+				u3.name AS "name",
+				u3.no AS "no",
+				u3.sex AS "sex",
+				u3.email AS "email",
+				u3.mobile AS "mobile",
+				u3.phone AS "phone",
+				u3.company_id AS "company_id",
+				u3.login_name AS "login_name",
+				u3.office_id AS "office_id",
+				u3.update_date AS "update_date",
+				u3.del_flag AS "del_flag"
+			FROM sys_user u3
+				LEFT JOIN team_user_relation tu ON tu.user_id = u3.id
+				LEFT JOIN team t ON t.id = tu.team_id
+				LEFT JOIN pw_enter_detail ed ON ed.rid = t.id
+				LEFT JOIN pw_enter e ON e.id = ed.eid
+				where u3.del_flag = '0' AND tu.id is not null  AND t.id is not null AND ed.id is not null AND ed.type = '0' AND e.id is not null AND e.status not in ('0', '20')
+			UNION ALL
+			SELECT
+				DISTINCT(u4.id) AS "id",
+				u4.name AS "name",
+				u4.no AS "no",
+				u4.sex AS "sex",
+				u4.email AS "email",
+				u4.mobile AS "mobile",
+				u4.phone AS "phone",
+				u4.company_id AS "company_id",
+				u4.login_name AS "login_name",
+				u4.office_id AS "office_id",
+				u4.update_date AS "update_date",
+				u4.del_flag AS "del_flag"
+			FROM sys_user u4
+				LEFT JOIN pw_enter e ON e.applicant = u4.id
+				LEFT JOIN pw_enter_detail ed ON ed.eid = e.id AND ed.type = '2'
+				where u4.del_flag = '0' AND e.id is not null AND ed.id is not null AND e.status not in ('0', '20')
+		) u
+        LEFT JOIN sys_office o ON o.id = u.office_id
+		<where>
+			u.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="office != null">
+				<if test="office.id != null and office.id != ''">
+					AND o.id = #{office.id}
+				</if>
+			</if>
+			<if test="no != null and no != ''">
+				AND u.no = #{no}
+			</if>
+			<if test="name != null and name != ''">
+				AND u.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY u.update_date DESC, ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY u.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findUserListNoCard" resultType="User">
+		SELECT
+			u.id AS "id",
+			u.no AS "no",
+			u.name AS "name",
+			u.sex AS "sex",
+			u.email AS "email",
+			u.mobile AS "mobile",
+			u.phone AS "phone",
+			u.company_id AS "company.id",
+			u.login_name AS "loginName",
+			u.office_id AS "office.id",
+			u.update_date AS "updateDate",
+			u.del_flag AS "delFlag",
+			o.name AS "office.name"
+		FROM (
+			SELECT
+				DISTINCT(u3.id) AS "id",
+				u3.name AS "name",
+				u3.no AS "no",
+				u3.sex AS "sex",
+				u3.email AS "email",
+				u3.mobile AS "mobile",
+				u3.phone AS "phone",
+				u3.company_id AS "company_id",
+				u3.login_name AS "login_name",
+				u3.office_id AS "office_id",
+				u3.update_date AS "update_date",
+				u3.del_flag AS "del_flag"
+			FROM sys_user u3
+				LEFT JOIN team_user_relation tu ON tu.user_id = u3.id
+				LEFT JOIN team t ON t.id = tu.team_id
+				LEFT JOIN pw_enter_detail ed ON ed.rid = t.id
+				LEFT JOIN pw_enter e ON e.id = ed.eid
+				where u3.del_flag = '0' AND tu.id is not null  AND t.id is not null AND ed.id is not null AND ed.type = '0' AND e.id is not null AND e.status not in ('0', '20')
+			UNION ALL
+			SELECT
+				DISTINCT(u4.id) AS "id",
+				u4.name AS "name",
+				u4.no AS "no",
+				u4.sex AS "sex",
+				u4.email AS "email",
+				u4.mobile AS "mobile",
+				u4.phone AS "phone",
+				u4.company_id AS "company_id",
+				u4.login_name AS "login_name",
+				u4.office_id AS "office_id",
+				u4.update_date AS "update_date",
+				u4.del_flag AS "del_flag"
+			FROM sys_user u4
+				LEFT JOIN pw_enter e ON e.applicant = u4.id
+				LEFT JOIN pw_enter_detail ed ON ed.eid = e.id AND ed.type = '2'
+				where u4.del_flag = '0' AND e.id is not null AND ed.id is not null AND e.status not in ('0', '20')
+		) u
+        LEFT JOIN sys_office o ON o.id = u.office_id
+        LEFT JOIN dr_card dr ON dr.uid = u.id
+		<where>
+			u.del_flag = #{DEL_FLAG_NORMAL} AND dr.status IN ('0')
+			<if test="office != null">
+				<if test="office.id != null and office.id != ''">
+					AND u.id = #{office.id}
+				</if>
+			</if>
+			<if test="no != null and no != ''">
+				AND u.no = #{no}
+			</if>
+			<if test="name != null and name != ''">
+				AND u.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND u.mobile = #{mobile}
+			</if>
+			<if test="qryStr != null and qryStr != ''">
+				AND (
+					u.name LIKE concat('%',#{qryStr},'%')
+					OR u.no like concat('%',#{qryStr},'%')
+					OR u.mobile LIKE concat('%',#{qryStr},'%')
+				)
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY u.update_date DESC, ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY u.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllUserListNoCard" resultType="User">
+		SELECT
+			u.id AS "id",
+			u.no AS "no",
+			u.name AS "name",
+			u.sex AS "sex",
+			u.email AS "email",
+			u.mobile AS "mobile",
+			u.phone AS "phone",
+			u.company_id AS "company.id",
+			u.login_name AS "loginName",
+			u.office_id AS "office.id",
+			u.update_date AS "updateDate",
+			u.del_flag AS "delFlag",
+			o.name AS "office.name"
+		FROM sys_user u
+        LEFT JOIN sys_office o ON o.id = u.office_id
+        LEFT JOIN dr_card dr ON dr.uid = u.id
+		<where>
+			u.del_flag = #{DEL_FLAG_NORMAL} AND dr.id IS NULL
+			<if test="office != null">
+				<if test="office.id != null and office.id != ''">
+					AND o.id = #{office.id}
+				</if>
+			</if>
+			<if test="no != null and no != ''">
+				AND u.no = #{no}
+			</if>
+			<if test="name != null and name != ''">
+				AND u.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND u.mobile = #{mobile}
+			</if>
+			<if test="qryStr != null and qryStr != ''">
+				AND (
+					u.name LIKE concat('%',#{qryStr},'%')
+					OR u.no like concat('%',#{qryStr},'%')
+					OR u.mobile LIKE concat('%',#{qryStr},'%')
+				)
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY u.update_date DESC, ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY u.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findUserListBy" resultMap="drCardUserByErspacesMap">
+		SELECT
+			<include refid="drCardUserByErspacesColumns"/>
+		FROM (
+			SELECT
+				DISTINCT(u3.id) AS "id",
+				u3.name AS "name",
+				u3.no AS "no",
+				u3.sex AS "sex",
+				u3.email AS "email",
+				u3.mobile AS "mobile",
+				u3.phone AS "phone",
+				u3.company_id AS "company_id",
+				u3.login_name AS "login_name",
+				u3.office_id AS "office_id",
+				u3.update_date AS "update_date",
+				u3.del_flag AS "del_flag"
+			FROM sys_user u3
+				LEFT JOIN team_user_relation tu ON tu.user_id = u3.id
+				LEFT JOIN team t ON t.id = tu.team_id
+				LEFT JOIN pw_enter_detail ed ON ed.rid = t.id
+				LEFT JOIN pw_enter e ON e.id = ed.eid
+				where u3.del_flag = '0' AND tu.id is not null  AND t.id is not null AND ed.id is not null AND ed.type = '0' AND e.id is not null AND e.status not in ('0', '20')
+			UNION ALL
+			SELECT
+				DISTINCT(u4.id) AS "id",
+				u4.name AS "name",
+				u4.no AS "no",
+				u4.sex AS "sex",
+				u4.email AS "email",
+				u4.mobile AS "mobile",
+				u4.phone AS "phone",
+				u4.company_id AS "company_id",
+				u4.login_name AS "login_name",
+				u4.office_id AS "office_id",
+				u4.update_date AS "update_date",
+				u4.del_flag AS "del_flag"
+			FROM sys_user u4
+				LEFT JOIN pw_enter e ON e.applicant = u4.id
+				LEFT JOIN pw_enter_detail ed ON ed.eid = e.id AND ed.type = '2'
+				where u4.del_flag = '0' AND e.id is not null AND ed.id is not null AND e.status not in ('0', '20')
+		) u
+		LEFT JOIN dr_card a ON u.id = a.uid
+        LEFT JOIN sys_office o ON o.id = u.office_id
+		<where>
+			u.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="ids != null and ids.size >0">
+                  AND a.id IN
+                <foreach item="item" collection="ids" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="no != null and no != ''">
+				AND a.no LIKE
+					<if test="dbName == 'oracle'">'%'||#{no}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{no}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{no},'%')</if>
+			</if>
+			<if test="status != null">
+				AND a.status = #{status}
+			</if>
+			<if test="dealStatus != null">
+				AND a.deal_status = #{dealStatus}
+			</if>
+			<if test="dealVersion != null">
+				AND a.deal_version = #{dealVersion}
+			</if>
+			<if test="openTimes != null and openTimes != ''">
+				AND a.open_times = #{openTimes}
+			</if>
+			<if test="privilege != null and privilege != ''">
+				AND a.privilege = #{privilege}
+			</if>
+			<if test="warnning != null and warnning != ''">
+				AND a.warnning = #{warnning}
+			</if>
+			<if test="isCancel != null and isCancel != ''">
+				AND a.is_cancel = #{isCancel}
+			</if>
+			<if test="cardType != null and cardType != ''">
+				AND (a.card_type = #{cardType} OR a.card_type is null)
+			</if>
+			<if test="tmpNo != null and tmpNo != ''">
+				AND a.tmp_no LIKE
+					<if test="dbName == 'oracle'">'%'||#{tmpNo}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{tmpNo}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{tmpNo},'%')</if>
+			</if>
+			<if test="tmpTel != null and tmpTel != ''">
+				AND a.tmp_tel = #{tmpTel}
+			</if>
+
+			<if test="holidayUse != null and holidayUse != ''">
+				AND a.holiday_use = #{holidayUse}
+			</if>
+			<if test="expiry != null and expiry != ''">
+				AND a.expiry <![CDATA[  >= ]]> #{expiry}
+			</if>
+			<if test="user != null">
+				<if test="user.id != null and user.id != ''">
+					AND a.uid = #{user.id}
+				</if>
+				<if test="user.name != null and user.name != ''">
+					AND (u.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+						OR a.tmp_name LIKE
+						<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+					)
+				</if>
+				<if test="user.office != null">
+					<if test="user.office.id != null and user.office.id != ''">
+						AND o.id = #{user.office.id}
+					</if>
+					<if test="user.office.name != null and user.office.name != ''">
+						AND o.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{user.office.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{user.office.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{user.office.name},'%')</if>
+					</if>
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.status, u.update_date DESC, ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.status, u.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findUserListByg" resultMap="drCardUserBygErspacesMap">
+		SELECT
+			<include refid="drCardUserBygErspacesColumns"/>
+		FROM (
+			SELECT
+				DISTINCT(u3.id) AS "id",
+				u3.name AS "name",
+				u3.no AS "no",
+				u3.sex AS "sex",
+				u3.email AS "email",
+				u3.mobile AS "mobile",
+				u3.phone AS "phone",
+				u3.company_id AS "company_id",
+				u3.login_name AS "login_name",
+				u3.office_id AS "office_id",
+				u3.update_date AS "update_date",
+				u3.del_flag AS "del_flag"
+			FROM sys_user u3
+				LEFT JOIN team_user_relation tu ON tu.user_id = u3.id
+				LEFT JOIN team t ON t.id = tu.team_id
+				LEFT JOIN pw_enter_detail ed ON ed.rid = t.id
+				LEFT JOIN pw_enter e ON e.id = ed.eid
+				where u3.del_flag = '0' AND tu.id is not null  AND t.id is not null AND ed.id is not null AND ed.type = '0' AND e.id is not null AND e.status not in ('0', '20')
+			UNION ALL
+			SELECT
+				DISTINCT(u4.id) AS "id",
+				u4.name AS "name",
+				u4.no AS "no",
+				u4.sex AS "sex",
+				u4.email AS "email",
+				u4.mobile AS "mobile",
+				u4.phone AS "phone",
+				u4.company_id AS "company_id",
+				u4.login_name AS "login_name",
+				u4.office_id AS "office_id",
+				u4.update_date AS "update_date",
+				u4.del_flag AS "del_flag"
+			FROM sys_user u4
+				LEFT JOIN pw_enter e ON e.applicant = u4.id
+				LEFT JOIN pw_enter_detail ed ON ed.eid = e.id AND ed.type = '2'
+				where u4.del_flag = '0' AND e.id is not null AND ed.id is not null AND e.status not in ('0', '20')
+		) u
+        LEFT JOIN sys_office o ON o.id = u.office_id
+		LEFT JOIN dr_card a ON u.id = a.uid
+        LEFT JOIN dr_card_erspace ce ON ce.card_id = a.id
+        LEFT JOIN dr_equipment_rspace b ON b.id = ce.erspace_id
+        LEFT JOIN dr_equipment c ON c.id = b.ept_id
+		<where>
+			u.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY u.update_date DESC, ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY u.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dr_card(
+			id,
+			uid,
+			no,
+			password,
+			expiry,
+			status,
+			deal_status,
+			deal_version,
+			open_times,
+			privilege,
+			holiday_use,
+			warnning,
+			is_cancel,
+			card_type,
+			create_date,
+			tmp_no,
+			tmp_name,
+			tmp_tel,
+			tmp_sex,
+			tmp_office,
+			tmp_office_bm,
+			tmp_office_xy,
+			tmp_office_zy,
+			tmp_office_xyid,
+			tmp_office_zyid,
+			tmp_office_bj
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{no},
+			#{password},
+			#{expiry},
+			#{status},
+			#{dealStatus},
+			#{dealVersion},
+			#{openTimes},
+			#{privilege},
+			#{holidayUse},
+			#{warnning},
+			#{isCancel},
+			#{cardType},
+			#{createDate},
+			#{tmpNo},
+			#{tmpName},
+			#{tmpTel},
+			#{tmpSex},
+			#{tmpOffice},
+			#{tmpOfficeBm},
+			#{tmpOfficeXy},
+			#{tmpOfficeZy},
+			#{tmpOfficeXyId},
+			#{tmpOfficeZyId},
+			#{tmpOfficeBj}
+
+		)
+	</insert>
+
+	<insert id="savePl" >
+		INSERT INTO dr_card(
+			id,
+			uid,
+			no,
+			password,
+			expiry,
+			status,
+			deal_status,
+			deal_version,
+			open_times,
+			privilege,
+			holiday_use,
+			warnning,
+			is_cancel,
+			card_type,
+			create_date,
+			tmp_no,
+			tmp_name,
+			tmp_tel,
+			tmp_sex,
+			tmp_office,
+			tmp_office_bm,
+			tmp_office_xy,
+			tmp_office_zy,
+			tmp_office_xyid,
+			tmp_office_zyid,
+			tmp_office_bj
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+				 separator=",">
+			(
+				#{item.id},
+				#{item.user.id},
+				#{item.no},
+				#{item.password},
+				#{item.expiry},
+				#{item.status},
+				#{item.dealStatus},
+				#{item.dealVersion},
+				#{item.openTimes},
+				#{item.privilege},
+				#{item.holidayUse},
+				#{item.warnning},
+				#{item.isCancel},
+				#{item.cardType},
+				#{item.createDate},
+				#{item.tmpNo},
+				#{item.tmpName},
+				#{item.tmpTel},
+				#{item.tmpSex},
+				#{item.tmpOffice},
+				#{item.tmpOfficeBm},
+				#{item.tmpOfficeXy},
+				#{item.tmpOfficeZy},
+				#{item.tmpOfficeXyId},
+				#{item.tmpOfficeZyId},
+				#{item.tmpOfficeBj}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE dr_card SET
+			uid = #{user.id},
+			no = #{no},
+			password = #{password},
+			expiry = #{expiry},
+			status = #{status},
+			deal_status = #{dealStatus},
+			deal_version = #{dealVersion},
+			open_times = #{openTimes},
+			privilege = #{privilege},
+			holiday_use = #{holidayUse},
+			warnning = #{warnning},
+			is_cancel = #{isCancel},
+			card_type = #{cardType},
+			tmp_no = #{tmpNo},
+			tmp_name = #{tmpName},
+			tmp_tel = #{tmpTel},
+			tmp_sex = #{tmpSex},
+			tmp_office = #{tmpOffice},
+			tmp_office_bm = #{tmpOfficeBm},
+			tmp_office_xy = #{tmpOfficeXy},
+			tmp_office_zy = #{tmpOfficeZy},
+			tmp_office_xyid = #{tmpOfficeXyId},
+			tmp_office_zyid = #{tmpOfficeZyId},
+			tmp_office_bj = #{tmpOfficeBj}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateStatusByPl" parameterType="java.util.List" >
+		UPDATE dr_card SET
+			status = #{status}
+		WHERE id in
+		<foreach item="id" collection="cids" separator="," open="("
+			close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="updateDealStatusByPl" parameterType="java.util.List" >
+		UPDATE dr_card SET
+			deal_status = #{dealStatus}
+		WHERE id in
+		<foreach item="id" collection="cids" separator="," open="("
+			close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="updateDealingStatusByPl" parameterType="java.util.List" >
+		UPDATE dr_card SET
+			deal_status = #{dealStatus}
+		WHERE id in
+		<foreach item="id" collection="cids" separator="," open="("
+			close=")">
+			#{id}
+		</foreach>
+		AND deal_status in ('1', '2')
+	</update>
+
+	<update id="updateUserByPl" parameterType="java.util.List" >
+		UPDATE dr_card
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="no =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.no}
+				</foreach>
+			</trim>
+			<trim prefix="uid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.user.id}
+				</foreach>
+			</trim>
+			<trim prefix="tmp_no =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.tmpNo}
+				</foreach>
+			</trim>
+			<trim prefix="tmp_name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.tmpName}
+				</foreach>
+			</trim>
+			<trim prefix="tmp_tel =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.tmpTel}
+				</foreach>
+			</trim>
+			<trim prefix="tmp_sex =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.tmpSex}
+				</foreach>
+			</trim>
+			<trim prefix="tmp_office =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.tmpOffice}
+				</foreach>
+			</trim>
+			<trim prefix="tmp_office_bm =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.tmpOfficeBm}
+				</foreach>
+			</trim>
+			<trim prefix="tmp_office_xy =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.tmpOfficeXy}
+				</foreach>
+			</trim>
+			<trim prefix="tmp_office_zy =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.tmpOfficeZy}
+				</foreach>
+			</trim>
+			<trim prefix="tmp_office_xyid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.tmpOfficeXyId}
+				</foreach>
+			</trim>
+			<trim prefix="tmp_office_zyid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.tmpOfficeZyId}
+				</foreach>
+			</trim>
+			<trim prefix="tmp_office_bj =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.tmpOfficeBj}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="delete">
+		DELETE FROM dr_card
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM dr_card WHERE id = #{id}
+	</update>
+
+	<update id="deletePlwl">
+		DELETE FROM dr_card WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<select id="getByNoWithoutId" resultType="DrCard">
+		select t.id from dr_card t where t.no=#{cardno} and t.id!=#{cardid} limit 1
+	</select>
+</mapper>

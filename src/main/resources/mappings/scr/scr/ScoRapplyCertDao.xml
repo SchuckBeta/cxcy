@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.scr.dao.ScoRapplyCertDao">
+
+	<sql id="scoRapplyCertColumns">
+		a.id AS "id",
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
+		a.name AS "name",
+		a.sort AS "sort",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="scoRapplyCertJoins">
+	</sql>
+
+	<sql id="scoRapplyCertByUserJoins">
+		LEFT JOIN sco_rapply_cert a on r.applyCert_id=a.id and a.del_flag=0
+		LEFT JOIN sys_user u on u.id = r.uid and u.del_flag=0
+	</sql>
+
+	<select id="get" resultType="ScoRapplyCert">
+		SELECT
+			<include refid="scoRapplyCertColumns"/>
+		FROM sco_rapply_cert a
+		<include refid="scoRapplyCertJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findCertByUserList" resultType="ScoRapplyCert">
+		SELECT
+		<include refid="scoRapplyCertColumns"/>
+		from sco_rapply r
+		<include refid="scoRapplyCertByUserJoins"/>
+		<where>
+			r.applyCert_id is not null and
+		r.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="status != null and status != ''">
+				and r.`status`=#{status}
+			</if>
+			<if test="user != null ">
+				<if test="user.id != null and user.id != ''">
+					and r.uid = #{user.id}
+				</if>
+			</if>
+		</where>
+	</select>
+
+	<select id="findList" resultType="ScoRapplyCert">
+		SELECT
+			<include refid="scoRapplyCertColumns"/>
+		FROM sco_rapply_cert a
+		<include refid="scoRapplyCertJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="queryStr != null and queryStr != ''">
+				and id =#{id} or parent_id=#{id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ScoRapplyCert">
+		SELECT
+			<include refid="scoRapplyCertColumns"/>
+		FROM sco_rapply_cert a
+		<include refid="scoRapplyCertJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.sort,a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findByParentIdsLike" resultType="ScoRapplyCert">
+		SELECT
+		<include refid="scoRapplyCertColumns"/>
+		FROM sco_rapply_cert a
+		<include refid="scoRapplyCertJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids LIKE #{parentIds}
+
+	</select>
+
+	<update id="updateParentIds">
+		UPDATE sco_rapply_cert SET
+		parent_id = #{parent.id},
+		parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+
+	<insert id="insert">
+		INSERT INTO sco_rapply_cert(
+			id,
+			parent_id,
+			parent_ids,
+			name,
+			sort,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{parent.id},
+			#{parentIds},
+			#{name},
+			#{sort},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO sco_rapply_cert(
+			id,
+			parent_id,
+			parent_ids,
+			name,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.parent.id},
+			#{item.parentIds},
+			#{item.name},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE sco_rapply_cert SET
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds},
+			name = #{name},
+			sort = #{sort},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE sco_rapply_cert
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="parent_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.parent.id}
+				</foreach>
+			</trim>
+			<trim prefix="parent_ids =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.parentIds}
+				</foreach>
+			</trim>
+			<trim prefix="name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.name}
+				</foreach>
+			</trim>
+			<trim prefix="update_by =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateBy.id}
+				</foreach>
+			</trim>
+			<trim prefix="update_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateDate}
+				</foreach>
+			</trim>
+			<trim prefix="remarks =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.remarks}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+
+	<update id="delete">
+		UPDATE sco_rapply_cert SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteChildren">
+		UPDATE sco_rapply_cert SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE parent_id = #{id}
+	</update>
+
+	<update id="deletePL">
+		UPDATE sco_rapply_cert SET
+			del_flag = #{DEL_FLAG_DELETE}
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="updateSort">
+		UPDATE sco_rapply_cert SET
+		sort = #{sort}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sco_rapply_cert WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM sco_rapply_cert WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM sco_rapply_cert
+	</update>
+
+	<select id="checkScoRaCertName" resultType="Integer">
+		SELECT COUNT(1) FROM sco_rapply_cert a
+		<where>
+			<if test="name != null and name != ''"> AND name = #{name}</if>
+			<if test="id != null and id != ''"> AND id != #{id}</if>
+			AND a.del_flag = '0'
+		</where>
+	</select>
+</mapper>

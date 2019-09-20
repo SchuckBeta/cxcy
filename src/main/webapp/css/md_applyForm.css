@@ -1,0 +1,146 @@
+@charset "UTF-8";
+
+
+.contest-content .input-box > .form-control-static {
+    padding: 7px 0;
+}
+
+button {
+    width: auto;
+    height: auto;
+}
+
+.table-pro-work > tbody > tr > td {
+    line-height: 30px;
+}
+
+.table-theme-default > thead > tr {
+    background-color: #f4e6d4;
+}
+
+.btn-default-oe {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc
+}
+
+.btn-default-oe.focus, .btn-default-oe:focus {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #8c8c8c
+}
+
+.btn-default-oe:hover {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad
+}
+
+.step-indicator {
+    margin-bottom: 20px;
+    line-height: 30px;
+}
+
+a.step {
+    display: block;
+    float: left;
+    font-weight: bold;
+    background: #f7f7f7;
+    padding-right: 10px;
+    height: 30px;
+    width: 240px;
+    text-align: center;
+    line-height: 32px;
+    margin-right: 33px;
+    position: relative;
+    text-decoration: none;
+    color: #4c4b4a;
+    cursor: default;
+}
+
+.step:before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 0;
+    left: -30px;
+    border: 15px solid transparent;
+    border-color: #f7f7f7;
+    border-left-color: transparent;
+}
+
+.step:after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 0;
+    right: -30px;
+    border: 15px solid transparent;
+    border-left-color: #f7f7f7;
+}
+
+.step:first-of-type {
+    border-radius: 2px 0 0 2px;
+    padding-left: 15px;
+}
+
+.step:first-of-type:before {
+    display: none;
+}
+
+.step:last-of-type {
+    border-radius: 0 2px 2px 0;
+    margin-right: 25px;
+    padding-right: 15px;
+}
+
+.step:last-of-type:after {
+    display: none;
+}
+
+a.step:hover {
+    text-decoration: none;
+}
+
+.step.completed {
+    background: #ffdacf;
+    color: #de3b0a;
+    cursor: pointer;
+}
+
+.step.completed:before {
+    border-color: #ffdacf;
+    border-left-color: transparent;
+}
+
+.step.completed:after {
+    border-left-color: #ffdacf;
+}
+
+.step.completed:hover {
+    background: #ffdacf;
+    border-color: #ffdacf;
+    color: #de3b0a;
+    text-decoration: none;
+}
+
+.step.completed:hover:before {
+    border-color: #ffdacf;
+    border-left-color: transparent;
+}
+
+.step.completed:hover:after {
+    border-left-color: #ffdacf;
+}
+
+.step-row {
+    width: 815px;
+    height: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}

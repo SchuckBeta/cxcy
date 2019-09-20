@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwClazzDao">
+
+	<sql id="actYwClazzColumns">
+		a.id AS "id",
+		a.theme AS "theme",
+		a.type AS "type",
+		a.packag AS "packag",
+		a.clazz AS "clazz",
+		a.alias AS "alias",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="actYwClazzJoins">
+	</sql>
+
+	<select id="get" resultType="ActYwClazz">
+		SELECT
+			<include refid="actYwClazzColumns"/>
+		FROM act_yw_clazz a
+		<include refid="actYwClazzJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ActYwClazz">
+		SELECT
+			<include refid="actYwClazzColumns"/>
+		FROM act_yw_clazz a
+		<include refid="actYwClazzJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="theme != null">
+				AND a.theme = #{theme}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="clazz != null and clazz != ''">
+				AND a.clazz LIKE
+					<if test="dbName == 'oracle'">'%'||#{clazz}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{clazz}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{clazz},'%')</if>
+			</if>
+			<if test="alias != null and alias != ''">
+				AND a.alias LIKE
+					<if test="dbName == 'oracle'">'%'||#{alias}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{alias}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{alias},'%')</if>
+			</if>
+			<if test="remarks != null and remarks != ''">
+				AND a.remarks = #{remarks}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwClazz">
+		SELECT
+			<include refid="actYwClazzColumns"/>
+		FROM act_yw_clazz a
+		<include refid="actYwClazzJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_clazz(
+			id,
+			theme,
+			type,
+			packag,
+			clazz,
+			alias,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{theme},
+			#{type},
+			#{packag},
+			#{clazz},
+			#{alias},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_clazz SET
+			theme = #{theme},
+			type = #{type},
+			packag = #{packag},
+			clazz = #{clazz},
+			alias = #{alias},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE act_yw_clazz SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM act_yw_clazz WHERE id = #{id}
+	</update>
+</mapper>

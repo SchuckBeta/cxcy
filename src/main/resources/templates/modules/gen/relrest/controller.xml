@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>controller</name>
+	<filePath>src/main/java/${packageName}/${moduleName}/web/${subModuleName}</filePath>
+	<fileName>${ClassName}${RclassName}Controller.java</fileName>
+	<content><![CDATA[
+package ${packageName}.${moduleName}.web<#if subModuleName != "">.${subModuleName}</#if>;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.oseasy.com.pcore.common.config.ApiConst;
+import com.oseasy.com.pcore.common.config.ApiParam;
+import com.oseasy.com.pcore.common.config.ApiResult;
+import com.oseasy.com.pcore.common.config.CoreJkey;
+import com.oseasy.com.pcore.common.persistence.Page;
+import com.oseasy.com.pcore.common.web.BaseController;
+import com.oseasy.util.common.utils.StringUtil;
+
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
+import ${packageName}.${moduleName}.service<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Service;
+
+/**
+ * ${functionName}Controller.
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+@Controller
+@RequestMapping(value = "${r"${adminPath}"}/${urlPrefix}")
+public class ${ClassName}RestController extends BaseController {
+
+	@Autowired
+	private ${ClassName}Service ${entityName}Service;
+
+	@ModelAttribute
+	public ${ClassName} get(@RequestParam(required=false) String id) {
+		${ClassName} ${entityName} = null;
+		if (StringUtil.isNotBlank(id)){
+			${entityName} = ${entityName}Service.get(id);
+		}
+		if (${entityName} == null){
+			${entityName} = new ${ClassName}();
+		}
+		return ${entityName};
+	}
+
+    @ResponseBody
+	@RequestMapping(value = "ajaxList")
+    public ApiResult ajaxlist(${ClassName} ${entityName}, HttpServletRequest request, HttpServletResponse response, Model model) {
+        try {
+            Page<${ClassName}> page = ${entityName}Service.findPage(new Page<${ClassName}>(request, response), ${entityName});
+            return ApiResult.success(page);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return ApiResult.failed(ApiConst.CODE_INNER_ERROR,ApiConst.getErrMsg(ApiConst.CODE_INNER_ERROR)+":"+e.getMessage());
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "ajaxSave", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public ApiResult ajaxSave(@RequestBody ${ClassName} ${entityName}, HttpServletRequest request, HttpServletResponse response, Model model) {
+        try {
+            if (!beanValidator(model, ${entityName})){
+                return ApiResult.failed(ApiConst.CODE_PARAM_ERROR_CODE,ApiConst.getErrMsg(ApiConst.CODE_PARAM_ERROR_CODE)+":参数校验失败！");
+            }
+            ${entityName}Service.save(${entityName});
+            return ApiResult.success(${entityName});
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return ApiResult.failed(ApiConst.CODE_INNER_ERROR,ApiConst.getErrMsg(ApiConst.CODE_INNER_ERROR)+":"+e.getMessage());
+        }
+    }
+
+	<#list table.columnList as c>
+		<#if c.isUpdate?? && c.isUpdate == "1">
+			<#if c.simpleJavaField == c.javaFieldId>
+	/**
+	 * 根据ID修改属性 ${c.javaFieldId?cap_first}.
+	 */
+    @ResponseBody
+	@RequestMapping(value = "ajaxUpdate${c.javaFieldId?cap_first}")
+	public ApiResult ajaxUpdate${c.javaFieldId?cap_first}(${ClassName} ${entityName}, HttpServletRequest request, HttpServletResponse response, Model model) {
+		try {
+            if (StringUtil.isEmpty(${entityName}.getId())){
+                return ApiResult.failed(ApiConst.CODE_PARAM_ERROR_CODE,ApiConst.getErrMsg(ApiConst.CODE_PARAM_ERROR_CODE)+":参数校验失败，ID标识不能为空！");
+            }
+            <#if c.javaType?? && (c.javaType == "String")>
+            if (StringUtil.isEmpty(${entityName}.get${c.javaFieldId?cap_first}())){
+			</#if>
+			<#if c.javaType?? && (c.javaType != "String")>
+            if (${entityName}.get${c.javaFieldId?cap_first}() == null){
+			</#if>
+                return ApiResult.failed(ApiConst.CODE_PARAM_ERROR_CODE,ApiConst.getErrMsg(ApiConst.CODE_PARAM_ERROR_CODE)+":参数校验失败, ${c.comments}不能为空！");
+            }
+            ${entityName}Service.save(${entityName});
+            return ApiResult.success(${entityName});
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return ApiResult.failed(ApiConst.CODE_INNER_ERROR,ApiConst.getErrMsg(ApiConst.CODE_INNER_ERROR)+":"+e.getMessage());
+        }
+	}
+
+
+				<#if c.isUpdatePl?? && c.isUpdatePl == "1">
+	/**
+	 * 根据ID批量修改属性 ${c.javaFieldId?cap_first}.
+	 */
+    @ResponseBody
+    @RequestMapping(value = "ajaxUpdatePL${c.javaFieldId?cap_first}", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public ApiResult ajaxUpdatePL${c.javaFieldId?cap_first}(@RequestBody ApiParam<List<${ClassName}>> api, HttpServletRequest request, HttpServletResponse response, Model model) {
+		try {
+			List<${ClassName}> ${entityName}s = api.getDatas();
+            if(StringUtil.checkEmpty(${entityName}s)){
+                return ApiResult.failed(ApiConst.CODE_PARAM_ERROR_CODE,ApiConst.getErrMsg(ApiConst.CODE_PARAM_ERROR_CODE)+":参数校验失败，"+CoreJkey.JK_DATAS+"不能为空！");
+            }
+            ${entityName}Service.updatePL${c.javaFieldId?cap_first}(${entityName}s);
+            return ApiResult.success(${entityName}s);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return ApiResult.failed(ApiConst.CODE_INNER_ERROR,ApiConst.getErrMsg(ApiConst.CODE_INNER_ERROR)+":"+e.getMessage());
+        }
+	}
+				</#if>
+			</#if>
+
+
+			<#if c.simpleJavaType?? && ((c.simpleJavaType != "String") && (c.simpleJavaType != "Long") && (c.simpleJavaType != "Integer") && (c.simpleJavaType != "Double") && (c.simpleJavaType != "Date"))>
+				<#if (c.javaFieldGid != "") && c.simpleJavaField != c.javaFieldId>
+	/**
+	 * 根据ID修改对象属性 ${c.simpleJavaField?cap_first}的ID属性.
+	 */
+    @ResponseBody
+	@RequestMapping(value = "ajaxUpdate${c.simpleJavaField?cap_first}Id")
+	public ApiResult ajaxUpdate${c.simpleJavaField?cap_first}Id(${ClassName} ${entityName}, HttpServletRequest request, HttpServletResponse response, Model model) {
+		try {
+            if (StringUtil.isEmpty(${entityName}.getId()) && (${entityName}.get${c.simpleJavaField?cap_first}() != null)){
+                return ApiResult.failed(ApiConst.CODE_PARAM_ERROR_CODE,ApiConst.getErrMsg(ApiConst.CODE_PARAM_ERROR_CODE)+":参数校验失败，ID标识不能为空！");
+            }
+            if (StringUtil.isEmpty(${entityName}.get${c.javaFieldGid?cap_first}())){
+                return ApiResult.failed(ApiConst.CODE_PARAM_ERROR_CODE,ApiConst.getErrMsg(ApiConst.CODE_PARAM_ERROR_CODE)+":参数校验失败, ${c.comments}不能为空！");
+            }
+            ${entityName}Service.save(${entityName});
+            return ApiResult.success(${entityName});
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return ApiResult.failed(ApiConst.CODE_INNER_ERROR,ApiConst.getErrMsg(ApiConst.CODE_INNER_ERROR)+":"+e.getMessage());
+        }
+	}
+
+					<#if c.isUpdatePl?? && c.isUpdatePl == "1">
+	/**
+	 * 根据ID批量修改对象属性 ${c.simpleJavaField?cap_first}的ID属性.
+	 */
+	@ResponseBody
+    @RequestMapping(value = "ajaxUpdatePL${c.simpleJavaField?cap_first}Id", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public ApiResult ajaxUpdatePL${c.simpleJavaField?cap_first}Id(@RequestBody ApiParam<List<${ClassName}>> api, HttpServletRequest request, HttpServletResponse response, Model model) {
+		try {
+			List<${ClassName}> ${entityName}s = api.getDatas();
+            if(StringUtil.checkEmpty(${entityName}s)){
+                return ApiResult.failed(ApiConst.CODE_PARAM_ERROR_CODE,ApiConst.getErrMsg(ApiConst.CODE_PARAM_ERROR_CODE)+":参数校验失败，"+CoreJkey.JK_DATAS+"不能为空！");
+            }
+            ${entityName}Service.updatePL${c.simpleJavaField?cap_first}Id(${entityName}s);
+            return ApiResult.success(${entityName}s);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return ApiResult.failed(ApiConst.CODE_INNER_ERROR,ApiConst.getErrMsg(ApiConst.CODE_INNER_ERROR)+":"+e.getMessage());
+        }
+	}
+					</#if>
+				</#if>
+
+				<#if (c.javaFieldGname != "") && c.simpleJavaField != c.javaFieldName>
+	/**
+	 * 根据ID修改对象属性 ${c.simpleJavaField?cap_first}的Name属性.
+	 */
+    @ResponseBody
+	@RequestMapping(value = "ajaxUpdate${c.simpleJavaField?cap_first}Name")
+	public ApiResult ajaxUpdate${c.simpleJavaField?cap_first}Name(${ClassName} ${entityName}, HttpServletRequest request, HttpServletResponse response, Model model) {
+		try {
+            if (StringUtil.isEmpty(${entityName}.getId()) && (${entityName}.get${c.simpleJavaField?cap_first}() != null)){
+                return ApiResult.failed(ApiConst.CODE_PARAM_ERROR_CODE,ApiConst.getErrMsg(ApiConst.CODE_PARAM_ERROR_CODE)+":参数校验失败，ID标识不能为空！");
+            }
+            if (StringUtil.isEmpty(${entityName}.get${c.javaFieldGname?cap_first}())){
+                return ApiResult.failed(ApiConst.CODE_PARAM_ERROR_CODE,ApiConst.getErrMsg(ApiConst.CODE_PARAM_ERROR_CODE)+":参数校验失败, ${c.comments}不能为空！");
+            }
+            ${entityName}Service.save(${entityName});
+            return ApiResult.success(${entityName});
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return ApiResult.failed(ApiConst.CODE_INNER_ERROR,ApiConst.getErrMsg(ApiConst.CODE_INNER_ERROR)+":"+e.getMessage());
+        }
+	}
+
+
+					<#if c.isUpdatePl?? && c.isUpdatePl == "1">
+	/**
+	 * 根据ID批量修改对象属性 ${c.simpleJavaField?cap_first}的Name属性.
+	 */
+	@ResponseBody
+    @RequestMapping(value = "ajaxUpdatePL${c.simpleJavaField?cap_first}Name", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+	public ApiResult ajaxUpdatePL${c.simpleJavaField?cap_first}Name(@RequestBody ApiParam<List<${ClassName}>> api, HttpServletRequest request, HttpServletResponse response, Model model) {
+		try {
+			List<${ClassName}> ${entityName}s = api.getDatas();
+            if(StringUtil.checkEmpty(${entityName}s)){
+                return ApiResult.failed(ApiConst.CODE_PARAM_ERROR_CODE,ApiConst.getErrMsg(ApiConst.CODE_PARAM_ERROR_CODE)+":参数校验失败，"+CoreJkey.JK_DATAS+"不能为空！");
+            }
+            ${entityName}Service.updatePL${c.simpleJavaField?cap_first}Name(${entityName}s);
+            return ApiResult.success(${entityName}s);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return ApiResult.failed(ApiConst.CODE_INNER_ERROR,ApiConst.getErrMsg(ApiConst.CODE_INNER_ERROR)+":"+e.getMessage());
+        }
+	}
+					</#if>
+				</#if>
+			</#if>
+		</#if>
+	</#list>
+
+    @ResponseBody
+    @RequestMapping(value = "ajaxDelete")
+    public ApiResult ajaxDelete(${ClassName} ${entityName}, HttpServletRequest request, HttpServletResponse response, Model model) {
+        try {
+            if (StringUtil.isEmpty(${entityName}.getId())){
+                return ApiResult.failed(ApiConst.CODE_PARAM_ERROR_CODE,ApiConst.getErrMsg(ApiConst.CODE_PARAM_ERROR_CODE)+":参数校验失败，ID标识和操作不能为空！");
+            }
+            ${entityName}Service.delete(${entityName});
+            return ApiResult.success(${entityName});
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return ApiResult.failed(ApiConst.CODE_INNER_ERROR,ApiConst.getErrMsg(ApiConst.CODE_INNER_ERROR)+":"+e.getMessage());
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "ajaxDeletePL", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public ApiResult ajaxDeletePL(@RequestBody ${ClassName} ${entityName}, HttpServletRequest request, HttpServletResponse response, Model model) {
+        try {
+            if (StringUtil.checkEmpty(${entityName}.getIds())){
+                return ApiResult.failed(ApiConst.CODE_PARAM_ERROR_CODE,ApiConst.getErrMsg(ApiConst.CODE_PARAM_ERROR_CODE)+":参数校验失败，ID标识和操作不能为空！");
+            }
+            ${entityName}Service.deletePL(${entityName});
+            return ApiResult.success(${entityName});
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return ApiResult.failed(ApiConst.CODE_INNER_ERROR,ApiConst.getErrMsg(ApiConst.CODE_INNER_ERROR)+":"+e.getMessage());
+        }
+    }
+
+}]]>
+	</content>
+</template>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.scr.dao.ScoRulePbDao">
+
+	<sql id="scoRulePbColumns">
+		a.id AS "id",
+		a.rid AS "rule.id",
+		a.num AS "num",
+		a.val AS "val"
+	</sql>
+
+	<sql id="scoRulePbJoins">
+		LEFT JOIN sco_rule r on r.id = a.rid and r.del_flag=0
+	</sql>
+
+	<select id="get" resultType="ScoRulePb">
+		SELECT
+			<include refid="scoRulePbColumns"/>
+		FROM sco_rule_pb a
+		<include refid="scoRulePbJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ScoRulePb">
+		SELECT
+			<include refid="scoRulePbColumns"/>
+		FROM sco_rule_pb a
+		<include refid="scoRulePbJoins"/>
+		<where>
+			a.rid= #{rule.id}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ScoRulePb">
+		SELECT
+			<include refid="scoRulePbColumns"/>
+		FROM sco_rule_pb a
+		<include refid="scoRulePbJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sco_rule_pb(
+			id,
+			rid,
+			num,
+			val
+		) VALUES (
+			#{id},
+			#{rule.id},
+			#{num},
+			#{val}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO sco_rule_pb(
+			id,
+			rid,
+			num,
+			val
+		) VALUES
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			replace(uuid(), '-', ''),
+			#{item.rule.id},
+			#{item.num},
+			#{item.val}
+			)
+		</foreach>
+
+	</insert>
+
+	<update id="update">
+		UPDATE sco_rule_pb SET
+			rid = #{rule.id},
+			num = #{num},
+			val = #{val}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE sco_rule_pb
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="rid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rule.id}
+				</foreach>
+			</trim>
+			<trim prefix="num =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.num}
+				</foreach>
+			</trim>
+			<trim prefix="val =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.val}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+
+	<update id="delete">
+		DELETE FROM sco_rule_pb
+		WHERE rid = #{rule.id}
+	</update>
+
+	<update id="deletePL">
+			DELETE FROM sco_rule_pb
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sco_rule_pb WHERE id = #{id}
+	</update>
+
+	<update id="deleteByRid">
+		DELETE FROM sco_rule_pb WHERE rid = #{rule.id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM sco_rule_pb WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM sco_rule_pb
+	</update>
+</mapper>

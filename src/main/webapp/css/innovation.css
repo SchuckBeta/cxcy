@@ -1,0 +1,264 @@
+.midBox{
+	width: 1240px;
+	overflow: hidden;
+	margin: 0 auto;
+	padding-top: 100px;
+	padding-bottom: 400px;
+	position: relative;
+}
+
+.introduceBox{
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 150px;
+}
+
+.introduceBox .title{
+	display: block;
+	width:246px;
+	height:62px;
+	overflow:hidden;
+	background: url(../img/innovation7.png) no-repeat;
+	background-position:0px 0px;
+	margin: 0 auto;
+	margin-bottom: 40px;
+}
+
+.introduceBox h6{
+	font-family:"宋体";
+	font-size: 14px;
+	color: #666;
+	font-weight: normal;
+	text-align: center;
+	line-height: 30px;
+	margin-bottom: 50px;
+}
+
+.introduceBox ul{
+	width: 100%;
+	overflow: hidden;
+}
+
+.introduceBox ul li{
+	width: 33.333333333%;
+	overflow: hidden;
+	float: left;
+	text-align: center;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 0px 30px;
+}
+
+.introduceBox ul li h5{
+	color: #696969;
+	font-size: 20px;
+	font-weight: normal;
+	line-height: 80px;
+}
+
+.introduceBox ul li p{
+	font-family:"宋体";
+	color: #666;
+	font-size:14px;
+	line-height: 30px;
+	text-align: justify;
+	text-indent: 28px;
+}
+
+
+
+
+.aimBox{
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 130px;
+}
+
+.aimBox .title{
+	display: block;
+	width:169px;
+	height:64px;
+	overflow: hidden;
+	background: url(../img/innovation7.png) no-repeat;
+	background-position:0px -62px;
+	margin: 0 auto;
+	margin-bottom: 68px;
+}
+
+.aimBox .content{
+	width:557px;
+	height:431px;
+	margin: 0 auto;
+	overflow: hidden;
+	background: url(../img/innovation4.png) no-repeat center center;
+	font-family:"宋体";
+	color: #666;
+	font-size:14px;
+	line-height: 30px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding-top:160px;
+}
+
+.policyBox{
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 160px;
+}
+
+.policyBox .title{
+	display: block;
+	width:249px;
+	height:61px;
+	overflow: hidden;
+	background: url(../img/innovation7.png) no-repeat;
+	background-position:0px -126px;
+	margin: 0 auto;
+	margin-bottom: 94px;
+}
+
+.policyBox ul{
+	width:1017px;
+	height:314px;
+	overflow: hidden;
+	background: url(../img/innovation5.png) no-repeat;
+	margin: 0 auto;
+}
+
+.policyBox ul li{
+	width: 50%;
+	height: 50%;
+	float: left;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 20px 160px 20px 20px;
+	font-family:"宋体";
+	color: #666;
+	font-size:14px;
+	line-height: 30px;
+}
+
+
+.policyBox ul li:last-child{
+	padding: 60px 20px 20px 160px;
+}
+
+.policyBox ul li:nth-child(2){
+	padding-right: 20px;
+	padding-left:160px;
+}
+
+.policyBox ul li:nth-last-child(2){
+	padding: 40px 160px 20px 20px;
+}
+
+
+
+
+
+
+.procedureBox{
+	width: 100%;
+	overflow: hidden;
+}
+
+.procedureBox .title{
+	display: block;
+	width:169px;
+	height:63px;
+	overflow: hidden;
+	background: url(../img/innovation7.png) no-repeat;
+	background-position:0px -187px;
+	margin: 0 auto;
+	margin-bottom: 58px;
+}
+
+.procedureBox ul{
+	width: 100%;
+	min-height: 458px;
+	overflow:hidden;
+	background: url(../img/innovation6.png) no-repeat center center;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 0px 180px;
+}
+
+.procedureBox ul li{
+	width: 100%;
+	overflow: hidden;
+	color: #666;
+	font-family: "宋体";
+	font-size: 14px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	line-height: 20px;
+}
+
+.procedureBox ul li.left{
+	float: left;
+	padding-right: 55%;
+	
+}
+
+.procedureBox ul li.right{
+	float: right;
+	padding-left: 55%;
+}
+
+.procedureBox ul li.one{
+	margin-top: 35px;
+}
+
+.procedureBox ul li.two{
+	margin-top: 40px;
+}
+
+.procedureBox ul li.three{
+	margin-top: 10px;
+}
+
+.procedureBox ul li.four{
+	margin-top: 28px;
+}
+
+.procedureBox ul li.five{
+	margin-top: 15px;
+}
+
+.procedureBox ul li.six{
+	margin-top: 15px;
+}
+
+img[class^=decorationpic]{
+	position: absolute;
+}
+
+img.decorationpic2{
+	top:285px;
+	left: 0px;
+}
+
+img.decorationpic3{
+	top:937px;
+	right: 0px;
+}
+
+img.decorationpic5{
+	top:2467px;
+	left: 0px;
+}
+
+img.decorationpic4{
+	top:2384px;
+	right: 0px;
+}
+
+img.decorationpic1{
+	bottom:0px;
+}
+

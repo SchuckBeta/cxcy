@@ -1,0 +1,1331 @@
+{
+	"resourceId": "85f60c55e7284a34a32945dab7fe181a",
+	"properties": {
+		"process_id": "process",
+		"name": "",
+		"documentation": "",
+		"process_author": "initiate",
+		"process_version": "",
+		"process_namespace": "http://www.activiti.org/processdef",
+		"executionlisteners": "",
+		"eventlisteners": "",
+		"signaldefinitions": "",
+		"messagedefinitions": ""
+	},
+	"stencil": {
+		"id": "BPMNDiagram"
+	},
+	"childShapes": [{
+		"resourceId": "sid-32712760-18A7-4702-BE4C-8CFB6F9A01B6",
+		"properties": {
+			"overrideid": "sid_111122223333",
+			"name": "",
+			"documentation": "",
+			"sequencefloworder": ""
+		},
+		"stencil": {
+			"id": "ExclusiveGateway"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-9CB2EEC8-6B13-4F2D-834A-2D9AAEC7D1F1"
+		}, {
+			"resourceId": "sid-08B73309-DB45-49FE-A5F2-1492F69DF339"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 488,
+				"y": 400
+			},
+			"upperLeft": {
+				"x": 448,
+				"y": 360
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-0D5619F2-702E-4495-A091-1832A671EECE",
+		"properties": {
+			"overrideid": "sid_sub1",
+			"name": "",
+			"documentation": "",
+			"asynchronousdefinition": "false",
+			"exclusivedefinition": true,
+			"executionlisteners": "",
+			"multiinstance_type": "None",
+			"multiinstance_cardinality": "",
+			"multiinstance_collection": "",
+			"multiinstance_variable": "",
+			"multiinstance_condition": ""
+		},
+		"stencil": {
+			"id": "SubProcess"
+		},
+		"childShapes": [{
+			"resourceId": "sid-E1F50E6B-A754-49F2-A211-70DB6C59BB34",
+			"properties": {
+				"overrideid": "sid_111111",
+				"name": "1_1",
+				"documentation": "",
+				"asynchronousdefinition": "false",
+				"exclusivedefinition": "false",
+				"executionlisteners": "",
+				"multiinstance_type": "None",
+				"multiinstance_cardinality": "",
+				"multiinstance_collection": "",
+				"multiinstance_variable": "",
+				"multiinstance_condition": "",
+				"isforcompensation": "false",
+				"usertaskassignment": {
+					"assignment": {
+						"candidateUsers": [{
+							"value": "{user}",
+							"$$hashKey": "1SA"
+						}],
+						"candidateGroups": [{
+							"value": "",
+							"$$hashKey": "4BN"
+						}]
+					}
+				},
+				"formkeydefinition": "/state/collegeSet",
+				"duedatedefinition": "",
+				"prioritydefinition": "",
+				"formproperties": "",
+				"tasklisteners": ""
+			},
+			"stencil": {
+				"id": "UserTask"
+			},
+			"childShapes": [],
+			"outgoing": [{
+				"resourceId": "sid-E175C39F-8E8A-4182-8CC4-0804D16578DA"
+			}],
+			"bounds": {
+				"lowerRight": {
+					"x": 175,
+					"y": 132
+				},
+				"upperLeft": {
+					"x": 75,
+					"y": 52
+				}
+			},
+			"dockers": []
+		}, {
+			"resourceId": "sid-B520A589-E90A-4D2A-870D-D9F6EA8462D5",
+			"properties": {
+				"overrideid": "sid_1111112",
+				"name": "1_2",
+				"documentation": "",
+				"asynchronousdefinition": "false",
+				"exclusivedefinition": "false",
+				"executionlisteners": "",
+				"multiinstance_type": "Parallel",
+				"multiinstance_cardinality": "",
+				"multiinstance_collection": "{users}",
+				"multiinstance_variable": "user",
+				"multiinstance_condition": "",
+				"isforcompensation": "false",
+				"usertaskassignment": {
+					"assignment": {
+						"candidateUsers": [{
+							"value": "{user}",
+							"$$hashKey": "45O"
+						}]
+					}
+				},
+				"formkeydefinition": "/state/collegeSet",
+				"duedatedefinition": "",
+				"prioritydefinition": "",
+				"formproperties": "",
+				"tasklisteners": ""
+			},
+			"stencil": {
+				"id": "UserTask"
+			},
+			"childShapes": [],
+			"outgoing": [{
+				"resourceId": "sid-73747063-14DC-40C8-9B62-9B80E9C19462"
+			}],
+			"bounds": {
+				"lowerRight": {
+					"x": 340,
+					"y": 132
+				},
+				"upperLeft": {
+					"x": 240,
+					"y": 52
+				}
+			},
+			"dockers": []
+		}, {
+			"resourceId": "sid-DD1F578D-73A9-45F1-990B-938142548D34",
+			"properties": {
+				"overrideid": "start1",
+				"name": "",
+				"documentation": "",
+				"executionlisteners": "",
+				"initiator": "",
+				"formkeydefinition": "",
+				"formproperties": ""
+			},
+			"stencil": {
+				"id": "StartNoneEvent"
+			},
+			"childShapes": [],
+			"outgoing": [{
+				"resourceId": "sid-345684A5-6B2C-4CA6-AC98-DBBBF556CFE1"
+			}],
+			"bounds": {
+				"lowerRight": {
+					"x": 30,
+					"y": 107
+				},
+				"upperLeft": {
+					"x": 0,
+					"y": 77
+				}
+			},
+			"dockers": []
+		}, {
+			"resourceId": "sid-C44C8E6E-EE64-44B8-B9B5-AA06F4E7C765",
+			"properties": {
+				"overrideid": "",
+				"name": "",
+				"documentation": "",
+				"executionlisteners": ""
+			},
+			"stencil": {
+				"id": "EndNoneEvent"
+			},
+			"childShapes": [],
+			"outgoing": [],
+			"bounds": {
+				"lowerRight": {
+					"x": 413,
+					"y": 106
+				},
+				"upperLeft": {
+					"x": 385,
+					"y": 78
+				}
+			},
+			"dockers": []
+		}],
+		"outgoing": [{
+			"resourceId": "sid-8DAC7D49-C360-476D-B81C-1D14C8626B7E"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 696,
+				"y": 274
+			},
+			"upperLeft": {
+				"x": 240,
+				"y": 90
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-C77A2093-A7F6-427E-8737-CC962006B3C3",
+		"properties": {
+			"overrideid": "start",
+			"name": "",
+			"documentation": "",
+			"executionlisteners": "",
+			"initiator": "",
+			"formkeydefinition": "",
+			"formproperties": ""
+		},
+		"stencil": {
+			"id": "StartNoneEvent"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-800B6DE0-B672-4C90-9D31-CFA2E6881188"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 483,
+				"y": 48
+			},
+			"upperLeft": {
+				"x": 453,
+				"y": 18
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-033A21F1-2076-4266-96F8-953F865579B4",
+		"properties": {
+			"overrideid": "sid_sub2",
+			"name": "",
+			"documentation": "",
+			"asynchronousdefinition": "false",
+			"exclusivedefinition": true,
+			"executionlisteners": "",
+			"multiinstance_type": "None",
+			"multiinstance_cardinality": "",
+			"multiinstance_collection": "",
+			"multiinstance_variable": "",
+			"multiinstance_condition": ""
+		},
+		"stencil": {
+			"id": "SubProcess"
+		},
+		"childShapes": [{
+			"resourceId": "sid-22011209-2F87-497B-809E-5B476C7E51FC",
+			"properties": {
+				"overrideid": "sid_2222221",
+				"name": "2_1",
+				"documentation": "",
+				"asynchronousdefinition": "false",
+				"exclusivedefinition": "false",
+				"executionlisteners": "",
+				"multiinstance_type": "None",
+				"multiinstance_cardinality": "",
+				"multiinstance_collection": "",
+				"multiinstance_variable": "",
+				"multiinstance_condition": "",
+				"isforcompensation": "false",
+				"usertaskassignment": {
+					"assignment": {
+						"candidateUsers": [{
+							"value": "{user}",
+							"$$hashKey": "1SA"
+						}, {
+							"value": "a",
+							"$$hashKey": "0F6"
+						}, {
+							"value": "a1",
+							"$$hashKey": "0I0"
+						}, {
+							"value": "a2",
+							"$$hashKey": "0I3"
+						}],
+						"candidateGroups": [{
+							"value": "b",
+							"$$hashKey": "4BN"
+						}, {
+							"value": "b1",
+							"$$hashKey": "0HR"
+						}, {
+							"value": "b2",
+							"$$hashKey": "0HU"
+						}, {
+							"value": "b3",
+							"$$hashKey": "0HX"
+						}],
+						"assignee": "u1"
+					}
+				},
+				"formkeydefinition": "/state/collegeSet",
+				"duedatedefinition": "",
+				"prioritydefinition": "",
+				"formproperties": "",
+				"tasklisteners": ""
+			},
+			"stencil": {
+				"id": "UserTask"
+			},
+			"childShapes": [],
+			"outgoing": [{
+				"resourceId": "sid-EA2084C2-6912-4F0C-9027-851D0A8AEDC2"
+			}],
+			"bounds": {
+				"lowerRight": {
+					"x": 175,
+					"y": 132
+				},
+				"upperLeft": {
+					"x": 75,
+					"y": 52
+				}
+			},
+			"dockers": []
+		}, {
+			"resourceId": "sid-8B4115E3-3379-49BC-94BA-EEA2B1F483B1",
+			"properties": {
+				"overrideid": "sid_222222",
+				"name": "2_2",
+				"documentation": "",
+				"asynchronousdefinition": "false",
+				"exclusivedefinition": "false",
+				"executionlisteners": "",
+				"multiinstance_type": "Parallel",
+				"multiinstance_cardinality": "",
+				"multiinstance_collection": "{users}",
+				"multiinstance_variable": "user",
+				"multiinstance_condition": "",
+				"isforcompensation": "false",
+				"usertaskassignment": {
+					"assignment": {
+						"candidateUsers": [{
+							"value": "{user}",
+							"$$hashKey": "45O"
+						}]
+					}
+				},
+				"formkeydefinition": "/state/collegeSet",
+				"duedatedefinition": "",
+				"prioritydefinition": "",
+				"formproperties": "",
+				"tasklisteners": ""
+			},
+			"stencil": {
+				"id": "UserTask"
+			},
+			"childShapes": [],
+			"outgoing": [{
+				"resourceId": "sid-F082D6FA-543E-4213-BF52-575DC464D798"
+			}],
+			"bounds": {
+				"lowerRight": {
+					"x": 340,
+					"y": 132
+				},
+				"upperLeft": {
+					"x": 240,
+					"y": 52
+				}
+			},
+			"dockers": []
+		}, {
+			"resourceId": "sid-41B1E7DD-FD0C-4975-A7F3-5C155F35C6FD",
+			"properties": {
+				"overrideid": "start2",
+				"name": "",
+				"documentation": "",
+				"executionlisteners": "",
+				"initiator": "",
+				"formkeydefinition": "",
+				"formproperties": ""
+			},
+			"stencil": {
+				"id": "StartNoneEvent"
+			},
+			"childShapes": [],
+			"outgoing": [{
+				"resourceId": "sid-CFF06C0E-7582-49E6-85BC-6BCEFC679A69"
+			}],
+			"bounds": {
+				"lowerRight": {
+					"x": 45,
+					"y": 105
+				},
+				"upperLeft": {
+					"x": 15,
+					"y": 75
+				}
+			},
+			"dockers": []
+		}, {
+			"resourceId": "sid-EBB4F3E0-A15F-4498-B5DC-0F252248E456",
+			"properties": {
+				"overrideid": "",
+				"name": "",
+				"documentation": "",
+				"executionlisteners": ""
+			},
+			"stencil": {
+				"id": "EndNoneEvent"
+			},
+			"childShapes": [],
+			"outgoing": [],
+			"bounds": {
+				"lowerRight": {
+					"x": 413,
+					"y": 106
+				},
+				"upperLeft": {
+					"x": 385,
+					"y": 78
+				}
+			},
+			"dockers": []
+		}],
+		"outgoing": [{
+			"resourceId": "sid-5AE18525-6BE3-49B3-8A64-E582CC96692C"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 456,
+				"y": 619
+			},
+			"upperLeft": {
+				"x": 0,
+				"y": 435
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-5864D4F2-FD6E-49EA-950F-EDDBABCA3F18",
+		"properties": {
+			"overrideid": "start_sub3",
+			"name": "",
+			"documentation": "",
+			"asynchronousdefinition": "false",
+			"exclusivedefinition": true,
+			"executionlisteners": "",
+			"multiinstance_type": "None",
+			"multiinstance_cardinality": "",
+			"multiinstance_collection": "",
+			"multiinstance_variable": "",
+			"multiinstance_condition": ""
+		},
+		"stencil": {
+			"id": "SubProcess"
+		},
+		"childShapes": [{
+			"resourceId": "sid-2E6D6D24-3551-4D92-A026-C210B181A31E",
+			"properties": {
+				"overrideid": "sid_3333332",
+				"name": "3_2",
+				"documentation": "",
+				"asynchronousdefinition": "false",
+				"exclusivedefinition": "false",
+				"executionlisteners": "",
+				"multiinstance_type": "Parallel",
+				"multiinstance_cardinality": "",
+				"multiinstance_collection": "{users}",
+				"multiinstance_variable": "user",
+				"multiinstance_condition": "",
+				"isforcompensation": "false",
+				"usertaskassignment": {
+					"assignment": {
+						"candidateUsers": [{
+							"value": "{user}",
+							"$$hashKey": "45O"
+						}]
+					}
+				},
+				"formkeydefinition": "/state/collegeSet",
+				"duedatedefinition": "",
+				"prioritydefinition": "",
+				"formproperties": "",
+				"tasklisteners": ""
+			},
+			"stencil": {
+				"id": "UserTask"
+			},
+			"childShapes": [],
+			"outgoing": [{
+				"resourceId": "sid-0D0C5476-01C3-4480-910C-013D2B911F04"
+			}, {
+				"resourceId": "sid-05FFEB41-9C17-489F-B8BF-E4F956D63592"
+			}],
+			"bounds": {
+				"lowerRight": {
+					"x": 340,
+					"y": 132
+				},
+				"upperLeft": {
+					"x": 240,
+					"y": 52
+				}
+			},
+			"dockers": []
+		}, {
+			"resourceId": "sid-7FAFBDA3-B057-48E1-947C-76819F55A676",
+			"properties": {
+				"overrideid": "start3",
+				"name": "",
+				"documentation": "",
+				"executionlisteners": "",
+				"initiator": "",
+				"formkeydefinition": "",
+				"formproperties": ""
+			},
+			"stencil": {
+				"id": "StartNoneEvent"
+			},
+			"childShapes": [],
+			"outgoing": [{
+				"resourceId": "sid-CC67C27C-EDCD-49FE-B2EA-7201BFC6E7AB"
+			}],
+			"bounds": {
+				"lowerRight": {
+					"x": 45,
+					"y": 107
+				},
+				"upperLeft": {
+					"x": 15,
+					"y": 77
+				}
+			},
+			"dockers": []
+		}, {
+			"resourceId": "sid-C01A05DC-BD34-43D1-9D00-B311381909CE",
+			"properties": {
+				"overrideid": "sid_3333331",
+				"name": "3_1",
+				"documentation": "",
+				"asynchronousdefinition": "false",
+				"exclusivedefinition": "false",
+				"executionlisteners": "",
+				"multiinstance_type": "None",
+				"multiinstance_cardinality": "",
+				"multiinstance_collection": "",
+				"multiinstance_variable": "",
+				"multiinstance_condition": "",
+				"isforcompensation": "false",
+				"usertaskassignment": {
+					"assignment": {
+						"candidateUsers": [{
+							"value": "{user}",
+							"$$hashKey": "1SA"
+						}]
+					}
+				},
+				"formkeydefinition": "/state/collegeSet",
+				"duedatedefinition": "",
+				"prioritydefinition": "",
+				"formproperties": "",
+				"tasklisteners": ""
+			},
+			"stencil": {
+				"id": "UserTask"
+			},
+			"childShapes": [],
+			"outgoing": [{
+				"resourceId": "sid-FC4F2E95-1C6F-49E7-9943-480548969B6F"
+			}],
+			"bounds": {
+				"lowerRight": {
+					"x": 175,
+					"y": 132
+				},
+				"upperLeft": {
+					"x": 75,
+					"y": 52
+				}
+			},
+			"dockers": []
+		}, {
+			"resourceId": "sid-1A59F926-478A-4CE8-9731-DFD44BAD17E1",
+			"properties": {
+				"overrideid": "",
+				"name": "",
+				"documentation": "",
+				"executionlisteners": ""
+			},
+			"stencil": {
+				"id": "EndNoneEvent"
+			},
+			"childShapes": [],
+			"outgoing": [],
+			"bounds": {
+				"lowerRight": {
+					"x": 413,
+					"y": 106
+				},
+				"upperLeft": {
+					"x": 385,
+					"y": 78
+				}
+			},
+			"dockers": []
+		}, {
+			"resourceId": "sid-8E6CEAE9-E508-40F8-86AB-BA3D36986D70",
+			"properties": {
+				"overrideid": "",
+				"name": "",
+				"documentation": "",
+				"text": ""
+			},
+			"stencil": {
+				"id": "TextAnnotation"
+			},
+			"childShapes": [],
+			"outgoing": [],
+			"bounds": {
+				"lowerRight": {
+					"x": 485,
+					"y": 117
+				},
+				"upperLeft": {
+					"x": 385,
+					"y": 67
+				}
+			},
+			"dockers": []
+		}],
+		"outgoing": [{
+			"resourceId": "sid-38799E97-9704-49D0-A87C-68AB7EA00CD6"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 966,
+				"y": 619
+			},
+			"upperLeft": {
+				"x": 510,
+				"y": 435
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-39584DE3-3D52-4015-8899-9C3BB022ECBB",
+		"properties": {
+			"overrideid": "",
+			"name": "",
+			"documentation": "",
+			"executionlisteners": ""
+		},
+		"stencil": {
+			"id": "EndNoneEvent"
+		},
+		"childShapes": [],
+		"outgoing": [],
+		"bounds": {
+			"lowerRight": {
+				"x": 242,
+				"y": 718
+			},
+			"upperLeft": {
+				"x": 214,
+				"y": 690
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-D6937158-00D0-4C16-B58D-8A7ED39DB784",
+		"properties": {
+			"overrideid": "",
+			"name": "",
+			"documentation": "",
+			"executionlisteners": ""
+		},
+		"stencil": {
+			"id": "EndNoneEvent"
+		},
+		"childShapes": [],
+		"outgoing": [],
+		"bounds": {
+			"lowerRight": {
+				"x": 752,
+				"y": 703
+			},
+			"upperLeft": {
+				"x": 724,
+				"y": 675
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-38799E97-9704-49D0-A87C-68AB7EA00CD6",
+		"properties": {
+			"overrideid": "",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-D6937158-00D0-4C16-B58D-8A7ED39DB784"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 738,
+				"y": 674.078125
+			},
+			"upperLeft": {
+				"x": 738,
+				"y": 619.125
+			}
+		},
+		"dockers": [{
+			"x": 227.99999999999997,
+			"y": 92
+		}, {
+			"x": 14,
+			"y": 14
+		}],
+		"target": {
+			"resourceId": "sid-D6937158-00D0-4C16-B58D-8A7ED39DB784"
+		}
+	}, {
+		"resourceId": "sid-9CB2EEC8-6B13-4F2D-834A-2D9AAEC7D1F1",
+		"properties": {
+			"overrideid": "sid_11111111116",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "{grade==1}",
+			"executionlisteners": "",
+			"defaultflow": "false",
+			"showdiamondmarker": false
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-033A21F1-2076-4266-96F8-953F865579B4"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 452.7584215747545,
+				"y": 434.8258905100167
+			},
+			"upperLeft": {
+				"x": 300.0407971752455,
+				"y": 385.5764532399833
+			}
+		},
+		"dockers": [{
+			"x": 20.5,
+			"y": 20.5
+		}, {
+			"x": 296.4,
+			"y": 1
+		}],
+		"target": {
+			"resourceId": "sid-033A21F1-2076-4266-96F8-953F865579B4"
+		}
+	}, {
+		"resourceId": "sid-800B6DE0-B672-4C90-9D31-CFA2E6881188",
+		"properties": {
+			"overrideid": "sid_11111111111",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false",
+			"showdiamondmarker": false
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-0D5619F2-702E-4495-A091-1832A671EECE"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 468,
+				"y": 90
+			},
+			"upperLeft": {
+				"x": 468,
+				"y": 48.5
+			}
+		},
+		"dockers": [{
+			"x": 15,
+			"y": 15
+		}, {
+			"x": 228,
+			"y": 1
+		}],
+		"target": {
+			"resourceId": "sid-0D5619F2-702E-4495-A091-1832A671EECE"
+		}
+	}, {
+		"resourceId": "sid-5AE18525-6BE3-49B3-8A64-E582CC96692C",
+		"properties": {
+			"overrideid": "",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-39584DE3-3D52-4015-8899-9C3BB022ECBB"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 228,
+				"y": 689.171875
+			},
+			"upperLeft": {
+				"x": 228,
+				"y": 619.265625
+			}
+		},
+		"dockers": [{
+			"x": 227.99999999999997,
+			"y": 92
+		}, {
+			"x": 14,
+			"y": 14
+		}],
+		"target": {
+			"resourceId": "sid-39584DE3-3D52-4015-8899-9C3BB022ECBB"
+		}
+	}, {
+		"resourceId": "sid-0D0C5476-01C3-4480-910C-013D2B911F04",
+		"properties": {
+			"overrideid": "",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-1A59F926-478A-4CE8-9731-DFD44BAD17E1"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 894.375,
+				"y": 527
+			},
+			"upperLeft": {
+				"x": 850.390625,
+				"y": 527
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 14,
+			"y": 14
+		}],
+		"target": {
+			"resourceId": "sid-1A59F926-478A-4CE8-9731-DFD44BAD17E1"
+		}
+	}, {
+		"resourceId": "sid-8DAC7D49-C360-476D-B81C-1D14C8626B7E",
+		"properties": {
+			"overrideid": "sid_11111111115",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false",
+			"showdiamondmarker": false
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-32712760-18A7-4702-BE4C-8CFB6F9A01B6"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 468.5,
+				"y": 359.08434889586215
+			},
+			"upperLeft": {
+				"x": 468.5,
+				"y": 274.3178317032764
+			}
+		},
+		"dockers": [{
+			"x": 228.5,
+			"y": 159.83983293351787
+		}, {
+			"x": 20.5,
+			"y": 20.5
+		}],
+		"target": {
+			"resourceId": "sid-32712760-18A7-4702-BE4C-8CFB6F9A01B6"
+		}
+	}, {
+		"resourceId": "sid-05FFEB41-9C17-489F-B8BF-E4F956D63592",
+		"properties": {
+			"overrideid": "",
+			"name": "",
+			"documentation": ""
+		},
+		"stencil": {
+			"id": "Association"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-8E6CEAE9-E508-40F8-86AB-BA3D36986D70"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 894.2500542490575,
+				"y": 526.4739588984277
+			},
+			"upperLeft": {
+				"x": 850.4999457509425,
+				"y": 526.0182286015723
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 1,
+			"y": 24
+		}],
+		"target": {
+			"resourceId": "sid-8E6CEAE9-E508-40F8-86AB-BA3D36986D70"
+		}
+	}, {
+		"resourceId": "sid-08B73309-DB45-49FE-A5F2-1492F69DF339",
+		"properties": {
+			"overrideid": "sid_11111111117",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "{grade==2}",
+			"executionlisteners": "",
+			"defaultflow": "false",
+			"showdiamondmarker": false
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-5864D4F2-FD6E-49EA-950F-EDDBABCA3F18"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 665.6398714675831,
+				"y": 434.8752175062787
+			},
+			"upperLeft": {
+				"x": 485.42452453232534,
+				"y": 383.6892356187213
+			}
+		},
+		"dockers": [{
+			"x": 29.7166748046875,
+			"y": 21.5
+		}, {
+			"x": 159.60000000000002,
+			"y": 1
+		}],
+		"target": {
+			"resourceId": "sid-5864D4F2-FD6E-49EA-950F-EDDBABCA3F18"
+		}
+	}, {
+		"resourceId": "sid-73747063-14DC-40C8-9B62-9B80E9C19462",
+		"properties": {
+			"overrideid": "sid_1111114",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-C44C8E6E-EE64-44B8-B9B5-AA06F4E7C765"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 624.375,
+				"y": 182
+			},
+			"upperLeft": {
+				"x": 580.390625,
+				"y": 182
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 14,
+			"y": 14
+		}],
+		"target": {
+			"resourceId": "sid-C44C8E6E-EE64-44B8-B9B5-AA06F4E7C765"
+		}
+	}, {
+		"resourceId": "sid-F082D6FA-543E-4213-BF52-575DC464D798",
+		"properties": {
+			"overrideid": "",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-EBB4F3E0-A15F-4498-B5DC-0F252248E456"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 384.375,
+				"y": 527
+			},
+			"upperLeft": {
+				"x": 340.390625,
+				"y": 527
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 14,
+			"y": 14
+		}],
+		"target": {
+			"resourceId": "sid-EBB4F3E0-A15F-4498-B5DC-0F252248E456"
+		}
+	}, {
+		"resourceId": "sid-EA2084C2-6912-4F0C-9027-851D0A8AEDC2",
+		"properties": {
+			"overrideid": "sid_111111122222",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false",
+			"showdiamondmarker": false
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-8B4115E3-3379-49BC-94BA-EEA2B1F483B1"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 240,
+				"y": 527
+			},
+			"upperLeft": {
+				"x": 175.84375,
+				"y": 527
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 1,
+			"y": 40
+		}],
+		"target": {
+			"resourceId": "sid-8B4115E3-3379-49BC-94BA-EEA2B1F483B1"
+		}
+	}, {
+		"resourceId": "sid-FC4F2E95-1C6F-49E7-9943-480548969B6F",
+		"properties": {
+			"overrideid": "sid_111111113333",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false",
+			"showdiamondmarker": false
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-2E6D6D24-3551-4D92-A026-C210B181A31E"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 750,
+				"y": 527
+			},
+			"upperLeft": {
+				"x": 685.84375,
+				"y": 527
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 1,
+			"y": 40
+		}],
+		"target": {
+			"resourceId": "sid-2E6D6D24-3551-4D92-A026-C210B181A31E"
+		}
+	}, {
+		"resourceId": "sid-E175C39F-8E8A-4182-8CC4-0804D16578DA",
+		"properties": {
+			"overrideid": "sid_11111111113",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false",
+			"showdiamondmarker": false
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-B520A589-E90A-4D2A-870D-D9F6EA8462D5"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 480,
+				"y": 182
+			},
+			"upperLeft": {
+				"x": 415.84375,
+				"y": 182
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 1,
+			"y": 40
+		}],
+		"target": {
+			"resourceId": "sid-B520A589-E90A-4D2A-870D-D9F6EA8462D5"
+		}
+	}, {
+		"resourceId": "sid-345684A5-6B2C-4CA6-AC98-DBBBF556CFE1",
+		"properties": {
+			"overrideid": "",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false",
+			"showdiamondmarker": false
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-E1F50E6B-A754-49F2-A211-70DB6C59BB34"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 314.15625,
+				"y": 182
+			},
+			"upperLeft": {
+				"x": 270.609375,
+				"y": 182
+			}
+		},
+		"dockers": [{
+			"x": 15,
+			"y": 15
+		}, {
+			"x": 50,
+			"y": 40
+		}],
+		"target": {
+			"resourceId": "sid-E1F50E6B-A754-49F2-A211-70DB6C59BB34"
+		}
+	}, {
+		"resourceId": "sid-CC67C27C-EDCD-49FE-B2EA-7201BFC6E7AB",
+		"properties": {
+			"overrideid": "",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false",
+			"showdiamondmarker": false
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-C01A05DC-BD34-43D1-9D00-B311381909CE"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 584.526123046875,
+				"y": 527
+			},
+			"upperLeft": {
+				"x": 555.568359375,
+				"y": 527
+			}
+		},
+		"dockers": [{
+			"x": 15,
+			"y": 15
+		}, {
+			"x": 13.2734375,
+			"y": 40
+		}],
+		"target": {
+			"resourceId": "sid-C01A05DC-BD34-43D1-9D00-B311381909CE"
+		}
+	}, {
+		"resourceId": "sid-CFF06C0E-7582-49E6-85BC-6BCEFC679A69",
+		"properties": {
+			"overrideid": "",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false",
+			"showdiamondmarker": false
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-22011209-2F87-497B-809E-5B476C7E51FC"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 74.51605224609375,
+				"y": 525
+			},
+			"upperLeft": {
+				"x": 45.761962890625,
+				"y": 525
+			}
+		},
+		"dockers": [{
+			"x": 15,
+			"y": 15
+		}, {
+			"x": 33.73046875,
+			"y": 38
+		}],
+		"target": {
+			"resourceId": "sid-22011209-2F87-497B-809E-5B476C7E51FC"
+		}
+	}],
+	"bounds": {
+		"lowerRight": {
+			"x": 1200,
+			"y": 1050
+		},
+		"upperLeft": {
+			"x": 0,
+			"y": 0
+		}
+	},
+	"stencilset": {
+		"url": "stencilsets/bpmn2.0/bpmn2.0.json",
+		"namespace": "http://b3mn.org/stencilset/bpmn2.0#"
+	},
+	"ssextensions": []
+}

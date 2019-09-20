@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwFassetsDao">
+
+	<sql id="pwFassetsColumns">
+		a.id AS "id",
+		a.rid AS "pwRoom.id",
+		a.cid AS "pwCategory.id",
+		a.name AS "name",
+		a.brand AS "brand",
+		a.specification AS "specification",
+		a.prname AS "prname",
+		a.phone AS "phone",
+		a.mobile AS "mobile",
+		a.time AS "time",
+		a.price AS "price",
+		a.status AS "status",
+		a.resp_name AS "respName",
+		a.resp_phone AS "respPhone",
+		a.resp_mobile AS "respMobile",
+		a.start_date AS "startDate",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+
+		c.parent_id AS "pwCategory.parent.id",
+		c.parent_ids AS "pwCategory.parentIds",
+		c.name AS "pwCategory.name",
+		c.update_date AS "pwCategory.updateDate",
+		c.update_by AS "pwCategory.updateBy.id",
+		c.create_date AS "pwCategory.createDate",
+		c.create_by AS "pwCategory.createBy.id",
+		c.remarks AS "pwCategory.remarks",
+		c.del_flag AS "pwCategory.delFlag",
+
+		cc.name AS "pwCategory.parent.name",
+
+		r.name AS "pwRoom.name",
+		r.person AS "pwRoom.person",
+		r.phone AS "pwRoom.phone",
+		r.mobile AS "pwRoom.mobile",
+		r.alias AS "pwRoom.alias",
+		r.type AS "pwRoom.type",
+		r.num AS "pwRoom.num",
+		r.is_usable AS "pwRoom.isUsable",
+		r.sid AS "pwRoom.pwSpace.id",
+		r.update_date AS "pwRoom.updateDate",
+		r.update_by AS "pwRoom.updateBy.id",
+		r.create_date AS "pwRoom.createDate",
+		r.create_by AS "pwRoom.createBy.id",
+		r.remarks AS "pwRoom.remarks",
+		r.del_flag AS "pwRoom.delFlag",
+
+		b.parent_id AS "pwRoom.pwSpace.parent.id",
+		b.parent_ids AS "pwRoom.pwSpace.parentIds",
+		b.name AS "pwRoom.pwSpace.name",
+		b.person AS "pwRoom.pwSpace.person",
+		b.type AS "pwRoom.pwSpace.type",
+		b.phone AS "pwRoom.pwSpace.phone",
+		b.mobile AS "pwRoom.pwSpace.mobile",
+		b.open_week AS "pwRoom.pwSpace.openWeek",
+		b.am_open_start_time AS "pwRoom.pwSpace.amOpenStartTime",
+		b.am_open_end_time AS "pwRoom.pwSpace.amOpenEndTime",
+		b.pm_open_start_time AS "pwRoom.pwSpace.pmOpenStartTime",
+		b.pm_open_end_time AS "pwRoom.pwSpace.pmOpenEndTime",
+		b.floor_num AS "pwRoom.pwSpace.floorNum",
+		b.area AS "pwRoom.pwSpace.area",
+		b.update_date AS "pwRoom.pwSpace.updateDate",
+		b.update_by AS "pwRoom.pwSpace.updateBy.id",
+		b.create_date AS "pwRoom.pwSpace.createDate",
+		b.create_by AS "pwRoom.pwSpace.createBy.id",
+		b.remarks AS "pwRoom.pwSpace.remarks",
+		b.del_flag AS "pwRoom.pwSpace.delFlag",
+
+		p.parent_id AS "pwRoom.pwSpace.parent.parent.id",
+		p.parent_ids AS "pwRoom.pwSpace.parent.parentIds",
+		p.name AS "pwRoom.pwSpace.parent.name",
+
+		pp.parent_id AS "pwRoom.pwSpace.parent.parent.parent.id",
+		pp.parent_ids AS "pwRoom.pwSpace.parent.parent.parentIds",
+		pp.name AS "pwRoom.pwSpace.parent.parent.name"
+	</sql>
+
+	<sql id="pwFassetsJoins">
+		LEFT JOIN pw_category c ON c.id = a.cid
+		LEFT JOIN pw_category cc on cc.id = c.parent_id
+		LEFT JOIN pw_room r ON r.id = a.rid
+		LEFT JOIN pw_space b ON b.id = r.sid
+		LEFT JOIN pw_space p ON p.id = b.parent_id
+		LEFT JOIN pw_space pp ON pp.id = p.parent_id
+	</sql>
+
+	<select id="get" resultType="PwFassets">
+		SELECT
+			<include refid="pwFassetsColumns"/>
+		FROM pw_fassets a
+		<include refid="pwFassetsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="PwFassets">
+		SELECT
+			<include refid="pwFassetsColumns"/>
+		FROM pw_fassets a
+		<include refid="pwFassetsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="pwRoom != null">
+				<if test="pwRoom.id != null and pwRoom.id != ''">
+					AND a.rid = #{pwRoom.id}
+				</if>
+				<if test="pwRoom.name != null and pwRoom.name != ''">
+					AND r.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{pwRoom.name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{pwRoom.name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{pwRoom.name},'%')</if>
+				</if>
+			</if>
+
+			<if test="pwCategory != null">
+				<if test="pwCategory.id != null and pwCategory.id != ''">
+					AND a.cid = #{pwCategory.id}
+				</if>
+			</if>
+			<if test="pwCategory != null and pwCategory.parent != null">
+				<if test="pwCategory.parent.id != null and pwCategory.parent.id != ''">
+					AND cc.id = #{pwCategory.parent.id}
+				</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="brand != null and brand != ''">
+				AND a.brand = #{brand}
+			</if>
+			<if test="specification != null and specification != ''">
+				AND a.specification = #{specification}
+			</if>
+			<if test="prname != null and prname != ''">
+				AND a.prname = #{prname}
+			</if>
+			<if test="phone != null and phone != ''">
+				AND a.phone = #{phone}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND a.mobile = #{mobile}
+			</if>
+			<if test="time != null and time != ''">
+				AND a.time = #{time}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="respName != null and respName != ''">
+				AND a.resp_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{respName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{respName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{respName},'%')</if>
+			</if>
+			<if test="respPhone != null and respPhone != ''">
+				AND a.resp_phone = #{respPhone}
+			</if>
+			<if test="respMobile != null and respMobile != ''">
+				AND a.resp_mobile = #{respMobile}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date = #{startDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByRoom" resultType="PwFassets">
+		SELECT
+			<include refid="pwFassetsColumns"/>
+		FROM pw_fassets a
+		<include refid="pwFassetsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND a.rid = #{pwRoom.id}
+			<if test="pwCategory != null">
+				<if test="pwCategory.id != null and pwCategory.id != ''">
+					AND a.cid = #{pwCategory.id}
+				</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="brand != null and brand != ''">
+				AND a.brand = #{brand}
+			</if>
+			<if test="specification != null and specification != ''">
+				AND a.specification = #{specification}
+			</if>
+			<if test="prname != null and prname != ''">
+				AND a.prname = #{prname}
+			</if>
+			<if test="phone != null and phone != ''">
+				AND a.phone = #{phone}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND a.mobile = #{mobile}
+			</if>
+			<if test="time != null and time != ''">
+				AND a.time = #{time}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="respName != null and respName != ''">
+				AND a.resp_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{respName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{respName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{respName},'%')</if>
+			</if>
+			<if test="respPhone != null and respPhone != ''">
+				AND a.resp_phone = #{respPhone}
+			</if>
+			<if test="respMobile != null and respMobile != ''">
+				AND a.resp_mobile = #{respMobile}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date = #{startDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByNoRoom" resultType="PwFassets">
+		SELECT
+			<include refid="pwFassetsColumns"/>
+		FROM pw_fassets a
+		<include refid="pwFassetsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND a.status = 0 AND (a.rid is NULL OR a.rid = '')
+			<if test="pwCategory != null">
+				<if test="pwCategory.id != null and pwCategory.id != ''">
+					AND a.cid = #{pwCategory.id}
+				</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="brand != null and brand != ''">
+				AND a.brand = #{brand}
+			</if>
+			<if test="specification != null and specification != ''">
+				AND a.specification = #{specification}
+			</if>
+			<if test="prname != null and prname != ''">
+				AND a.prname = #{prname}
+			</if>
+			<if test="phone != null and phone != ''">
+				AND a.phone = #{phone}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND a.mobile = #{mobile}
+			</if>
+			<if test="time != null and time != ''">
+				AND a.time = #{time}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="respName != null and respName != ''">
+				AND a.resp_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{respName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{respName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{respName},'%')</if>
+			</if>
+			<if test="respPhone != null and respPhone != ''">
+				AND a.resp_phone = #{respPhone}
+			</if>
+			<if test="respMobile != null and respMobile != ''">
+				AND a.resp_mobile = #{respMobile}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date = #{startDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="PwFassets">
+		SELECT
+			<include refid="pwFassetsColumns"/>
+		FROM pw_fassets a
+		<include refid="pwFassetsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByIds" resultType="PwFassets" parameterType="java.util.List">
+		SELECT
+			<include refid="pwFassetsColumns"/>
+		FROM pw_fassets a
+		<include refid="pwFassetsJoins"/>
+		<where>
+			a.del_flag = 0 AND a.id in
+			<foreach item="id" collection="ids" open="(" separator=","
+				close=")">
+				#{id}
+			</foreach>
+		</where>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pw_fassets(
+			id,
+			rid,
+			cid,
+			name,
+			brand,
+			specification,
+			prname,
+			phone,
+			mobile,
+			time,
+			price,
+			status,
+			resp_name,
+			resp_phone,
+			resp_mobile,
+			start_date,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{pwRoom.id},
+			#{pwCategory.id},
+			#{name},
+			#{brand},
+			#{specification},
+			#{prname},
+			#{phone},
+			#{mobile},
+			#{time},
+			#{price},
+			#{status},
+			#{respName},
+			#{respPhone},
+			#{respMobile},
+			#{startDate},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO pw_fassets(
+		id,
+		rid,
+		cid,
+		name,
+		brand,
+		specification,
+		prname,
+		phone,
+		mobile,
+		time,
+		price,
+		status,
+		resp_name,
+		resp_phone,
+		resp_mobile,
+		start_date,
+		update_date,
+		update_by,
+		create_date,
+		create_by,
+		remarks,
+		del_flag
+		) VALUES
+		<foreach item="item" collection="list" separator=",">
+			(
+			#{item.id},
+			#{item.pwRoom.id},
+			#{item.pwCategory.id},
+			#{item.name},
+			#{item.brand},
+			#{item.specification},
+			#{item.prname},
+			#{item.phone},
+			#{item.mobile},
+			#{item.time},
+			#{item.price},
+			#{item.status},
+			#{item.respName},
+			#{item.respPhone},
+			#{item.respMobile},
+			#{item.startDate},
+			#{item.updateDate},
+			#{item.updateBy.id},
+			#{item.createDate},
+			#{item.createBy.id},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+
+
+	</insert>
+
+	<update id="update">
+		UPDATE pw_fassets SET
+			rid = #{pwRoom.id},
+			cid = #{pwCategory.id},
+			name = #{name},
+			brand = #{brand},
+			specification = #{specification},
+			prname = #{prname},
+			phone = #{phone},
+			mobile = #{mobile},
+			time = #{time},
+			price = #{price},
+			status = #{status},
+			resp_name = #{respName},
+			resp_phone = #{respPhone},
+			resp_mobile = #{respMobile},
+			start_date = #{startDate},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateByPL" parameterType="java.util.List" >
+		UPDATE pw_fassets
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="rid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.pwRoom.id}
+				</foreach>
+			</trim>
+			<trim prefix="status =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.status}
+				</foreach>
+			</trim>
+			<trim prefix="resp_name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.respName}
+				</foreach>
+			</trim>
+			<trim prefix="resp_phone =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.respPhone}
+				</foreach>
+			</trim>
+			<trim prefix="resp_mobile =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.respMobile}
+				</foreach>
+			</trim>
+			<trim prefix="start_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.startDate}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="delete">
+		UPDATE pw_fassets SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateByRoomIds" parameterType="java.util.List">
+		UPDATE pw_fassets SET rid=NULL, resp_name=NULL, resp_phone=NULL, resp_mobile=NULL, start_date=NULL, status='0'
+		WHERE rid IN
+		<foreach item="item" collection="roomIds" separator="," open="("
+				 close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<select id="findByCategory" parameterType="java.util.List">
+		SELECT
+		<include refid="pwFassetsColumns"/>
+		FROM pw_fassets a
+		<include refid="pwFassetsJoins"/>
+		<where>
+
+		</where>
+	</select>
+
+</mapper>

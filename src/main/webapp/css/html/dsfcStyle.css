@@ -1,0 +1,217 @@
+  body {
+  	background-color: #f6f6f6;
+  }
+  
+  P {
+  	font-size: 1.3rem!important;
+  }
+ 
+  header img {
+  	display: block;
+  	max-width: 100%;
+  }
+  
+  ul li {
+  	list-style: none;
+  }
+  
+  header .ongimginfo {
+  	display: block;
+  	margin: 89px auto;
+  	max-width: 100%;
+  }
+  
+  .card-info {
+  	margin: 63px auto;
+  	width: 960px;
+  	max-width: 1243px;
+  	position: relative;
+  }
+  
+  .card_ft {
+  	position: absolute;
+  	left: -182px;
+  	top: -76px;
+  }
+  
+  .card_ft01 {
+  	position: absolute;
+  	left: 30px;
+  	bottom: -1017px;
+  }
+  
+  .card_ft02 {
+  	position: absolute;
+  	left: -23px;
+  	bottom: -600px;
+  }
+  
+  .wer {
+  	position: absolute;
+  	left: 1054px;
+  	bottom: 300px;
+  }
+  
+  .werr {
+  	position: absolute;
+  	left: 1054px;
+  	bottom: -1350px;
+  }
+  
+  .werone {
+  	position: absolute;
+  	left: 886px;
+  	bottom: -1388px;
+  }
+  
+  .card-info .title {
+  	color: #dc3d1f;
+  	padding-bottom: 30px;
+  }
+  
+  .card-info .teacher-info {
+  	margin-bottom: 50px;
+  	background-color: #FFF;
+  	padding: 20px;
+  }
+  
+  .card-info .teacher-info .list {
+  	margin-right: 250px;
+  	line-height: 2;
+  	list-style-image: url(img/listitem_dot.png);
+  }
+  
+  .card-info .teacher-info .photo {
+  	float: right;
+  	margin-top: -40px;
+  	text-align: center;
+  }
+  
+  .card-info .teacher-info .photo img {
+  	display: block;
+  	margin-right: 15px;
+  	box-shadow: 0 0 5px;
+  }
+  
+  .card-info .teacher-info .photo .name {
+  	display: inline-block;
+  	margin-top: 12px;
+  	padding: 3px;
+  	color: #dc3d1f;
+  	letter-spacing: 5px;
+  	border-bottom: 1px solid lightgray;
+  }
+  
+  .card-infoone {
+  	margin: 230px auto;
+  	width: 960px;
+  	max-width: 1243px;
+  }
+  
+  .card-infoone .title {
+  	color: #dc3d1f;
+  }
+  
+  .fcteacher {
+  	margin-top: 120px;
+  	background-color: #fff;
+  	/*width: 460px;*/
+  	height: 324px;
+  	padding: 20px;
+  	border: 2px solid #EDEDED;
+  }
+  
+  .yinhao {
+  	width: 29px;
+  	height: 27px;
+  	background-color: #BE5B3B;
+  	float: left;
+  }
+  
+  .yinhao span {
+  	font-size: 50px;
+  	color: #fff;
+  	line-height: 47px;
+  	text-align: center;
+  }
+  
+  .teacherclass {
+  	width: 93px;
+  	height: 75px;
+  	float: left;
+  	margin-top: -57px;
+  }
+  
+  .teacherclass img {
+  	width: 100%;
+  }
+  
+  #character {
+  	padding-top: 24px;
+  	font-size: 15px;
+  	font-weight: 500;
+  	letter-spacing: 1px;
+  	line-height: 23px;
+  }
+  
+  .teacharname {
+  	padding: 20px 20px;
+  }
+  
+  .name {
+  	float: left;
+  	border-right: 2px solid #E96942;
+  	height: 45px;
+  	padding-right: 10px;
+  }
+  
+  .name h2 {
+  	color: #E7330E;
+  	margin-top: 5px;
+  }
+  
+  .nameinfo {
+  	float: left;
+  	margin-left: 10px;
+  	font-size: 16px;
+  	line-height: 25px;
+  }
+  
+  .nameinfo span {
+  	color: #EB9B78;
+  }
+  
+  .tj {
+  	width: 48%;
+  }
+  
+  body {
+  	background-color: #f6f6f6!important;
+  }
+  
+  .fxj {
+  	margin-left: -19px;
+  	margin-top: 37px;
+  }
+  
+  .carousel-indicators li {
+  	background-color: #ccc!important;
+  }
+  
+  .carousel-indicators {
+  	bottom: -55px!important;
+  	left: 480px!important;
+  }
+  
+  .carousel-indicators li:hover {
+  	background-color: #fff!important;
+  	border: 1px solid red !important;
+  }
+  
+  .next img {
+  	position: absolute;
+  	top: 35px;
+  	left: 250px;
+  	z-index: 99;
+  	background-color: pink;
+  }

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.impdata.dao.PmgTeasErrorDao">
+
+	<sql id="pmgTeasErrorColumns">
+		a.id AS "id",
+		a.imp_id AS "impId",
+		a.pmge_id AS "pmgeId",
+		a.name AS "name",
+		a.no AS "no",
+		a.office AS "office",
+		a.enter AS "enter",
+		a.mobile AS "mobile",
+		a.email AS "email",
+		a.zhicheng AS "zhicheng",
+		a.sort AS "sort",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id"
+	</sql>
+
+	<sql id="pmgTeasErrorJoins">
+	</sql>
+
+	<select id="get" resultType="PmgTeasError">
+		SELECT
+			<include refid="pmgTeasErrorColumns"/>
+		FROM pmg_teas_error a
+		<include refid="pmgTeasErrorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="PmgTeasError">
+		SELECT
+			<include refid="pmgTeasErrorColumns"/>
+		FROM pmg_teas_error a
+		<include refid="pmgTeasErrorJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="PmgTeasError">
+		SELECT
+			<include refid="pmgTeasErrorColumns"/>
+		FROM pmg_teas_error a
+		<include refid="pmgTeasErrorJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pmg_teas_error(
+			id,
+			imp_id,
+			pmge_id,
+			name,
+			no,
+			office,
+			enter,
+			mobile,
+			email,
+			zhicheng,
+			sort,
+			update_date,
+			update_by,
+			create_date,
+			create_by
+		) VALUES (
+			#{id},
+			#{impId},
+			#{pmgeId},
+			#{name},
+			#{no},
+			#{office},
+			#{enter},
+			#{mobile},
+			#{email},
+			#{zhicheng},
+			#{sort},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pmg_teas_error SET
+			imp_id=#{impId},
+			pmge_id = #{pmgeId},
+			name = #{name},
+			no = #{no},
+			office = #{office},
+			enter = #{enter},
+			mobile = #{mobile},
+			email = #{email},
+			zhicheng = #{zhicheng},
+			sort = #{sort},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM pmg_teas_error
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM pmg_teas_error WHERE id = #{id}
+	</update>
+	<select id="getListByImpId" resultType="PmgTeasError"
+		parameterType="java.lang.String">
+		SELECT
+		t.*
+		FROM
+		pmg_teas_error t
+		WHERE
+		t.imp_id = #{impid}
+		order by
+		t.sort
+	</select>
+	<update id="deleteByImpId" parameterType="java.lang.String">
+		DELETE FROM
+		pmg_teas_error
+		WHERE imp_id = #{impid}
+	</update>
+</mapper>

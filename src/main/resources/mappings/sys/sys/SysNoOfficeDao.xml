@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.sys.modules.sys.dao.SysNoOfficeDao">
+
+	<sql id="sysNoOfficeColumns">
+		a.id AS "id",
+		a.no_id AS "sysNoId",
+		a.office_id AS "office.id",
+		a.max_val AS "maxVal",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		o3.name AS "office.name",
+
+		b.id AS "sysNo.id",
+		b.name AS "sysNo.name",
+		b.clazz AS "sysNo.clazz",
+		b.keyss AS "sysNo.keyss",
+		b.sysmax_val AS "sysNo.sysmaxVal",
+		b.format AS "sysNo.format",
+		b.prefix AS "sysNo.prefix",
+		b.postfix AS "sysNo.postfix",
+		b.update_date AS "sysNo.updateDate",
+		b.update_by AS "sysNo.updateBy.id",
+		b.create_date AS "sysNo.createDate",
+		b.create_by AS "sysNo.createBy.id",
+		b.remarks AS "sysNo.remarks",
+		b.del_flag AS "sysNo.delFlag"
+	</sql>
+
+	<sql id="sysNoOfficeJoins">
+		LEFT JOIN sys_no b ON b.id = a.no_id
+		LEFT JOIN sys_office o3 ON o3.id = a.office_id
+	</sql>
+
+	<select id="get" resultType="SysNoOffice">
+		SELECT
+			<include refid="sysNoOfficeColumns"/>
+		FROM sys_no_office a
+		<include refid="sysNoOfficeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByKeyss" resultType="SysNoOffice">
+		SELECT
+			<include refid="sysNoOfficeColumns"/>
+		FROM sys_no_office a
+		<include refid="sysNoOfficeJoins"/>
+		WHERE b.keyss = #{keyss} AND a.office_id = #{officeId}
+	</select>
+
+	<select id="findList" resultType="SysNoOffice">
+		SELECT
+			<include refid="sysNoOfficeColumns"/>
+		FROM sys_no_office a
+		<include refid="sysNoOfficeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="sysNo != null and sysNo.id != null and sysNo.id != ''">
+				AND a.no_id = #{sysNo.id}
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND a.office_id = #{office.id}
+			</if>
+			<if test="maxVal != null and maxVal != ''">
+				AND a.max_val = #{maxVal}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysNoOffice">
+		SELECT
+			<include refid="sysNoOfficeColumns"/>
+		FROM sys_no_office a
+		<include refid="sysNoOfficeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_no_office(
+			id,
+			no_id,
+			office_id,
+			max_val,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{sysNo.id},
+			#{office.id},
+			#{maxVal},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_no_office SET
+			no_id = #{sysNo.id},
+			office_id = #{office.id},
+			max_val = #{maxVal},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_no_office SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

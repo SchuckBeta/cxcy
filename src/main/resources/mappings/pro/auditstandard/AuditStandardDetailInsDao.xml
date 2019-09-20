@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.auditstandard.dao.AuditStandardDetailInsDao">
+    
+	<sql id="auditStandardDetailInsColumns">
+		a.id AS "id",
+		a.fid AS "fid",
+		a.audit_info_id AS "auditInfoId",
+		a.check_point AS "checkPoint",
+		a.check_element AS "checkElement",
+		a.view_score AS "viewScore",
+		a.score AS "score",
+		a.sort AS "sort",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="auditStandardDetailInsJoins">
+	</sql>
+    
+	<select id="get" resultType="AuditStandardDetailIns">
+		SELECT 
+			<include refid="auditStandardDetailInsColumns"/>
+		FROM audit_standard_detail_ins a
+		<include refid="auditStandardDetailInsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="AuditStandardDetailIns">
+		SELECT 
+			<include refid="auditStandardDetailInsColumns"/>
+		FROM audit_standard_detail_ins a
+		<include refid="auditStandardDetailInsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="auditInfoId!= null and auditInfoId!= ''">
+				AND a.audit_info_id = #{auditInfoId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.sort ASC ,a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="AuditStandardDetailIns">
+		SELECT 
+			<include refid="auditStandardDetailInsColumns"/>
+		FROM audit_standard_detail_ins a
+		<include refid="auditStandardDetailInsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="auditInfoId!= null and auditInfoId!= ''">
+				AND a.audit_info_id = #{auditInfoId}
+			</if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.sort ASC ,a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO audit_standard_detail_ins(
+			id,
+			fid,
+			audit_info_id,
+			check_point,
+			check_element,
+			view_score,
+			score,
+			sort,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{fid},
+			#{auditInfoId},
+			#{checkPoint},
+			#{checkElement},
+			#{viewScore},
+			#{score},
+			#{sort},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE audit_standard_detail_ins SET 	
+			fid = #{fid},
+			audit_info_id = #{auditInfoId},
+			check_point = #{checkPoint},
+			check_element = #{checkElement},
+			view_score = #{viewScore},
+			score = #{score},
+			sort = #{sort},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE audit_standard_detail_ins SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

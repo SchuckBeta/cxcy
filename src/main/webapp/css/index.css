@@ -1,0 +1,1000 @@
+@charset "UTF-8";
+
+.header-dropdown-menu-bg {
+    height: 40px;
+    width: 100%;
+    background-color: rgba(232, 54, 44, .7);
+    z-index: 1;
+    position: fixed;
+    visibility: hidden;
+}
+
+.slideBox .bd ul {
+    margin: 0;
+}
+
+.logo-box {
+    width: 266px;
+    overflow: hidden;
+}
+
+.header-brand {
+    float: left;
+    width: 76px;
+    height: 76px;
+    margin-right: 10px;
+}
+
+.header-brand-text {
+    float: left;
+    position: relative;
+    width: 160px;
+    height: 76px;
+    overflow: hidden;
+}
+
+.header-brand-text .brand-text-item {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 160px;
+    height: 76px;
+    line-height: 76px;
+    overflow: hidden;
+}
+
+.header-brand-text .brand-text-item > img {
+    display: inline-block;
+}
+
+.header-brand-text .brand-text-item.active {
+    display: block;
+}
+
+.notice-module {
+    background-color: #e9442d;
+}
+
+.notice-module .w1240 {
+    width: 1240px;
+    margin: 0 auto;
+}
+
+.notice-module .in-notice-list {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 40px;
+    line-height: 40px;
+    color: #fff;
+    font-style: italic;
+    text-decoration: none;
+}
+
+.notice-module .in-notice-list i {
+    display: inline-block;
+    font-size: 24px;
+    margin-left: 4px;
+    vertical-align: middle;
+    margin-top: -5px;
+    color: #333;
+}
+
+.notice-module .carousel-notice .item {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.carousel-notice {
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+.notice-module .icon-notice {
+    display: inline-block;
+    width: 20px;
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
+.carousel-head {
+    position: absolute;
+    left: 0;
+    top: 0;
+    line-height: 40px;
+}
+
+.notice-module .carousel-inner a {
+    color: #fff;
+}
+
+.hotspotBox .title, .itemDisplayBox .title, .teacherGraceBox .title {
+    width: auto;
+    height: auto;
+}
+
+.itemDisplayBox .project-thumbnail {
+    width: 384px;
+    height: 216px;
+    overflow: hidden;
+}
+
+.itemDisplayBox .project-thumbnail img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+}
+
+.teacherClassBox .description a {
+    text-decoration: none;
+    color: #fff;
+    vertical-align: middle;
+}
+
+.bannerBox {
+    width: 100%;
+    overflow: hidden;
+}
+
+.bannerBox .slideBox .bd ul li {
+    position: relative;
+}
+
+.bannerBox .slideBox .bd ul li p {
+    position: absolute;
+    left: 20px;
+    bottom: 0px;
+    margin: 0;
+    line-height: 60px;
+    color: white;
+}
+
+.bannerBox .slideBox .bd ul li a {
+    position: absolute;
+    left: 50%;
+    bottom: 20%;
+    display: block;
+    width: 140px;
+    height: 34px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    line-height: 34px;
+    background: white;
+    color: #333;
+    margin-left: -144px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.bannerBox .slideBox .bd ul li a:last-child {
+    background: #e04527;
+    color: white;
+    margin-left: 48px;
+}
+
+.hotspotBox {
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.hotspotBox .title {
+    display: block;
+    margin: 78px auto 53px auto;
+}
+
+.hotspotBox .content {
+    max-width: 1243px;
+    height: 413px;
+    overflow: hidden;
+    margin: 0 auto 135px auto;
+    position: relative;
+}
+
+.hotspotBox .content .leftVideoBox {
+    width: 45%;
+    max-width: 517px;
+    height: 413px;
+    overflow: hidden;
+    background: black;
+    position: relative;
+}
+
+.hotspotBox .content .leftVideoBox video {
+    width: 100%;
+}
+
+.hotspotBox .content .leftVideoBox p {
+    width: 100%;
+    height: 50px;
+    color: white;
+    line-height: 50px;
+    background: rgba(254, 80, 0, 1);
+    position: absolute;
+    left: 0px;
+    bottom: -10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.hotspotBox .content .leftVideoBox img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+}
+
+.hotspotBox .content .leftVideoBox img.play {
+    margin-top: -47px;
+    margin-left: -47px;
+    display: none;
+}
+
+.hotspotBox .content .leftVideoBox img.pause {
+    margin-top: -52px;
+    margin-left: -52px;
+    display: none;
+}
+
+.hotspotBox .content .leftVideoBox img.start {
+    margin-top: -51px;
+    margin-left: -51px;
+    cursor: pointer;
+    display: none;
+}
+
+.hotspotBox .content .rightScrollBox {
+    top: 0;
+    left: 45%;
+    width: 55%;
+    height: 413px;
+    position: absolute;
+}
+
+.hotspotBox .content .rightScrollBox img {
+    width: 100%;
+    height: 413px;
+}
+
+.hotspotBox .content .rightScrollBox .slideBox2 {
+    margin: 0 50px;
+    width: auto;
+}
+
+.hotspotBox .content .rightScrollBox .slideBox2 .prev {
+    margin-left: -55px;
+}
+
+.hotspotBox .content .rightScrollBox .slideBox2 .next {
+    margin-right: -55px;
+}
+
+.indexdeco {
+    display: block;
+    width: 100%;
+}
+
+.itemDisplayBox {
+    width: 100%;
+    padding-top: 60px;
+    margin-bottom: 60px;
+    overflow: hidden;
+    background: #222222;
+}
+
+.itemDisplayBox .title {
+    display: block;
+    margin: 40px auto 90px auto;
+}
+
+.itemDisplayBox .threeBlock {
+    width: 290px;
+    overflow: hidden;
+    margin: 0 auto 60px;
+}
+
+.itemDisplayBox .threeBlock li {
+    float: left;
+    width: 134px;
+    height: 40px;
+    background: #c5c5c5;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    color: #696969;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+.itemDisplayBox .threeBlock li+li{
+    margin-left: 20px;
+}
+
+.itemDisplayBox .threeBlock li.current {
+    color: #e9442d;
+    border: 1px solid #e9442d;
+    background: white;
+}
+
+.itemDisplayBox .threeBlock li.active {
+    border: 1px solid #e9442d;
+    background: white;
+}
+
+.itemDisplayBox .threeBlock li a {
+    text-decoration: none;
+    color: #696969;
+}
+
+.itemDisplayBox .threeBlock li.active a {
+    color: #e9442d;
+
+}
+
+.itemDisplayBox .content {
+    max-width: 1240px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.itemDisplayBox .content a {
+    text-decoration: none;
+}
+
+.itemDisplayBox .content li {
+    float: left;
+    width: 31%;
+    max-width: 390px;
+    overflow: hidden;
+}
+
+.itemDisplayBox .content li:nth-child(2) {
+    margin: 0 3.5%;
+}
+
+.project-show-footer {
+    font-size: 14px;
+    color: #fff;
+    padding-top: 15px;
+    padding-bottom: 30px;
+}
+
+.project-show-footer > span {
+    line-height: 20px;
+    vertical-align: middle;
+}
+
+.project-show-footer > span > img {
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
+.project-show-footer > span + span {
+    margin-left: 15px;
+}
+
+.itemDisplayBox .content li h5 {
+    color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 20px;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 10px 8px 5px;
+}
+
+.itemDisplayBox .pro-about {
+    color: #666;
+    overflow: hidden;
+    font-size: 0;
+    margin:0 8px 10px 4px;
+}
+
+.itemDisplayBox .pro-like-look {
+    font-size: 0;
+    text-align: right;
+    margin: 0 8px 0 8px;
+    overflow: hidden;
+}
+
+
+.itemDisplayBox .pro-like-look > span {
+    display: inline-block;
+    font-size: 12px;
+    white-space: nowrap;
+    width: 48px;
+    color: #666;
+    overflow: hidden;
+}
+.itemDisplayBox .pro-like-look .source{
+    float: left;
+    width: auto;
+    max-width: 150px;
+}
+
+.itemDisplayBox .pro-like-look > span img {
+    vertical-align: baseline;
+    margin-right: 10px;
+}
+
+.itemDisplayBox .pro-about > span {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 50%;
+    padding: 0 4px;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+.itemDisplayBox .content li p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    height: 40px;
+    margin: 0 8px 10px;
+    font-size: 13px;
+    text-align: justify;
+    line-height: 20px;
+}
+
+.teacherGraceBox {
+    width: 100%;
+    overflow: hidden;
+    background: white;
+}
+
+.teacherGraceBox .title {
+    display: block;
+    margin: 60px auto 45px auto;
+}
+
+.teacherGraceBox .content {
+    width: 1240px;
+    height: 350px;
+    overflow: hidden;
+    margin: 0 auto 60px;
+    position: relative;
+}
+
+.teacherGraceBox .content .left {
+    margin-right: 494px;
+}
+
+.teacherGraceBox .content .left .slideBox3 .bd ul li .infor {
+    overflow: hidden;
+    padding: 5px 0;
+    position: relative;
+}
+
+.teacherGraceBox .content .left .slideBox3 .bd ul li .infor .people {
+    float: left;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, .3);
+}
+
+.teacherGraceBox .content .left .slideBox3 .bd ul li .infor .people img {
+    display: block;
+    width: 100%;
+}
+
+.teacherGraceBox .slideBox3 .infor .teacher-tags, .teacherGraceBox .slideBox3 .infor .teacher-name_title {
+    margin-left: 120px;
+    overflow: hidden;
+}
+
+.teacherGraceBox .slideBox3 .infor .teacher-name_title {
+    line-height: 1.5;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.teacherGraceBox .slideBox3 .infor .name {
+    display: inline-block;
+    font-size: 24px;
+}
+
+.teacherGraceBox .slideBox3 .infor i {
+    font-size: 12px;
+    color: #666;
+    font-style: normal;
+    margin-left: 15px;
+}
+
+.teacherGraceBox .teacher-tags {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.teacherGraceBox .teacher-tags > span {
+    display: inline-block;
+    padding: 0 5px;
+    text-align: center;
+    line-height: 24px;
+    font-size: 12px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    margin-right: 6px;
+    color: #fff;
+    background-color: #f39689;
+}
+
+.teacherGraceBox .content .left .slideBox3 .bd ul li .infor p strong {
+    font-size: 24px;
+    color: #333;
+    font-weight: normal;
+}
+
+.teacherGraceBox .content .left .slideBox3 .bd ul li .infor p span {
+    float: left;
+    height: 14px;
+    font-size: 12px;
+    border-right: 1px solid #9f9b9a;
+    padding: 0px 10px;
+    color: #9f9b9a;
+}
+
+.teacherGraceBox .content .left .slideBox3 .bd ul li .infor p span:last-child {
+    border: none;
+}
+
+.teacherGraceBox .content .left .slideBox3 .bd ul li .intro {
+    overflow: hidden;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    margin-top: 20px;
+    padding: 20px 10px;
+    border-top: 1px solid #eee;
+}
+
+.teacherGraceBox .content .left .slideBox3 .bd ul li .intro p {
+    max-height: 144px;
+    overflow: hidden;
+    color: #333;
+    font-size: 13px;
+    letter-spacing: 1px;
+    line-height: 20px;
+    margin: 0;
+    text-align: justify;
+}
+
+.slideBox3 .bd {
+    overflow: hidden;
+}
+
+.slideBox3 {
+    position: relative;
+    padding: 0 30px 40px;
+}
+
+.teacherGraceBox .content .left .slideBox3 .prev {
+    left: 0;
+}
+
+.teacherGraceBox .content .left .slideBox3 .next {
+    right: 0;
+}
+
+.slideBox3 .prev,
+.slideBox3 .next {
+    position: absolute;
+    top: 50%;
+    margin-top: -66px;
+    display: block;
+    width: 25px;
+    height: 43px;
+    background: url(../../img/indexarrow1111_03.jpg) no-repeat;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}
+
+.slideBox3 .next {
+    background: url(../../img/indexarrow1111_05.png) no-repeat;
+}
+
+.teacherGraceBox .content .right {
+    float: right;
+    width: 434px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow: hidden;
+}
+
+.teacherGraceBox .content .right li {
+    width: 100%;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    overflow: hidden;
+}
+
+.teacherGraceBox .content .right li:first-child {
+    padding-top: 0;
+}
+
+.teacherGraceBox .content .right li .name {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.teacherGraceBox .content .right li:last-child {
+    border: none;
+}
+
+.teacherGraceBox .content .right li .people {
+    float: left;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, .3);
+    overflow: hidden;
+}
+
+.teacherGraceBox .content .right li .people img {
+    width: 100%;
+    display: block;
+}
+
+.teacherGraceBox .content .right li p.infor {
+    margin-left: 74px;
+    margin-bottom: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.teacherGraceBox .content .right li p.intro {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0 0 0 74px;
+    font-size: 13px;
+    color: #9f9b9a;
+}
+
+.teacherGraceBox .content .right li p big {
+    float: left;
+    font-size: 18px;
+    color: #342c2a;
+}
+
+.teacherGraceBox .content .right li p span {
+    float: right;
+    padding: 0 5px;
+    text-align: center;
+    line-height: 24px;
+    font-size: 12px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    margin-right: 6px;
+    color: #fff;
+    background-color: #f39689;
+}
+
+.teacherGraceBox .content .right a {
+    color: #e9442d;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.teacher-wrap {
+    height: 546px;
+    background: url(../img/teachingbg.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+.teacherClassBox {
+    max-width: 1240px;
+    height: 546px;
+    margin: 0 auto;
+}
+
+.teacherClassBox .teach-box {
+    float: left;
+    margin-top: 45px;
+    width: 48%;
+    height: 205px;
+    position: relative;
+}
+
+.teacherClassBox .teach-box:nth-child(even) {
+    margin-left: 4%;
+}
+
+.teacherClassBox .teach-box .media {
+    height: 205px;
+    width: 205px;
+    position: relative;
+    cursor: pointer;
+}
+
+.teacherClassBox .teach-box .media video {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+.teacherClassBox .teach-box .media img {
+    display: block;
+    width: 100%;
+}
+
+.teacherClassBox .teach-box .media.video img {
+    display: none;
+}
+
+.teacherClassBox .teach-box .media.video video {
+    display: block;
+}
+
+.teacherClassBox .teach-box .media .date {
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    position: absolute;
+    bottom: 15px;
+    background-color: rgb(189, 189, 189);
+    color: #FFF;
+}
+
+.teacherClassBox .teach-box .media:hover .date {
+    background-color: #e04527;
+}
+
+.teacherClassBox .teach-box .media .date strong {
+    font-size: 20px;
+}
+
+.teacherClassBox .teach-box .description {
+    position: absolute;
+    top: -2px;
+    left: 205px;
+    height: 205px;
+    right: 0;
+    margin-left: 30px;
+    color: #FFF;
+}
+
+.teacherClassBox .teach-box .description h4 {
+    color: white;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 20px;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 25px;
+}
+
+.teacherClassBox .teach-box .description h4 > a {
+    text-decoration: none;
+}
+
+.teacherClassBox .teach-box .description h4 > a:hover {
+    color: #e9442d;
+}
+
+.teacherClassBox .teach-box .description .desc {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    width: 100%;
+    height: 40px;
+    font-size: 13px;
+    color: #d0cbcb;
+    line-height: 20px;
+}
+
+.teacherClassBox .teach-box .description .teachers {
+    margin-bottom: 5px;
+    color: #c3c3c3;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.teacherClassBox .teach-box .description .teachers .name {
+    width: 200px;
+    margin-right: 10px;
+}
+
+.teacherClassBox .teach-box .description .teachers > span {
+    display: inline-block;
+    vertical-align: top;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.teacherClassBox .teach-box .description .btns {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    font-size: 13px;
+}
+
+.sc-news {
+    padding-top: 30px;
+    margin: 0 -30px 60px 0;
+    overflow: hidden;
+}
+
+.sc-news .card {
+    width: 392px;
+    box-sizing: border-box;
+    border: 1px solid #eee;
+    float: left;
+    position: relative;
+    margin-right: 30px;
+}
+
+.sc-news .card .title {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    margin-left: -2.25em;
+    font-size: 20px;
+    padding: 0 10px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #FFF;
+}
+
+.sc-news .card .title > a {
+    color: #333;
+    text-decoration: none;
+}
+
+.sc-news .card .title > a:hover {
+    color: #e9442d;
+}
+
+.sc-news .card .photo {
+    padding: 0 15px;
+    margin: 25px 0 15px;
+    height: 230px;
+    overflow: hidden;
+}
+
+.sc-news .card .photo img {
+    display: block;
+    width: 100%;
+}
+
+.sc-news .card .news-list {
+    padding-left: 18px;
+    padding-right: 18px;
+    height: 130px;
+    list-style: none;
+    overflow: hidden;
+}
+
+.sc-news .card .news-list li {
+    line-height: 2;
+    padding-left: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.sc-news .card .news-list li:hover:after {
+    background-color: #e9442d;
+}
+
+.sc-news .card .news-list li:after {
+    content: '';
+    width: 4px;
+    display: block;
+    height: 4px;
+    border-radius: 50%;
+    position: absolute;
+    left: 0;
+    top: 10px;
+    background-color: #333;
+}
+
+.sc-news .card .news-list li .link {
+    display: block;
+    margin-right: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #333;
+    font-size: 13px;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.sc-news .card .news-list li .link:hover {
+    color: #e9442d;
+}
+
+.sc-news .card .news-list li .date {
+    float: right;
+    width: 100px;
+    font-size: 13px;
+    color: #999;
+    text-align: right;
+}
+
+.sc-news .card .more {
+    text-align: right;
+    padding-right: 20px;
+}
+
+.footerBox {
+    position: relative;
+    background: #2c2c2c;
+}
+
+.footerBox .banner {
+    background: #FFF url(../img/footer_bg_white.png) no-repeat bottom;
+    background-size: cover;
+    height: 106px;
+    padding-bottom: 80px;
+}
+
+.footerBox .title {
+    position: absolute;
+    top: 111px;
+    right: 40px;
+    padding-left: 35px;
+    background: url(../img/footerline.png) no-repeat center left;
+    color: #FFF;
+}
+
+.footerBox .frend-links {
+    max-width: 1024px;
+    margin: 0 auto;
+}
+
+.footerBox .frend-links .cl {
+    clear: left;
+}
+
+.footerBox .frend-links img {
+    float: left;
+}
+
+.footerBox .frend-links a img {
+    margin-right: 40px;
+}
+
+.footerBox .frend-links img + img {
+    margin-left: 45px;
+}
+
+.footerBox .footerline {
+    height: 0px;
+    line-height: 0px;
+    border-top: 1px solid #bdbdbd;
+    margin: 10px 50px;
+    clear: both;
+}
+
+.footerBox .copyright {
+    color: #FFF;
+    padding: 80px 0 30px 0;
+    text-align: center;
+    margin: 0
+}

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwDesignerRoomDao">
+    
+	<sql id="pwDesignerRoomColumns">
+		a.id AS "id",
+		a.cid AS "cid",
+		a.transform AS "transform",
+		a.sort AS "sort",
+		a.shapetype AS "shapetype",
+		a.type AS "type",
+		a.href AS "href",
+		a.name AS "name",
+		a.room_id AS "roomId",
+		a.angle AS "angle",
+		a.rotate AS "rotate",
+		a.x AS "x",
+		a.y AS "y",
+		a.width AS "width",
+		a.height AS "height",
+		a.style AS "style",
+		a.fill AS "fill",
+		a.stroke AS "stroke",
+		a.cssclass AS "cssclass",
+		a.room_id AS "roomId",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="pwDesignerRoomJoins">
+	</sql>
+    
+	<select id="get" resultType="PwDesignerRoom">
+		SELECT 
+			<include refid="pwDesignerRoomColumns"/>
+		FROM pw_designer_room a
+		<include refid="pwDesignerRoomJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findListByCid" resultType="PwDesignerRoom">
+		SELECT
+			<include refid="pwDesignerRoomColumns"/>
+		FROM pw_designer_room a
+		<include refid="pwDesignerRoomJoins"/>
+		<where>
+			a.del_flag ='0' and a.cid=#{cid}
+		</where>
+		ORDER BY a.sort
+	</select>
+
+	<select id="findList" resultType="PwDesignerRoom">
+		SELECT 
+			<include refid="pwDesignerRoomColumns"/>
+		FROM pw_designer_room a
+		<include refid="pwDesignerRoomJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PwDesignerRoom">
+		SELECT 
+			<include refid="pwDesignerRoomColumns"/>
+		FROM pw_designer_room a
+		<include refid="pwDesignerRoomJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pw_designer_room(
+			id,
+			cid,
+			transform,
+			shapetype,
+			name,
+			type,
+			href,
+			sort,
+			angle,
+			rotate,
+			x,
+			y,
+			width,
+			height,
+			style,
+			fill,
+			stroke,
+			cssclass,
+			room_id,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{cid},
+			#{transform},
+			#{shapetype},
+			#{name},
+			#{type},
+			#{href},
+			#{sort},
+			#{angle},
+			#{rotate},
+			#{x},
+			#{y},
+			#{width},
+			#{height},
+			#{style},
+			#{fill},
+			#{stroke},
+			#{cssclass},
+			#{roomId},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pw_designer_room SET 	
+			cid = #{cid},
+			transform = #{transform},
+			shapetype = #{shapetype},
+			sort= #{sort},
+			name = #{name},
+			type = #{type},
+			href = #{href},
+			angle = #{angle},
+			rotate = #{rotate},
+			x = #{x},
+			y = #{y},
+			width = #{width},
+			height = #{height},
+			style = #{style},
+			fill = #{fill},
+			stroke = #{stroke},
+			cssclass = #{cssclass},
+			room_id = #{roomId},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE pw_designer_room SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteAllByCid">
+		UPDATE pw_designer_room SET
+			del_flag = '1'
+		WHERE cid = #{cid}
+	</update>
+	
+</mapper>

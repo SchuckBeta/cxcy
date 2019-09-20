@@ -1,0 +1,465 @@
+{
+	"resourceId": "1c84e72d3eba4a73bb4b430e57fc0821",
+	"properties": {
+		"process_id": "processAAA",
+		"name": "",
+		"documentation": "",
+		"process_author": "",
+		"process_version": "",
+		"process_namespace": "http://www.activiti.org/processdef",
+		"executionlisteners": "{\"executionListeners\":\"[]\"}",
+		"eventlisteners": "{\"eventListeners\":\"[]\"}",
+		"signaldefinitions": "\"[]\"",
+		"messagedefinitions": "\"[]\"",
+		"messages": []
+	},
+	"stencil": {
+		"id": "BPMNDiagram"
+	},
+	"childShapes": [{
+		"resourceId": "sid-7286FC98-45EB-49AF-BD3B-AC1AC6F9CF8A",
+		"properties": {
+			"overrideid": "sid-7286FC98-45EB-49AF-BD3B-AC1AC6F9CF8A",
+			"name": "",
+			"documentation": "",
+			"executionlisteners": "",
+			"initiator": "",
+			"formkeydefinition": "",
+			"formproperties": ""
+		},
+		"stencil": {
+			"id": "StartNoneEvent"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-C79EFEDD-F6DD-46BE-BC9C-665B723A22B1"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 684,
+				"y": 58
+			},
+			"upperLeft": {
+				"x": 654,
+				"y": 28
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-F0331479-E527-46AF-AFC9-E71DFB41F841",
+		"properties": {
+			"overrideid": "sid-F0331479-E527-46AF-AFC9-E71DFB41F841",
+			"name": "subProcess",
+			"documentation": "",
+			"asynchronousdefinition": false,
+			"exclusivedefinition": true,
+			"executionlisteners": {
+				"executionListeners": []
+			},
+			"multiinstance_type": "None",
+			"multiinstance_cardinality": "",
+			"multiinstance_collection": "",
+			"multiinstance_variable": "",
+			"multiinstance_condition": "",
+			"activitytype": "Sub-Process",
+			"subprocesstype": "Embedded",
+			"dataproperties": {
+				"items": []
+			}
+		},
+		"stencil": {
+			"id": "SubProcess"
+		},
+		"childShapes": [{
+			"resourceId": "sid-D23CDCB2-BDE7-4233-87EC-82C16D35AB32",
+			"properties": {
+				"overrideid": "sid-D23CDCB2-BDE7-4233-87EC-82C16D35AB32",
+				"name": "",
+				"documentation": "",
+				"executionlisteners": "",
+				"terminateall": true
+			},
+			"stencil": {
+				"id": "EndTerminateEvent"
+			},
+			"childShapes": [],
+			"outgoing": [],
+			"bounds": {
+				"lowerRight": {
+					"x": 154,
+					"y": 232
+				},
+				"upperLeft": {
+					"x": 126,
+					"y": 204
+				}
+			},
+			"dockers": []
+		}, {
+			"resourceId": "sid-DEBEC2AA-19AD-426A-9BDC-7995A295A293",
+			"properties": {
+				"overrideid": "sid-DEBEC2AA-19AD-426A-9BDC-7995A295A293",
+				"name": "",
+				"documentation": "",
+				"executionlisteners": "",
+				"initiator": "",
+				"formkeydefinition": "",
+				"formproperties": ""
+			},
+			"stencil": {
+				"id": "StartNoneEvent"
+			},
+			"childShapes": [],
+			"outgoing": [{
+				"resourceId": "sid-E63FF40A-7F43-4D8C-9511-F675A74D7119"
+			}],
+			"bounds": {
+				"lowerRight": {
+					"x": 155,
+					"y": 45
+				},
+				"upperLeft": {
+					"x": 125,
+					"y": 15
+				}
+			},
+			"dockers": []
+		}, {
+			"resourceId": "sid-C0A2AD1C-94A4-4DCA-8B70-D238EFC65902",
+			"properties": {
+				"overrideid": "sid-C0A2AD1C-94A4-4DCA-8B70-D238EFC65902",
+				"name": "",
+				"documentation": "",
+				"asynchronousdefinition": false,
+				"exclusivedefinition": true,
+				"executionlisteners": {
+					"executionListeners": []
+				},
+				"multiinstance_type": "Parallel",
+				"multiinstance_cardinality": "",
+				"multiinstance_collection": "${test1s}",
+				"multiinstance_variable": "test1",
+				"multiinstance_condition": "",
+				"isforcompensation": "false",
+				"usertaskassignment": {
+					"assignment": {
+						"assignee": "${test1}"
+					}
+				},
+				"formkeydefinition": "",
+				"duedatedefinition": "",
+				"prioritydefinition": "",
+				"formproperties": "",
+				"tasklisteners": {
+					"taskListeners": []
+				}
+			},
+			"stencil": {
+				"id": "UserTask"
+			},
+			"childShapes": [],
+			"outgoing": [{
+				"resourceId": "sid-B1930E5F-E35D-4C2D-B28A-809B962C56D6"
+			}],
+			"bounds": {
+				"lowerRight": {
+					"x": 190,
+					"y": 163.5
+				},
+				"upperLeft": {
+					"x": 90,
+					"y": 83.5
+				}
+			},
+			"dockers": []
+		}],
+		"outgoing": [{
+			"resourceId": "sid-35EA21EC-528C-4FAD-AFBB-1C2C73F167B0"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 828,
+				"y": 352
+			},
+			"upperLeft": {
+				"x": 510,
+				"y": 105
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-E63FF40A-7F43-4D8C-9511-F675A74D7119",
+		"properties": {
+			"overrideid": "sid-E63FF40A-7F43-4D8C-9511-F675A74D7119",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-C0A2AD1C-94A4-4DCA-8B70-D238EFC65902"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 650,
+				"y": 188.0546875
+			},
+			"upperLeft": {
+				"x": 650,
+				"y": 150.609375
+			}
+		},
+		"dockers": [{
+			"x": 15,
+			"y": 15
+		}, {
+			"x": 50,
+			"y": 40
+		}],
+		"target": {
+			"resourceId": "sid-C0A2AD1C-94A4-4DCA-8B70-D238EFC65902"
+		}
+	}, {
+		"resourceId": "sid-B1930E5F-E35D-4C2D-B28A-809B962C56D6",
+		"properties": {
+			"overrideid": "sid-B1930E5F-E35D-4C2D-B28A-809B962C56D6",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-D23CDCB2-BDE7-4233-87EC-82C16D35AB32"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 650,
+				"y": 308.7109375
+			},
+			"upperLeft": {
+				"x": 650,
+				"y": 269.3671875
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 14,
+			"y": 14
+		}],
+		"target": {
+			"resourceId": "sid-D23CDCB2-BDE7-4233-87EC-82C16D35AB32"
+		}
+	}, {
+		"resourceId": "sid-C79EFEDD-F6DD-46BE-BC9C-665B723A22B1",
+		"properties": {
+			"overrideid": "sid-C79EFEDD-F6DD-46BE-BC9C-665B723A22B1",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-F0331479-E527-46AF-AFC9-E71DFB41F841"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 669,
+				"y": 104.31640625
+			},
+			"upperLeft": {
+				"x": 669,
+				"y": 58.4921875
+			}
+		},
+		"dockers": [{
+			"x": 15,
+			"y": 15
+		}, {
+			"x": 159,
+			"y": 123.5
+		}],
+		"target": {
+			"resourceId": "sid-F0331479-E527-46AF-AFC9-E71DFB41F841"
+		}
+	}, {
+		"resourceId": "sid-109964BE-97B2-4499-AA31-9FBDCD63A0FE",
+		"properties": {
+			"overrideid": "sid-109964BE-97B2-4499-AA31-9FBDCD63A0FE",
+			"name": "",
+			"documentation": "",
+			"asynchronousdefinition": false,
+			"exclusivedefinition": true,
+			"executionlisteners": {
+				"executionListeners": []
+			},
+			"multiinstance_type": "None",
+			"multiinstance_cardinality": "",
+			"multiinstance_collection": "",
+			"multiinstance_variable": "",
+			"multiinstance_condition": "",
+			"isforcompensation": "false",
+			"usertaskassignment": {
+				"assignment": {
+					"candidateUsers": [{
+						"value": "${test}"
+					}]
+				}
+			},
+			"formkeydefinition": "",
+			"duedatedefinition": "",
+			"prioritydefinition": "",
+			"formproperties": "",
+			"tasklisteners": {
+				"taskListeners": []
+			}
+		},
+		"stencil": {
+			"id": "UserTask"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-F7490F54-8C44-472B-B360-DDE040F459BE"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 973,
+				"y": 268.5
+			},
+			"upperLeft": {
+				"x": 873,
+				"y": 188.5
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-35EA21EC-528C-4FAD-AFBB-1C2C73F167B0",
+		"properties": {
+			"overrideid": "sid-35EA21EC-528C-4FAD-AFBB-1C2C73F167B0",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-109964BE-97B2-4499-AA31-9FBDCD63A0FE"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 872.390625,
+				"y": 228.5
+			},
+			"upperLeft": {
+				"x": 828.75,
+				"y": 228.5
+			}
+		},
+		"dockers": [{
+			"x": 159,
+			"y": 123.5
+		}, {
+			"x": 50,
+			"y": 40
+		}],
+		"target": {
+			"resourceId": "sid-109964BE-97B2-4499-AA31-9FBDCD63A0FE"
+		}
+	}, {
+		"resourceId": "sid-A0FC7EF6-1456-4A5C-B0A8-060295DE4224",
+		"properties": {
+			"overrideid": "sid-A0FC7EF6-1456-4A5C-B0A8-060295DE4224",
+			"name": "",
+			"documentation": "",
+			"executionlisteners": ""
+		},
+		"stencil": {
+			"id": "EndNoneEvent"
+		},
+		"childShapes": [],
+		"outgoing": [],
+		"bounds": {
+			"lowerRight": {
+				"x": 937,
+				"y": 337
+			},
+			"upperLeft": {
+				"x": 909,
+				"y": 309
+			}
+		},
+		"dockers": []
+	}, {
+		"resourceId": "sid-F7490F54-8C44-472B-B360-DDE040F459BE",
+		"properties": {
+			"overrideid": "sid-F7490F54-8C44-472B-B360-DDE040F459BE",
+			"name": "",
+			"documentation": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "sid-A0FC7EF6-1456-4A5C-B0A8-060295DE4224"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 923,
+				"y": 308.7109375
+			},
+			"upperLeft": {
+				"x": 923,
+				"y": 269.3671875
+			}
+		},
+		"dockers": [{
+			"x": 50,
+			"y": 40
+		}, {
+			"x": 14,
+			"y": 14
+		}],
+		"target": {
+			"resourceId": "sid-A0FC7EF6-1456-4A5C-B0A8-060295DE4224"
+		}
+	}],
+	"bounds": {
+		"lowerRight": {
+			"x": 1200,
+			"y": 1050
+		},
+		"upperLeft": {
+			"x": 0,
+			"y": 0
+		}
+	},
+	"stencilset": {
+		"url": "stencilsets/bpmn2.0/bpmn2.0.json",
+		"namespace": "http://b3mn.org/stencilset/bpmn2.0#"
+	},
+	"ssextensions": []
+}

@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.dr.modules.dr.dao.DrEquipmentDao">
+
+	<sql id="drEquipmentColumns">
+		a.id AS "id",
+		a.no AS "no",
+		a.name AS "name",
+		a.psw AS "psw",
+		a.ip AS "ip",
+		a.type AS "type",
+		a.port AS "port",
+		a.dr_no AS "drNo",
+		a.deal_status AS "dealStatus",
+		a.tindex AS "tindex",
+		a.tsize AS "tsize",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="drEquipmentJoins">
+	</sql>
+
+	<select id="get" resultType="DrEquipment">
+		SELECT
+			<include refid="drEquipmentColumns"/>
+		FROM dr_equipment a
+		<include refid="drEquipmentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+
+	<select id="getListByDrEquipmentNo" resultType="DrEquipment">
+		SELECT
+			<include refid="drEquipmentColumns"/>
+		FROM dr_equipment a
+		<include refid="drEquipmentJoins"/>
+		WHERE 1=1 AND a.no=#{no}
+		   <if test="delFlags != null">
+                AND a.del_flag IN
+               <foreach item="item" collection="delFlags" separator="," open="("
+                        close=")">
+                   #{item}
+               </foreach>
+           </if>
+		   <if test="delFlags == null">
+			   <if test="delFlag != null">
+	                AND a.del_flag = #{delFlag}
+	           </if>
+	           <if test="delFlag == null">
+	                AND a.del_flag = #{DEL_FLAG_NORMAL}
+	           </if>
+           </if>
+           <if test="queryStr != null and queryStr != ''">
+				AND (
+					a.no LIKE concat('%',#{queryStr},'%')
+					OR a.name LIKE concat('%',#{queryStr},'%')
+					OR a.ip LIKE concat('%',#{queryStr},'%')
+				)
+			</if>
+			<if test=" id != null and id != '' ">
+				AND a.id!=#{id}
+			</if>
+	</select>
+
+	<select id="getListByDrEquipmentIpPort" resultType="DrEquipment">
+		SELECT
+			<include refid="drEquipmentColumns"/>
+		FROM dr_equipment a
+		<include refid="drEquipmentJoins"/>
+		WHERE 1=1 AND a.ip=#{ip} and a.port=#{port}
+			<if test="delFlags != null">
+                AND a.del_flag IN
+               <foreach item="item" collection="delFlags" separator="," open="("
+                        close=")">
+                   #{item}
+               </foreach>
+           </if>
+		   <if test="delFlags == null">
+			   <if test="delFlag != null">
+	                AND a.del_flag = #{delFlag}
+	           </if>
+	           <if test="delFlag == null">
+	                AND a.del_flag = #{DEL_FLAG_NORMAL}
+	           </if>
+           </if>
+           <if test="queryStr != null and queryStr != ''">
+				AND (
+					a.no LIKE concat('%',#{queryStr},'%')
+					OR a.name LIKE concat('%',#{queryStr},'%')
+					OR a.ip LIKE concat('%',#{queryStr},'%')
+				)
+			</if>
+		<if test=" id != null and id != '' ">
+			and a.id!=#{id}
+		</if>
+	</select>
+
+	<select id="getTindexByNo" resultType="Long">
+		SELECT tindex FROM dr_equipment a WHERE a.no = #{no}
+	</select>
+
+	<select id="findList" resultType="DrEquipment">
+		SELECT
+			<include refid="drEquipmentColumns"/>
+		FROM dr_equipment a
+		<include refid="drEquipmentJoins"/>
+		<where> 1=1
+           <if test="delFlags != null">
+                AND a.del_flag IN
+               <foreach item="item" collection="delFlags" separator="," open="("
+                        close=")">
+                   #{item}
+               </foreach>
+           </if>
+		   <if test="delFlags == null">
+			   <if test="delFlag != null">
+	                AND a.del_flag = #{delFlag}
+	           </if>
+	           <if test="delFlag == null">
+	                AND a.del_flag = #{DEL_FLAG_NORMAL}
+	           </if>
+           </if>
+           <if test="queryStr != null and queryStr != ''">
+				AND (
+					a.no LIKE concat('%',#{queryStr},'%')
+					OR a.name LIKE concat('%',#{queryStr},'%')
+					OR a.ip LIKE concat('%',#{queryStr},'%')
+				)
+			</if>
+			<if test="ids != null and ids.size >0">
+                AND a.id IN
+               <foreach item="item" collection="ids" separator="," open="("
+                        close=")">
+                   #{item}
+               </foreach>
+           	</if>
+			<if test="no != null and no != ''">
+				AND a.no LIKE
+				<if test="dbName == 'oracle'">'%'||#{no}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{no}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{no},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="ip != null and ip != ''">
+				AND a.ip  LIKE
+				<if test="dbName == 'oracle'">'%'||#{ip}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{ip}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{ip},'%')</if>
+			</if>
+			<if test="port != null and port != ''">
+				AND a.port = #{port}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="dealStatus != null and dealStatus != ''">
+				AND a.deal_status = #{dealStatus}
+			</if>
+			<if test="drNo != null and drNo != ''">
+				AND a.dr_no LIKE
+					<if test="dbName == 'oracle'">'%'||#{drNo}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{drNo}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{drNo},'%')</if>
+			</if>
+			<!-- <if test="tindex != null and tindex != ''">
+				AND a.tindex <![CDATA[  >= ]]> #{tindex}
+			</if> -->
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="DrEquipment">
+		SELECT
+			<include refid="drEquipmentColumns"/>
+		FROM dr_equipment a
+		<include refid="drEquipmentJoins"/>
+		<where> 1=1
+			<if test="delFlags != null">
+                AND a.del_flag IN
+               <foreach item="item" collection="delFlags" separator="," open="("
+                        close=")">
+                   #{item}
+               </foreach>
+           </if>
+		   <if test="delFlags == null">
+			   <if test="delFlag != null">
+	                AND a.del_flag = #{delFlag}
+	           </if>
+	           <if test="delFlag == null">
+	                AND a.del_flag = #{DEL_FLAG_NORMAL}
+	           </if>
+           </if>
+           <if test="queryStr != null and queryStr != ''">
+				AND (
+					a.no LIKE concat('%',#{queryStr},'%')
+					OR a.name LIKE concat('%',#{queryStr},'%')
+					OR a.ip LIKE concat('%',#{queryStr},'%')
+				)
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dr_equipment(
+			id,
+			no,
+			name,
+			psw,
+			ip,
+			type,
+			port,
+			dr_no,
+			deal_status,
+			tindex,
+			del_flag,
+			tsize
+		) VALUES (
+			#{id},
+			#{no},
+			#{name},
+			#{psw},
+			#{ip},
+			#{type},
+			#{port},
+			#{drNo},
+			#{dealStatus},
+			#{tindex},
+			#{delFlag},
+			#{tsize}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE dr_equipment SET
+			no = #{no},
+			name = #{name},
+			psw = #{psw},
+			ip = #{ip},
+			type = #{type},
+			port = #{port},
+			dr_no = #{drNo},
+			deal_status = #{dealStatus},
+			tindex = #{tindex},
+			del_flag = #{delFlag},
+			tsize = #{tsize}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateTindexByNo">
+		UPDATE dr_equipment SET
+			tindex = #{tindex}
+		WHERE no = #{no}
+	</update>
+
+	<update id="updateBatchEquipmentStatusByIds">
+		UPDATE dr_equipment SET
+		deal_status = #{dealStatus}
+		<where>
+			<if test="ids != null and ids.size >0">
+				id in
+				<foreach collection="ids" item="id" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			</if>
+		</where>
+	</update>
+
+	<update id="updateDelFlag">
+		UPDATE dr_equipment SET
+		del_flag = #{delFlag}
+		<where>
+			<if test="ids != null and ids.size >0">
+				id in
+				<foreach collection="ids" item="id" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			</if>
+			<if test="ids == null">
+				id = #{id}
+			</if>
+		</where>
+	</update>
+
+	<update id="delete">
+		DELETE FROM dr_equipment
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM dr_equipment WHERE id = #{id}
+	</update>
+</mapper>

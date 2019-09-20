@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwBillRuleDao">
+    
+	<sql id="pwBillRuleColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.amount AS "amount",
+		a.unit AS "unit",
+		a.cycle AS "cycle",
+		a.day AS "day",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="pwBillRuleJoins">
+	</sql>
+    
+	<select id="get" resultType="PwBillRule">
+		SELECT 
+			<include refid="pwBillRuleColumns"/>
+		FROM pw_bill_rule a
+		<include refid="pwBillRuleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PwBillRule">
+		SELECT 
+			<include refid="pwBillRuleColumns"/>
+		FROM pw_bill_rule a
+		<include refid="pwBillRuleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PwBillRule">
+		SELECT 
+			<include refid="pwBillRuleColumns"/>
+		FROM pw_bill_rule a
+		<include refid="pwBillRuleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pw_bill_rule(
+			id,
+			name,
+			amount,
+			unit,
+			cycle,
+			day,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{amount},
+			#{unit},
+			#{cycle},
+			#{day},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pw_bill_rule SET 	
+			name = #{name},
+			amount = #{amount},
+			unit = #{unit},
+			cycle = #{cycle},
+			day = #{day},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE pw_bill_rule SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

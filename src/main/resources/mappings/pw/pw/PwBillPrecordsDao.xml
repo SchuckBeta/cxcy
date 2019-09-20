@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwBillPrecordsDao">
+    
+	<sql id="pwBillPrecordsColumns">
+		a.id AS "id",
+		a.bid AS "bid",
+		a.pay_name AS "payName",
+		a.pay_time AS "payTime",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="pwBillPrecordsJoins">
+	</sql>
+    
+	<select id="get" resultType="PwBillPrecords">
+		SELECT 
+			<include refid="pwBillPrecordsColumns"/>
+		FROM pw_bill_precords a
+		<include refid="pwBillPrecordsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PwBillPrecords">
+		SELECT 
+			<include refid="pwBillPrecordsColumns"/>
+		FROM pw_bill_precords a
+		<include refid="pwBillPrecordsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="bid != null and bid != ''">
+				AND a.bid = #{bid}
+			</if>
+			<if test="payName != null and payName != ''">
+				AND a.pay_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{payName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{payName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{payName},'%')</if>
+			</if>
+			<if test="payTime != null and payTime != ''">
+				AND a.pay_time &gt;= #{payTime}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PwBillPrecords">
+		SELECT 
+			<include refid="pwBillPrecordsColumns"/>
+		FROM pw_bill_precords a
+		<include refid="pwBillPrecordsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pw_bill_precords(
+			id,
+			bid,
+			pay_name,
+			pay_time,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{bid},
+			#{payName},
+			#{payTime},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pw_bill_precords SET 	
+			bid = #{bid},
+			pay_name = #{payName},
+			pay_time = #{payTime},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE pw_bill_precords SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

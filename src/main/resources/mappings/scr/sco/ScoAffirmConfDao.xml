@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.sco.dao.ScoAffirmConfDao">
+    
+	<sql id="scoAffirmConfColumns">
+		a.id AS "id",
+		a.proc_id AS "procId",
+		a.type AS "type",
+		a.item AS "item",
+		a.category AS "category",
+		a.subdivision AS "subdivision",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="scoAffirmConfJoins">
+	</sql>
+    
+	<select id="get" resultType="ScoAffirmConf">
+		SELECT 
+			<include refid="scoAffirmConfColumns"/>
+		FROM sco_affirm_conf a
+		<include refid="scoAffirmConfJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByItem" resultType="ScoAffirmConf">
+		SELECT
+			<include refid="scoAffirmConfColumns"/>
+		FROM sco_affirm_conf a
+		<include refid="scoAffirmConfJoins"/>
+		WHERE a.item = #{item}
+	</select>
+
+	
+	<select id="findList" resultType="ScoAffirmConf">
+		SELECT 
+			<include refid="scoAffirmConfColumns"/>
+		FROM sco_affirm_conf a
+		<include refid="scoAffirmConfJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ScoAffirmConf">
+		SELECT 
+			<include refid="scoAffirmConfColumns"/>
+		FROM sco_affirm_conf a
+		<include refid="scoAffirmConfJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sco_affirm_conf(
+			id,
+			proc_id,
+			type,
+			item,
+			category,
+			subdivision,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{procId},
+			#{type},
+			#{item},
+			#{category},
+			#{subdivision},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sco_affirm_conf SET 	
+			proc_id = #{procId},
+			type = #{type},
+			item = #{item},
+			category = #{category},
+			subdivision = #{subdivision},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM sco_affirm_conf 
+		WHERE id = #{id}
+	</update>
+	<select id="check" resultType="java.lang.Integer">
+		select count(1) from
+		sco_affirm_conf a
+		where a.del_flag='0' 
+		<if test=" id != null and id != '' ">
+			and a.id!=#{id}
+		</if>
+		<if test=" type != null and type != '' ">
+			and a.type=#{type}
+		</if>
+		<if test=" item != null and item != '' ">
+			and a.item=#{item}
+		</if>
+		<if test=" category != null and category != '' ">
+			and a.category=#{category}
+		</if>
+		<if test=" subdivision != null and subdivision != '' ">
+			and a.subdivision=#{subdivision}
+		</if>
+	</select>
+	<select id="findAll" resultType="ScoAffirmConf">
+		SELECT 
+			<include refid="scoAffirmConfColumns"/>
+		FROM sco_affirm_conf a
+		<include refid="scoAffirmConfJoins"/>
+		<where>
+			a.del_flag = '0'
+		</where>
+		order by a.type,a.item,a.category
+	</select>
+	<update id="updateProc">
+		update sco_affirm_conf set proc_id=#{proc} where id=#{id}
+	</update>
+	<select id="getTypeSetData" resultType="java.util.Map">
+	select t.type from pro_project t 
+	left  join act_yw a on t.id=a.rel_id
+	where t.pro_type=#{item} and t.del_flag='0'
+	and a.is_deploy='1'
+	</select>
+	<select id="getSetData" resultType="java.util.Map">
+	select t.pro_category,t.level,t.final_status from pro_project t 
+	left  join act_yw a on t.id=a.rel_id
+	where t.pro_type=#{item} and t.type=#{category} and t.del_flag='0'
+	and a.is_deploy='1'
+	</select>
+	<select id="getDictForScoAffirm" resultType="com.oseasy.com.pcore.modules.sys.entity.Dict">
+		select s.* from sys_dict s where s.type=#{type} and s.value in
+		<foreach collection="ids" item="id" index="index" open="("
+			close=")" separator=",">
+			#{id}
+		</foreach>
+	</select>
+</mapper>

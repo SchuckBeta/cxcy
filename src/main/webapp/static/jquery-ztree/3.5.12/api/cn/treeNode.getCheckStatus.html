@@ -1,0 +1,63 @@
+<div class="apiDetail">
+<div>
+	<h2><span>Function()</span><span class="path">treeNode.</span>getCheckStatus</h2>
+	<h3>姒傝堪<span class="h3_info">[ 渚濊禆 <span class="highlight_green">jquery.ztree.excheck</span> 鎵╁睍 js ]</span></h3>
+	<div class="desc">
+		<p></p>
+		<div class="longdesc">
+			<p>鑾峰彇鑺傜偣 checkbox / radio 鍗婂嬀閫夌姸鎬併��<span class="highlight_red">[setting.check.enable = true 鏃舵湁鏁圿</span></p>
+			<p class="highlight_red">鍒濆鍖栬妭鐐规暟鎹椂锛岀敱 zTree 澧炲姞姝ゅ睘鎬э紝璇峰嬁鎻愬墠璧嬪��</p>
+		</div>
+	</div>
+	<h3>Function 鍙傛暟璇存槑</h3>
+	<div class="desc">
+	<h4><b>杩斿洖鍊�</b><span>JSON</span></h4>
+	<pre xmlns=""><code>{
+	checked: true, //绛夊悓浜� treeNode.checked
+	half: true  //瑙勫垯瑙佷笅琛�
+}</code></pre>
+	<table style="width: 100%;"  border="0" cellspacing="1" cellpadding="0">
+		<thead>
+			<tr><td colspan="4">setting.check.checkType = "checkbox"</td></tr>
+			<tr><td>treeNode.checked</td><td>treeNode.check_Child_State</td><td>treeNode.halfCheck</td><td> half </td></tr>
+		</thead>
+		<tbody>
+			<tr><td>-</td><td>-</td><td>true</td><td>true</td></tr>
+			<tr><td colspan="4">&nbsp;</td></tr>
+			<tr><td>true</td><td>-1</td><td>false</td><td>false</td></tr>
+			<tr><td>true</td><td>0</td><td>false</td><td>true</td></tr>
+			<tr><td>true</td><td>1</td><td>false</td><td>true</td></tr>
+			<tr><td>true</td><td>2</td><td>false</td><td>false</td></tr>
+			<tr><td colspan="4">&nbsp;</td></tr>
+			<tr><td>false</td><td>-1</td><td>false</td><td>false</td></tr>
+			<tr><td>false</td><td>0</td><td>false</td><td>false</td></tr>
+			<tr><td>false</td><td>1</td><td>false</td><td>true</td></tr>
+			<tr><td>false</td><td>2</td><td>false</td><td>true</td></tr>
+		</tbody>
+	</table>
+	<br/>
+	<table style="width: 100%;"  border="0" cellspacing="1" cellpadding="0">
+		<thead>
+			<tr><td colspan="4">setting.check.checkType = "radio"</td></tr>
+			<tr><td>treeNode.checked</td><td>treeNode.check_Child_State</td><td>treeNode.halfCheck</td><td> half </td></tr>
+		</thead>
+		<tbody>
+			<tr><td>-</td><td>-</td><td>true</td><td>true</td></tr>
+			<tr><td colspan="4">&nbsp;</td></tr>
+			<tr><td>true</td><td>-1</td><td>false</td><td>false</td></tr>
+			<tr><td>true</td><td>0</td><td>false</td><td>false</td></tr>
+			<tr><td>true</td><td>2</td><td>false</td><td>true</td></tr>
+			<tr><td colspan="4">&nbsp;</td></tr>
+			<tr><td>false</td><td>-1</td><td>false</td><td>false</td></tr>
+			<tr><td>false</td><td>0</td><td>false</td><td>false</td></tr>
+			<tr><td>false</td><td>2</td><td>false</td><td>true</td></tr>
+		</tbody>
+	</table>
+	</div>
+	<h3>treeNode 涓句緥</h3>
+	<h4>1. 鑾峰彇绗竴涓牴鑺傜偣鐨勫崐閫夌姸鎬�</h4>
+	<pre xmlns=""><code>var treeObj = $.fn.zTree.getZTreeObj("tree");
+var halfCheck = treeObj.getNodes()[0].getCheckStatus();
+</code></pre>
+</div>
+</div>

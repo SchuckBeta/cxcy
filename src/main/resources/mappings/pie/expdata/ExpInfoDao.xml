@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.expdata.dao.ExpInfoDao">
+
+	<sql id="expInfoColumns">
+		a.id AS "id",
+		a.exp_type AS "expType",
+		a.total AS "total",
+		a.success AS "success",
+		a.fail AS "fail",
+		a.is_complete AS "isComplete",
+		a.create_by AS "createBy.id",
+		a.start_date AS "startDate",
+		a.end_date AS
+		"endDate",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.file_id AS "fileId",
+		a.errmsg AS
+		"errmsg"
+	</sql>
+
+	<sql id="expInfoJoins">
+	</sql>
+
+	<select id="get" resultType="ExpInfo">
+		SELECT
+		<include refid="expInfoColumns" />
+		FROM exp_info a
+		<include refid="expInfoJoins" />
+		WHERE a.id = #{id}
+	</select>
+	<select id="findListByType" resultType="ExpInfo">
+		SELECT
+		<include refid="expInfoColumns" />
+		FROM exp_info a
+		WHERE a.exp_type=#{type}
+	</select>
+	<select id="findList" resultType="ExpInfo">
+		SELECT
+		<include refid="expInfoColumns" />
+		FROM exp_info a
+		<include refid="expInfoJoins" />
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ExpInfo">
+		SELECT
+		<include refid="expInfoColumns" />
+		FROM exp_info a
+		<include refid="expInfoJoins" />
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO exp_info(
+		id,
+		exp_type,
+		total,
+		success,
+		fail,
+		is_complete,
+		create_by,
+		start_date,
+		end_date,
+		create_date,
+		update_by,
+		update_date,
+		file_id,
+		errmsg
+		) VALUES (
+		#{id},
+		#{expType},
+		#{total},
+		#{success},
+		#{fail},
+		#{isComplete},
+		#{createBy.id},
+		#{startDate},
+		#{endDate},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{fileId},
+		#{errmsg}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE exp_info SET
+		exp_type = #{expType},
+		total =
+		#{total},
+		success = #{success},
+		fail = #{fail},
+		is_complete =
+		#{isComplete},
+		start_date = #{startDate},
+		end_date = #{endDate},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		file_id =
+		#{fileId},
+		errmsg = #{errmsg}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM exp_info
+		WHERE id = #{id}
+	</update>
+	<update id="deleteByList">
+		DELETE FROM exp_info
+		WHERE id in
+		<if test="eis != null and eis.size >0 ">
+			<foreach collection="eis" item="value" open="(" close=")"
+				separator=",">
+				#{value.id}
+			</foreach>
+		</if>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM exp_info
+		WHERE id = #{id}
+	</update>
+</mapper>

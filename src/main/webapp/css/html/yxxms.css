@@ -1,0 +1,426 @@
+h3{
+	font-weight: bold!important;
+}
+.scinfonavigation a:hover{
+	text-decoration: none!important;
+	color: #000!important;
+}
+.name_info{
+	color: red;
+}
+.scinfonavigation a{
+	color: #000!important;
+}
+
+.scinfonavigation ul li:first-child{
+	margin-top: -2px;
+}
+.scinfonavigation ul li{
+	float: left;
+	letter-spacing: 3px;
+	margin-left: 10px;
+}
+.system_info{
+	margin-left: 24px;
+	margin-top: 46px;
+}
+.system img{
+	width: 270px;
+	height: 182px;
+	float: left;
+	margin-top: 21px;
+}
+
+.systemright{
+	float: left;
+	margin: 59px 13px;
+}
+
+.systemright p{
+	font-weight: 300!important;
+	line-height: 15px;	
+}
+.systemright button{
+	width: 100px;
+	height: 29px;
+	color: #fff;
+	margin-top: 15px;
+	background-color: #ED452B;
+}
+
+.introduction{
+	margin-top: 32px;
+	width: 100%;
+	background-color: #F5F5F5;
+	height: auto;
+}
+.introduction_info{
+	padding: 28px 32px;
+}
+.introduction_info h4{
+	font-weight: 500;
+}
+.introduction_info h4 img,.product h4 img,.team h4 img{
+	margin-left: 5px;
+}
+
+.xmone li:first-child,.xmtwo li:first-child,.xmthree li:first-child{
+	font-size: 16px;
+}
+
+.xmone{
+	margin-top: 53px;
+	width: 294px;
+	height: 349px;
+	float: left;
+}
+.xmone li{
+	margin-top: 10px;
+}
+
+.xmone li:last-child{
+	width: 285px;
+	height: 349px;	
+	word-wrap: break-word;
+}
+.xmtwo{
+	margin-top: 53px;
+	width: 294px;
+	height: 349px;
+	float: left;
+	margin-left: 85px;
+}
+
+.xmthree{
+	margin-top: 53px;
+	width: 294px;
+	height: 349px;
+	margin-left: 85px;
+	float: left;
+}
+
+.xmtwo li:last-child{
+	width:285px;
+	height: 349px;	
+	word-wrap: break-word;
+}
+
+.xmthree li:last-child{
+	width: 285px;
+	height: 349px;	
+	word-wrap: break-word;
+}
+
+.xmtwo li{
+	margin-top: 10px;
+}
+
+.xmthree li{
+	margin-top: 10px;
+}
+
+.product{
+	margin-top: 40px;
+}
+
+.productdisplay #one{
+	background-color: #EBEBEB;
+	width:655px;
+	height: 246px;
+	float: left;
+}
+
+.productdisplay #two{
+	background-color: #EBEBEB;
+	width: 235px;
+	height: 246px;
+	float: left;
+	margin-left: 6px;
+}
+.productdisplay #three{
+	background-color: #EBEBEB;
+	width: 235px;
+	height: 246px;
+	float: left;
+	margin-left: 6px;
+}
+.productdisplayone #one{
+	background-color: #EBEBEB;
+	width:655px;
+	height: 246px;
+	float: left;
+}
+
+
+.productdisplayone #two{
+	background-color: #EBEBEB;
+	width: 477px;
+	height: 246px;
+	float: left;
+	margin-left: 6px;
+}
+
+.productdisplayone{
+	margin-top: 6px;
+}
+
+.classBox{
+	position:relative;
+}
+
+.classBoxone{
+	position:relative;
+	text-align: center;
+	width: 636px;
+    height: 693px;
+    margin: auto;
+}
+
+.classBoxone img:nth-child(1){
+	width:100%;
+	height:100%;
+}
+
+.classBoxone img:nth-child(2){
+	position:absolute;
+	left: -86px;
+    top: 0;
+}
+
+.classBoxone img:nth-child(3){
+	position:absolute;
+	right: -41px;
+    top: 0;
+} 
+
+.classBoxone img:nth-child(4){
+	position:absolute;
+	bottom: 182px;
+    left: -30px;
+}
+
+.classBoxone img:nth-child(5){
+	position:absolute;
+	bottom: 85px;
+    right: 10px;
+}
+
+.classBoxone img:nth-child(6){
+	position:absolute;
+	top: 217px;
+    left: 138px;
+}
+
+.classBox .content{
+	width: 302px;
+}
+
+.classBox .content_one{
+	position:absolute;
+	top: 100px;
+    left: -51px;
+    overflow: hidden; /*自动隐藏文字*/
+    display:none;
+}
+
+.classBox .content_one,.content_second,.content_three,.content_four,.content_five h4,p{
+	overflow: hidden; /*自动隐藏文字*/
+    text-overflow: ellipsis;/*文字隐藏后添加省略号*/
+    white-space: nowrap;/*强制不换行*/
+}
+
+.classBox .content_second{
+	position:absolute;
+	top: 159px;
+    right: -25px;
+	display:none;
+}
+
+.classBox .content_three{
+	position:absolute;
+	left: 23px;
+    bottom: 0;
+    display:none;
+}
+
+.classBox .content_four{
+	position:absolute;
+	right: -54px;
+	bottom:0;
+	display:none;
+}
+
+.classBox  .content_five{
+	position:absolute;
+	top: -49px;
+    left: 50%;
+    margin-left: -151px;
+    display:none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.comment{
+	margin-top: 105px;
+}
+.comment span{
+	font-weight: bold;
+	float: left;
+}
+.recommendclass{
+	margin-top: 63px;	
+}
+.recommendclass h4{
+	font-weight: bold;
+	border-bottom: 2px solid #F5F5F5;
+	padding-bottom: 5px;
+}
+
+.style_info{
+	border: 1px solid #ED7E84;
+	float: left;
+	width: 94%;
+	margin-left: 10px;
+	margin-top: 10px;
+}
+#discuss{
+	width: 100%;
+	height: 151px;
+	border: 2px solid #F1F1F1;
+	margin-top: 17px;
+}
+#publish{
+	background-color: #EA442E;
+	width: 103px;
+	height: 31px;
+	color: #fff;
+	text-align: center;
+    line-height: 34px;
+    margin-top: 14px;
+
+}
+
+.review li{
+	float: left;
+	margin-top: 31px;
+	margin-left: 15px;
+	border-bottom: 2px solid #F2F2F2;
+	font-weight: bold;
+	padding-bottom: 5px;
+}
+
+.review li:hover{
+	border-bottom: 2px solid #E9442D;
+}
+
+.commentcontent{
+	margin-top: 53px;
+	border-bottom: 2px solid #F2F2F2;
+	border-top: 2px solid #F2F2F2;
+	padding-bottom: 105px;
+	padding-top: 10px;
+	display: none;
+}
+.packup{
+	display: none;
+}
+.commenttwo{
+	margin-top: 53px;
+	border-bottom: 2px solid #F2F2F2;
+	border-top: 2px solid #F2F2F2;
+	padding-bottom: 105px;
+	padding-top: 10px;
+}
+
+.commentimg{
+	width: 42px;
+	height: 42px;
+	float: left;
+}
+.commentimg img{
+	width: 100%;
+}
+.commentright{
+	float: left;
+	margin-left: 40px;
+}
+.packup{
+	text-align: center;
+	margin-top: 60px;
+}
+.packup a{
+	color: #EA432D;
+}
+.packupone{
+	text-align: center;
+	margin-top: 60px;
+}
+.packupone a{
+	color: #EA432D;
+}
+.commentcontent_info{
+	display: none;
+}
+.member{
+	text-align: center;
+}
+.member{
+	position: relative;
+	margin-top: 127px;
+}
+
+
+.memberpos .men_infp img{
+	position: absolute;
+	top: -19px;
+	left: 131px;
+}
+
+.memberpos .men_two img{
+	position: absolute;
+	bottom: 435px;
+	left: 759px;
+}
+.memberpos .men_three img{
+	/*position: absolute;
+	bottom: 2px;
+	left: 389px;*/
+}
+
+.memberpos .men_four img{
+	position: absolute;
+	bottom: 273px;
+	left: 237px;
+}
+.memberpos .men_five img{
+	position: absolute;
+	bottom: 192px;
+	left: 707px;
+}
+
+.team h4{
+	margin-top: 46px;
+}
+#team{
+	text-align: center;
+}
+#team img{
+	position: relative;
+}
+#teaminfo{
+	position: absolute;
+}
+.commentright p:nth-child(3){
+	margin-top: 29px;
+}

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.impdata.dao.OfficeErrorDao">
+    
+	<sql id="officeErrorColumns">
+		a.id AS "id",
+		a.imp_id AS "impId",
+		a.office AS "office",
+		a.professional AS "professional",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="officeErrorJoins">
+	</sql>
+    
+	<select id="get" resultType="OfficeError">
+		SELECT 
+			<include refid="officeErrorColumns"/>
+		FROM office_error a
+		<include refid="officeErrorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="OfficeError">
+		SELECT 
+			<include refid="officeErrorColumns"/>
+		FROM office_error a
+		<include refid="officeErrorJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="OfficeError">
+		SELECT 
+			<include refid="officeErrorColumns"/>
+		FROM office_error a
+		<include refid="officeErrorJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO office_error(
+			id,
+			imp_id,
+			office,
+			professional,
+			remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES (
+			#{id},
+			#{impId},
+			#{office},
+			#{professional},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE office_error SET 	
+			imp_id = #{impId},
+			office = #{office},
+			professional = #{professional},
+			remarks = #{remarks},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM office_error
+		WHERE id = #{id}
+	</update>
+	<select id="getListByImpId" resultType="java.util.HashMap"
+		parameterType="java.lang.String">
+		SELECT
+		t.*
+		FROM
+		office_error t
+		WHERE
+		t.imp_id = #{impid}
+		order by
+		t.create_date
+	</select>
+	<update id="deleteByImpId"
+		parameterType="java.lang.String">
+		DELETE FROM office_error
+		WHERE imp_id =  #{impid}
+	</update>
+</mapper>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwGroleDao">
+
+	<sql id="actYwGroleColumns">
+		a.id AS "id",
+		a.group_id AS "group.id",
+		a.gnode_id AS "gnode.id",
+		a.is_delegate AS "isDelegate",
+		a.role_id AS "role.id",
+		r.name AS "role.name",
+		r.office_id AS "role.office.id"
+	</sql>
+
+	<sql id="actYwGroleJoins">
+		LEFT JOIN sys_role r on r.id=a.role_id
+	</sql>
+
+	<select id="get" resultType="ActYwGrole">
+		SELECT
+			<include refid="actYwGroleColumns"/>
+		FROM act_yw_grole a
+		<include refid="actYwGroleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="checkUseByRole" resultType="ActYwGrole">
+		SELECT
+			r.id AS "role.id",
+			r.name AS "role.name",
+			group_concat(g.id) AS "group.id",
+			group_concat(g.name) AS "group.name"
+		FROM act_yw_grole a
+		LEFT JOIN sys_role r on r.id=a.role_id
+		LEFT JOIN act_yw_group g on g.id=a.group_id
+		WHERE a.role_id IN
+        <foreach item="item" collection="roleIds" separator="," open="("
+                 close=")">
+            #{item}
+        </foreach>
+		GROUP BY a.role_id
+		ORDER BY a.role_id
+	</select>
+
+	<select id="findList" resultType="ActYwGrole">
+		SELECT
+			<include refid="actYwGroleColumns"/>
+		FROM act_yw_grole a
+		<include refid="actYwGroleJoins"/>
+		<where>
+			<if test="group != null">
+				<if test="group.id != null and group.id != ''">
+					AND a.group_id = #{group.id}
+				</if>
+
+			</if>
+			<if test="gnode != null">
+				<if test="gnode.id != null and gnode.id != ''">
+					AND a.gnode_id = #{gnode.id}
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwGrole">
+		SELECT
+			<include refid="actYwGroleColumns"/>
+		FROM act_yw_grole a
+		<include refid="actYwGroleJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_grole(
+			id,
+			group_id,
+			gnode_id,
+			is_delegate,
+			role_id
+		) VALUES (
+			#{id},
+			#{group.id},
+			#{gnode.id},
+			#{isDelegate},
+			#{role.id}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_grole SET
+			id = #{id},
+			group_id = #{group.id},
+			gnode_id = #{gnode.id},
+			is_delegate = #{isDelegate},
+			role_id = #{role.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM act_yw_grole
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM act_yw_grole WHERE id = #{id}
+	</update>
+
+	<insert id="savePl" >
+		INSERT INTO act_yw_grole(
+			id,
+			group_id,
+			gnode_id,
+			is_delegate,
+			role_id
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+				 separator=",">
+			(
+                #{item.id},
+                #{item.group.id},
+                #{item.gnode.id},
+                #{item.isDelegate},
+                #{item.role.id}
+			)
+		</foreach>
+	</insert>
+
+    <update id="deletePlwl">
+            DELETE FROM act_yw_grole WHERE group_id = #{groupId} AND gnode_id = #{gnodeId}
+    </update>
+
+    <update id="deletePlwlByGroup">
+            DELETE FROM act_yw_grole WHERE group_id = #{groupId}
+    </update>
+</mapper>

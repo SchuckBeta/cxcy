@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.expdata.dao.PieSysAttachmentDao">
+    <resultMap id="resultMap" type="SysAttachment">
+	  <id property="id" column="id" />
+	  <result property="type" column="type"  typeHandler="com.oseasy.com.pcore.common.handler.EnumTypeHandler"/>
+	  <result property="fileStep" column="fileStep" typeHandler="com.oseasy.com.pcore.common.handler.EnumTypeHandler"/>
+	  <result property="uid" column="uid"/>
+	  <result property="url" column="url"/>
+	  <result property="gnodeId" column="gnodeId"/>
+	  <result property="name" column="name"/>
+	  <result property="userName" column="userName"/>
+	  <result property="size" column="size"/>
+	  <result property="suffix" column="suffix"/>
+	  <result property="updateDate" column="updateDate"/>
+	  <result property="updateBy.id" column="updateBy.id"/>
+	  <result property="createDate" column="createDate"/>
+	  <result property="createBy.id" column="createBy.id"/>
+
+	  <result property="createBy.name" column="createBy.name"/>
+	  <result property="createBy.no" column="createBy.no"/>
+
+	  <result property="createBy.office.id" column="createBy.office.id"/>
+	  <result property="createBy.office.name" column="createBy.office.name"/>
+	</resultMap>
+	<sql id="sysAttachmentColumns">
+		a.id AS "id",
+		a.type AS "type",
+		a.file_step AS "fileStep",
+		a.uid AS "uid",
+		a.url AS "url",
+		a.name AS "name",
+		a.size AS "size",
+		a.gnode_id AS "gnodeId",
+		a.suffix AS "suffix",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id"
+	</sql>
+
+	<select id="findByExpInfo" resultMap="resultMap">
+		select <include refid="sysAttachmentColumns"/> from sys_attachment a
+		WHERE  a.id in
+		<if test="eis != null and eis.size > 0 ">
+			<foreach collection="eis" item="value" open="(" close=")" separator=",">
+				#{value.fileId}
+			</foreach>
+		</if>
+	</select>
+
+</mapper>

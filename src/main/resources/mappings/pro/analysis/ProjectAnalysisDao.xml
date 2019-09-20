@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.analysis.dao.ProjectAnalysisDao">
+
+	<select id="getData1" resultType="java.util.HashMap">
+		select s1.label,count(1) cc
+		from project_declare t
+		left join sys_dict s1 on t.level=s1.value and
+		s1.type='project_degree' and
+		s1.del_flag='0'
+		where t.level!='5' and
+		t.del_flag='0' and s1.id is not null
+		group by s1.label
+	</select>
+	<select id="getData2" resultType="java.util.HashMap">
+		select s1.label,count(1) cc
+		from project_declare t
+		left join sys_dict s1 on t.type=s1.value and
+		s1.type='project_type' and
+		s1.del_flag='0'
+		where t.del_flag='0' and t.level!='5' and t.level is not null and
+		s1.id is not null
+		group by s1.label
+	</select>
+	<select id="getData3" resultType="java.util.HashMap">
+		select s1.label,o.name,count(1) cc
+		from project_declare t
+		left join sys_dict
+		s1 on t.level=s1.value and
+		s1.type='project_degree' and
+		s1.del_flag='0'
+		left join sys_user u on t.leader=u.id
+		left join sys_office o on
+		u.office_id=o.id
+		where t.level!='5' and
+		t.del_flag='0' and s1.id is not
+		null
+		group by s1.label,o.name
+	</select>
+
+	<select id="getColleges" resultType="java.lang.String">
+		select t.name from sys_office t where t.grade='2'  and t.del_flag='0'
+	</select>
+
+	<select id="getYears" resultType="java.lang.String">
+		select * from (
+		select SUBSTRING(pd.apply_time,1,4) year from project_declare pd
+		LEFT join act_yw ay on ay.id=pd.actyw_id
+		where pd.apply_time is not null and pd.del_flag='0' and ay.rel_id is not null
+		UNION
+		select SUBSTRING(pm.sub_time,1,4) year from pro_model pm
+		LEFT join act_yw ay on ay.id=pm.actyw_id
+		where pm.sub_time is not null and pm.del_flag='0' and ay.rel_id is not null
+		) m
+		group by year
+		ORDER by year
+	</select>
+	<select id="getProjecTypes" resultType="java.lang.String">
+		select d.label from  sys_dict d
+		inner JOIN pro_project p on d.value=p.type
+		where d.type='project_style'	and p.del_flag='0' and p.type is not null and p.pro_type='1,' and d.del_flag='0'
+	</select>
+	<select id="findAllPojectByYear" resultType="java.util.HashMap">
+		select year,label,count(*) as sum,t1.pid from (
+		select SUBSTRING(pd.apply_time,1,4) year,pd.id ,pd.actyw_id ,ay.rel_id pid from project_declare pd
+		LEFT join act_yw ay on ay.id=pd.actyw_id
+		LEFT join pro_project pp on pp.id=ay.rel_id
+		where pd.apply_time is not null and pd.del_flag='0' and ay.rel_id is not null
+		and pp.del_flag='0'
+		UNION
+		select SUBSTRING(pm.sub_time,1,4) year ,pm.id,pm.actyw_id ,ay.rel_id pid from pro_model pm
+		LEFT join act_yw ay on ay.id=pm.actyw_id
+		LEFT join pro_project pp on pp.id=ay.rel_id
+		where pm.sub_time is not null and pm.del_flag='0' and ay.rel_id is not null
+		and pp.del_flag='0'
+		) t1
+		LEFT JOIN
+		(
+		select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+		inner JOIN pro_project p on d.value=p.type
+		where d.type='project_style' and p.type is not null and p.pro_type='1,' and d.del_flag='0'
+		) t2
+		on t1.pid=t2.pid
+		where label is not null
+		GROUP BY label,year
+	</select>
+
+
+	<select id="findAllPojectByType" resultType="java.util.HashMap" parameterType="java.util.Map">
+		select label,value,count(*) as num,t1.pid ,t2.project_name from (
+			select SUBSTRING(pd.apply_time,1,4) year,pd.id ,pd.actyw_id ,ay.rel_id pid from project_declare pd
+			LEFT join act_yw ay on ay.id=pd.actyw_id
+			where pd.apply_time is not null and pd.del_flag='0' and ay.rel_id is not null
+			UNION
+			select SUBSTRING(pm.sub_time,1,4) year ,pm.id,pm.actyw_id ,ay.rel_id pid from pro_model pm
+			LEFT join act_yw ay on ay.id=pm.actyw_id
+			where pm.sub_time is not null and pm.del_flag='0' and ay.rel_id is not null
+		) t1
+		LEFT JOIN
+		(
+		select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+		inner JOIN pro_project p on d.value=p.type
+		where d.type='project_style' and p.type is not null and p.del_flag='0' and p.pro_type='1,'
+		and d.del_flag='0'
+		) t2
+		on t1.pid=t2.pid
+		where 1=1 and label is not null
+		<if test="year != null and year!= ''">
+			AND t1.year = #{year}
+		</if>
+		GROUP BY label
+	</select>
+
+	<select id="findPojectByTypeAndCategory" resultType="java.util.HashMap"  parameterType="java.util.Map">
+		select dt.label,dt.value,IFNULL(t1.num,0) as num from sys_dict dt
+		left join
+		(
+		select t1.year, t2.label,t2.value,t1.pid ,t2.project_name,pType ,count(*) as num from (
+			select SUBSTRING(pd.apply_time,1,4) year,pd.name,pd.type pType,pd.id ,pd.actyw_id ,ay.rel_id pid from project_declare pd
+			LEFT join act_yw ay on ay.id=pd.actyw_id
+			where pd.apply_time is not null and pd.del_flag='0' and ay.rel_id is not null
+			UNION
+			select SUBSTRING(pm.sub_time,1,4) year ,pm.p_name name,pm.pro_category pType,pm.id,pm.actyw_id ,ay.rel_id pid from pro_model pm
+			LEFT join act_yw ay on ay.id=pm.actyw_id
+			where pm.sub_time is not null and pm.del_flag='0' and ay.rel_id is not null
+		) t1
+		LEFT JOIN
+		(
+		select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+		inner JOIN pro_project p on d.value=p.type
+		where d.type='project_style' and p.type is not null and p.pro_type='1,'
+		and d.del_flag='0'
+		) t2
+		on t1.pid=t2.pid
+		where 1=1
+		<if test="year != null and year!= ''">
+			AND t1.year = #{year}
+		</if>
+		<if test="label != null and label!= ''">
+			AND t2.label = #{label}
+		</if>
+		group by pType
+		)t1
+		on dt.value=t1.pType
+		where dt.type='project_type' and dt.del_flag='0'
+	</select>
+
+	<select id="findProjectApplyByType" resultType="java.util.HashMap"  parameterType="java.util.Map">
+		select t3.label,t.name  ,count(*) as num from sys_office t
+		LEFT JOIN
+		(
+		select t1.year, t2.label,t2.value,t1.officeId,t1.pid ,t2.project_name from (
+			select SUBSTRING(pd.apply_time,1,4) year,pd.leader,so.id officeId,pd.name,pd.type pType,pd.id ,pd.actyw_id ,ay.rel_id pid from project_declare pd
+			LEFT join act_yw ay on ay.id=pd.actyw_id
+			LEFT join sys_user su on su.id=pd.leader
+			LEFT join sys_office so on so.id=su.office_id
+			where pd.apply_time is not null and pd.del_flag='0' and ay.rel_id is not null
+			and su.office_id is not null and so.del_flag='0'
+			UNION
+			select SUBSTRING(pm.sub_time,1,4) year ,pm.declare_id,so.id officeId,pm.p_name name,pm.pro_category pType,pm.id,pm.actyw_id ,ay.rel_id pid from pro_model pm
+			LEFT join act_yw ay on ay.id=pm.actyw_id
+			LEFT join sys_user su on su.id=pm.declare_id
+			LEFT join sys_office so on so.id=su.office_id
+			where pm.sub_time is not null and pm.del_flag='0' and ay.rel_id is not null
+			and su.office_id is not null and so.del_flag='0'
+		) t1
+		LEFT JOIN
+		(
+		select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+		inner JOIN pro_project p on d.value=p.type
+		where d.type='project_style' and p.type is not null and p.pro_type='1,'
+		and d.del_flag='0' and p.del_flag='0'
+		) t2
+		on t1.pid=t2.pid
+		where 1=1
+		<if test="year != null and year!= ''">
+			AND t1.year = #{year}
+		</if>
+		<if test="label != null and label!= ''">
+			AND t2.label = #{label}
+		</if>
+		)t3 on t.id=t3.officeId
+		where t.grade =2 and t3.officeId is not null and t3.label is not null
+		GROUP BY label,name
+	</select>
+
+	<select id="findProjectLiByType" resultType="java.util.HashMap"  parameterType="java.util.Map">
+			select t3.label,t.name  ,count(*) as num from sys_office t
+			LEFT JOIN
+			(
+			select t1.year, t2.label,t2.value,t1.officeId,t1.pid ,t2.project_name from (
+				select SUBSTRING(pd.apply_time,1,4) year,pd.leader,so.id officeId,pd.name,pd.type pType,pd.id ,pd.actyw_id ,ay.rel_id pid from project_declare pd
+				LEFT join act_yw ay on ay.id=pd.actyw_id
+				LEFT join sys_user su on su.id=pd.leader
+				LEFT join sys_office so on so.id=su.office_id
+				where pd.apply_time is not null and pd.del_flag='0' and ay.rel_id is not null
+				and su.office_id is not null and pd.level is not null and so.del_flag='0'
+				UNION
+				select SUBSTRING(pm.sub_time,1,4) year ,pm.declare_id,so.id officeId,pm.p_name name,pm.pro_category pType,pm.id,pm.actyw_id ,ay.rel_id pid from pro_model pm
+				LEFT join act_yw ay on ay.id=pm.actyw_id
+				LEFT join sys_user su on su.id=pm.declare_id
+				LEFT join sys_office so on so.id=su.office_id
+				where pm.sub_time is not null and pm.del_flag='0' and ay.rel_id is not null
+				and su.office_id is not null  and pm.final_status is not null and so.del_flag='0'
+			) t1
+			LEFT JOIN
+			(
+			select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+			inner JOIN pro_project p on d.value=p.type
+			where d.type='project_style' and p.type is not null and p.pro_type='1,'
+				and d.del_flag='0'
+			) t2
+			on t1.pid=t2.pid
+			where 1=1
+			<if test="year != null and year!= ''">
+				AND t1.year = #{year}
+			</if>
+			<if test="label != null and label!= ''">
+				AND t2.label = #{label}
+			</if>
+			)t3 on t.id=t3.officeId
+			where t.grade =2 and t3.officeId is not null
+			GROUP BY label,name
+		</select>
+
+	<select id="findProjectApplyByTypeNum" resultType="java.util.HashMap"  parameterType="java.util.Map">
+			select t3.label,t.name  ,count(*) as num from sys_office t
+			LEFT JOIN
+			(
+			select t1.year, t2.label,t2.value,t1.officeId,t1.pid ,t2.project_name from (
+				select SUBSTRING(pd.apply_time,1,4) year,pd.leader,so.id officeId,pd.name,pd.type pType,pd.id ,pd.actyw_id ,ay.rel_id pid from project_declare pd
+				LEFT join act_yw ay on ay.id=pd.actyw_id
+				LEFT join sys_user su on su.id=pd.leader
+				LEFT join sys_office so on so.id=su.office_id
+				where pd.apply_time is not null and pd.del_flag='0' and ay.rel_id is not null
+				and su.office_id is not null and so.del_flag='0'
+				UNION
+				select SUBSTRING(pm.sub_time,1,4) year ,pm.declare_id,so.id officeId,pm.p_name name,pm.pro_category pType,pm.id,pm.actyw_id ,ay.rel_id pid from pro_model pm
+				LEFT join act_yw ay on ay.id=pm.actyw_id
+				LEFT join sys_user su on su.id=pm.declare_id
+				LEFT join sys_office so on so.id=su.office_id
+				where pm.sub_time is not null and pm.del_flag='0' and ay.rel_id is not null
+				and su.office_id is not null and so.del_flag='0'
+			) t1
+			LEFT JOIN
+			(
+			select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+			inner JOIN pro_project p on d.value=p.type
+			where d.type='project_style' and p.type is not null and p.pro_type='1,' and d.del_flag='0'
+			) t2
+			on t1.pid=t2.pid
+			where 1=1
+			<if test="year != null and year!= ''">
+				AND t1.year = #{year}
+			</if>
+			<if test="label != null and label!= ''">
+				AND t2.label = #{label}
+			</if>
+			)t3 on t.id=t3.officeId
+			where t.grade =2 and t3.officeId is not null
+			GROUP BY  name
+		</select>
+
+	<select id="findProjectLiByTypeNum" resultType="java.util.HashMap"  parameterType="java.util.Map">
+			select t3.label,t.name  ,count(*) as num from sys_office t
+			LEFT JOIN
+			(
+			select t1.year, t2.label,t2.value,t1.officeId,t1.pid ,t2.project_name from (
+				select SUBSTRING(pd.apply_time,1,4) year,pd.leader,so.id officeId,pd.name,pd.type pType,pd.id ,pd.actyw_id ,ay.rel_id pid from project_declare pd
+				LEFT join act_yw ay on ay.id=pd.actyw_id
+				LEFT join sys_user su on su.id=pd.leader
+				LEFT join sys_office so on so.id=su.office_id
+				where pd.apply_time is not null and pd.del_flag='0' and ay.rel_id is not null
+				and su.office_id is not null and pd.level is not null and so.del_flag='0'
+				UNION
+				select SUBSTRING(pm.sub_time,1,4) year ,pm.declare_id,so.id officeId,pm.p_name name,pm.pro_category pType,pm.id,pm.actyw_id ,ay.rel_id pid from pro_model pm
+				LEFT join act_yw ay on ay.id=pm.actyw_id
+				LEFT join sys_user su on su.id=pm.declare_id
+				LEFT join sys_office so on so.id=su.office_id
+				where pm.sub_time is not null and pm.del_flag='0' and ay.rel_id is not null
+				and su.office_id is not null  and pm.final_status is not null and so.del_flag='0'
+			) t1
+			LEFT JOIN
+			(
+			select d.label ,d.value ,p.project_name,p.pro_type,p.id pid from  sys_dict d
+			inner JOIN pro_project p on d.value=p.type
+			where d.type='project_style' and p.type is not null and p.pro_type='1,' and d.del_flag='0'
+			) t2
+			on t1.pid=t2.pid
+			where 1=1
+			<if test="year != null and year!= ''">
+				AND t1.year = #{year}
+			</if>
+			<if test="label != null and label!= ''">
+				AND t2.label = #{label}
+			</if>
+			)t3 on t.id=t3.officeId
+			where t.grade =2 and t3.officeId is not null
+			GROUP BY  name
+		</select>
+
+
+</mapper>

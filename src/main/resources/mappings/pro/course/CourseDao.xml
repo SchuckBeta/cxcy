@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.course.dao.CourseDao">
+    
+	<sql id="courseColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.cover_img AS "coverImg",
+		a.video AS "video",
+		a.description AS "description",
+		a.type AS "type",
+		a.status AS "status",
+		a.course_summary AS "courseSummary",
+		a.teacher_summary AS "teacherSummary",
+		a.publish_flag AS "publishFlag",
+		a.top_flag AS "topFlag",
+		a.comment_flag AS "commentFlag",
+		a.recommend_flag AS "recommendFlag",
+		a.downloads AS "downloads",
+		a.views AS "views",
+		a.likes AS "likes",
+		a.comments AS "comments",
+		a.publish_date AS "publishDate",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.cmsarticleid AS "cmsArtileId"
+	</sql>
+	
+	<sql id="courseJoins">
+	</sql>
+    
+	<select id="get" resultType="Course">
+		SELECT 
+			<include refid="courseColumns"/>
+		FROM course a
+		<include refid="courseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Course">
+		SELECT 
+			<include refid="courseColumns"/>
+		FROM course a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''"> <!--要查找课程名字或者老师名字-->
+				AND ( a.name LIKE concat('%',#{name},'%')
+				or ( select 1 from course_teacher ct where ct.course_id=a.id and ct.teacher_name like  concat('%',#{name},'%') )
+				)
+			</if>
+			<if test="categoryId != null and categoryId != ''">
+				AND #{categoryId} in (select cg.value from course_category cg where cg.course_id = a.id)
+			</if>
+			<if test="type != null and type != ''">
+				AND  a.type = #{type}
+			</if>
+			<if test="status != null and status != ''">
+				AND  a.status = #{status}
+			</if>
+			<if test="publishFlag != null and publishFlag != ''">
+				AND  a.publish_flag = #{publishFlag}
+			</if>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY  a.top_flag DESC , a.publish_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findFrontList" resultType="Course">
+		SELECT
+		<include refid="courseColumns"/>
+		FROM course a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and  a.publish_flag='1'
+			<if test="name != null and name != ''"> <!--要查找课程名字或者老师名字-->
+				AND ( a.name LIKE concat('%',#{name},'%')
+				or ( select 1 from course_teacher ct where ct.course_id=a.id and ct.teacher_name like  concat('%',#{name},'%') )
+				)
+			</if>
+
+			<if test="typeList != null and typeList.size>0">
+				AND a.type in
+				<foreach collection="typeList" item="typeValue" open="(" close=")" separator=",">
+					#{typeValue}
+				</foreach>
+			</if>
+
+			<if test="statusList != null and statusList.size>0">
+				AND a.status in
+				<foreach collection="statusList" item="statusValue" open="(" close=")" separator=",">
+					#{statusValue}
+				</foreach>
+			</if>
+
+			<if test="categoryValueList != null and categoryValueList.size>0">
+				AND EXISTS (select 1 from course_category cc where cc.course_id=a.id and cc.value in
+				<foreach collection="categoryValueList" item="category" open="(" close=")" separator=",">
+					#{category}
+				</foreach>
+				)
+			</if>
+
+		</where>
+		ORDER BY  a.top_flag DESC , a.publish_date DESC
+	</select>
+
+	
+	<select id="findAllList" resultType="Course">
+		SELECT 
+			<include refid="courseColumns"/>
+		FROM course a
+		<include refid="courseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.top_flag DESC ,a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO course(
+			id,
+			name,
+			cover_img,
+			video,
+			description,
+			type,
+			status,
+			course_summary,
+			teacher_summary,
+			publish_flag,
+			top_flag,
+			comment_flag,
+			recommend_flag,
+			downloads,
+			views,
+			likes,
+			comments,
+			publish_date,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag,
+			cmsarticleid
+		) VALUES (
+			#{id},
+			#{name},
+			#{coverImg},
+			#{video},
+			#{description},
+			#{type},
+			#{status},
+			#{courseSummary},
+			#{teacherSummary},
+			#{publishFlag},
+			#{topFlag},
+			#{commentFlag},
+			#{recommendFlag},
+			#{downloads},
+			#{views},
+			#{likes},
+			#{comments},
+			#{publishDate},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag},
+			#{cmsArtileId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE course SET 	
+			name = #{name},
+			cover_img = #{coverImg},
+			video = #{video},
+			description = #{description},
+			type = #{type},
+			status = #{status},
+			course_summary = #{courseSummary},
+			teacher_summary = #{teacherSummary},
+			publish_flag = #{publishFlag},
+			top_flag = #{topFlag},
+			comment_flag = #{commentFlag},
+			recommend_flag = #{recommendFlag},
+			downloads = #{downloads},
+			views = #{views},
+			likes = #{likes},
+			comments = #{comments},
+			publish_date = #{publishDate},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE course SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateDownloads">
+		  UPDATE course SET  downloads = #{downloads} WHERE id = #{id}
+	</update>
+
+	<update id="updateViews">
+		UPDATE course SET  views = #{views} WHERE id = #{id}
+	</update>
+
+	<select id="findTeacherListForCourse" resultType="com.oseasy.pro.modules.course.entity.CourseTeacher">
+		select
+		u.id AS "teacherId",
+		u.name AS "teacherName",
+		o.name AS "collegeName",
+		dict.label AS "postName"
+		FROM sys_teacher_expansion a
+		LEFT JOIN sys_user u ON u.id = a.user_id
+		LEFT JOIN sys_dict dict ON dict.value=a.technical_title and dict.type="postTitle_type"
+		LEFT JOIN sys_office o ON u.office_id=o.id where a.del_flag=0
+	</select>
+
+	<select id="findFrontCourse" resultType="Course">
+		SELECT
+		<include refid="courseColumns"/>,
+		(select CONCAT(GROUP_CONCAT(ifnull(u22.name,'') SEPARATOR '、'),'-',GROUP_CONCAT(ifnull(d.label,'无') SEPARATOR '、'))
+		from course_teacher r  left join sys_user u22 on r.teacher_id=u22.id  and r.del_flag='0'
+		left join sys_teacher_expansion se on u22.id=se.user_id
+		left join sys_dict d on se.technical_title = d.`value` and d.type='postTitle_type'
+		where a.id=r.course_id) teasInfo
+		FROM course a
+		where a.del_flag='0'
+			  and  a.publish_flag='1'
+		ORDER BY a.top_flag DESC ,a.publish_date DESC
+		limit 4;
+	</select>
+	<!-- 根据专业分类,状态分类相关和是否推荐字段查询 按置顶，发布时间倒序排序-->
+	<select id="findRecommedList" resultType="Course">
+		SELECT
+		<include refid="courseColumns"/>
+		FROM course a
+		where a.del_flag='0' and a.publish_flag='1' and a.recommend_flag='1' and a.id!=#{id}
+		and
+		(EXISTS (select 1 from course_category cc where cc.course_id=a.id and cc.value in
+			<foreach collection="categoryList" item="category" open="(" close=")" separator=",">
+				#{category.value}
+			</foreach>
+			)
+			or a.type=#{type}
+		)
+		ORDER BY  a.top_flag DESC , a.publish_date DESC
+		limit 10;
+	</select>
+	<update id="updateComments" parameterType="java.util.Map">
+		UPDATE course SET comments = CASE id
+		<foreach collection="param.keys" item="key" separator=" ">
+			WHEN #{key} THEN ifnull(comments,0)+#{param[${key}]}
+		</foreach>
+		END
+		where id in 
+		<foreach collection="param.keys" item="key" open="(" separator="," close=")">
+			#{key}
+		</foreach>
+	</update>
+	<update id="updateViewsPlus" parameterType="java.util.Map">
+		UPDATE course SET views = CASE id
+		<foreach collection="param.keys" item="key" separator=" ">
+			WHEN #{key} THEN ifnull(views,0)+#{param[${key}]}
+		</foreach>
+		END
+		where id in 
+		<foreach collection="param.keys" item="key" open="(" separator="," close=")">
+			#{key}
+		</foreach>
+	</update>
+	<update id="updateLikes" parameterType="java.util.Map">
+		UPDATE course SET likes = CASE id
+		<foreach collection="param.keys" item="key" separator=" ">
+			WHEN #{key} THEN ifnull(likes,0)+#{param[${key}]}
+		</foreach>
+		END
+		where id in 
+		<foreach collection="param.keys" item="key" open="(" separator="," close=")">
+			#{key}
+		</foreach>
+	</update>
+
+</mapper>

@@ -1,0 +1,312 @@
+@charset "utf-8";
+
+.modal {
+    display: block;
+}
+
+.modal-transition {
+    transition: all .6s ease;
+}
+
+.modal-leave {
+    border-radius: 1px !important; /* 样式没什么用，但可以让根标签的transitionEnd生效，以去掉modal-leave */
+}
+
+.modal-transition .modal-dialog, .modal-transition .modal-backdrop {
+    transition: all .5s ease;
+}
+
+.modal-enter .modal-dialog, .modal-leave .modal-dialog {
+    opacity: 0;
+    transform: translateY(-30%);
+}
+
+.modal-enter .modal-backdrop, .modal-leave .modal-backdrop {
+    opacity: 0;
+}
+
+.collapse-transition {
+    transition: all .3s ease;
+    overflow: hidden;
+}
+
+.collapse-leave, .collapse-enter {
+    height: 0
+}
+
+.form-append {
+    position: relative;
+}
+
+.form-append .form-control {
+    padding-right: 30px;
+}
+
+.form-append .icon-close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    text-align: center;
+    height: 30px;
+    width: 30px;
+    font-size: 18px;
+    line-height: 30px;
+    color: #888;
+    text-decoration: none;
+}
+
+.form-append .icon-search {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    color: #888;
+}
+
+.tab-content-base-data {
+    margin-bottom: 60px;
+}
+
+.bd-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 15px;
+    transition: height .3s ease;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.bd-nav::-webkit-scrollbar-thumb {
+    background-color: #6e6e6e;
+    outline: 1px solid #333;
+}
+
+.bd-nav::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+}
+
+.edit-bar {
+    margin-bottom: 15px;
+    margin-top: 30px;
+}
+
+.edit-bar-left {
+    position: relative;
+}
+
+.edit-bar-left > span {
+    position: relative;
+    padding: 0 15px 0 0;
+    color: #e9432d;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 2.5;
+    background: #fff;
+    z-index: 1;
+}
+
+.edit-bar-left .line {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    right: 0;
+    border-top: 1px solid rgb(243, 213, 175);
+}
+
+.form-container {
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.form-container .form-inline {
+    float: right;
+}
+
+.bd-menu .title {
+    line-height: 1.8
+}
+
+.bd-menu .title a {
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+    text-decoration: none;
+}
+
+.bd-menu .title i {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-right: 8px;
+    border-left: 8px solid;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    vertical-align: middle;
+}
+
+.bd-menu .bd-nav > li {
+    line-height: 1.8
+}
+
+.btn-oe-primary, .btn-oe-primary:hover, .btn-oe-primary:focus {
+    color: #fff;
+    background-color: #dd4814;
+}
+
+.table-base-data > thead > tr {
+    background-color: #f4e6d4;
+}
+
+.table-base-data > thead > tr > th, .table-base-data > tbody > tr > td {
+    vertical-align: middle;
+}
+
+.bd-nav > li {
+    position: relative;
+    height: 24px;
+    line-height: 22px;
+    vertical-align: middle;
+    overflow: hidden;
+}
+
+.bd-nav > li > a {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #333;
+    text-decoration: none;
+}
+
+.bd-nav .btn-box {
+    display: none;
+    float: right;
+    margin-right: 5px;
+    list-style: none;
+}
+
+.bd-nav > li:hover .btn-box, .bd-nav .active .btn-box {
+    display: block;
+}
+
+.bd-nav > li:hover a, .bd-nav .active a {
+    color: #e9432d;
+}
+
+.left-menu {
+    float: left;
+    padding: 0 0 0 15px;
+    width: 310px;
+}
+
+.center-content {
+    padding: 0 15px 0 0;
+    margin-left: 310px;
+}
+
+.center-content .wrap {
+    padding: 0 15px;
+
+}
+
+.tab-content-base-data .tab-pane {
+    padding: 15px 0 30px;
+}
+
+.tab-content-base-data .tab-content {
+    border: solid #ddd;
+    border-width: 0 1px 1px 1px;
+}
+
+.tab-content-base-data .nav-tabs a {
+    color: #A29C9C;
+}
+
+.pagination-bar .num-page {
+    float: right;
+    height: 34px;
+    font-size: 0;
+}
+
+.pagination-bar .num-page > p {
+    display: inline-block;
+    margin: 0;
+    font-size: 14px;
+    line-height: 30px;
+}
+
+.pagination-bar .num-page select {
+    font-size: 14px;
+    height: 30px;
+    padding: 4px 6px;
+}
+
+.pagination-bar .select-page {
+    display: inline-block;
+    margin-left: 8px;
+    width: 60px;
+}
+
+.pagination-bar .pagination-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow: hidden;
+}
+
+.pagination-bar .pagination-list li {
+    float: left;
+}
+
+.pagination-bar .pagination-list li + li {
+    margin-left: 4px;
+}
+
+.pagination-list > li > a, .pagination-list > li > span {
+    display: block;
+    position: relative;
+    padding: 4px 10px;
+    color: #A29C9C;
+}
+
+.pagination-list > li > a {
+    border: 1px solid #ccc;
+}
+
+.pagination-list > li > a {
+    text-decoration: none;
+}
+
+.pagination-list li:hover a, .pagination-list li.active a {
+    border-color: #e9432d;
+}
+
+.pagination-list li:hover a, .pagination-list li.active a {
+    color: #fff;
+    background-color: #e9432d;
+}
+
+.pagination-list li.active a {
+    cursor: default;
+}
+
+.pagination-list li a[disabled] {
+    color: #A29C9C;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+.pagination-list .prev .disabled, .pagination-list .next .disabled {
+    color: #A29C9C;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+@media (max-width: 1300px) {
+    .pagination-bar .num-page > p {
+        display: none;
+    }
+}

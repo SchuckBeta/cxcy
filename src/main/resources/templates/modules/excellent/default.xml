@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<content>
+		<![CDATA[&lt;style&gt;
+		.classBox {
+			position: relative;
+		}
+
+		.classBoxone {
+			position: relative;
+			text-align: center;
+			width: 636px;
+			height: 693px;
+			margin: auto;
+		}
+
+		.classBoxone img:nth-child(1) {
+			width: 100%;
+			height: 100%;
+		}
+
+		.classBoxone img:nth-child(2) {
+			position: absolute;
+			left: -86px;
+			top: 0;
+		}
+
+		.classBoxone img:nth-child(3) {
+			position: absolute;
+			right: -41px;
+			top: 0;
+		}
+
+		.classBoxone img:nth-child(4) {
+			position: absolute;
+			bottom: 182px;
+			left: -30px;
+		}
+
+		.classBoxone img:nth-child(5) {
+			position: absolute;
+			bottom: 85px;
+			right: 10px;
+		}
+
+		.classBoxone img:nth-child(6) {
+			position: absolute;
+			top: 217px;
+			left: 138px;
+		}
+
+		.classBox .content {
+			width: 302px;
+		}
+
+		.classBox .content_one {
+			position: absolute;
+			top: 100px;
+			left: -51px;
+			overflow: hidden; /*自动隐藏文字*/
+			display: none;
+		}
+
+		.classBox .content_one, .content_second, .content_three, .content_four,
+		.content_five h4, p {
+			overflow: hidden; /*自动隐藏文字*/
+			text-overflow: ellipsis; /*文字隐藏后添加省略号*/
+			white-space: nowrap; /*强制不换行*/
+		}
+
+		.classBox .content_second {
+			position: absolute;
+			top: 159px;
+			right: -25px;
+			display: none;
+		}
+
+		.classBox .content_three {
+			position: absolute;
+			left: 23px;
+			bottom: 0;
+			display: none;
+		}
+
+		.classBox .content_four {
+			position: absolute;
+			right: -54px;
+			bottom: 0;
+			display: none;
+		}
+
+		.classBox  .content_five {
+			position: absolute;
+			top: -49px;
+			left: 50%;
+			margin-left: -151px;
+			display: none;
+		}&lt;/style&gt;&lt;div class=&quot;introduction&quot;&gt;&lt;div class=&quot;product&quot;&gt;&lt;h4&gt;
+
+
+			项目介绍&lt;img src=&quot;/img/footerline.png&quot;/&gt;&lt;/h4&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;${introduction}&lt;br/&gt;&lt;div class=&quot;productdisplayone&quot; style=&quot;display: none&quot;&gt;&lt;div id=&quot;one&quot;&gt;&lt;img src=&quot;/img/yxsj03.jpg&quot; style=&quot;width: 100%; height: inherit;&quot;/&gt;&lt;/div&gt;&lt;div id=&quot;two&quot;&gt;&lt;img src=&quot;/img/yxsj01.jpg&quot; style=&quot;width: 100%; height: inherit;&quot;/&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;team container&quot;&gt;&lt;h4&gt;
+
+
+		团队介绍&lt;img src=&quot;/img/footerline.png&quot;/&gt;&lt;/h4&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;${team_summary}&lt;br/&gt;&lt;/p&gt;&lt;/div&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;&lt;/p&gt;]]>
+	</content>
+</template>

@@ -1,0 +1,75 @@
+{
+	"resourceId": "a44a5645e273442198a329bf2ba33bf6",
+	"properties": {
+		"process_id": "state_project_audit",
+		"name": "大创审核流程",
+		"documentation": "",
+		"process_author": "",
+		"process_version": "",
+		"process_namespace": "http://www.activiti.org/processdef",
+		"executionlisteners": "{\"executionListeners\":\"[]\"}",
+		"eventlisteners": "{\"eventListeners\":\"[]\"}",
+		"signaldefinitions": "\"[]\"",
+		"messagedefinitions": "\"[]\"",
+		"messages": []
+	},
+	"stencil": {
+		"id": "BPMNDiagram"
+	},
+	"childShapes": [{
+		"resourceId": "start",
+		"properties": {
+			"overrideid": "start",
+			"n…eners": "",
+			"defaultflow": "false"
+		},
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"outgoing": [{
+			"resourceId": "end"
+		}],
+		"bounds": {
+			"lowerRight": {
+				"x": 656.634521484375,
+				"y": 2234
+			},
+			"upperLeft": {
+				"x": 268,
+				"y": 1358
+			}
+		},
+		"dockers": [{
+			"x": 20,
+			"y": 20
+		}, {
+			"x": 268,
+			"y": 1358
+		}, {
+			"x": 268,
+			"y": 2234
+		}, {
+			"x": 14,
+			"y": 14
+		}],
+		"target": {
+			"resourceId": "end"
+		}
+	}],
+	"bounds": {
+		"lowerRight": {
+			"x": 1200,
+			"y": 2348
+		},
+		"upperLeft": {
+			"x": 0,
+			"y": 0
+		}
+	},
+	"stencilset": {
+		"url": "stencilsets/bpmn2.0/bpmn2.0.json",
+		"namespace": "http://b3mn.org/stencilset/bpmn2.0#"
+	},
+	"ssextensions": []
+}

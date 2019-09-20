@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.gcontest.dao.GContestAwardDao">
+    
+	<sql id="gContestAwardColumns">
+		a.id AS "id",
+		a.contest_id AS "contestId",
+		a.award AS "award",
+		a.money AS "money",
+		a.award_level AS "awardLevel",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="gContestAwardJoins">
+	</sql>
+    
+	<select id="get" resultType="GContestAward">
+		SELECT 
+			<include refid="gContestAwardColumns"/>
+		FROM g_contest_award a
+		<include refid="gContestAwardJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByGid" resultType="GContestAward">
+		SELECT 
+			<include refid="gContestAwardColumns"/>
+		FROM g_contest_award a
+		<include refid="gContestAwardJoins"/>
+		WHERE a.contest_id = #{id} and a.del_flag='0'
+	</select>
+	
+	<select id="findList" resultType="GContestAward">
+		SELECT 
+			<include refid="gContestAwardColumns"/>
+		FROM g_contest_award a
+		<include refid="gContestAwardJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GContestAward">
+		SELECT 
+			<include refid="gContestAwardColumns"/>
+		FROM g_contest_award a
+		<include refid="gContestAwardJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO g_contest_award(
+			id,
+			contest_id,
+			award,
+			money,
+			award_level,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag
+		) VALUES (
+			#{id},
+			#{contestId},
+			#{award},
+			#{money},
+			#{awardLevel},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE g_contest_award SET 	
+			contest_id = #{contestId},
+			award = #{award},
+			money = #{money},
+			award_level = #{awardLevel},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE g_contest_award SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.project.dao.ProProgressDao">
+    
+	<sql id="proProgressColumns">
+		a.id AS "id",
+		a.type AS "type",
+		a.f_id AS "fId",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.situation AS "situation",
+		a.result AS "result",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id"
+	</sql>
+	
+	<sql id="proProgressJoins">
+	</sql>
+    
+	<select id="get" resultType="ProProgress">
+		SELECT 
+			<include refid="proProgressColumns"/>
+		FROM pro_progress a
+		<include refid="proProgressJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByFid" resultType="ProProgress" parameterType="java.lang.String">
+		SELECT
+		<include refid="proProgressColumns"/>
+		FROM pro_progress a
+		WHERE  a.f_id=#{fid} order by start_date asc
+	</select>
+	
+	<select id="findList" resultType="ProProgress">
+		SELECT 
+			<include refid="proProgressColumns"/>
+		FROM pro_progress a
+		<include refid="proProgressJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProProgress">
+		SELECT 
+			<include refid="proProgressColumns"/>
+		FROM pro_progress a
+		<include refid="proProgressJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pro_progress(
+			id,
+			type,
+			f_id,
+			start_date,
+			end_date,
+			situation,
+			result,
+			create_date,
+			create_by,
+			update_date,
+			update_by
+		) VALUES (
+			#{id},
+			#{type},
+			#{fId},
+			#{startDate},
+			#{endDate},
+			#{situation},
+			#{result},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pro_progress SET 	
+			type = #{type},
+			f_id = #{fId},
+			start_date = #{startDate},
+			end_date = #{endDate},
+			situation = #{situation},
+			result = #{result},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM pro_progress
+		WHERE id = #{id}
+	</update>
+
+	<!-- 根据主表id删除 -->
+	<delete id="deleteByMidId" parameterType="java.lang.String">
+		DELETE FROM pro_progress WHERE f_id = #{fid}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.com.mqserver.modules.oa.dao.OaNotifyReoffilterDao">
+
+	<sql id="oaNotifyReoffilterColumns">
+		a.id AS "id",
+		a.oa_notify_id AS "oaNotify.id",
+		a.user_id AS "user.id",
+		a.read_flag AS "readFlag",
+		a.read_date AS "readDate",
+		a.operate_flag AS "operateFlag",
+		u3.name AS "user.name"
+	</sql>
+
+	<sql id="oaNotifyReoffilterJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+
+	<select id="get" resultType="OaNotifyReoffilter">
+		SELECT
+			<include refid="oaNotifyReoffilterColumns"/>
+		FROM oa_notify_reoffilter a
+		<include refid="oaNotifyReoffilterJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByNidAndUser" resultType="OaNotifyReoffilter">
+		SELECT
+			<include refid="oaNotifyReoffilterColumns"/>
+		FROM oa_notify_reoffilter a
+		<include refid="oaNotifyReoffilterJoins"/>
+		WHERE a.oa_notify_id = #{oaNotify.id} AND a.user_id = #{user.id}
+	</select>
+
+	<select id="findList" resultType="OaNotifyReoffilter">
+		SELECT
+			<include refid="oaNotifyReoffilterColumns"/>
+		FROM oa_notify_reoffilter a
+		<include refid="oaNotifyReoffilterJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="OaNotifyReoffilter">
+		SELECT
+			<include refid="oaNotifyReoffilterColumns"/>
+		FROM oa_notify_reoffilter a
+		<include refid="oaNotifyReoffilterJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO oa_notify_reoffilter(
+			id,
+			oa_notify_id,
+			user_id,
+			read_flag,
+			read_date,
+			operate_flag
+		) VALUES (
+			#{id},
+			#{oaNotify.id},
+			#{user.id},
+			#{readFlag},
+			#{readDate},
+			#{operateFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE oa_notify_reoffilter SET
+			oa_notify_id = #{oaNotify.id},
+			user_id = #{user.id},
+			read_flag = #{readFlag},
+			read_date = #{readDate},
+			operate_flag = #{operateFlag}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateReadFlag">
+		UPDATE oa_notify_reoffilter SET
+			READ_FLAG = #{readFlag},
+			READ_DATE = #{readDate}
+		WHERE OA_NOTIFY_ID = #{oaNotify.id}
+			AND USER_ID = #{user.id}
+	</update>
+	<update id="updateOperateFlag">
+		UPDATE oa_notify_reoffilter SET
+		   operate_flag = #{operateFlag}
+		where  OA_NOTIFY_ID = #{oaNotify.id}
+			AND USER_ID = #{user.id}
+	</update>
+	<update id="updateReadOperateFlag">
+		UPDATE oa_notify_reoffilter SET
+			READ_FLAG = #{readFlag},
+			READ_DATE = #{readDate},
+			operate_flag = #{operateFlag}
+		WHERE OA_NOTIFY_ID = #{oaNotify.id}
+			AND USER_ID = #{user.id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM oa_notify_reoffilter
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM oa_notify_reoffilter WHERE id = #{id}
+	</update>
+</mapper>

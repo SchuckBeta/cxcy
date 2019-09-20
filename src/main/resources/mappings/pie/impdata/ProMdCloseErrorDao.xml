@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.impdata.dao.ProMdCloseErrorDao">
+    
+	<sql id="proMdCloseErrorColumns">
+		a.id AS "id",
+		a.imp_id AS "impId",
+		a.p_number AS "pNumber",
+		a.p_name AS "pName",
+		a.leader_name AS "leaderName",
+		a.no AS "no",
+		a.mobile AS "mobile",
+		a.members AS "members",
+		a.tea_name AS "teaName",
+		a.tea_no AS "teaNo",
+		a.modify AS "modify",
+		a.level AS "level",
+		a.pro_category AS "proCategory",
+		a.result AS "result",
+		a.audit_result AS "auditResult",
+		a.excellent AS "excellent",
+		a.reimbursement_amount AS "reimbursementAmount",
+		a.pro_model_md_id AS "proModelMdId",
+		a.gnodeid AS "gnodeid",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="proMdCloseErrorJoins">
+	</sql>
+    
+	<select id="get" resultType="ProMdCloseError">
+		SELECT 
+			<include refid="proMdCloseErrorColumns"/>
+		FROM pro_md_close_error a
+		<include refid="proMdCloseErrorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ProMdCloseError">
+		SELECT 
+			<include refid="proMdCloseErrorColumns"/>
+		FROM pro_md_close_error a
+		<include refid="proMdCloseErrorJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProMdCloseError">
+		SELECT 
+			<include refid="proMdCloseErrorColumns"/>
+		FROM pro_md_close_error a
+		<include refid="proMdCloseErrorJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pro_md_close_error(
+			id,
+			imp_id,
+			p_number,
+			p_name,
+			leader_name,
+			no,
+			mobile,
+			members,
+			tea_name,
+			tea_no,
+			modify,
+			level,
+			pro_category,
+			result,
+			audit_result,
+			excellent,
+			reimbursement_amount,
+			pro_model_md_id,
+			gnodeid,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES (
+			#{id},
+			#{impId},
+			#{pNumber},
+			#{pName},
+			#{leaderName},
+			#{no},
+			#{mobile},
+			#{members},
+			#{teaName},
+			#{teaNo},
+			#{modify},
+			#{level},
+			#{proCategory},
+			#{result},
+			#{auditResult},
+			#{excellent},
+			#{reimbursementAmount},
+			#{proModelMdId},
+			#{gnodeid},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pro_md_close_error SET 	
+			imp_id = #{impId},
+			p_number = #{pNumber},
+			p_name = #{pName},
+			leader_name = #{leaderName},
+			no = #{no},
+			mobile = #{mobile},
+			members = #{members},
+			tea_name = #{teaName},
+			tea_no = #{teaNo},
+			modify = #{modify},
+			level = #{level},
+			pro_category = #{proCategory},
+			result = #{result},
+			audit_result = #{auditResult},
+			excellent = #{excellent},
+			reimbursement_amount = #{reimbursementAmount},
+			pro_model_md_id = #{proModelMdId},
+			gnodeid = #{gnodeid},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	<select id="getListByImpId" resultType="java.util.HashMap"
+		parameterType="java.lang.String">
+		SELECT
+		t.*
+		FROM
+		pro_md_close_error t
+		WHERE
+		t.imp_id = #{impid}
+		order by
+		t.create_date
+	</select>
+	<update id="deleteByImpId" parameterType="java.lang.String">
+		DELETE FROM
+		pro_md_close_error
+		WHERE imp_id = #{impid}
+	</update>
+	<update id="delete">
+		DELETE FROM pro_md_close_error
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

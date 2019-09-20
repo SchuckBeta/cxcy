@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.sys.modules.sys.dao.SysTeacherExpansionDao">
+
+	<sql id="sysTeacherExpansionColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.arrangement AS "arrangement",
+		a.discipline AS "discipline",
+		a.industry AS "industry",
+		a.technical_title AS "technicalTitle",
+		a.service_intention AS "serviceIntention",
+		a.work_unit AS "workUnit",
+		a.address AS "address",
+		a.resume AS "resume",
+		a.recommended_units AS "recommendedUnits",
+		a.result AS "result",
+		a.award AS "award",
+		a.level AS "level",
+		a.review_name AS "reviewName",
+		a.join_review_time AS "joinReviewTime",
+		a.first_bank AS "firstBank",
+		a.bank_account AS "bankAccount",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.teachertype AS "teachertype",
+		a.is_open AS "isOpen",
+		u2.name AS "user.name",
+		u2.no AS "user.no",
+		u2.qq AS "user.qq",
+		u2.email AS "user.email",
+		u2.phone AS "user.phone",
+		u2.mobile AS "user.mobile",
+		u2.user_type AS "user.userType",
+		u2.photo AS "user.photo",
+		u2.id_type AS "user.idType",
+		u2.national AS "user.national",
+		u2.political AS "user.political",
+		u2.professional AS "user.professional",
+		u2.post_code AS "user.postcode",
+		u2.sex AS "user.sex",
+		u2.country AS "user.country",
+		u2.area AS "user.area",
+		u2.domain AS "user.domain",
+		u2.education AS "user.education",
+		so.name AS "user.office.name"
+
+	</sql>
+
+	<sql id="sysTeacherExpansionJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+
+	<select id="get" resultType="SysTeacherExpansion">
+		SELECT
+			<include refid="sysTeacherExpansionColumns"/>
+		FROM sys_teacher_expansion a
+		<include refid="sysTeacherExpansionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SysTeacherExpansion">
+		SELECT
+			<include refid="sysTeacherExpansionColumns"/>
+		FROM sys_teacher_expansion a
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+		LEFT JOIN  sys_office so ON so.id = u2.office_id
+		LEFT JOIN  team_user_relation tur ON tur.user_id = u2.id
+		LEFT JOIN  team t ON t.id = tur.team_id
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="technicalTitle != null and technicalTitle != ''">
+				AND a.technical_title = #{technicalTitle}
+			</if>
+			<if test="useCorpModel">
+				AND u.tenant_id=#{tenantId}
+			</if>
+			<if test="serviceIntention != null and serviceIntention != ''">
+				AND a.service_intention = #{serviceIntention}
+			</if>
+			<if test="teachertype != null and teachertype != ''">
+				AND a.teachertype = #{teachertype}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysTeacherExpansion">
+		SELECT
+			<include refid="sysTeacherExpansionColumns"/>
+		FROM sys_teacher_expansion a
+		<include refid="sysTeacherExpansionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="useCorpModel">
+				AND u.tenant_id=#{tenantId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_teacher_expansion(
+			id,
+			user_id,
+			arrangement,
+			discipline,
+			industry,
+			technical_title,
+			service_intention,
+			work_unit,
+			address,
+			resume,
+			recommended_units,
+			result,
+			award,
+			level,
+			review_name,
+			join_review_time,
+			first_bank,
+			bank_account,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag,
+			teachertype,
+			is_open
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{arrangement},
+			#{discipline},
+			#{industry},
+			#{technicalTitle},
+			#{serviceIntention},
+			#{workUnit},
+			#{address},
+			#{resume},
+			#{recommendedUnits},
+			#{result},
+			#{award},
+			#{level},
+			#{reviewName},
+			#{joinReviewTime},
+			#{firstBank},
+			#{bankAccount},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag},
+			#{teachertype},
+			#{isOpen}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_teacher_expansion SET
+			arrangement = #{arrangement},
+			discipline = #{discipline},
+			industry = #{industry},
+			technical_title = #{technicalTitle},
+			service_intention = #{serviceIntention},
+			work_unit = #{workUnit},
+			address = #{address},
+			resume = #{resume},
+			recommended_units = #{recommendedUnits},
+			result = #{result},
+			award = #{award},
+			level = #{level},
+			review_name = #{reviewName},
+			join_review_time = #{joinReviewTime},
+			first_bank = #{firstBank},
+			bank_account = #{bankAccount},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			create_date = #{createDate},
+			create_by = #{createBy.id},
+			teachertype = #{teachertype},
+			is_open = #{isOpen}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_teacher_expansion SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

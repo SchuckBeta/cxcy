@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.project.dao.ProSituationDao">
+    
+	<sql id="proSituationColumns">
+		a.id AS "id",
+		a.f_id AS "fId",
+		a.type AS "type",
+		a.user_id AS "user.id",
+		a.division AS "division",
+		a.situation AS "situation",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		u4.name AS "user.name"
+	</sql>
+	
+	<sql id="proSituationJoins">
+		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="ProSituation">
+		SELECT 
+			<include refid="proSituationColumns"/>
+		FROM pro_situation a
+		<include refid="proSituationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<!-- 根据主表id 查找List -->
+	<select id="getByFid"  parameterType="java.lang.String" resultType="ProSituation">
+		SELECT
+		<include refid="proSituationColumns"/>
+		FROM pro_situation a
+		<include refid="proSituationJoins"/>
+		WHERE a.f_id= #{fid} order by u4.name asc
+	</select>
+	
+	<select id="findList" resultType="ProSituation">
+		SELECT 
+			<include refid="proSituationColumns"/>
+		FROM pro_situation a
+		<include refid="proSituationJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProSituation">
+		SELECT 
+			<include refid="proSituationColumns"/>
+		FROM pro_situation a
+		<include refid="proSituationJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pro_situation(
+			id,
+			f_id,
+			type,
+			user_id,
+			division,
+			situation,
+			create_date,
+			create_by,
+			update_date,
+			update_by
+		) VALUES (
+			#{id},
+			#{fId},
+			#{type},
+			#{user.id},
+			#{division},
+			#{situation},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pro_situation SET 	
+			f_id = #{fId},
+			type = #{type},
+			user_id = #{user.id},
+			division = #{division},
+			situation = #{situation},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM pro_situation
+		WHERE id = #{id}
+	</update>
+
+	<!-- 根据主表id删除完成情况 -->
+	<delete id="deleteByMidId" parameterType="java.lang.String">
+		DELETE FROM pro_situation WHERE f_id = #{fid}
+	</delete>
+
+</mapper>

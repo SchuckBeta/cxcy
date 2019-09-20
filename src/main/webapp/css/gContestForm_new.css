@@ -1,0 +1,149 @@
+@charset "utf-8";
+
+.select-inline{
+    display: inline-block;
+}
+
+.contest-content {
+    padding: 0 15px;
+    border: 1px solid #efefef;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.contest-content .tool-bar {
+    margin: 6px 5px;
+    overflow: hidden;
+}
+
+.main-title {
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+    font-size: 30px;
+    line-height: 1.1;
+    margin: 0 30px 0;
+    color: #1b1b1b;
+}
+
+.btn-print {
+    float: right;
+    display: block;
+    line-height: 30px;
+    margin-right: 10px;
+    color: #656565;
+    font-size: 14px;
+    padding-left: 24px;
+    background: url(../img/print.png) no-repeat left center;
+    text-decoration: none;
+}
+
+.btn-print:hover {
+    color: #ffd0a8;
+    background: url(../img/printon.png) no-repeat left center;
+    text-decoration: none;
+}
+
+.tool-bar .inner {
+    line-height: 30px;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+.tool-bar .inner > span {
+    color: #656565;
+}
+
+.tool-bar .inner > i {
+    font-style: normal;
+}
+
+.contest-title {
+    line-height: 30px;
+    padding: 8px 15px;
+    margin: 0 -15px 30px;
+    color: #333;
+    font-size: 16px;
+    font-weight: 700;
+    background-color: #f4e6d4;
+    text-align: left;
+}
+
+
+
+
+
+.contest-content .control-label {
+    float: left;
+    width: 140px;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+
+
+.contest-content .input-box {
+    margin-left: 145px;
+    font-size: 14px;
+    padding: 0 15px;
+}
+
+.contest-content .input-box .select-inline {
+    display: inline-block;
+    width: auto;
+    margin-left: 10px;
+    max-width: 625px;
+    vertical-align: top;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media print {
+    .header, .footerBox, .btn-tool-bar {
+        display: none;
+    }
+
+    .edit-bar-left .line {
+        left: 110px;
+    }
+    .contest-content .input-box>p{
+        padding-top: 0;
+    }
+    .project-view-contanier,.g-contest-detail{
+        width: 1080px;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+    .main-title{
+        margin-top: 0;
+    }
+    .btn-print{
+        display: none;
+    }
+    .btngroup .btn{
+        display: none;
+    }
+}

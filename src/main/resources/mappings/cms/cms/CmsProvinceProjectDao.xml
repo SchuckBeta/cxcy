@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.cms.modules.cms.dao.CmsProvinceProjectDao">
+
+
+
+	<select id="get" resultType="CmsProvinceProject">
+		SELECT
+			m.id,
+			m.p_name AS "name",
+			m.sub_time AS "subTime",
+			m.step ,
+			m.introduction AS "projectIntrodution",
+			att.url AS "logo",
+			t.school_name AS "schoolName",
+			IFNULL(d.label,d1.label) AS "resource",
+			GROUP_CONCAT(d2.label) AS "technologyField",
+			te.id AS "teamId",
+			te.summary AS "teamSummary"
+		from province_pro_model a
+		left JOIN pro_model m on a.model_id = m.id
+		Left JOIN team te on te.id = m.team_id
+		left join sys_attachment att on att.uid = m.id and att.file_step='1101'
+		left join sys_tenant t on t.tenant_id = m.tenant_id
+		LEFT JOIN act_yw y on m.actyw_id = y.id
+		left JOIN pro_project p on y.rel_id = p.id
+		LEFT JOIN sys_dict d on d.`value` = p.type and d.type='project_style'
+		LEFT JOIN sys_dict d1 on d1.`value` = p.type and d1.type='competition_type'
+		LEFT JOIN sys_dict d2 ON FIND_IN_SET(d2.`value`, m.belongs_field)   and d2.type = 'technology_field'
+		where m.del_flag=0 and m.is_send=1
+		and m.id= #{id}
+		GROUP BY a.id
+	</select>
+
+	<select id="findList" resultType="CmsProvinceProject">
+		SELECT
+			m.id,
+			m.p_name AS "name",
+			m.sub_time AS "subTime",
+			IFNULL(ar.thumbnail,att.url) AS "logo",
+			t.school_name AS "schoolName",
+			IFNULL(d.label,d1.label) AS "resource",
+			GROUP_CONCAT(d2.label) AS "technologyField"
+		from province_pro_model a
+		left JOIN pro_model m on a.model_id = m.id
+		left join sys_attachment att on att.uid = m.id and att.file_step='1101'
+		left join sys_tenant t on t.tenant_id = m.tenant_id
+		LEFT JOIN act_yw y on m.actyw_id = y.id
+		left JOIN pro_project p on y.rel_id = p.id
+		LEFT JOIN sys_dict d on d.`value` = p.type and d.type='project_style'
+		LEFT JOIN sys_dict d1 on d1.`value` = p.type and d1.type='competition_type'
+		LEFT JOIN sys_dict d2 ON FIND_IN_SET(d2.`value`, m.belongs_field)   and d2.type = 'technology_field'
+		LEFT JOIN cms_article ar on ar.pr_id = a.id and ar.del_flag=0
+		<where>
+		  m.del_flag=0 and m.is_send=1 and ar.publish_status=1
+			<if test="isInIndex != null and isInIndex != ''">
+				and ar.posid=#{isInIndex}
+			</if>
+			<if test="name != null and name != ''">
+				and m.pro_type like concat('%',#{name},'%')
+			</if>
+			<if test="schoolName != null and schoolName != ''">
+				and t.tenant_id = #{schoolName}
+			</if>
+			<if test="technologyField != null and technologyField != ''">
+				and m.belongs_field like concat('%',#{technologyField},'%')
+			</if>
+			<if test="step != null and step != ''">
+				and m.step = #{step}
+			</if>
+			<if test="queryKeywords != null and queryKeywords != ''">
+				and
+				(m.p_name like concat('%',#{queryKeywords},'%')
+				or t.school_name like concat('%',#{queryKeywords},'%')
+				or d2.label like concat('%',#{queryKeywords},'%')
+				)
+			</if>
+		</where>
+		GROUP BY a.id
+		ORDER BY m.sub_time desc
+	</select>
+
+
+
+
+</mapper>

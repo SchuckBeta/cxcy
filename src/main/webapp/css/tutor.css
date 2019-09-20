@@ -1,0 +1,84 @@
+/*双创学生画像 css*/
+
+.teacher{
+	width:100%;
+	padding: 20px 27px;
+}
+
+/*---面包屑---*/
+.teacher .breadcrumb{
+	background-color: #fff;
+	padding: 8px 0px;
+}
+.teacher .breadcrumb a{
+	color: #656565;
+}
+.teacher .breadcrumb>li+li:before{
+	padding: 0 5px;
+    color: #ccc;
+    content: ">";
+}
+
+/*---表单+按钮---*/
+.teacher form{
+	margin-bottom: 15px;
+}
+.teacher .form-inline span{
+	color: #e9442d;
+	padding: 5px;
+}
+.teacher .form-inline a{
+	background-color:#e9442d;
+	color: #fff;
+	margin-right: 15px;
+}
+/* 内容 开始 */
+.teacher .information{
+	border:1px solid #ccc;
+	margin-bottom: 45px;
+	color: #656565;
+	margin-top: 15px;
+	border-radius: 5px;
+}
+.teacher .teacher-data{
+	padding: 25px;
+}
+.teacher .teacher-data ul{
+	list-style: none;
+	padding:0px; 
+}
+.teacher .teacher-data li{
+	float: left;
+	margin-right: 15px;
+	color: #656565;
+	margin-bottom: 5px;
+}
+
+.teacher .tea-information-th, .teacher .tea-information-exp{
+	color: #656565; 
+	padding-right: 0px;
+}
+.teacher .tea-information-th{
+	width: 21%;
+	padding:0px;
+}
+.teacher .tea-information-exp{
+	width: 79%;
+}
+.teacher .tea-information-exp p{
+	text-align: left;
+}
+.teacher .tea-information-exp ul{
+	list-style: none;
+	padding: 0px;
+}
+.teacher .tea-label{
+
+}
+.teacher .tea-label li{
+	background-color: #e9422d;
+	color: #fff;
+	padding: 5px;
+	float: left;
+	margin: 0px 5px 5px 0px;
+}

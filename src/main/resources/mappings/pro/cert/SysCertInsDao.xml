@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.cert.dao.SysCertInsDao">
+
+	<sql id="sysCertInsColumns">
+		a.id AS "id",
+		a.cert_id AS "certId",
+		a.cert_name AS "certName",
+		a.proid AS "proid",
+		a.flow AS "flow",
+		a.gnode AS "gnode",
+		a.award AS "award",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysCertInsJoins">
+	</sql>
+
+	<select id="get" resultType="SysCertIns">
+		SELECT
+			<include refid="sysCertInsColumns"/>
+		FROM sys_cert_ins a
+		<include refid="sysCertInsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SysCertIns">
+		SELECT
+			<include refid="sysCertInsColumns"/>
+		FROM sys_cert_ins a
+		<include refid="sysCertInsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysCertIns">
+		SELECT
+			<include refid="sysCertInsColumns"/>
+		FROM sys_cert_ins a
+		<include refid="sysCertInsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_cert_ins(
+			id,
+			cert_id,
+			cert_name,
+			proid,
+			flow,
+			gnode,
+			award,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{certId},
+			#{certName},
+			#{proid},
+			#{flow},
+			#{gnode},
+			#{award},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_cert_ins SET
+			cert_id = #{certId},
+			cert_name = #{certName},
+			proid = #{proid},
+			flow = #{flow},
+			gnode = #{gnode},
+			award = #{award},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_cert_ins SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sys_cert_ins WHERE id = #{id}
+	</update>
+	<select id="getPidsByFlowNode" resultType="java.lang.String">
+		select t.proid from sys_cert_ins t where t.flow=#{flow} and t.gnode=#{node}
+	</select>
+	<select id="getSysCertIns"  resultType="com.oseasy.pro.modules.cert.vo.SysCertInsVo">
+		select t.id,t.cert_name name,proid from sys_cert_ins t where 
+		<foreach item="item" collection="pids"  separator=" or ">
+            t.proid=#{item}
+        </foreach>
+        order by t.create_date
+	</select>
+</mapper>

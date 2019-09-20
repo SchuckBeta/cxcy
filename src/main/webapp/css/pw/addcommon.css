@@ -1,0 +1,102 @@
+.upload-image-container{
+    display: inline-block;
+    width: 128px;
+}
+.upload-image-container .imageBox {
+    width: 128px;
+    height: 104px;
+    /*border: 1px solid #ccc;*/
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.upload-image-container .imageBox > img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+}
+
+.upload-image-container .loadding{
+    position: absolute;
+    left: 0;
+    top:0;
+    bottom: 0;
+    width: 100%;
+    /*display: none;*/
+    margin: 0;
+    background-color: rgba(0,0,0,.6);
+}
+
+.upload-image-container .loadding img{
+    display: block;
+    width: 24px;
+    margin: 40px auto;
+}
+
+.upload-image-container {
+    position: relative;
+}
+
+.upload-image-container .imageBtnBox {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 128px;
+    text-align: center;
+    color: #fff;
+    line-height: 104px;
+    vertical-align: middle;
+    background-color: rgba(0, 0, 0, .6);
+    cursor: pointer;
+}
+
+.upload-image-container:hover .imageBtnBox{
+    display: block;
+}
+.upload-image-container.upload-image-loading .imageBtnBox{
+    display: none;
+}
+
+/*.imageBtnBox {*/
+/*margin-top: 10px; }*/
+
+.panel-body {
+    padding: 0 30px;
+    margin-bottom: 10px;
+}
+
+.font-color {
+    color: #cbcbcb;
+}
+
+.teamPeopleLimit,
+.teacherPeopleLimit,
+.cTeacherPeopleLimit {
+    display: none;
+}
+
+.form-horizontal .input-no-border {
+    border: none;
+    box-shadow: none;
+    background: #fff;
+}
+
+.form-horizontal .textarea-no-bg {
+    background: #fff;
+}
+
+.enterpriseInfo {
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    margin: 20px 0px 20px 20px;
+    border: none;
+}
+
+.enterpriseInfo .yw-line {
+    float: left;
+    width: 100%;
+    border-bottom: 1px solid orange;
+}

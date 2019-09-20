@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.pro.dao.ProProjectDao">
+	<sql id="proProjectColumns">
+		DISTINCT a.id AS "id",
+		a.menu_rid AS "menuRid",
+		a.category_rid AS "categoryRid",
+		a.project_name AS "projectName",
+		a.project_mark AS "projectMark",
+		a.state AS "state",
+		a.content AS "content",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.node_state AS "nodeState",
+		a.node_start_date AS "nodeStartDate",
+		a.node_end_date AS "nodeEndDate",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.pro_type AS "proType",
+		a.type AS "type",
+		a.pro_category AS "proCategory",
+		a.level AS "level",
+		a.final_status AS "finalStatus",
+
+		c.id AS "category.id",
+		c.parent_id AS "category.parent.id",
+		c.parent_ids AS "category.parentIds",
+		c.site_id AS "category.site.id",
+		c.module AS "category.module",
+		<!-- '' AS "category.office.id",
+		'' AS "category.name",
+		'' AS "category.image",
+		'' AS "category.href",
+		'' AS "category.target",
+		'' AS "category.description",
+		'' AS "category.keywords",
+		'' AS "category.inMenu",
+		'' AS "category.inList",
+		'' AS "category.customContentView",
+		'' AS "category.viewConfig",
+		'' AS "category.remarks",
+		'' AS "category.parent.name",
+		c.office_id AS "category.office.id",
+		c.name AS "category.name",
+		c.image AS "category.image",
+		c.href AS "category.href",
+		c.target AS "category.target",
+		c.description AS "category.description",
+		c.keywords AS "category.keywords",
+		c.in_menu AS "category.inMenu",
+		c.in_list AS "category.inList",
+		c.custom_list_view AS "category.customListView",
+		c.view_config AS "category.viewConfig",
+		c.remarks AS "category.remarks",
+		cp.name AS "category.parent.name",-->
+		c.sort AS "category.sort",
+		c.show_modes AS "category.showModes",
+		c.allow_comment AS "category.allowComment",
+		c.is_audit AS "category.isAudit",
+		c.create_by AS "category.createBy.id",
+		c.create_date AS "category.createDate",
+		c.update_by AS "category.updateBy.id",
+		c.update_date AS "category.updateDate",
+		c.del_flag AS "category.delFlag",
+
+		m.id AS "menu.id",
+		m.parent_id AS "menu.parent.id",
+		m.parent_ids AS "menu.parent_ids",
+		m.name AS "menu.name",
+		m.href AS "menu.href",
+		m.target AS "menu.target",
+		m.icon AS "menu.icon",
+		m.sort AS "menu.sort",
+		m.is_show AS "menu.isShow",
+		m.img_url AS "menu.imgUrl",
+		m.permission AS "menu.permission",
+		m.remarks AS "menu.remarks",
+		m.create_by AS "menu.createBy.id",
+		m.create_date AS "menu.createDate",
+		m.update_by AS "menu.updateBy.id",
+		m.update_date AS "menu.updateDate",
+		m.del_flag AS "menu.delFlag",
+		mp.name AS "menu.parent.name"
+	</sql>
+
+	<sql id="proProjectJoins">
+		LEFT JOIN cms_category c ON c.id = a.category_rid
+		LEFT JOIN cms_category cp ON cp.id = c.parent_id
+		LEFT JOIN sys_menu m ON m.id = a.menu_rid
+		LEFT JOIN sys_menu mp ON mp.id = m.parent_id AND mp.tenant_id = m.tenant_id
+	</sql>
+
+	<select id="getProProjectByName" resultType="ProProject">
+		select
+			<include refid="proProjectColumns"/>
+		FROM pro_project a
+		where a.project_name=#{name} AND a.del_flag=0
+	</select>
+
+	<select id="getProProjectByMark" resultType="ProProject">
+		select
+			<include refid="proProjectColumns"/>
+		FROM pro_project a
+		<include refid="proProjectJoins"/>
+		where a.project_mark=#{mark} AND a.del_flag=0
+	</select>
+
+	<select id="getByProType" resultType="String">
+		SELECT
+			DISTINCT a.type
+		FROM
+		pro_project a
+		WHERE
+		a.del_flag = '0' AND a.pro_type = #{proType}
+	</select>
+
+	<select id="get" resultType="ProProject">
+		SELECT
+			<include refid="proProjectColumns"/>
+		FROM pro_project a
+		<include refid="proProjectJoins"/>
+		WHERE a.id = #{id} AND m.tenant_id = #{menu.tenantId}
+	</select>
+
+	<select id="getWithId" resultType="ProProject">
+		SELECT DISTINCT a.id AS "id",
+			a.menu_rid AS "menuRid",
+			a.category_rid AS "categoryRid",
+			a.project_name AS "projectName",
+			a.project_mark AS "projectMark",
+			a.state AS "state",
+			a.content AS "content",
+			a.start_date AS "startDate",
+			a.end_date AS "endDate",
+			a.node_state AS "nodeState",
+			a.node_start_date AS "nodeStartDate",
+			a.node_end_date AS "nodeEndDate",
+			a.update_date AS "updateDate",
+			a.update_by AS "updateBy.id",
+			a.create_date AS "createDate",
+			a.create_by AS "createBy.id",
+			a.del_flag AS "delFlag",
+			a.pro_type AS "proType",
+			a.type AS "type",
+			a.pro_category AS "proCategory",
+			a.level AS "level",
+			a.final_status AS "finalStatus"
+		FROM pro_project a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ProProject">
+		SELECT
+			<include refid="proProjectColumns"/>
+		FROM pro_project a
+		<include refid="proProjectJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ProProject">
+		SELECT
+			<include refid="proProjectColumns"/>
+		FROM pro_project a
+		<include refid="proProjectJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pro_project(
+			id,
+			menu_rid,
+			category_rid,
+			project_name,
+			project_mark,
+			pro_type,
+			type,
+			pro_category,
+			level,
+			final_status,
+			state,
+			content,
+			start_date,
+			end_date,
+			node_state,
+			node_start_date,
+			node_end_date,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag,
+			year
+		) VALUES (
+			#{id},
+			#{menuRid},
+			#{categoryRid},
+			#{projectName},
+			#{projectMark},
+			#{proType},
+			#{type},
+			#{proCategory},
+			#{level},
+			#{finalStatus},
+			#{state},
+			#{content},
+			#{startDate},
+			#{endDate},
+			#{nodeState},
+			#{nodeStartDate},
+			#{nodeEndDate},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag},
+			#{year}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pro_project SET
+			menu_rid = #{menuRid},
+			category_rid = #{categoryRid},
+			project_name = #{projectName},
+			project_mark = #{projectMark},
+			pro_type = #{proType},
+			type = #{type},
+			pro_category = #{proCategory},
+			level = #{level},
+			final_status = #{finalStatus},
+			state = #{state},
+			content = #{content},
+			start_date = #{startDate},
+			end_date = #{endDate},
+			node_state = #{nodeState},
+			node_start_date = #{nodeStartDate},
+			node_end_date = #{nodeEndDate},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			year = #{year}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE pro_project SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.com.pcore.modules.sys.dao.RoleDao">
+
+	<resultMap id="roleResult" type="Role">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="rinit" column="rinit" />
+		<result property="rtype" column="rtype" />
+		<result property="regval" column="regval" />
+		<result property="rid" column="rid" />
+		<result property="enname" column="enname" />
+		<result property="roleType" column="roleType" />
+		<result property="roleGroup" column="roleGroup" />
+		<result property="bizType" column="bizType" />
+		<result property="dataScope" column="dataScope" />
+		<result property="remarks" column="remarks" />
+		<result property="useable" column="useable" />
+		<result property="sysData" column="sysData" /><!--
+		<collection property="userList" ofType="User">
+			<id property="id" column="userList.id" />
+			<id property="loginName" column="userList.loginName" />
+			<id property="name" column="userList.name" />
+			<id property="email" column="userList.email" />
+			<id property="phone" column="userList.phone" />
+			<id property="mobile" column="userList.mobile" />
+			<id property="office.name" column="userList.office.name" />
+			<id property="company.name" column="userList.company.name" />
+		</collection> -->
+		<collection property="menuList" ofType="Menu">
+			<id property="id" column="menuList.id" />
+		</collection>
+		<collection property="officeList" ofType="Office">
+			<id property="id" column="officeList.id" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="roleMenuMap" type="Role">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="rinit" column="rinit" />
+		<result property="rtype" column="rtype" />
+		<result property="regval" column="regval" />
+		<result property="rid" column="rid" />
+		<result property="enname" column="enname" />
+		<result property="roleType" column="roleType" />
+		<result property="roleGroup" column="roleGroup" />
+		<result property="bizType" column="bizType" />
+		<result property="dataScope" column="dataScope" />
+		<result property="remarks" column="remarks" />
+		<result property="useable" column="useable" />
+		<result property="sysData" column="sysData" />
+		<collection property="menuList" ofType="Menu">
+			<id property="id" column="menuList.id" />
+		</collection>
+	</resultMap>
+
+	<sql id="roleColumns">
+    	a.id,
+    	a.office_id AS "office.id",
+    	a.name,
+    	a.rinit,
+    	a.rtype,
+    	a.regval,
+    	a.rid,
+    	a.enname,
+    	a.role_type AS roleType,
+    	a.role_group AS roleGroup,
+    	a.biz_type AS bizType,
+		a.data_scope AS dataScope,
+		a.remarks,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+    	o.name AS "office.name",
+    	o.code,
+    	a.useable AS useable,
+    	a.is_sys AS sysData
+    </sql>
+
+	<sql id="roleMenuColumns">
+		a.id,
+		a.office_id AS "office.id",
+		a.name,
+		a.rinit,
+		a.rtype,
+		a.regval,
+		a.rid,
+		a.enname,
+		a.role_type AS roleType,
+		a.role_group AS roleGroup,
+		a.biz_type AS bizType,
+		a.data_scope AS dataScope,
+		a.remarks,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		a.useable AS useable,
+		a.is_sys AS sysData,
+		rm.menu_id AS "menuList.id"
+	</sql>
+
+    <sql id="roleUserColumns">
+    	a.id AS "id",
+    	a.name AS "name",
+    	a.rinit AS "rinit",
+    	a.rtype AS "rtype",
+    	a.regval AS "regval",
+    	a.rid AS "rid",
+    	a.enname AS "enname",
+    	a.role_type AS "roleType",
+    	a.role_group AS roleGroup,
+    	a.biz_type AS bizType,
+		a.data_scope AS "dataScope",
+    	a.useable AS "useable",
+    	a.is_sys AS "sysData",
+    	a.office_id AS "office.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+
+		u.id AS "user.id",
+		u.company_id AS "user.company.id",
+		u.office_id AS "user.office.id",
+		u.login_name AS "user.loginName",
+		u.password AS "user.password",
+		u.no AS "user.no",
+		u.sex AS "user.sex",
+		u.name AS "user.name",
+		u.email AS "user.email",
+		u.phone AS "user.phone",
+		u.mobile AS "user.mobile",
+		u.user_type AS "user.userType",
+		u.login_ip AS "user.loginIp",
+		u.login_date AS "user.loginDate",
+		u.remarks AS "user.remarks",
+		u.login_flag AS "user.loginFlag",
+		u.photo AS "user.photo",
+		u.professional AS "user.professional",
+		u.update_date AS "updateDate",
+		u.update_by AS "updateBy.id",
+		u.create_date AS "createDate",
+		u.create_by AS "createBy.id",
+		u.remarks AS "remarks",
+		u.del_flag AS "delFlag",
+		u.id_type AS "idType",
+		u.birthday AS "birthday",
+		u.id_no AS "idNumber",
+		u.national AS "national",
+		u.political AS "political",
+		u.country AS "country",
+		u.qq AS "qq",
+		u.education AS "education",
+		u.degree AS "degree",
+		u.views AS "views",
+		u.likes AS "likes",
+
+    	o.name AS "office.name",
+    	o.code
+    </sql>
+
+	<select id="get" resultMap="roleResult">
+		SELECT
+			<include refid="roleColumns"/>,<!--
+			ur.user_id AS "userList.id",
+			u.login_name AS "userList.loginName",
+			u.name AS "userList.name",
+			u.email AS "userList.email",
+			u.phone AS "userList.phone",
+			u.mobile AS "userList.mobile",
+			uc.name AS "userList.company.name",
+			uo.name AS "userList.office.name", -->
+			rm.menu_id AS "menuList.id",
+			ro.office_id AS "officeList.id"
+		FROM sys_role a
+		LEFT JOIN sys_office o ON o.id = a.office_id<!--
+		LEFT JOIN sys_user_role ur ON ur.role_id = a.id
+		LEFT JOIN sys_user u ON u.id = ur.user_id
+		LEFT JOIN sys_office uc ON uc.id = u.company_id
+		LEFT JOIN sys_office uo ON uo.id = u.office_id -->
+		LEFT JOIN sys_role_menu rm ON rm.role_id = a.id
+		LEFT JOIN sys_role_office ro ON ro.role_id = a.id
+		WHERE a.id = #{id} and a.del_flag='0'
+	</select>
+
+	<select id="getNamebyId" resultMap="roleResult">
+		SELECT
+			a.id,
+    		a.name,
+    		a.rinit,
+    		a.rtype,
+    		a.rid,
+    		a.enname
+		FROM sys_role a
+		WHERE a.id = #{id} and a.del_flag='0'
+
+	</select>
+
+
+	<select id="getByName" resultType="Role">
+		SELECT
+		<include refid="roleColumns"/>
+		FROM sys_role a
+		JOIN sys_office o ON o.id = a.office_id
+		WHERE a.name = #{name} AND a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+
+	<select id="getByRid" resultType="Role">
+		SELECT
+		<include refid="roleColumns"/>
+		FROM sys_role a
+		JOIN sys_office o ON o.id = a.office_id
+		WHERE a.rid = #{rid} AND a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+
+	<select id="getByRtmenu" resultMap="roleResult">
+		SELECT
+		<include refid="roleColumns"/>,
+		rm.menu_id AS "menuList.id",
+		ro.office_id AS "officeList.id"
+		FROM sys_role a
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		LEFT JOIN sys_role_menu rm ON rm.role_id = a.id
+		LEFT JOIN sys_role_office ro ON ro.role_id = a.id
+		WHERE a.rtype = #{rtype} AND a.del_flag = #{DEL_FLAG_NORMAL} AND a.rinit = '1'
+	</select>
+
+	<select id="getByRtype" resultType="Role">
+		SELECT
+		<include refid="roleColumns"/>
+		FROM sys_role a
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		WHERE a.rtype = #{rtype} AND a.del_flag = #{DEL_FLAG_NORMAL} AND a.rinit = '1'
+	</select>
+
+	<select id="getByRtypeOfProvince" resultType="Role">
+		SELECT
+		<include refid="roleColumns"/>
+		FROM sys_role a
+		JOIN sys_office o ON o.id = a.office_id
+		WHERE a.rtype = #{rtype} AND a.del_flag = #{DEL_FLAG_NORMAL} AND a.rinit = '1' and a.tenant_id = #{tenantId}
+	</select>
+
+	<select id="findListByRtype" resultType="Role">
+		SELECT
+		<include refid="roleColumns"/>
+		FROM sys_role a
+		JOIN sys_office o ON o.id = a.office_id
+		WHERE a.rtype = #{rtype} AND a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+
+	<select id="findListByRinit" resultType="Role">
+		SELECT
+		<include refid="roleColumns"/>
+		FROM sys_role a
+		JOIN sys_office o ON o.id = a.office_id
+		WHERE a.rinit = '1' AND a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+
+	<select id="getByEnname" resultType="Role">
+		SELECT
+			<include refid="roleColumns"/>
+		FROM sys_role a
+		JOIN sys_office o ON o.id = a.office_id
+		WHERE a.enname = #{enname} AND a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+
+	<select id="findRoles" resultMap="roleResult">
+		SELECT
+		<include refid="roleColumns"/>
+		FROM sys_role a
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.useable=#{useable}
+		ORDER BY a.name
+	</select>
+
+	<select id="findList" resultMap="roleResult">
+		SELECT <!-- DISTINCT -->
+		<include refid="roleColumns"/>,
+		ro.office_id AS "officeList.id"
+		FROM sys_role a
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		LEFT JOIN sys_user_role ur ON ur.role_id = a.id
+		LEFT JOIN sys_user u ON u.id = ur.user_id
+		LEFT JOIN sys_role_office ro ON ro.role_id = a.id
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.useable=#{useable}
+		<if test="user != null and user.id != null and user.id != ''">
+			AND u.id = #{user.id}
+		</if>
+		<if test="user != null and user.loginName != null and user.loginName != ''">
+			AND u.login_name = #{user.loginName}
+		</if>
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+		ORDER BY o.code, a.name
+	</select>
+
+	<select id="findListNtenant" resultMap="roleResult">
+		SELECT
+		<include refid="roleColumns"/>,
+		ro.office_id AS "officeList.id"
+		FROM sys_role a
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		LEFT JOIN sys_user_role ur ON ur.role_id = a.id
+		LEFT JOIN sys_user u ON u.id = ur.user_id
+		LEFT JOIN sys_role_office ro ON ro.role_id = a.id
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.useable=#{useable}
+		<if test="user != null and user.id != null and user.id != ''">
+			AND u.id = #{user.id}
+		</if>
+		<if test="user != null and user.loginName != null and user.loginName != ''">
+			AND u.login_name = #{user.loginName}
+		</if>
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+		ORDER BY o.code, a.name
+	</select>
+	<select id="findListTenant" resultMap="roleResult">
+		SELECT <!-- DISTINCT -->
+		<include refid="roleColumns"/>,
+		ro.office_id AS "officeList.id"
+		FROM sys_role a
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		LEFT JOIN sys_user_role ur ON ur.role_id = a.id
+		LEFT JOIN sys_user u ON u.id = ur.user_id
+		LEFT JOIN sys_role_office ro ON ro.role_id = a.id
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.useable=#{useable}
+		<if test="user != null and user.id != null and user.id != ''">
+			AND u.id = #{user.id}
+		</if>
+		<if test="useCorpModel">
+			AND a.tenant_id = #{tenantId}
+		</if>
+		<if test="user != null and user.loginName != null and user.loginName != ''">
+			AND u.login_name = #{user.loginName}
+		</if>
+		<!-- 数据范围过滤 -->
+		${sqlMap.dsf}
+		ORDER BY o.code, a.name
+	</select>
+	<select id="findListByIds" parameterType="java.util.List" resultType="Role">
+		SELECT
+		<include refid="roleUserColumns"/>
+		FROM sys_role a
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		LEFT JOIN sys_user_role ur ON ur.role_id = a.id
+		LEFT JOIN sys_user u ON u.id = ur.user_id
+		WHERE a.del_flag='0' and u.del_flag='0' and a.id in
+		<foreach item="item" collection="ids" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="findListByUserId" resultType="Role">
+		SELECT
+			a.role_id AS 'id',
+			a.user_id AS 'user.id',
+			r.name AS 'name',
+			r.rinit AS 'rinit',
+			r.rtype AS 'rtype',
+			r.regval AS 'regval',
+			r.rid AS 'rid',
+			r.office_id AS 'officeId',
+			r.enname AS 'enname',
+			r.role_type AS 'roleType'
+		FROM sys_user_role  a  	left join sys_role r on a.role_id = r.id
+		WHERE r.del_flag = '0' AND r.useable='1'
+		AND a.user_id = #{userId}
+	</select>
+
+	<select id="findByOffice" resultMap="roleMenuMap">
+		SELECT
+			<include refid="roleMenuColumns"/>
+		FROM sys_role a
+		LEFT JOIN sys_role_menu rm ON rm.role_id = a.id
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="office != null and office.id != null and office.id != ''">
+			AND a.office_id = #{office.id}
+		</if>
+	</select>
+
+	<select id="findListByUserIds" resultType="Role">
+		SELECT
+			a.role_id AS 'id',
+			a.user_id AS 'user.id',
+			r.name AS 'name',
+			r.rinit AS 'rinit',
+			r.rtype AS 'rtype',
+			r.regval AS 'regval',
+			r.rid AS 'rid',
+			r.office_id AS 'officeId',
+			r.enname AS 'enname',
+			r.role_type AS 'roleType'
+		FROM sys_user_role  a  	left join sys_role r on a.role_id = r.id
+		WHERE r.del_flag = '0' AND r.useable='1'
+		AND a.user_id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+
+
+	<select id="findAllList" resultType="Role">
+		SELECT
+			<include refid="roleColumns"/>
+		FROM sys_role a
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY o.code, a.name
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_role(
+			id,
+			office_id,
+			name,
+			rinit,
+			rtype,
+			regval,
+			rid,
+			enname,
+			role_type,
+			role_group,
+			biz_type,
+			data_scope,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			is_sys,
+			useable
+		) VALUES (
+			#{id},
+			#{office.id},
+			#{name},
+			#{rinit},
+			#{rtype},
+			#{regval},
+			#{rid},
+			#{enname},
+			#{roleType},
+			#{roleGroup},
+			#{bizType},
+			#{dataScope},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{sysData},
+			#{useable}
+		)
+	</insert>
+
+
+	<insert id="insertPL">
+		INSERT INTO sys_role(
+			id,
+			office_id,
+			name,
+			rinit,
+			rtype,
+			regval,
+			rid,
+			enname,
+			role_type,
+			role_group,
+			biz_type,
+			data_scope,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			is_sys,
+			useable
+		) VALUES
+		<foreach collection="entitys" item="item" index="index"
+				 separator=",">
+			(
+			#{item.id},
+			#{item.office.id},
+			#{item.name},
+			#{item.rinit},
+			#{item.rtype},
+			#{item.regval},
+			#{item.rid},
+			#{item.enname},
+			#{item.roleType},
+			#{item.roleGroup},
+			#{item.bizType},
+			#{item.dataScope},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag},
+			#{item.sysData},
+			#{item.useable}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE sys_role SET
+			office_id = #{office.id},
+			name = #{name},
+			rinit = #{rinit},
+			rtype = #{rtype},
+			regval = #{regval},
+			rid = #{rid},
+			enname = #{enname},
+			role_type = #{roleType},
+			role_group   = #{roleGroup},
+			biz_type=#{bizType},
+			data_scope = #{dataScope},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			is_sys = #{sysData},
+			useable = #{useable}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="deleteRoleMenu">
+		DELETE FROM sys_role_menu WHERE role_id = #{id}
+	</delete>
+
+	<delete id="deleteRoleMenus">
+		DELETE FROM sys_role_menu WHERE role_id = #{id}
+		<if test="menuList != null and menuList.size >0">
+			AND menu_id in
+			<foreach item="item" collection="menuList" open="(" separator=","
+					 close=")">
+				#{item.id}
+			</foreach>
+		</if>
+	</delete>
+
+	<insert id="insertRoleMenu">
+		INSERT INTO sys_role_menu(role_id, menu_id)
+		<foreach collection="menuList" item="menu" separator=" union all ">
+			SELECT #{id}, #{menu.id}
+			<if test="dbName != 'mssql'">
+			FROM dual
+			</if>
+		</foreach>
+	</insert>
+
+	<delete id="deleteRoleOffice">
+		DELETE FROM sys_role_office WHERE role_id = #{id}
+	</delete>
+
+	<insert id="insertRoleOffice">
+		INSERT INTO sys_role_office(role_id, office_id)
+		<foreach collection="officeList" item="office" separator=" union all ">
+			SELECT #{id}, #{office.id}
+			<if test="dbName != 'mssql'">
+			FROM dual
+			</if>
+		</foreach>
+	</insert>
+
+	<update id="delete">
+		UPDATE sys_role SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<select id="getRoleUserCount" resultType="java.lang.Integer">
+		select count(1) from sys_user_role t left join sys_user u on t.user_id=u.id
+		where u.del_flag='0' and t.role_id=#{roleid}
+	</select>
+
+
+	<select id="checkRoleName" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM sys_role a
+		<where>
+			<if test="name != null and name != ''"> AND  a.name = #{name}</if>
+			<if test="id != null and id != ''"> AND  a.id != #{id}</if>
+			AND a.del_flag = '0'
+		</where>
+	</select>
+
+	<select id="checkRoleEnName" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM sys_role a
+		<where>
+			<if test="name != null and name != ''"> AND  a.enname = #{enname}</if>
+			<if test="id != null and id != ''"> AND  a.id != #{id}</if>
+			AND a.del_flag = '0'
+		</where>
+	</select>
+
+	<select id="checkRoleByUid" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM sys_user_role a
+		<where>
+			a.user_id = #{uid} AND a.role_id = #{rid}
+		</where>
+	</select>
+
+	<select id="getRoleNameByGnodeId" resultType="java.lang.String">
+		SELECT
+			a.NAME
+		FROM
+			sys_role a
+				LEFT JOIN act_yw_grole g ON FIND_IN_SET( a.id, g.role_id )
+		WHERE
+			g.gnode_id =#{gnodeId} and a.del_flag = '0'
+	</select>
+</mapper>

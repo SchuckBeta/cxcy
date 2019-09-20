@@ -1,0 +1,337 @@
+{
+	"resourceId": "1341a0f7735a6540d6b5cbf36857ec3d55",
+	"ssextensions": [],
+	"bounds": {
+		"upperLeft": {
+			"x": 0,
+			"y": 0
+		},
+		"lowerRight": {
+			"x": 1200,
+			"y": 2245
+		}
+	},
+	"stencilset": {
+		"namespace": "http://b3mn.org/stencilset/bpmn2.0#",
+		"url": "stencilsets/bpmn2.0/bpmn2.0.json"
+	},
+	"stencil": {
+		"id": "BPMNDiagram"
+	},
+	"childShapes": [{
+		"outgoing": [{
+			"resourceId": "sid-a6cb90b33e6b4066a03c5e66f07bb0b7"
+		}],
+		"resourceId": "start0a1faf1bf11145e7a14dc6dd940c2ae8",
+		"bounds": {
+			"upperLeft": {
+				"x": 600,
+				"y": 50
+			},
+			"lowerRight": {
+				"x": 600,
+				"y": 100
+			}
+		},
+		"dockers": [{
+			"x": 0,
+			"y": 0
+		}, {
+			"x": 10,
+			"y": 10
+		}],
+		"stencil": {
+			"id": "StartNoneEvent"
+		},
+		"childShapes": [],
+		"properties": {
+			"formproperties": {
+				"formProperties": []
+			},
+			"multiinstance_collection": "",
+			"formkeydefinition": "",
+			"sequencefloworder": "",
+			"tasklisteners": {
+				"taskListeners": []
+			},
+			"multiinstance_condition": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"documentation": "开始-开始无事件",
+			"initiator": "",
+			"prioritydefinition": "",
+			"multiinstance_cardinality": "",
+			"multiinstance_variable": "",
+			"usertaskassignment": {
+				"assignment": null
+			},
+			"multiinstance_type": "Parallel",
+			"exclusivedefinition": "true",
+			"defaultflow": "",
+			"duedatedefinition": "",
+			"asynchronousdefinition": "false",
+			"name": "开始",
+			"overrideid": "start0a1faf1bf11145e7a14dc6dd940c2ae8",
+			"isforcompensation": "false",
+			"showdiamondmarker": ""
+		},
+		"target": null
+	}, {
+		"outgoing": [{
+			"resourceId": "sid-755a08761bf541aaa5c7b60a96d45a74"
+		}],
+		"resourceId": "sid-a6cb90b33e6b4066a03c5e66f07bb0b7",
+		"bounds": {
+			"upperLeft": {
+				"x": 0,
+				"y": 0
+			},
+			"lowerRight": {
+				"x": 0,
+				"y": 0
+			}
+		},
+		"dockers": [{
+			"x": 0,
+			"y": 0
+		}, {
+			"x": 10,
+			"y": 10
+		}],
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"properties": {
+			"formproperties": {
+				"formProperties": []
+			},
+			"multiinstance_collection": "",
+			"formkeydefinition": "",
+			"sequencefloworder": "",
+			"tasklisteners": {
+				"taskListeners": []
+			},
+			"multiinstance_condition": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"documentation": "连接-序列连接线",
+			"initiator": "",
+			"prioritydefinition": "",
+			"multiinstance_cardinality": "",
+			"multiinstance_variable": "",
+			"usertaskassignment": {
+				"assignment": null
+			},
+			"multiinstance_type": "Parallel",
+			"exclusivedefinition": "true",
+			"defaultflow": "",
+			"duedatedefinition": "",
+			"asynchronousdefinition": "false",
+			"name": "连接线",
+			"overrideid": "sid-a6cb90b33e6b4066a03c5e66f07bb0b7",
+			"isforcompensation": "false",
+			"showdiamondmarker": ""
+		},
+		"target": {
+			"resourceId": "sid-755a08761bf541aaa5c7b60a96d45a74"
+		}
+	}, {
+		"outgoing": [{
+			"resourceId": "sid-a904e3cbe3ba40cfab0cc067ca1384f7"
+		}],
+		"resourceId": "sid-755a08761bf541aaa5c7b60a96d45a74",
+		"bounds": {
+			"upperLeft": {
+				"x": 550,
+				"y": 1122.5
+			},
+			"lowerRight": {
+				"x": 700,
+				"y": 1222.5
+			}
+		},
+		"dockers": [{
+			"x": 0,
+			"y": 0
+		}, {
+			"x": 10,
+			"y": 10
+		}],
+		"stencil": {
+			"id": "UserTask"
+		},
+		"childShapes": [],
+		"properties": {
+			"formproperties": {
+				"formProperties": []
+			},
+			"multiinstance_collection": "",
+			"formkeydefinition": null,
+			"sequencefloworder": "",
+			"tasklisteners": {
+				"taskListeners": []
+			},
+			"multiinstance_condition": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"documentation": "任务-用户任务",
+			"initiator": "",
+			"prioritydefinition": "",
+			"multiinstance_cardinality": "",
+			"multiinstance_variable": "",
+			"usertaskassignment": {
+				"assignment": {
+					"candidateGroups": [{
+						"$$hashKey": "91da32bff69243f3bcc77156e5bda4cc",
+						"value": "${R431e3fc9adb248279221c0ab5b3b717f}"
+					}],
+					"candidateUsers": [{
+						"$$hashKey": "da5fa1da8dc6418989681da2ca58f061",
+						"value": "${R431e3fc9adb248279221c0ab5b3b717f}"
+					}],
+					"assignee": ""
+				}
+			},
+			"multiinstance_type": "None",
+			"exclusivedefinition": "true",
+			"defaultflow": "",
+			"duedatedefinition": "",
+			"asynchronousdefinition": "false",
+			"name": "任务",
+			"overrideid": "sid-755a08761bf541aaa5c7b60a96d45a74",
+			"isforcompensation": "false",
+			"showdiamondmarker": ""
+		},
+		"target": null
+	}, {
+		"outgoing": [{
+			"resourceId": "sid-7ee4f54f1c32495daa67860de79e080a"
+		}],
+		"resourceId": "sid-a904e3cbe3ba40cfab0cc067ca1384f7",
+		"bounds": {
+			"upperLeft": {
+				"x": 0,
+				"y": 0
+			},
+			"lowerRight": {
+				"x": 0,
+				"y": 0
+			}
+		},
+		"dockers": [{
+			"x": 0,
+			"y": 0
+		}, {
+			"x": 10,
+			"y": 10
+		}],
+		"stencil": {
+			"id": "SequenceFlow"
+		},
+		"childShapes": [],
+		"properties": {
+			"formproperties": {
+				"formProperties": []
+			},
+			"multiinstance_collection": "",
+			"formkeydefinition": "",
+			"sequencefloworder": "",
+			"tasklisteners": {
+				"taskListeners": []
+			},
+			"multiinstance_condition": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"documentation": "连接-序列连接线",
+			"initiator": "",
+			"prioritydefinition": "",
+			"multiinstance_cardinality": "",
+			"multiinstance_variable": "",
+			"usertaskassignment": {
+				"assignment": null
+			},
+			"multiinstance_type": "Parallel",
+			"exclusivedefinition": "true",
+			"defaultflow": "",
+			"duedatedefinition": "",
+			"asynchronousdefinition": "false",
+			"name": "连接线",
+			"overrideid": "sid-a904e3cbe3ba40cfab0cc067ca1384f7",
+			"isforcompensation": "false",
+			"showdiamondmarker": ""
+		},
+		"target": {
+			"resourceId": "sid-7ee4f54f1c32495daa67860de79e080a"
+		}
+	}, {
+		"outgoing": [],
+		"resourceId": "sid-7ee4f54f1c32495daa67860de79e080a",
+		"bounds": {
+			"upperLeft": {
+				"x": 600,
+				"y": 1122.5
+			},
+			"lowerRight": {
+				"x": 650,
+				"y": 1202.5
+			}
+		},
+		"dockers": [{
+			"x": 0,
+			"y": 0
+		}, {
+			"x": 10,
+			"y": 10
+		}],
+		"stencil": {
+			"id": "EndNoneEvent"
+		},
+		"childShapes": [],
+		"properties": {
+			"formproperties": {
+				"formProperties": []
+			},
+			"multiinstance_collection": "",
+			"formkeydefinition": "",
+			"sequencefloworder": "",
+			"tasklisteners": {
+				"taskListeners": []
+			},
+			"multiinstance_condition": "",
+			"conditionsequenceflow": "",
+			"executionlisteners": "",
+			"documentation": "结束-结束无事件",
+			"initiator": "",
+			"prioritydefinition": "",
+			"multiinstance_cardinality": "",
+			"multiinstance_variable": "",
+			"usertaskassignment": {
+				"assignment": null
+			},
+			"multiinstance_type": "Parallel",
+			"exclusivedefinition": "true",
+			"defaultflow": "",
+			"duedatedefinition": "",
+			"asynchronousdefinition": "false",
+			"name": "结束",
+			"overrideid": "sid-7ee4f54f1c32495daa67860de79e080a",
+			"isforcompensation": "false",
+			"showdiamondmarker": ""
+		},
+		"target": null
+	}],
+	"properties": {
+		"process_id": "F_SNPT180200118_SNFW180200167",
+		"signaldefinitions": "[]",
+		"messagedefinitions": "[]",
+		"eventlisteners": "{\"eventlisteners\":\"[]\"}",
+		"executionlisteners": "{\"executionListeners\":\"[]\"}",
+		"process_namespace": "http://www.activiti.org/processdef",
+		"documentation": "自定义工作流",
+		"name": "双创项目流程_测试签收流程",
+		"process_version": "1.0.0",
+		"messages": "[]",
+		"process_author": "thinkgem-系统超级管理员"
+	}
+}

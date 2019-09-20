@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.gcontest.dao.GcontestHotsKeywordDao">
+    
+	<sql id="gcontestHotsKeywordColumns">
+		a.id AS "id",
+		a.gcontest_hots_id AS "gcontestHotsId",
+		a.keyword AS "keyword",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="gcontestHotsKeywordJoins">
+	</sql>
+    
+	<select id="get" resultType="GcontestHotsKeyword">
+		SELECT 
+			<include refid="gcontestHotsKeywordColumns"/>
+		FROM gcontest_hots_keyword a
+		<include refid="gcontestHotsKeywordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GcontestHotsKeyword">
+		SELECT 
+			<include refid="gcontestHotsKeywordColumns"/>
+		FROM gcontest_hots_keyword a
+		<include refid="gcontestHotsKeywordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GcontestHotsKeyword">
+		SELECT 
+			<include refid="gcontestHotsKeywordColumns"/>
+		FROM gcontest_hots_keyword a
+		<include refid="gcontestHotsKeywordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gcontest_hots_keyword(
+			id,
+			gcontest_hots_id,
+			keyword,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag
+		) VALUES (
+			#{id},
+			#{gcontestHotsId},
+			#{keyword},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gcontest_hots_keyword SET 	
+			gcontest_hots_id = #{gcontestHotsId},
+			keyword = #{keyword},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gcontest_hots_keyword SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<select id="findListByEsid" resultType="java.lang.String">
+		SELECT 
+			a.keyword
+		FROM gcontest_hots_keyword a
+		where a.gcontest_hots_id=#{esid} and a.del_flag='0'
+	</select>
+	<update id="delByEsid">
+		delete from gcontest_hots_keyword
+		WHERE gcontest_hots_id = #{esid}
+	</update>
+</mapper>

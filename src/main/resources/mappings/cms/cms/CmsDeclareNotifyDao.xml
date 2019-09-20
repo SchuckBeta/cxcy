@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.cms.modules.cms.dao.CmsDeclareNotifyDao">
+
+	<sql id="cmsDeclareNotifyColumns">
+		a.id AS "id",
+		a.content AS "content",
+		a.is_release AS "isRelease",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.title AS "title",
+		a.type AS "type",
+		a.category_id AS "categoryId",
+		a.views AS "views",
+		a.release_date AS "releaseDate"
+	</sql>
+
+	<sql id="cmsDeclareNotifyJoins">
+	</sql>
+
+	<select id="get" resultType="CmsDeclareNotify">
+		SELECT
+			<include refid="cmsDeclareNotifyColumns"/>
+		FROM cms_declare_notify a
+		<include refid="cmsDeclareNotifyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="CmsDeclareNotify">
+		SELECT
+			<include refid="cmsDeclareNotifyColumns"/>
+		FROM cms_declare_notify a
+		<include refid="cmsDeclareNotifyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="CmsDeclareNotify">
+		SELECT
+			<include refid="cmsDeclareNotifyColumns"/>
+		FROM cms_declare_notify a
+		<include refid="cmsDeclareNotifyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cms_declare_notify(
+			id,
+			content,
+			is_release,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag,
+			title,
+			type,
+			category_id,
+			views,
+			release_date
+		) VALUES (
+			#{id},
+			#{content},
+			#{isRelease},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag},
+			#{title},
+			#{type},
+			#{categoryId},
+			#{views},
+			#{releaseDate}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE cms_declare_notify SET
+			content = #{content},
+			is_release = #{isRelease},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			title = #{title},
+			type = #{type},
+			category_id = #{categoryId},
+			views=#{views},
+			release_date=#{releaseDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE cms_declare_notify SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<update id="updateRelease">
+		UPDATE cms_declare_notify SET
+			is_release = #{release}
+		WHERE id = #{id}
+	</update>
+	<update id="deleteWL">
+		DELETE FROM cms_declare_notify WHERE id = #{id}
+	</update>
+	<update id="updateViews" parameterType="java.util.Map">
+		UPDATE cms_declare_notify SET views = CASE id
+		<foreach collection="param.keys" item="key" separator=" ">
+			WHEN #{key} THEN ifnull(views,0)+#{param[${key}]}
+		</foreach>
+		END
+		where id in 
+		<foreach collection="param.keys" item="key" open="(" separator="," close=")">
+			#{key}
+		</foreach>
+	</update>
+</mapper>

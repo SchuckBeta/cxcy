@@ -1,0 +1,98 @@
+
+.user-register {
+    width: 100%;
+    height: 760px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: url(../../img/studentloginbg_02.png) no-repeat center center;
+}
+.user-register-box {
+    width: 450px;
+    float: right;
+}
+.user-register-box > p {
+    text-align: center;
+    font-size: 20px;
+    color: #1b1b1b;
+    /*margin-top: 50px;*/
+    line-height: 60px;
+}
+.user-register-form {
+    border: 1px solid #F2F2F2;
+    border-radius: 5px;
+    padding: 34px 20px 42px 20px;
+    background: white;
+}
+.user-register-form .el-tabs__nav {
+    width: 100%;
+    text-align: center;
+}
+.user-register-form .el-tabs__active-bar, .user-register-form .el-tabs__item {
+    width: 50%;
+    font-size: 14px;
+}
+.user-register-form .el-tabs__content{
+    padding:15px 35px 0;
+}
+.user-register-form .reg-way{
+    width:338px;
+}
+.user-register-form .reg-validate-code .el-input{
+    width:72%;
+    float: left;
+}
+.user-register-form .reg-validate-code img{
+    float: right;
+}
+.user-register-form .reg-validate-code img:hover{
+    cursor:pointer;
+}
+.user-register-form .icon-jiesuo{
+    position: absolute;
+    top: 4px;
+    right: 11px;
+    font-size: 17px;
+}
+.user-register-form .icon-yonghudianji{
+    font-size: 14px;
+    position: absolute;
+    top: 6px;
+    right: 13px;
+}
+.user-register-form .real-name-img{
+    position: absolute;
+    top: 5px;
+    right: 12px;
+}
+.user-register-form .icon-unie64f{
+    font-size: 18px;
+    position: absolute;
+    top: 3px;
+    right: 10px;
+}
+
+.user-register-form [class^=el-icon-]{
+    font-size: 16px;
+    line-height: 2;
+    text-indent: 1px;
+}
+.user-register-form .register-btn{
+    position: relative;
+    margin-top:35px;
+}
+.user-register-form .register-btn button{
+    width:109px;
+    padding: 8px 10px;
+}
+.user-register-form .register-btn a{
+    position: absolute;
+    font-size: 12px;
+    bottom: 0;
+    margin-left: 10px;
+}
+
+
+.user-register .one-tab .el-tabs__active-bar{
+    width:100% !important;
+}

@@ -1,0 +1,198 @@
+
+a:hover{
+    text-decoration: none !important;
+}
+
+.mar_top{
+    margin-top: 48px;
+    margin-bottom: 32px;
+}
+
+.mar_top .contnet_head{
+   background: #e7e7e7;
+}
+
+.mar_top .contnet_head h4{
+    font-weight: bold;
+    color: #e9442d;
+}
+
+.wid{
+    border:1px solid #D4D4D4;
+}
+
+.container .contnet{
+    padding: 0 100px;
+}
+
+.container .contnet .item_mar{
+    margin: 25px auto;
+}
+
+.container .contnet .item{
+    margin:5px auto;
+}
+
+.container .contnet  .title{
+    border-bottom: 1px solid  #e9442d;
+    margin-left: 30px;
+    font-size: 15px;
+    position: relative;
+}
+
+.container .contnet  .title  h4{
+    font-size: 16px;
+    position:absolute;
+    left: -106px;
+    top: 4px;
+    font-weight: 500;
+}
+
+.container .contnet .tle{
+    font-size: 15px;
+}
+
+.container .contnet  .title .pro_btn{
+    float: right;
+    cursor: pointer;
+}
+
+.container .contnet  .title .pro_btn span:first-child{
+    margin: 0 5px;
+}
+
+.container .contnet  .title .pro_btn span:last-child{
+    margin: 0 5px;
+}
+
+.container .contnet  .title .pro_btn span:first-child:hover{
+    color:#e9442d;
+}
+
+.container .contnet  .title .pro_btn span:last-child:hover{
+    color:#e9442d;
+}
+
+.container .contnet  .item_mar{
+    margin-top: 40px;
+    display: block;
+}
+
+.container .contnet  .padd_0{
+    padding:0;
+}
+
+.container .contnet  .title .pas_ri{
+    position:absolute;
+    left: -82px;
+}
+
+.container .contnet .fl_left{
+       float: left;
+    margin-left: 16px;
+    margin-bottom: 25px;
+}
+
+.container .contnet  .title_t{
+    margin-left: 19px;
+}
+
+.container .contnet  .bold{
+    font-weight: 600;
+    color: rgba(0,0,0,.6);
+}
+
+.container .contnet .item_mar .mar_lef{
+    font-size: 15px;
+    margin-left: 30px;
+}
+
+table tr th{
+    text-align: center;
+    background-color: rgb(243,230,213);
+    color:rgba(0, 0, 0,.6);
+}
+
+table tr td{
+    text-align: center;
+}
+
+.container .contnet .item_mar  .mar_bottom{
+     margin-bottom: 5px; 
+}
+
+.mar_bottom{
+    margin-bottom: 50px;
+}
+
+.container .contnet .mar_lef{
+    margin-left: -45px;
+}
+
+textarea{
+    -wekit-border-radius:3px;
+    -moz-border-radius:3px;
+    border-radius: 3px;
+    border: 1px solid #D4D4D4 !important;
+    width:600px;
+    height: 150px;
+    resize:none;
+    padding:10px;
+}
+
+.container .contnet .mar_to{
+    margin-top: 20px;
+    margin-bottom: 21px;
+}
+
+.container .contnet .mar_tod{
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.container .contnet .link{
+    margin-left:50px;
+}
+
+.container .contnet .link .doc{
+    margin: 12px 0;
+}
+
+.container .contnet .link .doc a{
+    text-decoration: underline;
+}
+
+.container .contnet  .text_size{
+    font-weight: initial;
+    font-size: 15px;
+}
+
+.button{
+    background-color: #e9442d;
+    color:#fff;
+    width: 72px;
+    height: 38px;
+    -wekit-border-radius:3px;
+    -moz-border-radius:3px;
+    border-radius:3px;
+    margin-left:10px;
+}
+
+button{
+    outline:none !important;
+}
+
+.container .contnet  .prf_top{
+    position:absolute !important;
+    top: -18px !important;
+}
+
+.container .contnet .pas_lef{
+     position:absolute !important;
+     left: -50px !important;
+     top: -17px !important;
+}
+
+.container .contnet ._top{
+        margin-top: 22px;
+}

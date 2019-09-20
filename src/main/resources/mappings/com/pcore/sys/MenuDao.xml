@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.com.pcore.modules.sys.dao.MenuDao">
+	<sql id="menuColumns">
+		DISTINCT a.id,
+		a.parent_id AS "parent.id",
+		a.parent_ids,
+		a.rid,
+		a.ltype,
+		a.lver,
+		a.name,
+		a.href,
+		a.target,
+		a.icon,
+		a.sort,
+		a.is_show,
+		a.permission,
+		a.remarks,
+		a.create_by AS "createBy.id",
+		a.create_date,
+		a.update_by AS "updateBy.id",
+		a.update_date,
+		a.del_flag,
+		p.ltype AS "parent.ltype",
+		p.lver AS "parent.lver",
+		p.rid AS "parent.rid",
+		p.name AS "parent.name",
+		a.img_url
+	</sql>
+
+	<sql id="menuJoins">
+		LEFT JOIN sys_menu p ON p.id = a.parent_id AND p.tenant_id = a.tenant_id
+    </sql>
+
+	<select id="get" resultType="Menu">
+		SELECT
+			<include refid="menuColumns"/>
+		FROM sys_menu a
+		<include refid="menuJoins"/>
+		WHERE a.del_flag = '0' and a.id = #{id}
+	</select>
+
+	<select id="getById" resultType="Menu">
+		SELECT
+		<include refid="menuColumns"/>
+		FROM sys_menu a
+		<include refid="menuJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getRoot" resultType="Menu">
+		SELECT
+		<include refid="menuColumns"/>
+		FROM sys_menu a
+		<include refid="menuJoins"/>
+		WHERE a.parent_id = #{parent.id}
+	</select>
+
+	<select id="getByHref" resultType="Menu">
+		SELECT
+		<include refid="menuColumns"/>
+		FROM sys_menu a
+		<include refid="menuJoins"/>
+		WHERE a.href = #{href}
+	</select>
+
+	<select id="getByRid" resultType="Menu">
+		SELECT
+		<include refid="menuColumns"/>
+		FROM sys_menu a
+		<include refid="menuJoins"/>
+		WHERE a.rid = #{rid}
+	</select>
+
+
+	<select id="getByLtype" resultType="Menu">
+		SELECT
+		<include refid="menuColumns"/>
+		FROM sys_menu a
+		<include refid="menuJoins"/>
+		WHERE a.ltype = #{ltype}
+	</select>
+
+	<select id="findLlistByLver" resultType="Menu">
+		SELECT
+		<include refid="menuColumns"/>
+		FROM sys_menu a
+		<include refid="menuJoins"/>
+		WHERE a.del_flag = '0' AND a.lver = #{lver}
+		<if test="ltype != null and ltype != ''">
+			AND a.ltype =#{ltype}
+		</if>
+		<if test="ids != null and ids.size > 0">
+			AND a.id in
+			<foreach item="item" collection="ids" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+
+	<select id="findListByHref" resultType="Menu">
+		SELECT
+		<include refid="menuColumns"/>
+		FROM sys_menu a
+		<include refid="menuJoins"/>
+		WHERE a.del_flag = '0' AND a.href =#{href}
+		<if test="ltype != null and ltype != ''">
+			AND a.ltype =#{ltype}
+		</if>
+	</select>
+
+	<select id="getParentLtypeById" resultType="integer">
+		SELECT
+		a.ltype
+		FROM sys_menu a
+		WHERE a.id = #{id} and a.del_flag = '0'
+	</select>
+
+	<select id="findById" resultType="Menu">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids,
+			a.rid,
+			a.ltype,
+			a.lver,
+			a.name,
+			a.href,
+			a.target,
+			a.icon,
+			a.sort,
+			a.is_show,
+			a.permission,
+			a.remarks,
+			a.create_by AS "createBy.id",
+			a.create_date,
+			a.update_by AS "updateBy.id",
+			a.update_date,
+			a.del_flag,
+			a.img_url
+		FROM sys_menu a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findAllList" resultType="Menu">
+		SELECT
+			<include refid="menuColumns"/>
+		FROM sys_menu a
+		<include refid="menuJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY a.sort
+	</select>
+
+	<select id="findAllListIndex" resultType="Menu">
+		SELECT
+		<include refid="menuColumns"/>
+		FROM sys_menu a
+		<include refid="menuJoins"/>
+		JOIN sys_role_menu rm ON rm.menu_id = a.id
+		JOIN sys_role r ON r.id = rm.role_id AND r.useable='1'
+		JOIN sys_user_role ur ON ur.role_id = r.id
+		JOIN sys_user u ON u.id = ur.user_id AND u.id = #{userId}
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND r.del_flag = #{DEL_FLAG_NORMAL} AND u.del_flag = #{DEL_FLAG_NORMAL}
+
+		ORDER BY a.sort
+	</select>
+
+	<select id="findByParentIdsLike" resultType="Menu">
+		SELECT
+			a.id,
+			a.href,
+			a.ltype,
+			a.lver,
+			a.rid,
+			a.name,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM sys_menu a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids LIKE CONCAT('%', #{parentIds}, '%')
+		ORDER BY a.sort
+	</select>
+
+
+	<select id="findListByIds" resultType="Menu">
+		SELECT
+		<include refid="menuColumns"/>
+		FROM sys_menu a
+		<include refid="menuJoins"/>
+		<where>
+			a.del_flag = 0
+			<if test="ids != null and ids.size >0">
+				AND a.id in
+				<foreach item="item" collection="ids" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+	<select id="findRoleMenuByParentIdsLike" resultType="Menu">
+		SELECT
+			a.id,
+			a.href,
+			a.ltype,
+			a.lver,
+			a.rid,
+			a.name,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM sys_menu a INNER JOIN sys_role_menu rm on a.id = rm.menu_id
+		WHERE a.del_flag ='0' AND a.is_show = '1' AND a.parent_ids LIKE CONCAT('%', #{menu.parentIds}, '%')
+		AND rm.role_id in
+		<if test="rids != null and rids.size > 0">
+			<foreach item="item" collection="rids" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		GROUP BY a.id
+		ORDER BY a.sort
+	</select>
+
+	<select id="getMenuByName" resultType="Menu">
+		SELECT DISTINCT
+				<include refid="menuColumns"/>
+		FROM sys_menu a
+		<include refid="menuJoins"/>
+		where 	a.del_flag = '0' and a.name= #{name}
+	</select>
+	<select id="findByUserId" resultType="Menu">
+		SELECT
+			<include refid="menuColumns"/>
+		FROM sys_menu a
+		LEFT JOIN sys_menu p ON p.id = a.parent_id AND p.tenant_id = a.tenant_id
+		JOIN sys_role_menu rm ON rm.menu_id = a.id
+		JOIN sys_role r ON r.id = rm.role_id AND r.useable='1'
+		JOIN sys_user_role ur ON ur.role_id = r.id
+		JOIN sys_user u ON u.id = ur.user_id AND u.id = #{userId}
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND r.del_flag = #{DEL_FLAG_NORMAL} AND u.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY a.sort
+	</select>
+
+	<select id="findByRoleId" resultType="Menu">
+		SELECT
+		<include refid="menuColumns"/>
+		FROM sys_menu a
+		LEFT JOIN sys_menu p ON p.id = a.parent_id AND p.tenant_id = a.tenant_id
+		JOIN sys_role_menu rm ON rm.menu_id = a.id
+		JOIN sys_role r ON r.id = rm.role_id AND r.useable='1'
+		WHERE a.del_flag = '0' AND r.del_flag = '0' AND r.id=#{roleId}
+		ORDER BY a.sort
+	</select>
+
+	<select id="findListByTenant" resultType="Menu">
+		SELECT
+		<include refid="menuColumns"/>
+		FROM sys_menu a
+		LEFT JOIN sys_menu p ON p.id = a.parent_id AND p.tenant_id = a.tenant_id
+		LEFT JOIN sys_role_menu rm ON rm.menu_id = a.id
+		WHERE a.del_flag = '0'
+		AND a.parent_ids LIKE CONCAT('%', #{parentIds}, '%')
+		ORDER BY a.sort
+	</select>
+
+	<select id="findListByRtenant" resultType="Menu">
+		SELECT DISTINCT
+		<include refid="menuColumns"/>
+		FROM sys_menu a
+		LEFT JOIN sys_menu p ON p.id = a.parent_id AND p.tenant_id = a.tenant_id
+		LEFT JOIN sys_role_menu rm ON rm.menu_id = a.id
+		WHERE a.del_flag = '0'
+		AND a.parent_ids LIKE CONCAT('%', #{menu.parentIds}, '%')
+		<if test="rids != null and rids.size > 0">
+			AND rm.role_id in
+			<foreach item="item" collection="rids" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		ORDER BY a.sort
+	</select>
+
+
+
+	<insert id="insert">
+		INSERT INTO sys_menu(
+			id,
+			parent_id,
+			parent_ids,
+			ltype,
+			lver,
+			rid,
+			name,
+			href,
+			target,
+			icon,
+			sort,
+			is_show,
+			permission,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			img_url
+		) VALUES (
+			#{id},
+			#{parent.id},
+			#{parentIds},
+			#{ltype},
+			#{lver},
+			#{rid},
+			#{name},
+			#{href},
+			#{target},
+			#{icon},
+			#{sort},
+			#{isShow},
+			#{permission},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{imgUrl}
+		)
+	</insert>
+
+	<select id="checkMenuName" resultType="Integer">
+		SELECT COUNT(1) FROM sys_menu a
+		<where>
+			<if test="name != null and name != ''"> AND  a.name = #{name}</if>
+			<if test="id != null and id != ''"> AND  a.id != #{id}</if>
+			AND a.del_flag = '0'
+		</where>
+	</select>
+
+	<update id="update">
+		UPDATE sys_menu SET
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds},
+			ltype = #{ltype},
+			lver = #{lver},
+			rid = #{rid},
+			name = #{name},
+			href = #{href},
+			target = #{target},
+			icon = #{icon},
+			sort = #{sort},
+			is_show = #{isShow},
+			permission = #{permission},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			img_url=#{imgUrl}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateParentIds">
+		UPDATE sys_menu SET
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateSort">
+		UPDATE sys_menu SET
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateIsShow">
+		UPDATE sys_menu SET
+			is_show = #{isShow}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_menu SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE
+					<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
+					<if test="dbName == 'mssql'">'%,'+#{id}+',%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+	</update>
+
+	<!-- 删除用户 -->
+	<delete id="deleteWLByTenant">
+		DELETE FROM sys_menu WHERE tenant_id = #{tenantId}
+	</delete>
+
+	<!-- 删除用户 -->
+	<delete id="deleteWLByPtenant">
+		DELETE FROM sys_menu WHERE tenant_id = #{tenantId}
+		<if test="id != null and id != ''">
+			AND ((id = #{id} OR parent_ids LIKE
+			<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
+			<if test="dbName == 'mssql'">'%,'+#{id}+',%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+			))
+		</if>
+	</delete>
+
+	<!-- 删除用户 -->
+	<delete id="deleteWLByPidTenant">
+		DELETE FROM sys_menu WHERE tenant_id = #{tenantId}
+		<if test="id != null and id != ''">
+			AND (parent_ids LIKE
+			<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
+			<if test="dbName == 'mssql'">'%,'+#{id}+',%'</if>
+			<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+			)
+		</if>
+	</delete>
+</mapper>

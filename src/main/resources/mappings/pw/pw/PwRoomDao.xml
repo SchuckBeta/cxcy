@@ -1,0 +1,1098 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwRoomDao">
+
+    <sql id="pwRoomColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.color AS "color",
+		a.person AS "person",
+		a.area AS "area",
+		a.phone AS "phone",
+		a.mobile AS "mobile",
+		a.alias AS "alias",
+		a.type AS "type",
+		a.num AS "num",
+		a.num_type AS "numtype",
+		a.remainder_num AS "remaindernum",
+		a.is_usable AS "isUsable",
+		a.is_allowm AS "isAllowm",
+		a.is_assign AS "isAssign",
+		a.sid AS "pwSpace.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+
+		b.parent_id AS "pwSpace.parent.id",
+		b.parent_ids AS "pwSpace.parentIds",
+		b.name AS "pwSpace.name",
+		b.person AS "pwSpace.person",
+		b.type AS "pwSpace.type",
+		b.phone AS "pwSpace.phone",
+		b.mobile AS "pwSpace.mobile",
+		b.open_week AS "pwSpace.openWeek",
+		b.am_open_start_time AS "pwSpace.amOpenStartTime",
+		b.am_open_end_time AS "pwSpace.amOpenEndTime",
+		b.pm_open_start_time AS "pwSpace.pmOpenStartTime",
+		b.pm_open_end_time AS "pwSpace.pmOpenEndTime",
+		b.floor_num AS "pwSpace.floorNum",
+		b.area AS "pwSpace.area",
+		b.update_date AS "pwSpace.updateDate",
+		b.update_by AS "pwSpace.updateBy.id",
+		b.create_date AS "pwSpace.createDate",
+		b.create_by AS "pwSpace.createBy.id",
+		b.remarks AS "pwSpace.remarks",
+		b.del_flag AS "pwSpace.delFlag",
+
+		p.parent_id AS "pwSpace.parent.parent.id",
+		p.parent_ids AS "pwSpace.parent.parentIds",
+		p.name AS "pwSpace.parent.name",
+
+		pp.parent_id AS "pwSpace.parent.parent.parent.id",
+		pp.parent_ids AS "pwSpace.parent.parent.parentIds",
+		pp.name AS "pwSpace.parent.parent.name",
+
+		ppp.parent_id AS "pwSpace.parent.parent.parent.parent.id",
+		ppp.parent_ids AS "pwSpace.parent.parent.parent.parentIds",
+		ppp.name AS "pwSpace.parent.parent.parent.name",
+
+		pppp.parent_id AS "pwSpace.parent.parent.parent.parent.parent.id",
+		pppp.parent_ids AS "pwSpace.parent.parent.parent.parent.parentIds",
+		pppp.name AS "pwSpace.parent.parent.parent.parent.name"
+	</sql>
+
+    <sql id="pwRoomByJLKfpCDColumns">
+		er.id AS "pwEnterRoom.id",
+		er.eid AS "pwEnterRoom.pwEnter.id",
+		er.rid AS "pwEnterRoom.pwRoom.id",
+		er.cnum AS "pwEnterRoom.cnum",
+
+		e.no AS "pwEnterRoom.pwRoom.no",
+		e.applicant AS "pwEnterRoom.pwRoom.applicant.id",
+		e.status AS "pwEnterRoom.pwRoom.status",
+		e.term AS "pwEnterRoom.pwRoom.term",
+		e.start_date AS "pwEnterRoom.pwRoom.startDate",
+		e.end_date AS "pwEnterRoom.pwRoom.endDate",
+		e.update_date AS "pwEnterRoom.pwRoom.updateDate",
+		e.update_by AS "pwEnterRoom.pwRoom.updateBy.id",
+		e.create_date AS "pwEnterRoom.pwRoom.createDate",
+		e.create_by AS "pwEnterRoom.pwRoom.createBy.id",
+		e.remarks AS "pwEnterRoom.pwRoom.remarks",
+		e.del_flag AS "pwEnterRoom.pwRoom.delFlag",
+
+		u3.name AS "applicant.name",
+		u3.no AS "applicant.no",
+		o.name AS "applicant.office.name",
+
+        <include refid="pwRoomColumns"/>
+	</sql>
+
+    <sql id="pwRoomJoins">
+		LEFT JOIN pw_space b ON b.id = a.sid
+		LEFT JOIN pw_space p ON p.id = b.parent_id
+		LEFT JOIN pw_space pp ON pp.id = p.parent_id
+		LEFT JOIN pw_space ppp ON ppp.id = pp.parent_id
+		LEFT JOIN pw_space pppp ON pppp.id = ppp.parent_id
+	</sql>
+
+    <sql id="pwRoomByJLKfpCDJoins">
+        <include refid="pwRoomJoins"/>
+		LEFT JOIN (
+			SELECT
+				er.id AS "id",
+				er.eid AS "eid",
+				er.rid AS "rid",
+				count(er.id) AS "cnum"
+			FROM pw_enter_room er
+			GROUP BY er.rid
+		) er ON er.rid = a.id
+		LEFT JOIN pw_enter e ON b.id = er.eid
+		LEFT JOIN sys_user u3 ON u3.id = e.applicant
+		LEFT JOIN sys_office o ON o.id = u3.office_id
+	</sql>
+
+    <select id="get" resultType="PwRoom">
+        SELECT
+        <include refid="pwRoomColumns"/>
+        FROM pw_room a
+        <include refid="pwRoomJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findOtherRoomPage" resultType="PwRoom">
+        SELECT
+        a.id AS "id",
+		a.name AS "name",
+		a.color AS "color",
+		a.person AS "person",
+		a.phone AS "phone",
+        a.area AS "area",
+		a.mobile AS "mobile",
+		a.alias AS "alias",
+		a.type AS "type",
+		a.num AS "num",
+        a.num_type AS "numtype",
+        a.remainder_num as "remaindernum",
+		a.is_usable AS "isUsable",
+		a.is_allowm AS "isAllowm",
+		a.is_assign AS "isAssign",
+		a.sid AS "pwSpace.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag" ,
+        b.parent_id AS "pwSpace.parent.id",
+        b.parent_ids AS "pwSpace.parentIds",
+        b.name AS "pwSpace.name",
+        b.person AS "pwSpace.person",
+        b.type AS "pwSpace.type",
+        b.phone AS "pwSpace.phone",
+        b.mobile AS "pwSpace.mobile",
+        b.open_week AS "pwSpace.openWeek",
+        b.am_open_start_time AS "pwSpace.amOpenStartTime",
+        b.am_open_end_time AS "pwSpace.amOpenEndTime",
+        b.pm_open_start_time AS "pwSpace.pmOpenStartTime",
+        b.pm_open_end_time AS "pwSpace.pmOpenEndTime",
+        b.floor_num AS "pwSpace.floorNum",
+        b.area AS "pwSpace.area",
+        b.update_date AS "pwSpace.updateDate",
+        b.update_by AS "pwSpace.updateBy.id",
+        b.create_date AS "pwSpace.createDate",
+        b.create_by AS "pwSpace.createBy.id",
+        b.remarks AS "pwSpace.remarks",
+        b.del_flag AS "pwSpace.delFlag",
+
+        p.parent_id AS "pwSpace.parent.parent.id",
+        p.parent_ids AS "pwSpace.parent.parentIds",
+        p.name AS "pwSpace.parent.name",
+
+        pp.parent_id AS "pwSpace.parent.parent.parent.id",
+        pp.parent_ids AS "pwSpace.parent.parent.parentIds",
+        pp.name AS "pwSpace.parent.parent.name",
+
+        ppp.parent_id AS "pwSpace.parent.parent.parent.parent.id",
+        ppp.parent_ids AS "pwSpace.parent.parent.parent.parentIds",
+        ppp.name AS "pwSpace.parent.parent.parent.name",
+
+        pppp.parent_id AS "pwSpace.parent.parent.parent.parent.parent.id",
+        pppp.parent_ids AS "pwSpace.parent.parent.parent.parent.parentIds",
+        pppp.name AS "pwSpace.parent.parent.parent.parent.name"
+
+        from pw_room a
+        LEFT JOIN pw_space b ON b.id = a.sid
+        LEFT JOIN pw_space p ON p.id = b.parent_id
+        LEFT JOIN pw_space pp ON pp.id = p.parent_id
+        LEFT JOIN pw_space ppp ON ppp.id = pp.parent_id
+        LEFT JOIN pw_space pppp ON pppp.id = ppp.parent_id
+        <where>
+           a.del_flag = #{DEL_FLAG_NORMAL} and is_usable=0 and is_assign=0
+            <if test="querynumbegin != null and querynumbegin != ''">
+                AND a.num  >= #{querynumbegin} and a.num_type = 2
+            </if>
+            <if test="querynumend != null and querynumend != ''">
+                AND #{querynumend}  >= a.num and a.num_type = 2
+            </if>
+            <if test="querypeoplebegin != null and querypeoplebegin != ''">
+                AND a.num  >= #{querypeoplebegin} and a.num_type = 1
+            </if>
+            <if test="querypeopleend != null and querypeopleend != ''">
+                AND #{querypeopleend}  >= a.num and a.num_type = 1
+            </if>
+            <if test="queryareabegin != null and queryareabegin != ''">
+                AND a.area  >= #{queryareabegin}
+            </if>
+            <if test="queryareaend != null and queryareaend != ''">
+                AND #{queryareaend}  >= a.area
+            </if>
+            <if test="type != null and type != ''">
+                AND a.type = #{type}
+            </if>
+            <if test="ids != null">
+                AND a.sid in
+                <foreach item="sid" collection="ids" open="(" separator="," close=")">
+                    #{sid}
+                </foreach>
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy} ${page.orderByType}, pp.parent_id DESC, p.parent_id DESC, b.parent_id DESC
+            </when>
+            <otherwise>
+                ORDER BY a.create_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+
+    <select id="findAllotRoomPage" resultType="PwRoom">
+        SELECT
+        r.id AS "id",
+		r.name AS "name",
+		r.color AS "color",
+		r.person AS "person",
+		r.phone AS "phone",
+        r.area AS "area",
+		r.mobile AS "mobile",
+		r.alias AS "alias",
+		r.type AS "type",
+		r.num AS "num",
+        r.num_type AS "numtype",
+        r.remainder_num as "remaindernum",
+		r.is_usable AS "isUsable",
+		r.is_allowm AS "isAllowm",
+		r.is_assign AS "isAssign",
+		r.sid AS "pwSpace.id",
+		r.update_date AS "updateDate",
+		r.update_by AS "updateBy.id",
+		r.create_date AS "createDate",
+		r.create_by AS "createBy.id",
+		r.remarks AS "remarks",
+		r.del_flag AS "delFlag",
+		er.num as "usenum",
+		e.restatus as "roomstatus",
+        IFNULL(t.rmcount,0) as "enterteamcount" ,
+        b.parent_id AS "pwSpace.parent.id", b.parent_ids AS "pwSpace.parentIds",
+        b.name AS "pwSpace.name", b.person AS "pwSpace.person", b.type AS "pwSpace.type", b.phone AS "pwSpace.phone", b.mobile AS "pwSpace.mobile", b.open_week AS "pwSpace.openWeek",
+        b.am_open_start_time AS "pwSpace.amOpenStartTime", b.am_open_end_time AS "pwSpace.amOpenEndTime", b.pm_open_start_time AS "pwSpace.pmOpenStartTime", b.pm_open_end_time AS "pwSpace.pmOpenEndTime",
+        b.floor_num AS "pwSpace.floorNum", b.area AS "pwSpace.area", b.update_date AS "pwSpace.updateDate", b.update_by AS "pwSpace.updateBy.id", b.create_date AS "pwSpace.createDate",
+        b.create_by AS "pwSpace.createBy.id", b.remarks AS "pwSpace.remarks", b.del_flag AS "pwSpace.delFlag", p.parent_id AS "pwSpace.parent.parent.id", p.parent_ids AS "pwSpace.parent.parentIds",
+        p.name AS "pwSpace.parent.name", pp.parent_id AS "pwSpace.parent.parent.parent.id", pp.parent_ids AS "pwSpace.parent.parent.parentIds", pp.name AS "pwSpace.parent.parent.name"
+		from pw_room r
+        LEFT JOIN pw_enter_room er on r.id = er.rid
+        LEFT JOIN pw_enter e on e.id = er.eid
+        LEFT JOIN pw_space b ON b.id = r.sid
+        LEFT JOIN pw_space p ON p.id = b.parent_id
+        LEFT JOIN pw_space pp ON pp.id = p.parent_id
+        LEFT JOIN (
+            SELECT er.rid,count(er.rid) as rmcount from pw_enter_room er
+            left join pw_enter e on e.id = er.eid
+            where er.del_flag=0 and e.del_flag=0 GROUP BY er.rid
+        ) t on t.rid= r.id
+        where r.is_assign=1 and  e.type=0 and e.del_flag=0 and e.restatus =20 and e.`status`in(10,30,40) and r.del_flag=#{DEL_FLAG_NORMAL}
+        <if test="name != null and name != ''">
+            AND r.name LIKE
+
+            concat('%',#{name},'%')
+        </if>
+        <if test="type != null and type != ''">
+            AND r.type  = #{type}
+        </if>
+        <if test="querynumbegin != null and querynumbegin != ''">
+            AND r.num  >= #{querynumbegin} and r.num_type = 2
+        </if>
+        <if test="querynumend != null and querynumend != ''">
+            AND #{querynumend}  >= r.num and r.num_type = 2
+        </if>
+        <if test="querypeoplebegin != null and querypeoplebegin != ''">
+            AND r.num  >= #{querypeoplebegin} and r.num_type = 1
+        </if>
+        <if test="querypeopleend != null and querypeopleend != ''">
+            AND #{querypeopleend}  >= r.num and r.num_type = 1
+        </if>
+        <if test="queryareabegin != null and queryareabegin != ''">
+            AND r.area  >= #{queryareabegin}
+        </if>
+        <if test="queryareaend != null and queryareaend != ''">
+            AND #{queryareaend}  >= r.area
+        </if>
+        <if test="ids != null">
+            AND r.sid in
+            <foreach item="sid" collection="ids" open="(" separator="," close=")">
+                #{sid}
+            </foreach>
+        </if>
+        GROUP BY r.id
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy} ${page.orderByType}, pp.parent_id DESC, p.parent_id DESC, b.parent_id DESC
+            </when>
+            <otherwise>
+                ORDER BY r.create_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <select id="findOrderRoomPage" resultType="PwRoom">
+        SELECT
+        r.id AS "id",
+		r.name AS "name",
+		r.color AS "color",
+		r.person AS "person",
+		r.phone AS "phone",
+		r.mobile AS "mobile",
+		r.alias AS "alias",
+		r.type AS "type",
+		r.num AS "num",
+		r.num_type AS "numtype",
+		r.remainder_num AS "remaindernum",
+        r.area AS "area",
+		r.is_usable AS "isUsable",
+		r.is_allowm AS "isAllowm",
+		r.is_assign AS "isAssign",
+		r.sid AS "pwSpace.id",
+		r.update_date AS "updateDate",
+		r.update_by AS "updateBy.id",
+		r.create_date AS "createDate",
+		r.create_by AS "createBy.id",
+		r.remarks AS "remarks",
+		r.del_flag AS "delFlag",
+		IFNULL(s.roomordercount,0) as "roomordercount",
+		IFNULL(h.hroomordercount,0) as "hroomordercount",
+        a.status AS "pwAppointment.status",
+        (SELECT count(r1.id) FROM pw_room r1 LEFT JOIN pw_appointment pa on r1.id = pa.rid
+        AND r1.del_flag = '0'
+        WHERE
+        r1.id = r.id
+        AND pa.`status` = 1
+        AND  now()>= pa.start_date
+        AND pa.end_date >= now()
+        ) as  orderusing,
+        (SELECT count(r1.id) FROM pw_room r1 LEFT JOIN pw_appointment pa on r1.id = pa.rid
+        AND r1.del_flag = '0'
+        WHERE
+        r1.id = r.id
+        AND pa.`status` = 1
+        AND  pa.start_date >= now()
+
+        ) as  ordernotuse,
+        b.parent_id AS "pwSpace.parent.id", b.parent_ids AS "pwSpace.parentIds",
+        b.name AS "pwSpace.name", b.person AS "pwSpace.person", b.type AS "pwSpace.type", b.phone AS "pwSpace.phone", b.mobile AS "pwSpace.mobile", b.open_week AS "pwSpace.openWeek",
+        b.am_open_start_time AS "pwSpace.amOpenStartTime", b.am_open_end_time AS "pwSpace.amOpenEndTime", b.pm_open_start_time AS "pwSpace.pmOpenStartTime", b.pm_open_end_time AS "pwSpace.pmOpenEndTime",
+        b.floor_num AS "pwSpace.floorNum", b.area AS "pwSpace.area", b.update_date AS "pwSpace.updateDate", b.update_by AS "pwSpace.updateBy.id", b.create_date AS "pwSpace.createDate",
+        b.create_by AS "pwSpace.createBy.id", b.remarks AS "pwSpace.remarks", b.del_flag AS "pwSpace.delFlag", p.parent_id AS "pwSpace.parent.parent.id", p.parent_ids AS "pwSpace.parent.parentIds",
+        p.name AS "pwSpace.parent.name", pp.parent_id AS "pwSpace.parent.parent.parent.id", pp.parent_ids AS "pwSpace.parent.parent.parentIds", pp.name AS "pwSpace.parent.parent.name"
+
+        from pw_room r
+        LEFT JOIN pw_appointment a  on a.rid = r.id and a.del_flag=0
+        LEFT JOIN pw_space b ON b.id = r.sid
+        LEFT JOIN pw_space p ON p.id = b.parent_id
+        LEFT JOIN pw_space pp ON pp.id = p.parent_id
+        LEFT JOIN (SELECT a.id,a.rid,count(a.id) as roomordercount from pw_appointment a where a.del_flag=0 and a.`status`=1  group by a.rid) s on s.id=a.id
+        LEFT JOIN (SELECT a.id,a.rid,count(a.id) as hroomordercount from pw_appointment a where a.del_flag=0 and a.`status` in (1,3)  group by a.rid) h on h.id=a.id
+        where r.is_usable=1  and r.del_flag = #{DEL_FLAG_NORMAL}
+        <if test="keys != null and keys != ''">
+            and (r.name like '%${keys}%' or  b.name like '%${keys}%' or  p.name like '%${keys}%'
+            or  pp.name like '%${keys}%' )
+        </if>
+        <if test="name != null and name != ''">
+            AND r.name LIKE
+            concat('%',#{name},'%')
+        </if>
+        <if test="type != null and type != ''">
+            AND r.type  = #{type}
+        </if>
+        <if test="querynumbegin != null and querynumbegin != ''">
+            AND r.num  >= #{querynumbegin} and r.num_type = 2
+        </if>
+        <if test="querynumend != null and querynumend != ''">
+            AND #{querynumend}  >= r.num and r.num_type = 2
+        </if>
+        <if test="querypeoplebegin != null and querypeoplebegin != ''">
+            AND r.num  >= #{querypeoplebegin} and r.num_type = 1
+        </if>
+        <if test="querypeopleend != null and querypeopleend != ''">
+            AND #{querypeopleend}  >= r.num and r.num_type = 1
+        </if>
+        <if test="queryareabegin != null and queryareabegin != ''">
+            AND r.area  >= #{queryareabegin}
+        </if>
+        <if test="queryareaend != null and queryareaend != ''">
+            AND #{queryareaend}  >= r.area
+        </if>
+        <if test="orderusing==2">
+           AND (SELECT count(r1.id) FROM pw_room r1 LEFT JOIN pw_appointment pa on r1.id = pa.rid
+            AND r1.del_flag = '0'
+            WHERE
+            r1.id = r.id
+            AND pa.`status` = 1
+            AND  now()>= pa.start_date
+            AND pa.end_date >= now()
+            ) > 0
+        </if>
+        <if test="ordernotuse==2">
+            AND (SELECT count(r1.id) FROM pw_room r1 LEFT JOIN pw_appointment pa on r1.id = pa.rid
+            AND r1.del_flag = '0'
+            WHERE
+            r1.id = r.id
+            AND pa.`status` = 1
+            AND  pa.start_date >= now()
+
+            ) > 0
+        </if>
+        <if test="ordernotuse==1 and orderusing==1">
+            AND (SELECT count(r1.id) FROM pw_room r1 LEFT JOIN pw_appointment pa on r1.id = pa.rid
+            AND r1.del_flag = '0'
+            WHERE
+            r1.id = r.id
+            AND pa.`status` = 1
+            AND  pa.start_date >= now()
+
+            ) =0
+            AND (SELECT count(r1.id) FROM pw_room r1 LEFT JOIN pw_appointment pa on r1.id = pa.rid
+            AND r1.del_flag = '0'
+            WHERE
+            r1.id = r.id
+            AND pa.`status` = 1
+            AND  now()>= pa.start_date
+            AND pa.end_date >= now()
+            ) =0
+        </if>
+        <if test="ids != null">
+            AND r.sid in
+            <foreach item="sid" collection="ids" open="(" separator="," close=")">
+                #{sid}
+            </foreach>
+        </if>
+        GROUP BY r.id
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy} ${page.orderByType}, pp.parent_id DESC, p.parent_id DESC, b.parent_id DESC
+            </when>
+            <otherwise>
+                ORDER BY r.create_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findList" resultType="PwRoom">
+        SELECT
+        <include refid="pwRoomColumns"/>
+        FROM pw_room a
+        <include refid="pwRoomJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="name != null and name != ''">
+                AND a.name LIKE
+
+                concat('%',#{name},'%')
+            </if>
+            <if test="alias != null and alias != ''">
+                AND a.alias LIKE
+
+                concat('%',#{alias},'%')
+            </if>
+            <if test="person != null and person != ''">
+                AND a.person = #{person}
+            </if>
+            <if test="phone != null and phone != ''">
+                AND a.phone = #{phone}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                AND a.mobile = #{mobile}
+            </if>
+            <if test="type != null and type != ''">
+                AND a.type = #{type}
+            </if>
+            <if test="num != null and num != ''">
+                AND a.num = #{num}
+            </if>
+            <if test="remaindernum != null and remaindernum != ''">
+                AND a.remainder_num <![CDATA[ >= ]]> #{remaindernum}
+            </if>
+            <if test="isUsable != null and isUsable != ''">
+                AND a.is_usable = #{isUsable}
+            </if>
+            <if test="isAllowm != null and isAllowm != ''">
+                AND a.is_allowm = #{isAllowm}
+            </if>
+            <if test="numtype != null and numtype != ''">
+                AND a.num_type = #{numtype}
+            </if>
+            <if test="isAssign != null and isAssign != ''">
+                AND a.is_assign = #{isAssign}
+            </if>
+            <if test="pwSpace != null">
+                <if test="pwSpace.id != null and pwSpace.id != ''">
+                    AND a.sid = #{pwSpace.id}
+                </if>
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy} ${page.orderByType}, pp.parent_id DESC, p.parent_id DESC, b.parent_id DESC
+            </when>
+            <otherwise>
+                ORDER BY pp.parent_id DESC, p.parent_id DESC, b.parent_id DESC, a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findRoomUseList" resultType="PwRoom">
+        SELECT
+        (
+        SELECT
+        count(r1.id)
+        FROM
+        pw_room r1
+        LEFT JOIN pw_appointment pa ON r1.id = pa.rid
+        AND r1.del_flag = '0'
+        WHERE
+        r1.id = a.id
+        AND pa.`status` = 1
+        AND  now()>= pa.start_date
+        AND pa.end_date >= now()
+        ) AS 'isYY',
+        (SELECT
+        count(r2.id) from pw_room r2
+        LEFT JOIN pw_enter_room per on per.rid = r2.id and per.del_flag=0
+        LEFT JOIN pw_enter e on e.id = per.eid and e.del_flag=0
+        where r2.id=a.id and e.`status` in (10,30,40) and e.restatus in(11,20) and  now()>= e.start_date and e.end_date >= now()
+        ) AS 'isFP',
+        <include refid="pwRoomColumns"/>
+        FROM pw_room a
+        <include refid="pwRoomJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="keys != null and keys != ''">
+                and (a.name like '%${keys}%' or  b.name like '%${keys}%' or  p.name like '%${keys}%'
+                or  pp.name like '%${keys}%' or  ppp.name like '%${keys}%' or  pppp.name like '%${keys}%')
+            </if>
+            <if test="name != null and name != ''">
+                AND a.name LIKE
+
+                concat('%',#{name},'%')
+            </if>
+            <if test="isYY ==2">
+                and (
+                SELECT
+                count(r1.id)
+                FROM
+                pw_room r1
+                LEFT JOIN pw_appointment pa ON r1.id = pa.rid
+                AND r1.del_flag = '0'
+                WHERE
+                r1.id = a.id
+                AND pa.`status` = 1
+                AND now() >= pa.start_date
+                AND pa.end_date >= now()
+                ) >0
+            </if>
+            <if test="isFP ==2">
+                and (SELECT
+                count(r2.id) from pw_room r2
+                LEFT JOIN pw_enter_room per on per.rid = r2.id and per.del_flag=0
+                LEFT JOIN pw_enter e on e.id = per.eid and e.del_flag=0
+                where r2.id=a.id and e.`status` in (10,30,40) and e.restatus in(11,20) and now() >= e.start_date and e.end_date >= now()
+                )  >0
+            </if>
+            <if test="isYY ==1 and  isFP ==1">
+                and (
+                SELECT
+                count(r1.id)
+                FROM
+                pw_room r1
+                LEFT JOIN pw_appointment pa ON r1.id = pa.rid
+                AND r1.del_flag = '0'
+                WHERE
+                r1.id = a.id
+                AND pa.`status` = 1
+                AND now() >= pa.start_date
+                AND pa.end_date >= now()
+                ) =0 and (SELECT
+                count(r2.id) from pw_room r2
+                LEFT JOIN pw_enter_room per on per.rid = r2.id and per.del_flag=0
+                LEFT JOIN pw_enter e on e.id = per.eid and e.del_flag=0
+                where r2.id=a.id and e.`status` in (10,30,40) and e.restatus in(11,20) and now() >= e.start_date and e.end_date >= now()
+                )  =0
+            </if>
+            <if test="alias != null and alias != ''">
+                AND a.alias LIKE
+
+                concat('%',#{alias},'%')
+            </if>
+            <if test="person != null and person != ''">
+                AND a.person = #{person}
+            </if>
+            <if test="phone != null and phone != ''">
+                AND a.phone = #{phone}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                AND a.mobile = #{mobile}
+            </if>
+            <if test="type != null and type != ''">
+                AND a.type = #{type}
+            </if>
+            <if test="num != null and num != ''">
+                AND a.num = #{num}
+            </if>
+            <if test="querypeoplebegin != null">
+                AND a.num_type = '1'
+                AND a.num <![CDATA[  >= ]]> #{querypeoplebegin}
+            </if>
+            <if test="querypeopleend != null">
+                AND a.num_type = '1'
+                AND a.num <![CDATA[ <= ]]> #{querypeopleend}
+            </if>
+            <if test="querynumbegin != null">
+                AND a.num_type = '2'
+                AND a.num <![CDATA[  >= ]]> #{querynumbegin}
+            </if>
+            <if test="querynumend != null">
+                AND a.num_type = '2'
+                AND a.num <![CDATA[ <= ]]> #{querynumend}
+            </if>
+            <if test="queryareaend != null">
+                AND a.area <![CDATA[  >= ]]> #{queryareabegin}
+            </if>
+            <if test="queryareaend != null">
+                AND a.area <![CDATA[ <= ]]> #{queryareaend}
+            </if>
+            <if test="isUsable != null and isUsable != ''">
+                AND a.is_usable = #{isUsable}
+            </if>
+            <if test="isAllowm != null and isAllowm != ''">
+                AND a.is_allowm = #{isAllowm}
+            </if>
+            <if test="isAssign != null and isAssign != ''">
+                AND a.is_assign = #{isAssign}
+            </if>
+
+            <if test="ids != null">
+                AND a.sid in
+                <foreach item="sid" collection="ids" open="(" separator="," close=")">
+                    #{sid}
+                </foreach>
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy} ${page.orderByType}, pp.parent_id DESC, p.parent_id DESC, b.parent_id DESC
+            </when>
+            <otherwise>
+                ORDER BY a.create_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findListByJL" resultType="PwRoom">
+        SELECT
+        (SELECT count(a1.id) from pw_room a1 where  a1.remainder_num=0 and a1.del_flag=0 and a1.id = a.id) as fullroom,
+        (SELECT count(a2.id) from pw_room a2 where  a2.remainder_num !=0 and a2.remainder_num != a2.num and a2.del_flag=0 and a2.id = a.id) as notfullroom,
+        <include refid="pwRoomColumns"/>
+        FROM pw_room a
+        <include refid="pwRoomJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="keys != null and keys != ''">
+                and (a.name like '%${keys}%' or  b.name like '%${keys}%' or  p.name like '%${keys}%'
+                or  pp.name like '%${keys}%' or  ppp.name like '%${keys}%' or  pppp.name like '%${keys}%')
+            </if>
+            <if test="name != null and name != ''">
+                AND a.name LIKE
+
+                concat('%',#{name},'%')
+            </if>
+            <if test="alias != null and alias != ''">
+                AND a.alias LIKE
+
+                concat('%',#{alias},'%')
+            </if>
+            <if test="person != null and person != ''">
+                AND a.person = #{person}
+            </if>
+            <if test="phone != null and phone != ''">
+                AND a.phone = #{phone}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                AND a.mobile = #{mobile}
+            </if>
+            <if test="type != null and type != ''">
+                AND a.type = #{type}
+            </if>
+            <if test="num != null and num != ''">
+                AND a.num = #{num}
+            </if>
+            <if test="querypeoplebegin != null">
+            	AND a.num_type = '1'
+                AND a.num <![CDATA[  >= ]]> #{querypeoplebegin}
+            </if>
+            <if test="querypeopleend != null">
+            	AND a.num_type = '1'
+                AND a.num <![CDATA[ <= ]]> #{querypeopleend}
+            </if>
+            <if test="querynumbegin != null">
+            	AND a.num_type = '2'
+                AND a.num <![CDATA[  >= ]]> #{querynumbegin}
+            </if>
+            <if test="querynumend != null">
+            	AND a.num_type = '2'
+                AND a.num <![CDATA[ <= ]]> #{querynumend}
+            </if>
+            <if test="queryareaend != null">
+                AND a.area <![CDATA[  >= ]]> #{queryareabegin}
+            </if>
+            <if test="queryareaend != null">
+                AND a.area <![CDATA[ <= ]]> #{queryareaend}
+            </if>
+            <if test="isUsable != null and isUsable != ''">
+                AND a.is_usable = #{isUsable}
+            </if>
+            <if test="isAllowm != null and isAllowm != ''">
+                AND a.is_allowm = #{isAllowm}
+            </if>
+            <if test="isAssign != null and isAssign != ''">
+                AND a.is_assign = #{isAssign}
+            </if>
+            <if test="fullroom == 2">
+                AND (SELECT count(a1.id) from pw_room a1 where  a1.remainder_num=0 and a1.del_flag=0 and a1.id = a.id) >0
+            </if>
+            <if test="notfullroom == 2">
+                AND (SELECT count(a2.id) from pw_room a2 where  a2.remainder_num !=0 and a2.remainder_num != a2.num and a2.del_flag=0 and a2.id = a.id) >0
+            </if>
+            <if test="notfullroom == 1 and fullroom == 1">
+                AND (SELECT count(a1.id) from pw_room a1 where  a1.remainder_num=0 and a1.del_flag=0 and a1.id = a.id) = 0
+                AND (SELECT count(a2.id) from pw_room a2 where  a2.remainder_num !=0 and a2.remainder_num != a2.num and a2.del_flag=0 and a2.id = a.id) = 0
+            </if>
+            <if test="ids != null">
+                AND a.sid in
+                <foreach item="sid" collection="ids" open="(" separator="," close=")">
+                    #{sid}
+                </foreach>
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy} ${page.orderByType}, pp.parent_id DESC, p.parent_id DESC, b.parent_id DESC
+            </when>
+            <otherwise>
+                ORDER BY a.create_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="PwRoom">
+        SELECT
+        <include refid="pwRoomColumns"/>
+        FROM pw_room a
+        <include refid="pwRoomJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy} ${page.orderByType}, pp.parent_id DESC, p.parent_id DESC, b.parent_id DESC
+            </when>
+            <otherwise>
+                ORDER BY pp.parent_id DESC, p.parent_id DESC, b.parent_id DESC, a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findListByJLKfpCD" resultType="PwRoom">
+        SELECT
+        <include refid="pwRoomByJLKfpCDColumns"/>
+        FROM pw_room a
+        <include refid="pwRoomByJLKfpCDJoins"/>
+        <where>
+            <!-- a.del_flag = #{DEL_FLAG_NORMAL} AND a.is_usable = 1 AND a.is_assign = 1 AND ((a.is_allowm = 0 AND er.cnum IS NULL) OR (a.is_allowm = 1)) -->
+            a.del_flag = #{DEL_FLAG_NORMAL} AND a.is_assign = 1
+            <if test="name != null and name != ''">
+                AND a.name LIKE
+
+                concat('%',#{name},'%')
+            </if>
+            <if test="alias != null and alias != ''">
+                AND a.alias LIKE
+
+               concat('%',#{alias},'%')
+            </if>
+            <if test="person != null and person != ''">
+                AND a.person = #{person}
+            </if>
+            <if test="phone != null and phone != ''">
+                AND a.phone = #{phone}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                AND a.mobile = #{mobile}
+            </if>
+            <if test="num != null and num != ''">
+                AND a.num = #{num}
+            </if>
+            <if test="isUsable != null and isUsable != ''">
+                AND a.is_usable = #{isUsable}
+            </if>
+            <if test="isAssign != null and isAssign != ''">
+                AND a.is_assign = #{isAssign}
+            </if>
+            <if test="ids != null">
+                AND a.sid in
+                <foreach item="sid" collection="ids" open="(" separator="," close=")">
+                    #{sid}
+                </foreach>
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy} ${page.orderByType}, pp.parent_id DESC, p.parent_id DESC, b.parent_id DESC
+            </when>
+            <otherwise>
+                ORDER BY pp.parent_id DESC, p.parent_id DESC, b.parent_id DESC, a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="verifyNameBySpace" resultType="PwRoom">
+        SELECT
+        <include refid="pwRoomColumns"/>
+        FROM pw_room a
+        <include refid="pwRoomJoins"/>
+        <where>
+            a.del_flag = 0 AND a.sid = #{sid} AND a.name = #{name}
+        </where>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO pw_room(
+			id,
+			name,
+			color,
+			person,
+			phone,
+			mobile,
+			alias,
+			type,
+			num_type,
+			num,
+			remainder_num,
+			area,
+			is_usable,
+			is_allowm,
+			is_assign,
+			sid,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{color},
+			#{person},
+			#{phone},
+			#{mobile},
+			#{alias},
+			#{type},
+			#{numtype},
+			#{num},
+			#{remaindernum},
+			#{area},
+			#{isUsable},
+			#{isAllowm},
+			#{isAssign},
+			#{pwSpace.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE pw_room SET
+			name = #{name},
+			color = #{color},
+			name=#{name},
+			person = #{person},
+			phone = #{phone},
+			mobile = #{mobile},
+			alias = #{alias},
+			type = #{type},
+			num = #{num},
+			num_type = #{numtype},
+			remainder_num = #{remaindernum},
+			area = #{area},
+			sid = #{pwSpace.id},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePLRemaindernum" parameterType="java.util.List" >
+		UPDATE pw_room
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="remainder_num =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.remaindernum}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+    <update id="delete">
+		UPDATE pw_room SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+    <update id="deleteByRoomIds">
+        UPDATE pw_room SET
+            del_flag = '1'
+        WHERE id IN
+        <foreach item="item" collection="roomIds" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="findSpaceAndRoom" resultType="com.oseasy.pw.modules.pw.entity.PwSpaceRoom">
+    SELECT
+      a.id AS 'pwSpace.id',
+      a.parent_id AS 'pwSpace.parent.id',
+      a.parent_ids AS 'pwSpace.parentIds',
+      a.name AS 'pwSpace.name',
+      a.type AS 'pwSpace.type',
+      a.remarks AS 'pwSpace.remarks',
+      p.parent_id AS 'pwSpace.parent.parent.id',
+      p.parent_ids AS 'pwSpace.parent.parentIds',
+      p.name AS 'pwSpace.parent.name',
+      p.type AS 'pwSpace.parent.type',
+      r.id AS 'roomId',
+      r.name AS 'roomName',
+      r.type AS 'roomType',
+      r.person AS 'respName',
+      r.is_usable AS 'usable',
+      r.del_flag AS 'roomDelFlag',
+      r.id AS 'pwRoom.id',
+      r.name AS 'pwRoom.name',
+      r.type AS 'pwRoom.type',
+      r.person AS 'pwRoom.person',
+      r.num AS 'pwRoom.num',
+      r.mobile AS 'pwRoom.mobile',
+      r.is_usable AS 'pwRoom.isUsable',
+      r.is_assign AS 'pwRoom.isAssign',
+      r.del_flag AS 'pwRoom.delFlag'
+    FROM
+      pw_space a
+      INNER JOIN  pw_space p ON p.id = a.parent_id
+      LEFT JOIN  pw_room r ON r.sid = a.id
+    WHERE
+      a.del_flag = 0 AND a.id != '1'
+    ORDER BY a.name ASC, r.name ASC
+	</select>
+
+    <sql id="findListByPwAppointmentVoColumns">
+        a.id AS "id",
+		a.name AS "name",
+		a.color AS "color",
+		a.person AS "person",
+		a.phone AS "phone",
+		a.mobile AS "mobile",
+		a.alias AS "alias",
+		a.type AS "type",
+		a.num AS "num",
+		a.is_usable AS "isUsable",
+		a.color AS "color",
+		a.is_allowm AS "isAllowm",
+		a.is_assign AS "isAssign",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+
+		p.id AS "pwSpace.id",
+		p.name AS "pwSpace.name",
+		p.type AS "pwSpace.type",
+
+		pp.id AS "pwSpace.parent.id",
+		pp.name AS "pwSpace.parent.name",
+		pp.type AS "pwSpace.parent.type",
+
+		ppp.id AS "pwSpace.parent.parent.id",
+		ppp.name AS "pwSpace.parent.parent.name",
+		ppp.type AS "pwSpace.parent.parent.type",
+
+		pppp.id AS "pwSpace.parent.parent.parent.id",
+		pppp.name AS "pwSpace.parent.parent.parent.name",
+		pppp.type AS "pwSpace.parent.parent.parent.type"
+    </sql>
+
+    <sql id="findListByPwAppointmentVoJoins">
+        INNER JOIN pw_space p on p.id = a.sid
+        INNER JOIN pw_space pp on pp.id = p.parent_id
+        LEFT JOIN pw_space ppp on ppp.id = pp.parent_id
+        LEFT JOIN pw_space pppp on pppp.id = ppp.parent_id
+    </sql>
+
+    <select id="findListByPwAppointmentVo" resultType="PwRoom" parameterType="com.oseasy.pw.modules.pw.vo.PwAppointmentVo">
+        SELECT
+        <include refid="findListByPwAppointmentVoColumns"/>
+        FROM pw_room a
+        <include refid="findListByPwAppointmentVoJoins"/>
+        <where>
+            a.del_flag = '0' AND a.is_usable = '1'
+            <if test="roomTypes != null">
+                AND a.type in
+                <foreach item="item" collection="roomTypes" open="(" separator=","
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="roomNumMin != null and roomNumMin != ''">
+                AND a.num <![CDATA[>=]]> #{roomNumMin}
+            </if>
+            <if test="roomNumMax != null and roomNumMax != ''">
+                AND a.num <![CDATA[<=]]> #{roomNumMax}
+            </if>
+
+            <if test="floorId != null and floorId != ''" >
+                AND p.id = #{floorId}
+            </if>
+
+            <if test="buildingId != null and buildingId != ''">
+                AND pp.id = #{buildingId}
+            </if>
+        </where>
+        ORDER BY a.name ASC
+    </select>
+
+    <update id="deleteRoom">
+        update pw_room
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="del_flag =case" suffix="end,">
+                <foreach item="item" collection="entitys" index="index">
+                    when id=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+        </trim>
+        WHERE id in
+        <foreach item="item" collection="entitys" separator="," open="("
+                 close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="updateRoom">
+        update pw_room SET
+        <if test="isAllowm!=null ">
+            is_allowm = #{isAllowm},
+        </if>
+        <if test="isUsable!=null ">
+            is_usable = #{isUsable},
+        </if>
+        <if test="isAssign!=null ">
+            is_assign = #{isAssign},
+        </if>
+        update_by = #{updateBy.id},
+		update_date = #{updateDate}
+		WHERE id = #{id}
+    </update>
+</mapper>

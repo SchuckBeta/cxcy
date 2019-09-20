@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwFormDao">
+
+	<sql id="actYwFormColumns">
+		a.id AS "id",
+		a.list_id AS "listId",
+		a.flow_type AS "flowType",
+		a.style_type AS "styleType",
+		a.client_type AS "clientType",
+		a.pro_type AS "proType",
+		a.theme AS "theme",
+		a.name AS "name",
+		a.type AS "type",
+		a.sgtype AS "sgtype",
+		a.model AS "model",
+		a.params AS "params",
+		a.path AS "path",
+		a.content AS "content",
+		a.office_id AS "office.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		o6.name AS "office.name",
+
+		b.id AS "listForm.id",
+		b.flow_type AS "listForm.flowType",
+		b.style_type AS "listForm.styleType",
+		b.client_type AS "listForm.clientType",
+		b.pro_type AS "listForm.proType",
+		b.theme AS "listForm.theme",
+		b.name AS "listForm.name",
+		b.sgtype AS "listForm.sgtype",
+		b.type AS "listForm.type",
+		b.model AS "listForm.model",
+		b.path AS "listForm.path",
+
+		gt.id AS "gtheme.id",
+		gt.name AS "gtheme.name"
+	</sql>
+
+	<sql id="actYwFormJoins">
+		LEFT JOIN act_yw_form b ON b.id = a.list_id
+		LEFT JOIN sys_office o6 ON o6.id = a.office_id
+		LEFT JOIN act_yw_gtheme gt ON gt.idx = a.theme
+	</sql>
+
+	<select id="get" resultType="ActYwForm">
+		SELECT
+			<include refid="actYwFormColumns"/>
+		FROM act_yw_form a
+		<include refid="actYwFormJoins"/>
+		WHERE a.id = #{id} group by a.id
+	</select>
+
+	<select id="getActYwForm" resultType="com.oseasy.act.modules.actyw.entity.ActYwForm">
+		SELECT
+		<include refid="actYwFormColumns"/>
+		FROM act_yw_form a
+		<include refid="actYwFormJoins"/>
+		WHERE a.id = #{id} and gt.tenant_id = #{tenantId}
+	</select>
+
+	<select id="findList" resultType="ActYwForm">
+		SELECT
+			<include refid="actYwFormColumns"/>
+		FROM act_yw_form a
+		<include refid="actYwFormJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and gt.tenant_id=#{tenantId}
+			<if test="queryStr != null and queryStr != ''">
+				AND (
+					a.name LIKE concat('%',#{queryStr},'%')
+					OR gt.name LIKE concat('%',#{queryStr},'%')
+				)
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="flowType != null and flowType != ''">
+				AND a.flow_type LIKE
+					<if test="dbName == 'oracle'">'%'||#{flowType}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{flowType}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{flowType},'%')</if>
+			</if>
+			<if test="styleType != null and styleType != ''">
+				AND a.style_type = #{styleType}
+			</if>
+			<if test="clientType != null and clientType != ''">
+				AND a.client_type = #{clientType}
+			</if>
+			<if test="proType != null and proType != ''">
+				AND a.pro_type = #{proType}
+			</if>
+			<if test="theme != null">
+				AND a.theme = #{theme}
+			</if>
+            <if test="themes != null">
+                   AND a.theme IN
+                 <foreach item="item" collection="themes" separator="," open="(" close=")">
+                     #{item}
+                 </foreach>
+            </if>
+            <if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+            <if test="sgtype != null and sgtype != ''">
+				AND a.sgtype = #{sgtype}
+			</if>
+			<if test="model != null and model != ''">
+				AND a.model = #{model}
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND a.office_id = #{office.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC, a.flow_type, a.type
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByInStyle" resultType="ActYwForm" parameterType="ActYwFormVo">
+		SELECT
+			<include refid="actYwFormColumns"/>
+		FROM act_yw_form a
+		<include refid="actYwFormJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and gt.tenant_id=#{tenantId}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="flowType != null and flowType != ''">
+				AND a.flow_type LIKE
+					<if test="dbName == 'oracle'">'%'||#{flowType}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{flowType}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{flowType},'%')</if>
+			</if>
+			<if test="inStyleList != null">
+				<if test="inStyleList == true">
+					AND a.style_type = 1
+				</if>
+				<if test="inStyleList == false">
+					AND (a.style_type = 2 OR a.style_type = 3)
+				</if>
+			</if>
+			<if test="clientType != null and clientType != ''">
+				AND a.client_type = #{clientType}
+			</if>
+			<if test="proType != null and proType != ''">
+				AND a.pro_type LIKE
+					<if test="dbName == 'oracle'">'%'||#{proType}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{proType}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{proType},'%')</if>
+			</if>
+			<if test="theme != null">
+				AND a.theme = #{theme}
+			</if>
+            <if test="themes != null">
+                   AND a.theme IN
+                 <foreach item="item" collection="themes" separator="," open="(" close=")">
+                     #{item}
+                 </foreach>
+            </if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="sgtype != null and sgtype != ''">
+				AND a.sgtype = #{sgtype}
+			</if>
+			<if test="model != null and model != ''">
+				AND a.model = #{model}
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND a.office_id = #{office.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC, a.flow_type, a.type
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwForm">
+		SELECT
+			<include refid="actYwFormColumns"/>
+		FROM act_yw_form a
+		<include refid="actYwFormJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="themes != null">
+                   AND a.theme IN
+                 <foreach item="item" collection="themes" separator="," open="(" close=")">
+                     #{item}
+                 </foreach>
+            </if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC, a.flow_type, a.type
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_form(
+			id,
+			list_id,
+			flow_type,
+			style_type,
+			client_type,
+			pro_type,
+			theme,
+			name,
+			type,
+			sgtype,
+			model,
+			params,
+			path,
+			content,
+			office_id,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{listId},
+			#{flowType},
+			#{styleType},
+			#{clientType},
+			#{proType},
+			#{theme},
+			#{name},
+			#{type},
+			#{sgtype},
+			#{model},
+			#{params},
+			#{path},
+			#{content},
+			#{office.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_form SET
+			list_id=#{listId},
+			flow_type=#{flowType},
+			style_type=#{styleType},
+			client_type=#{clientType},
+			pro_type=#{proType},
+			theme=#{theme},
+			name = #{name},
+			type = #{type},
+			sgtype = #{sgtype},
+			model = #{model},
+			params = #{params},
+			path = #{path},
+			content = #{content},
+			office_id = #{office.id},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE act_yw_form SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

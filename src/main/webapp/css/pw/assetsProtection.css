@@ -1,0 +1,35 @@
+.mybreadcrumbs {
+  margin: 20px 1.5em;
+  margin-left: 27px;
+  border-bottom: 3px solid #f4e6d4; }
+
+.mybreadcrumbs span {
+  position: relative;
+  top: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #e9432d;
+  display: inline-block;
+  background-color: #FFF;
+  padding-right: 10px; }
+
+.label-list {
+  display: inline-block; }
+
+.label-list, .area-list {
+  margin: 10px; }
+  .label-list .control-label,
+  .area-list .control-label {
+    width: 64px !important; }
+  .label-list .controls, .area-list .controls {
+    margin-left: 79px !important;}
+
+.form-top-search {
+  margin-bottom: 0;
+  overflow: hidden;
+  margin: 0 0 20px; }
+  .form-top-search .search-form-wrap {
+    float: right;
+    margin-bottom: 20px; }
+  .form-top-search .condition-row {
+    margin-right: -10px;}

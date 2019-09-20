@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.cert.dao.SysCertDao">
+
+	<sql id="sysCertColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.releases AS "releases",
+		a.release_date AS "releaseDate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="sysCertJoins">
+	</sql>
+
+	<select id="get" resultType="SysCert">
+		SELECT
+			<include refid="sysCertColumns"/>
+		FROM sys_cert a
+		<include refid="sysCertJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SysCert">
+		SELECT
+			<include refid="sysCertColumns"/>
+		FROM sys_cert a
+		<include refid="sysCertJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysCert">
+		SELECT
+			<include refid="sysCertColumns"/>
+		FROM sys_cert a
+		<include refid="sysCertJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_cert(
+			id,
+			name,
+			releases,
+			release_date,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{releases},
+			#{releaseDate},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_cert SET
+			name = #{name},
+			releases = #{releases},
+			release_date = #{releaseDate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="editSysCertName">
+		UPDATE sys_cert SET
+		name = #{name}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_cert SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sys_cert WHERE id = #{id}
+	</update>
+	<select id="getMyPageList" resultType="com.oseasy.pro.modules.cert.vo.SysCertVo" >
+		select a.id,a.name,a.releases,a.release_date from sys_cert a  where a.del_flag='0' order by a.create_date desc
+	</select>
+	<select id="findAllListVo" resultType="com.oseasy.pro.modules.cert.vo.SysCertVo" >
+		select t.id,t.name,t.releases,t.release_date from sys_cert t  where t.del_flag='0' order by t.create_date desc
+	</select>
+	<select id="getCertPageVoList" resultType="com.oseasy.pro.modules.cert.vo.SysCertPageVo">
+		select t.id,t.name certpagename,t.cert_id certid,f.name certname,
+		(select s.url from sys_attachment s where s.type='10000' and s.file_step='10002' and s.uid=t.id limit 1) imgUrl 
+		from sys_cert_page t 
+		left join sys_cert f on t.cert_id=f.id
+		where t.del_flag='0' and f.del_flag='0' and
+		<foreach collection="list" item="certid" index="index" open="("
+					close=")" separator=" or ">
+					t.cert_id=#{certid}
+		</foreach>
+		order by t.sort
+	</select>
+	<select id="getCertFlowVoList" resultType="com.oseasy.pro.modules.cert.vo.SysCertFlowVo">
+		select b.id,b.cert_id certId,b.flow,b.node,pp.project_name flowName,(case when gn.name is not null  and gn.name !='' then gn.name else n.name end) nodeName from sys_cert_flow b 
+		left join sys_cert a on a.id=b.cert_id and a.del_flag='0'
+		left join act_yw g on b.flow=g.id
+		LEFT JOIN pro_project pp ON pp.id = g.rel_id
+		LEFT JOIN act_yw_gnode gn ON gn.id = b.node
+		LEFT JOIN act_yw_node n ON n.id = gn.node_id 
+		where b.del_flag='0' and
+		<foreach collection="list" item="certid" index="index" open="("
+					close=")" separator=" or ">
+					b.cert_id=#{certid}
+		</foreach>
+		order by b.create_date
+	</select>
+	
+	<update id="deleteAll">
+		UPDATE sys_cert SET
+			del_flag = '1'
+		WHERE find_in_set(id,#{ids}) and releases='0'
+	</update>
+	
+	<select id="getCertPage" resultType="com.oseasy.pro.modules.cert.entity.CertPage" >
+		select f.id certid,f.name certname,t.id certpageid,t.name certpagename,t.html uiHtml,t.ui_json uiJson,t.width,t.height,
+		s.url imgPath
+		from sys_cert_page t 
+		left join sys_cert f on t.cert_id=f.id
+		left join sys_attachment s on s.uid=t.id and s.type='10000' and s.file_step='10004'
+		where t.id=#{pageid} and t.del_flag='0' and f.del_flag='0'
+		order by s.create_date desc
+		limit 1
+	</select>
+	<update id="unrelease">
+		UPDATE sys_cert SET
+			releases = '0',release_date=null
+		WHERE id=#{id}
+	</update>
+	<update id="release">
+		UPDATE sys_cert SET
+			releases = '1',release_date=sysdate()
+		WHERE id=#{id}
+	</update>
+	<select id="getProjectData" resultType="java.util.Map">
+	select (case when t.short_name is not null and t.short_name !='' then t.short_name else t.p_name end) col_1,s1.label col_2,s2.label col_3,t.competition_number col_4,s3.label col_5,
+	(select GROUP_CONCAT(u22.name SEPARATOR '、')
+		from team_user_history r  left join sys_user u22 on
+		r.user_id=u22.id 
+		left join sys_teacher_expansion ste on u22.id=ste.user_id
+		left join sys_dict s on s.value=ste.post_title and s.type='teacher_level'
+		where t.team_id=r.team_id and t.id=r.pro_id  and r.user_type='2') col_6,
+		u.name col_7,
+		(select GROUP_CONCAT(u22.name SEPARATOR '、')
+		from team_user_history r left join sys_user u22 on
+		r.user_id=u22.id 
+		left join sys_teacher_expansion ste on u22.id=ste.user_id
+		where t.team_id=r.team_id and t.id=r.pro_id  and t.declare_id!=r.user_id  and r.user_type='1') col_8,
+		date_format(t.sub_time,'%Y年%m月') subtime,u.email,u.id leader
+	from pro_model t
+	left join pro_model_md f on t.id=f.model_id
+	LEFT JOIN sys_dict s1 on t.type=s1.value AND s1.type='project_style'
+	LEFT JOIN sys_dict s2 on t.pro_category=s2.value AND s2.type='project_type'
+	LEFT JOIN sys_dict s3 on f.app_level=s3.value AND s3.type='0000000196'
+	left join sys_user u on t.declare_id=u.id 
+	where t.pro_type='1,' and t.id=#{pid}
+	</select>
+	<select id="getCertListWithFlow" resultType="java.util.Map">
+		select f.id,f.name from sys_cert_flow t 
+		left join sys_cert f on t.cert_id=f.id
+		where t.flow=#{flow} and t.del_flag='0' and f.del_flag='0' and f.releases='1'
+		order by t.create_date
+	</select>
+</mapper>

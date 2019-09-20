@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.cms.modules.cms.dao.CmsConmmentDao">
+	<resultMap id="cmsConmmentMap" type="com.oseasy.cms.modules.cms.entity.CmsConmment">
+		<id property="id" column="id" />
+		<result property="category.id" column="category.id" />
+		<result property="cnt.id" column="cnt.id" />
+		<result property="user.id" column="user.id"/>
+		<result property="user.name" column="user.name"/>
+		<result property="user.photo" column="user.photo"/>
+		<result property="likes" column="likes" />
+		<result property="content" column="content" />
+		<result property="createDate" column="createDate" />
+		<result property="auUser.id" column="auUser.id" />
+		<result property="auUser.name" column="auUser.name" />
+		<result property="auUser.photo" column="auUser.photo" />
+		<result property="auditDate" column="auditDate" />
+		<result property="reply" column="reply" />
+		<result property="reDate" column="reDate" />
+		<result property="reUser.id" column="reUser.id" />
+		<result property="reUser.name" column="reUser.name" />
+		<result property="reUser.photo" column="reUser.photo" />
+		<result property="auditstatus" column="auditstatus" />
+		<result property="isRecommend" column="isRecommend" />
+		<result property="delFlag" column="delFlag" />
+		<collection property="ctLikes" ofType="CmsConmmentLikes">
+			<id property="user.id" column="ctLikes.user.id" />
+			<result property="user.name" column="ctLikes.user.name" />
+		</collection>
+	</resultMap>
+
+	<sql id="cmsConmmentColumns">
+		a.id AS "id",
+		a.category_id AS "category.id",
+		a.content_id AS "cnt.id",
+		a.uid AS "user.id",
+		a.likes AS "likes",
+		a.content AS "content",
+		a.create_date AS "createDate",
+		a.audit_user_id AS "auUser.id",
+		a.audit_date AS "auditDate",
+		a.reply AS "reply",
+		a.reply_date AS "reDate",
+		a.reply_user_id AS "reUser.id",
+		a.auditstatus AS "auditstatus",
+		a.is_recommend AS "isRecommend",
+		a.del_flag AS "delFlag",
+		u.name AS "user.name",
+		u.photo AS "user.photo",
+		ua.name AS "auUser.name",
+		ua.photo AS "auUser.photo",
+		ur.name AS "reUser.name",
+		ur.photo AS "reUser.photo",
+		cl.uid AS "ctLikes.user.id",
+		cl.pid AS "ctLikes.parent.id"
+	</sql>
+
+	<sql id="cmsConmmentJoins">
+	LEFT JOIN cms_article ae ON ae.id = a.content_id
+	LEFT JOIN cms_conmment_likes cl ON cl.pid = a.id
+	LEFT JOIN sys_user u ON u.id = a.uid
+	LEFT JOIN sys_user ua ON ua.id = a.audit_user_id
+	LEFT JOIN sys_user ur ON ur.id = a.reply_user_id
+	</sql>
+
+	<select id="get" resultMap="cmsConmmentMap">
+		SELECT
+			<include refid="cmsConmmentColumns"/>
+		FROM cms_conmment a
+		<include refid="cmsConmmentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultMap="cmsConmmentMap">
+		SELECT
+			<include refid="cmsConmmentColumns"/>
+		FROM cms_conmment a
+		<include refid="cmsConmmentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="category != null and category.id != null and category.id != ''">
+				AND a.category_id = #{category.id}
+			</if>
+			<if test="cnt != null">
+				<if test="cnt.id != null and cnt.id != ''">
+					AND a.content_id = #{cnt.id}
+				</if>
+				<if test="cnt.ids != null and cnt.ids != ''">
+					<foreach item="id" collection="cnt.ids" open="(" separator="," close=")">
+						#{id}
+					</foreach>
+				</if>
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.uid = #{user.id}
+			</if>
+			<if test="likes != null and likes != ''">
+				AND a.likes = #{likes}
+			</if>
+			<if test="content != null and content != ''">
+				AND a.content = #{content}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+			<if test="auUser != null and auUser.id != null and auUser.id != ''">
+				AND a.audit_user_id = #{auUser.id}
+			</if>
+			<if test="auditDate != null and auditDate != ''">
+				AND a.audit_date = #{auditDate}
+			</if>
+			<if test="auditstatus != null and auditstatus != ''">
+				AND a.auditstatus = #{auditstatus}
+			</if>
+			<if test="isRecommend != null and isRecommend != ''">
+				AND a.is_recommend = #{isRecommend}
+			</if>
+			<if test="queryStr != null and queryStr != ''">
+				AND (
+					ae.title LIKE concat('%',#{queryStr},'%')
+					OR a.id LIKE concat('%',#{queryStr},'%')
+				)
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.is_recommend DESC, ${page.orderBy} ${page.orderByType}, a.update_date DESC, a.create_date DESC, a.audit_date DESC, a.reply_date DESC
+			</when>
+			<otherwise>
+				ORDER BY a.is_recommend DESC, a.update_date DESC, a.create_date DESC, a.audit_date DESC, a.reply_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getArticleCommentCounts" resultType="java.lang.Integer">
+		SELECT  count(1) from cms_conmment a where a.del_flag = #{DEL_FLAG_NORMAL} and a.content_id = #{cnt.id}
+	</select>
+
+	<select id="findAllList" resultMap="cmsConmmentMap">
+		SELECT
+			<include refid="cmsConmmentColumns"/>
+		FROM cms_conmment a
+		<include refid="cmsConmmentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.is_recommend DESC, ${page.orderBy} ${page.orderByType}, a.update_date DESC, a.create_date DESC, a.audit_date DESC, a.reply_date DESC
+			</when>
+			<otherwise>
+				ORDER BY a.is_recommend DESC, a.update_date DESC, a.create_date DESC, a.audit_date DESC, a.reply_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cms_conmment(
+			<!-- id, -->
+			category_id,
+			content_id,
+			uid,
+			likes,
+			content,
+			create_date,
+			update_date,
+			audit_user_id,
+			audit_date,
+			reply,
+			reply_date,
+			reply_user_id,
+			auditstatus,
+			is_recommend,
+			del_flag
+		) VALUES (
+			<!-- #{id}, -->
+			#{category.id},
+			#{cnt.id},
+			#{user.id},
+			#{likes},
+			#{content},
+			#{createDate},
+			#{updateDate},
+			#{auUser.id},
+			#{auditDate},
+			#{reply},
+			#{reUser.id},
+			#{reDate},
+			#{auditstatus},
+			#{isRecommend},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO cms_conmment(
+			<!-- id, -->
+			category_id,
+			content_id,
+			uid,
+			likes,
+			content,
+			create_date,
+			update_date,
+			audit_user_id,
+			audit_date,
+			reply,
+			reply_date,
+			reply_user_id,
+			auditstatus,
+			is_recommend,
+			del_flag
+		) VALUES
+		<foreach collection="entitys" item="item" index="index" separator=",">
+			(
+				<!-- #{item.id}, -->
+				#{item.category.id},
+				#{item.cnt.id},
+				#{item.user.id},
+				#{item.likes},
+				#{item.content},
+				#{item.createDate},
+				#{item.updateDate},
+				#{item.auUser.id},
+				#{item.auditDate},
+				#{item.reply},
+				#{item.reUser.id},
+				#{item.reDate},
+				#{item.auditstatus},
+				#{item.isRecommend},
+				#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE cms_conmment SET
+			category_id = #{category.id},
+			content_id = #{cnt.id},
+			uid = #{user.id},
+			likes = #{likes},
+			content = #{content},
+			audit_user_id = #{auUser.id},
+			audit_date = #{auditDate},
+			update_date = #{updateDate},
+			reply = #{reply},
+			reply_user_id = #{reUser.id},
+			reply_date = #{reDate},
+			auditstatus = #{auditstatus},
+			is_recommend = #{isRecommend},
+			del_flag = #{delFlag}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE cms_conmment
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="category_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.category.id}
+				</foreach>
+			</trim>
+			<trim prefix="content_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.cnt.id}
+				</foreach>
+			</trim>
+			<trim prefix="uid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.user.id}
+				</foreach>
+			</trim>
+			<trim prefix="likes =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.likes}
+				</foreach>
+			</trim>
+			<trim prefix="content =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.content}
+				</foreach>
+			</trim>
+			<trim prefix="audit_user_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.auUser.id}
+				</foreach>
+			</trim>
+			<trim prefix="audit_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.auditDate}
+				</foreach>
+			</trim>
+			<trim prefix="reply =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.reply}
+				</foreach>
+			</trim>
+			<trim prefix="reply_user_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.reUser.id}
+				</foreach>
+			</trim>
+			<trim prefix="reply_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.reDate}
+				</foreach>
+			</trim>
+			<trim prefix="auditstatus =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.auditstatus}
+				</foreach>
+			</trim>
+			<trim prefix="is_recommend =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isRecommend}
+				</foreach>
+			</trim>
+			<trim prefix="del_flag =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.delFlag}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="updatePLRecommend" parameterType="java.util.List" >
+		UPDATE cms_conmment
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="is_recommend =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isRecommend}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="updatePLAudit" parameterType="java.util.List" >
+		UPDATE cms_conmment
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="audit_user_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.auUser.id}
+				</foreach>
+			</trim>
+			<trim prefix="audit_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.auditDate}
+				</foreach>
+			</trim>
+			<trim prefix="auditstatus =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.auditstatus}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="updatePLAuditByCntIds" parameterType="java.util.List" >
+		UPDATE cms_conmment
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="audit_user_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when content_id=#{item.cnt.id} then #{item.auUser.id}
+				</foreach>
+			</trim>
+			<trim prefix="audit_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when content_id=#{item.cnt.id} then #{item.auditDate}
+				</foreach>
+			</trim>
+			<trim prefix="auditstatus =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when content_id=#{item.cnt.id} then #{item.auditstatus}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE content_id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.cnt.id}
+		</foreach>
+	</update>
+
+	<update id="delete">
+		UPDATE cms_conmment SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deletePL">
+		UPDATE cms_conmment SET del_flag = #{DEL_FLAG_DELETE} WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deletePLByCntIds">
+		UPDATE cms_conmment SET del_flag = '1' WHERE content_id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM cms_conmment WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM cms_conmment WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLPLByCntIds">
+		DELETE FROM cms_conmment WHERE content_id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+</mapper>

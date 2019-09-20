@@ -1,0 +1,213 @@
+.red {
+    color: red;
+}
+
+.form-search input, select {
+    height: auto;
+}
+
+.form-search input, select {
+    max-width: none;
+}
+
+.jtk-node {
+    position: absolute;
+    z-index: 100;
+}
+
+.jtk-flow-node {
+    padding: 0 8px;
+    margin: 0;
+    max-width: 160px;
+    height: 32px;
+    line-height: 32px;
+    border: 1px solid #ccc;
+    background-color: #ffcc99;
+}
+
+.jtk-flow-node .name {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.jtk-flow-group {
+    position: absolute;
+    min-width: 200px;
+    min-height: 200px;
+    border: 1px dashed #ccc;
+    z-index: 1;
+}
+
+.jtk-endpoint {
+    z-index: 100;
+}
+
+.flow-canvas {
+    position: relative;
+}
+
+.nodeDesign {
+    position: relative;
+}
+
+.sup-draggable-box {
+    position: absolute;
+    bottom: 0;
+    min-width: 200px;
+    min-height: 200px;
+    padding-right: 20px;
+    padding-right: 20px;
+    background-color: transparent;
+}
+
+.jktFlowOtherEnd {
+    margin-bottom: 200px;
+}
+
+.jtk-flow-group-header {
+    height: 30px;
+    background-color: #ffcc99;
+    overflow: hidden;
+}
+
+.jtk-flow-group-header .operations {
+    float: right;
+    height: 30px;
+    overflow: hidden;
+}
+
+.jtk-flow-group-header .operations .add, .jtk-flow-group-header .operations .edit, .jtk-flow-group-header .operations .delete {
+    display: block;
+    float: left;
+    width: 16px;
+    margin-top: 5px;
+    margin-right: 3px;
+}
+
+.jtk-flow-group-header .name {
+    display: block;
+    line-height: 30px;
+    padding: 0 5px;
+    height: 30px;
+    font-weight: 700;
+    text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.jtk-node-dropMenu {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    width: 80px;
+    text-align: center;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    z-index: 3000;
+}
+
+.jtk-node-dropMenu > li {
+    line-height: 24px;
+    border-bottom: 1px solid #ccc;
+}
+
+.jtk-node-dropMenu > li:last-child {
+    border-bottom: none;
+}
+
+.jtk-node-dropMenu > li > a {
+    display: block;
+    text-decoration: none;
+}
+
+.jkt-flow-other {
+    width: 64px;
+    height: 30px;
+    border-radius: 50%;
+    text-align: center;
+    background-color: #ffcc99;
+    line-height: 30px;
+}
+
+/*.jkt-root-group {*/
+/*width: 120px;*/
+/*height: 120px;*/
+/*line-height: 120px;*/
+/*text-align: center;*/
+/*background: url('/images/bg-flowRootGroup.png');*/
+/*background-size: cover;*/
+/*}*/
+
+.jkt-root-group .name {
+    display: inline-block;
+    line-height: 24px;
+    font-size: 14px;
+    max-height: 48px;
+    overflow: hidden;
+    margin: 0 7px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+.draggable-handler {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-bottom: -2px;
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    /*cursor: crosshair;*/
+}
+
+.draggable-handler:hover {
+    opacity: 1;
+}
+
+.flow-header {
+    position: relative;
+    padding-top: 10px;
+    overflow: hidden;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.flow-header .name {
+    font-size: 14px;
+    line-height: 26px;
+    text-align: center;
+    color: #e9432d;
+    font-weight: bold;
+}
+
+.h26 {
+    position: absolute;
+    right: 0;
+    height: 26px;
+}
+
+.jtk-flow-group-node {
+    position: absolute;
+}
+
+.modal {
+    transition: opacity .3s ease;
+}
+.modal-enter {
+    opacity: 0;
+}
+
+.modal-leave-active {
+    opacity: 0;
+}
+
+.modal-enter .modal,
+.modal-leave-active .modal {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+

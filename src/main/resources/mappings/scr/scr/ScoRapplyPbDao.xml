@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.scr.dao.ScoRapplyPbDao">
+
+	<sql id="scoRapplyPbColumns">
+		a.id AS "id",
+		a.app_id AS "apply.id",
+		a.sum_id AS "sum.id",
+		a.uid AS "user.id",
+		a.rdid AS "rdetail.id",
+		a.val AS "val",
+		a.score AS "score"
+	</sql>
+
+	<sql id="scoRapplyPbJoins">
+	</sql>
+
+	<select id="get" resultType="ScoRapplyPb">
+		SELECT
+			<include refid="scoRapplyPbColumns"/>
+		FROM sco_rapply_pb a
+		<include refid="scoRapplyPbJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ScoRapplyPb">
+		SELECT
+			<include refid="scoRapplyPbColumns"/>
+		FROM sco_rapply_pb a
+		<include refid="scoRapplyPbJoins"/>
+		<where>
+			1=1
+			<if test="apply != null and apply.id != null and apply.id != ''">
+				and a.app_id = #{apply.id}
+			</if>
+			<if test="user != null and user.id != '' and user.id != null ">
+				and a.uid = #{user.id}
+			</if>
+			<if test="rdetail != null and rdetail.id != '' and rdetail.id != null ">
+				and a.rdid = #{rdetail.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ScoRapplyPb">
+		SELECT
+			<include refid="scoRapplyPbColumns"/>
+		FROM sco_rapply_pb a
+		<include refid="scoRapplyPbJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sco_rapply_pb(
+			id,
+			app_id,
+			sum_id,
+			uid,
+			rdid,
+			val,
+			score
+		) VALUES (
+			#{id},
+			#{apply.id},
+			#{sum.id},
+			#{user.id},
+			#{rdetail.id},
+			#{val},
+			#{score}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO sco_rapply_pb(
+			id,
+			app_id,
+			sum_id,
+			uid,
+			rdid,
+			val,
+			score
+		) VALUES
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.apply.id},
+			#{item.sum.id},
+			#{item.user.id},
+			#{item.rdetail.id},
+			#{item.val},
+			#{item.score}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE sco_rapply_pb SET
+			app_id = #{apply.id},
+			sum_id = #{sum.id},
+			uid = #{user.id},
+			rdid = #{rdetail.id},
+			val = #{val},
+			score = #{score}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE sco_rapply_pb
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="app_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.apply.id}
+				</foreach>
+			</trim>
+			<trim prefix="sum_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.sum.id}
+				</foreach>
+			</trim>
+			<trim prefix="uid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.user.id}
+				</foreach>
+			</trim>
+			<trim prefix="rdid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rdetail.id}
+				</foreach>
+			</trim>
+			<trim prefix="val =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.val}
+				</foreach>
+			</trim>
+			<trim prefix="score =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.score}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="updateVal">
+		update sco_rapply_pb set score = #{val} where app_id=#{apply.id} and uid=#{user.id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM sco_rapply_pb
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLByApplyId">
+		DELETE FROM sco_rapply_pb
+		WHERE app_id = #{apply.id}
+	</update>
+
+	<update id="deletePL">
+			DELETE FROM sco_rapply_pb
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sco_rapply_pb WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM sco_rapply_pb WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM sco_rapply_pb
+	</update>
+</mapper>

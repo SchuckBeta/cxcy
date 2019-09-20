@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/layer.css">
+</head>
+<body style=" height: 2000px; ">
+
+  <input type="button" value="弹出框" id="btn1">
+  <div id="popup">
+    <div class="title">
+      <p data-title="Popup Text"></p>
+      <span>x</span>
+    </div>
+    <div class="cont"></div>
+  </div>
+  <div id="mask_shadow"></div>
+
+  <script src="${ctxJs}/jquery.min.js"></script>
+  <script src="${ctxJs}/popup.js"></script>
+  <script>
+    $(function () {
+      /**
+          ifDrag: 是否拖拽
+          dragLimit: 拖拽限制范围
+       */
+      $('#popup').popup({
+          ifDrag: true, dragLimit: true
+        });
+      
+    });
+  </script>
+  
+</body>
+</html>

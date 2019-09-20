@@ -1,0 +1,80 @@
+@charset "UTF-8";
+/*替换掉原有的showModalMessage*/
+.dialog-cyjd-container .ui-dialog-titlebar-close {
+    border: none; }
+.dialog-cyjd-container .ui-dialog-buttonpane .ui-dialog-buttonset {
+    float: none;
+    margin: 10px auto;
+    text-align: center; }
+.dialog-cyjd-container .ui-dialog-buttonpane .ui-dialog-buttonset button {
+    margin: 0; }
+.dialog-cyjd-container .ui-dialog-buttonpane .ui-dialog-buttonset button + button {
+    margin-left: 8px; }
+.dialog-cyjd-container .dialog-cyjd {
+    padding: 20px 15px;
+    min-height: 250px;
+    min-width: 320px;
+    max-width: 360px;
+    text-align: center;
+    overflow: hidden; }
+.dialog-cyjd-container .dialog-cyjd .icon-ok-msg, .dialog-cyjd-container .dialog-cyjd .icon-fail-msg, .dialog-cyjd-container .dialog-cyjd .icon-warning-msg {
+    display: block;
+    width: 38px;
+    height: 38px;
+    margin: 0 auto;
+    background: no-repeat center;
+    vertical-align: middle; }
+.dialog-cyjd-container .dialog-cyjd .icon-ok-msg {
+    background-image: url(/img/ok-msg.png); }
+.dialog-cyjd-container .dialog-cyjd .icon-fail-msg {
+    background-image: url(/img/alert-msg.png); }
+
+.dialog-cyjd-container .dialog-cyjd .icon-warning-msg {
+    background-image: url(/img/alert-msg.png); }
+.dialog-cyjd-container .dialog-cyjd span {
+    display: block;
+    padding: 5px 10px;
+    margin-top: 4px;
+    vertical-align: middle; }
+
+.dialog-cyjd-container .dialog-info-box {
+    position: relative;
+    display: inline-block;
+    padding-left: 40px;
+    min-height: 40px; }
+
+.dialog-cyjd-container .dialog-cyjd .dialog-info-box > i {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -19px; }
+
+
+.dialog-cyjd-container .ui-widget-header{
+    border-width: 0;
+    background-color: #f1f1f1;
+    border-bottom-width: 1px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.dialog-cyjd-container{
+    padding: 0;
+}
+.dialog-cyjd-container .dialog-cyjd{
+    margin-top: 20px;
+}
+.ui-dialog .ui-dialog-buttonpane{
+    border-top: none;
+}
+
+.dialog-cyjd-container.ui-widget.ui-widget-content{
+    width: auto !important;
+    height: auto !important;
+}
+.dialog-cyjd-container .ui-dialog-buttonpane .ui-dialog-buttonset button{
+    width: auto;
+    height: auto;
+}
+.dialog-cyjd-container .ui-dialog-buttonpane .ui-dialog-buttonset{
+    margin-bottom: 15px;
+}

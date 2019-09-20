@@ -1,0 +1,76 @@
+{
+    "pro": {
+    	"type": "创新训练",
+    	"no": "SNFW170800079",
+        "name": "创新训练项目",
+        "curDate": "2017年12月"
+    },
+    "team": {
+        "spname": "团队负责人",
+        "spmobile": "13580006666",
+        "spcollege": "所在学院",
+        "spno": "No1111111",
+        "te": [{
+		        "name": "导师1",
+		        "no": "TN100",
+		        "unit": "单位",
+		        "title": "职称",
+		        "mobile": "导师电话",
+		        "edu": "学历",
+		        "email": "316@qq.com"
+        	},{
+		        "name": "导师2",
+		        "no": "TN100",
+		        "unit": "单位",
+		        "title": "职称",
+		        "mobile": "导师电话",
+		        "edu": "学历",
+		        "email": "316@qq.com"
+        	},{
+		        "name": "导师3",
+		        "no": "TN100",
+		        "unit": "单位",
+		        "title": "职称",
+		        "mobile": "导师电话",
+		        "edu": "学历",
+		        "email": "316@qq.com"
+        	},{
+		        "name": "导师4",
+		        "no": "TN100",
+		        "unit": "单位",
+		        "title": "职称",
+		        "mobile": "导师电话",
+		        "edu": "学历",
+		        "email": "316@qq.com"
+        }],
+        "tm": [{
+		        "name": "张三1",
+		        "no": "学号",
+		        "mobile": "导师电话",
+		        "college": "学院",
+		        "work": "xssxxscom",
+		        "email": "316@qq.com"
+        	},{
+		        "name": "张三2",
+		        "no": "学号",
+		        "mobile": "导师电话",
+		        "college": "学院",
+		        "work": "XXXX",
+		        "email": "316@qq.com"
+        	},{
+		        "name": "张三3",
+		        "no": "学号",
+		        "mobile": "导师电话",
+		        "college": "学院",
+		        "work": "xxxxx",
+		        "email": "316@qq.com"
+        	},{
+		        "name": "导师4",
+		        "no": "学号",
+		        "mobile": "导师电话",
+		        "college": "学院",
+		        "work": "xxxxx",
+		        "email": "316@qq.com"
+        }]
+    }
+}

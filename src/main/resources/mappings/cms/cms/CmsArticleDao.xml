@@ -1,0 +1,718 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.cms.modules.cms.dao.CmsArticleDao">
+
+	<sql id="cmsArticleColumns">
+		a.id AS "id",
+		a.category_id AS "categoryId",
+		a.module AS "module",
+		a.pr_id AS "prId",
+		a.pr_type AS "prType",
+		a.views AS "views",
+		a.keywords AS "keywords",
+		a.video AS "video",
+		a.image AS "image",
+		a.title AS "title",
+		a.is_link AS "isLink",
+		a.link AS "link",
+		a.isshowlink AS "isshowlink",
+		a.description AS "description",
+		a.isshowdescription AS "isshowdescription",
+		a.thumbnail AS "thumbnail",
+		a.writer AS "writer",
+		a.isshowwriter AS "isshowwriter",
+		a.articlepulish_date AS "articlepulishDate",
+		a.isshowpublishdate AS "isshowpublishdate",
+		a.publish_status AS "publishStatus",
+		a.publish_startdate AS "publishStartdate",
+		a.publish_enddate AS "publishEnddate",
+		a.publishhforever AS "publishhforever",
+		a.sort AS "sort",
+		a.top AS "top",
+		a.deadline AS "deadline",
+		a.posid AS "posid",
+		a.posidweight AS "posidweight",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		c.name AS "cmsCategory.name",
+		d.content AS "cmsArticleData.content",
+		d.copyfrom AS "cmsArticleData.copyfrom",
+		d.isshowcopyfrom AS "cmsArticleData.isshowcopyfrom",
+		d.relation AS "cmsArticleData.relation",
+		d.allow_comment AS "cmsArticleData.allowComment",
+		d.likes AS "cmsArticleData.likes",
+		d.id AS "cmsArticleData.id"
+	</sql>
+
+	<sql id="cmsArticleJoins">
+		LEFT JOIN cms_category c ON c.id = a.category_id
+		LEFT JOIN cms_article_data d ON d.content_id = a.id
+		LEFT JOIN sys_user u ON u.id = a.create_by
+
+	</sql>
+
+	<sql id="cmsNormalArticleJoins">
+		LEFT JOIN cms_category c ON c.id = a.category_id
+		LEFT JOIN cms_article_data d ON d.content_id = a.id
+		LEFT JOIN sys_user u ON u.id = a.create_by
+		LEFT JOIN cms_site st on st.id = c.site_id
+	</sql>
+
+	<select id="get" resultType="CmsArticle">
+		SELECT
+			<include refid="cmsArticleColumns"/>
+		FROM cms_article a
+		<include refid="cmsArticleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="frontArticleList" resultType="CmsArticle">
+		SELECT
+		<include refid="cmsArticleColumns"/>
+		FROM cms_article a
+		<include refid="cmsArticleJoins"/>
+		where
+		a.del_flag = #{DEL_FLAG_NORMAL} AND a.publish_status = #{publishStatus} AND a.category_id = #{cmsCategory.id}
+		AND a.publish_enddate >= #{nowDate} AND a.publish_startdate <![CDATA[<=]]> #{nowDate}
+
+		or ( a.publishhforever=1 and a.del_flag = #{DEL_FLAG_NORMAL} AND a.publish_status = #{publishStatus} AND a.category_id = #{cmsCategory.id}
+
+		)
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.posid DESC, a.top DESC,a.sort DESC,a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="validateArticleName" resultType="CmsArticle">
+	SELECT
+	<include refid="cmsArticleColumns"/>
+	FROM cms_article a
+	<include refid="cmsArticleJoins"/>
+		where a.del_flag = 0 and a.title = #{title} AND a.category_id = #{cmsCategory.id}
+	</select>
+
+	<select id="findList" resultType="CmsArticle">
+		SELECT
+			<include refid="cmsArticleColumns"/>
+		FROM cms_article a
+		<include refid="cmsArticleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="publishStatus != null and publishStatus != ''">
+				AND a.publish_status = #{publishStatus}
+			</if>
+			<if test="cmsCategory!=null and cmsCategory.id != null and cmsCategory.id != '' ">
+				AND a.category_id = #{cmsCategory.id}
+			</if>
+			<if test="prType != null and prType != ''">
+				AND a.pr_type = #{prType}
+			</if>
+			<if test="module != null and module != ''">
+				AND a.module = #{module}
+			</if>
+			<if test="articlepulishStartDate != null and articlepulishStartDate != ''">
+				AND a.articlepulish_date >= #{articlepulishStartDate}
+			</if>
+			<if test="articlepulishEndDate != null and articlepulishEndDate != ''">
+				AND a.articlepulish_date <![CDATA[<=]]> #{articlepulishEndDate}
+			</if>
+			<if test="publishStartdate != null and publishStartdate != ''">
+				AND a.deadline >= #{publishStartdate}
+			</if>
+			<if test="publishEnddate != null and publishEnddate != ''">
+				AND a.deadline <![CDATA[<=]]> #{publishEnddate}
+			</if>
+			<if test="ids != null and ids != ''">
+				AND a.id in (${ids})
+			</if>
+			<if test="queryStr != null and queryStr != ''">
+				AND (a.title LIKE concat('%',#{queryStr},'%'))
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.posid DESC, a.top DESC,a.sort DESC,a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+
+	<select id="findIndexList" resultType="CmsArticle">
+		SELECT
+			<include refid="cmsArticleColumns"/>
+		FROM cms_article a
+		<include refid="cmsArticleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="publishStatus != null and publishStatus != ''">
+				AND (a.publish_status = #{publishStatus} or a.publish_status is null)
+			</if>
+			<if test="cmsCategory!=null and cmsCategory.id != null and cmsCategory.id != '' ">
+				AND a.category_id = #{cmsCategory.id}
+			</if>
+			<if test="prType != null and prType != ''">
+				AND a.pr_type = #{prType}
+			</if>
+			<if test="module != null and module != ''">
+				AND a.module = #{module}
+			</if>
+			<if test="articlepulishStartDate != null and articlepulishStartDate != ''">
+				AND a.articlepulish_date >= #{articlepulishStartDate}
+			</if>
+			<if test="articlepulishEndDate != null and articlepulishEndDate != ''">
+				AND a.articlepulish_date <![CDATA[<=]]> #{articlepulishEndDate}
+			</if>
+			<if test="publishStartdate != null and publishStartdate != ''">
+				AND a.deadline >= #{publishStartdate}
+			</if>
+			<if test="publishEnddate != null and publishEnddate != ''">
+				AND a.deadline <![CDATA[<=]]> #{publishEnddate}
+			</if>
+			<if test="ids != null and ids != ''">
+				AND a.id in (${ids})
+			</if>
+			<if test="queryStr != null and queryStr != ''">
+				AND (
+						a.title LIKE concat('%',#{queryStr},'%')
+					)
+			</if>
+			<if test="nowDate != null and nowDate != ''">
+				AND a.publish_enddate >= #{nowDate}
+			</if>
+			<if test="nowDate != null and nowDate != ''">
+				AND a.publish_startdate <![CDATA[<=]]> #{nowDate}
+			</if>
+
+
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.posid DESC, a.top DESC,a.sort DESC,a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findIndexFrontList" resultType="CmsArticle">
+		SELECT
+		<include refid="cmsArticleColumns"/>
+		FROM cms_article a
+		<include refid="cmsNormalArticleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND st.is_currentsite=1
+			AND a.pr_id is not null and a.pr_id !=""
+			<if test="prType != null and prType != ''">
+				AND a.pr_type = #{prType}
+			</if>
+			<if test="module != null and module != ''">
+				AND a.module = #{module}
+			</if>
+			<if test="posid != null and posid != ''">
+				AND a.posid = #{posid}
+			</if>
+			<if test="cmsCategory!=null and cmsCategory.id != null and cmsCategory.id != '' ">
+				AND a.category_id = #{cmsCategory.id}
+			</if>
+			<if test="queryStr != null and queryStr != ''">
+				AND (
+						a.title LIKE concat('%',#{queryStr},'%')
+					)
+			</if>
+
+			AND (
+				a.publish_status is null
+				OR (a.publish_status = #{publishStatus}
+					<if test="nowDate != null and nowDate != ''">
+						AND a.publish_enddate >= #{nowDate}
+					</if>
+					<if test="nowDate != null and nowDate != ''">
+						AND a.publish_startdate <![CDATA[<=]]> #{nowDate}
+					</if>
+					OR ( a.publishhforever=1 and a.del_flag = #{DEL_FLAG_NORMAL} AND a.publish_status = #{publishStatus}  AND st.is_currentsite=1)
+				)
+			)
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.posid DESC, a.top DESC,a.sort DESC,a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="findListByLimit" resultType="CmsArticle">
+		SELECT
+			<include refid="cmsArticleColumns"/>
+		FROM cms_article a
+		<include refid="cmsNormalArticleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and st.is_currentsite=1
+			<if test="publishStatus != null and publishStatus != ''">
+				AND a.publish_status = #{publishStatus}
+			</if>
+			<if test="cmsCategory!=null and cmsCategory.id != null and cmsCategory.id != '' ">
+				AND a.category_id = #{cmsCategory.id}
+			</if>
+			<if test="prType != null and prType != ''">
+				AND a.pr_type = #{prType}
+			</if>
+			<if test="module != null and module != ''">
+				AND a.module = #{module}
+			</if>
+			<if test="posid != null and posid != ''">
+				AND a.posid = #{posid}
+			</if>
+			<if test="nowDate != null and nowDate != ''">
+				AND a.publish_enddate >= #{nowDate}
+			</if>
+			<if test="nowDate != null and nowDate != ''">
+				AND a.publish_startdate <![CDATA[<=]]> #{nowDate}
+			</if>
+			or ( a.publishhforever=1 and a.del_flag = #{DEL_FLAG_NORMAL} AND a.publish_status = #{publishStatus}  and st.is_currentsite=1
+
+				AND a.pr_type = #{prType}
+				and a.tenant_id=#{tenantId}
+
+			)
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.posid DESC, a.top DESC,a.sort DESC,a.update_date DESC
+			</otherwise>
+		</choose>
+		limit 4
+	</select>
+
+	<select id="findNormalContentList" resultType="CmsArticle">
+		SELECT
+		<include refid="cmsArticleColumns"/>
+		FROM cms_article a
+		<include refid="cmsNormalArticleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and a.module in ("0000000275","0000000278") and st.is_currentsite=1
+			<if test="title != null and title != ''">
+				AND a.title LIKE
+				<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="publishStatus != null and publishStatus != ''">
+				AND a.publish_status = #{publishStatus}
+			</if>
+			<if test="categoryId != null and categoryId != ''">
+				AND a.category_id = #{categoryId}
+			</if>
+			<if test="prType != null and prType != ''">
+				AND a.pr_type = #{prType}
+			</if>
+
+			<if test="articlepulishStartDate != null and articlepulishStartDate != ''">
+				AND a.articlepulish_date >= #{articlepulishStartDate}
+			</if>
+			<if test="articlepulishEndDate != null and articlepulishEndDate != ''">
+				AND a.articlepulish_date <![CDATA[<=]]> #{articlepulishEndDate}
+			</if>
+			<if test="publishStartdate != null and publishStartdate != ''">
+				AND a.deadline >= #{publishStartdate}
+			</if>
+			<if test="publishEnddate != null and publishEnddate != ''">
+				AND a.deadline <![CDATA[<=]]> #{publishEnddate}
+			</if>
+			<if test="ids != null and ids != ''">
+				AND a.id in (${ids})
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.posid DESC, a.top DESC,a.sort DESC,a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="findAllList" resultType="CmsArticle">
+		SELECT
+			<include refid="cmsArticleColumns"/>
+		FROM cms_article a
+		<include refid="cmsArticleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getCmsArticleByIds" resultType="CmsArticle">
+		SELECT
+			<include refid="cmsArticleColumns"/>
+		FROM cms_article a
+		<include refid="cmsArticleJoins"/>
+		<where>
+			a.del_flag = '0' AND
+			a.id in
+			<foreach item="id" collection="relationIdList" separator="," open="("
+					 close=")">
+				#{id}
+			</foreach>
+		</where>
+	</select>
+
+	<select id="getCmsArticleByPrIds" resultType="CmsArticle">
+		SELECT
+			<include refid="cmsArticleColumns"/>
+		FROM cms_article a
+		<include refid="cmsArticleJoins"/>
+		<where>
+			a.del_flag = '0' AND
+			a.pr_id in
+			<foreach item="id" collection="idsList" separator="," open="("
+					 close=")">
+				#{id}
+			</foreach>
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="CmsArticle"  >
+		<selectKey resultType="String" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		INSERT INTO cms_article(
+
+			category_id,
+			module,
+			pr_id,
+			pr_type,
+			keywords,
+			video,
+			image,
+			title,
+			views,
+			is_link,
+			link,
+			isshowlink,
+			description,
+			isshowdescription,
+			thumbnail,
+			writer,
+			isshowwriter,
+			articlepulish_date,
+			isshowpublishdate,
+			publish_status,
+			publish_startdate,
+			publish_enddate,
+			publishhforever,
+			sort,
+			top,
+			deadline,
+			posid,
+			posidweight,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		) VALUES (
+
+			#{categoryId},
+			#{module},
+			#{prId},
+			#{prType},
+			#{keywords},
+			#{video},
+			#{image},
+			#{title},
+			#{views},
+			#{isLink},
+			#{link},
+			#{isshowlink},
+			#{description},
+			#{isshowdescription},
+			#{thumbnail},
+			#{writer},
+			#{isshowwriter},
+			#{articlepulishDate},
+			#{isshowpublishdate},
+			#{publishStatus},
+			#{publishStartdate},
+			#{publishEnddate},
+			#{publishhforever},
+			#{sort},
+			#{top},
+			#{deadline},
+			#{posid},
+			#{posidweight},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		)
+
+	</insert>
+
+	<update id="update">
+		UPDATE cms_article SET
+			category_id = #{categoryId},
+			module = #{module},
+			pr_id = #{prId},
+			pr_type = #{prType},
+			keywords = #{keywords},
+			video = #{video},
+			image = #{image},
+			title = #{title},
+
+			is_link = #{isLink},
+			link = #{link},
+			isshowlink = #{isshowlink},
+			description = #{description},
+			isshowdescription = #{isshowdescription},
+			thumbnail = #{thumbnail},
+			writer = #{writer},
+			isshowwriter = #{isshowwriter},
+			articlepulish_date = #{articlepulishDate},
+			isshowpublishdate = #{isshowpublishdate},
+			publish_status = #{publishStatus},
+			publish_startdate = #{publishStartdate},
+			publish_enddate = #{publishEnddate},
+			publishhforever = #{publishhforever},
+			sort = #{sort},
+			top = #{top},
+			deadline = #{deadline},
+			posid = #{posid},
+			posidweight = #{posidweight},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateSortArticle">
+		UPDATE cms_article SET
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+
+
+	<update id="updateTopArticle">
+		UPDATE cms_article SET
+			top = #{top}
+		WHERE id = #{id}
+	</update>
+
+
+	<update id="delete">
+		UPDATE cms_article SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM cms_article WHERE id = #{id}
+	</update>
+
+	<update id="udpateTop">
+		update cms_article
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="top =case" suffix="end,">
+				<foreach item="item" collection="cmsArticleList" index="index">
+					when id=#{item.id} then #{item.top}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="cmsArticleList" separator="," open="("
+				 close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+
+	<update id="udpateSort">
+		update cms_article
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="sort =case" suffix="end,">
+				<foreach item="item" collection="cmsArticleList" index="index">
+					when id=#{item.id} then #{item.sort}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="cmsArticleList" separator="," open="("
+				 close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="udpatePublishStatus">
+		update cms_article
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="publish_status =case" suffix="end,">
+				<foreach item="item" collection="cmsArticleList" index="index">
+					when id=#{item.id} then #{item.publishStatus}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="cmsArticleList" separator="," open="("
+				 close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="udpateDelFlag">
+		update cms_article
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="del_flag =case" suffix="end,">
+				<foreach item="item" collection="cmsArticleList" index="index">
+					when id=#{item.id} then #{item.delFlag}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="cmsArticleList" separator="," open="("
+				 close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+
+	<insert id="savePublishProject">
+		INSERT INTO cms_article(
+			category_id,
+			module,
+			pr_id,
+			title,
+			pr_type,
+			publishhforever,
+			publish_status,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		) VALUES
+		<foreach collection="cmsArticleList" item="item" index="index"
+				 separator=",">
+			(
+			#{item.categoryId},
+			#{item.module},
+			#{item.prId},
+			#{item.title},
+			#{item.prType},
+			#{item.publishhforever},
+			#{item.publishStatus},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<select id="articleInCommentList"  resultType="CmsArticle">
+		SELECT
+		<include refid="cmsArticleColumns"/>
+		from cms_article a
+		<include refid="cmsArticleJoins"/>
+
+
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and a.id in (SELECT DISTINCT content_id from cms_conmment m where m.del_flag=0)
+			<if test="title != null and title != ''">
+				AND a.title LIKE
+				<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="publishStatus != null and publishStatus != ''">
+				AND a.publish_status = #{publishStatus}
+			</if>
+			<if test="categoryId != null and categoryId != ''">
+				AND a.category_id = #{categoryId}
+			</if>
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.top desc, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<update id="delPl" parameterType="java.util.List">
+		UPDATE cms_article SET del_flag = '1'
+		where id in
+		<foreach collection="idList" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+
+	<update id="updateHitsAddOne">
+		update cms_article set
+		views = views+1
+		WHERE id = #{id}
+	</update>
+
+
+	<update id="updateTopPassDate">
+		update cms_article
+		set top ='0'
+		where SYSDATE() > deadline and del_flag ='0'
+	</update>
+
+	<update id="updatePubLishPassDate">
+		update cms_article
+		set publish_status ='0'
+		where publishhforever='0'
+		and SYSDATE() > publish_enddate and del_flag ='0'
+	</update>
+
+</mapper>

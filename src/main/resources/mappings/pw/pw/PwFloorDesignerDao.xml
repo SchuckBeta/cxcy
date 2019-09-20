@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwFloorDesignerDao">
+
+	<sql id="pwFloorDesignerColumns">
+		a.id AS "id",
+		a.type AS "type",
+		a.name AS "name",
+		a.x AS "x",
+		a.y AS "y",
+		a.floorid AS "floorId",
+		a.roomid AS "roomId",
+		a.isclickable AS "isclickable",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="pwFloorDesignerJoins">
+	</sql>
+
+	<select id="get" resultType="PwFloorDesigner">
+		SELECT
+			<include refid="pwFloorDesignerColumns"/>
+		FROM pw_floor_designer a
+		<include refid="pwFloorDesignerJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByFloorid" resultType="PwFloorDesigner">
+		SELECT
+			<include refid="pwFloorDesignerColumns"/>
+		FROM pw_floor_designer a
+		<include refid="pwFloorDesignerJoins"/>
+		WHERE a.floorid = #{floorid}
+	</select>
+
+	<select id="findList" resultType="PwFloorDesigner">
+		SELECT
+			<include refid="pwFloorDesignerColumns"/>
+		FROM pw_floor_designer a
+		<include refid="pwFloorDesignerJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="floorId != null and floorId != ''">
+				AND a.floorid = #{floorId}
+			</if>
+			<if test="roomId != null and roomId != ''">
+				AND a.roomid = #{roomId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="PwFloorDesigner">
+		SELECT
+			<include refid="pwFloorDesignerColumns"/>
+		FROM pw_floor_designer a
+		<include refid="pwFloorDesignerJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pw_floor_designer(
+			id,
+			type,
+			name,
+			x,
+			y,
+			floorid,
+			roomid,
+			isclickable,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{type},
+			#{name},
+			#{x},
+			#{y},
+			#{floorId},
+			#{roomId},
+			#{isclickable},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertAll">
+		INSERT INTO pw_floor_designer(
+		id,
+		type,
+		name,
+		x,
+		y,
+		floorid,
+		roomid,
+		isclickable,
+		update_date,
+		update_by,
+		create_date,
+		create_by,
+		remarks,
+		del_flag
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+				 separator=",">
+			(
+			#{item.id},
+			#{item.type},
+			#{item.name},
+			#{item.x},
+			#{item.y},
+			#{item.floorId},
+			#{item.roomId},
+			#{item.isclickable},
+			#{item.updateDate},
+			#{item.updateBy.id},
+			#{item.createDate},
+			#{item.createBy.id},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+
+
+
+	<update id="update">
+		UPDATE pw_floor_designer SET
+			type = #{type},
+			name = #{name},
+			x = #{x},
+			y = #{y},
+			floorid = #{floorId},
+			roomid = #{roomId},
+			isclickable = #{isclickable},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE  FROM pw_floor_designer
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteAll">
+		DELETE FROM pw_floor_designer
+			where id in
+			<foreach collection="ids" item="id" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+
+</mapper>

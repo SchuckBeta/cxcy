@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.project.dao.ProjectCloseDao">
+    
+	<sql id="projectCloseColumns">
+		a.id AS "id",
+		a.project_id AS "projectId",
+		a.suggest AS "suggest",
+		a.suggest_date AS "suggestDate",
+		a.status AS "status",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="projectCloseJoins">
+	</sql>
+    
+	<select id="get" resultType="ProjectClose">
+		SELECT 
+			<include refid="projectCloseColumns"/>
+		FROM project_close a
+		<include refid="projectCloseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ProjectClose">
+		SELECT 
+			<include refid="projectCloseColumns"/>
+		FROM project_close a
+		<include refid="projectCloseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProjectClose">
+		SELECT 
+			<include refid="projectCloseColumns"/>
+		FROM project_close a
+		<include refid="projectCloseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO project_close(
+			id,
+			project_id,
+			suggest,
+			suggest_date,
+			create_date,
+			create_by,
+			update_date,
+			update_by,
+			status,
+			del_flag
+		) VALUES (
+			#{id},
+			#{projectId},
+			#{suggest},
+			#{suggestDate},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{status},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE project_close SET 	
+			project_id = #{projectId},
+			suggest = #{suggest},
+			suggest_date = #{suggestDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE project_close SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+		<select id="getByProjectId" resultType="ProjectClose" parameterType="java.lang.String">
+		SELECT 
+			<include refid="projectCloseColumns"/>
+		FROM project_close a
+		<where>
+			a.project_id = #{pid}
+		</where>
+		order by a.create_date desc limit 1		
+	</select>
+</mapper>

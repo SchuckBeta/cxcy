@@ -1,0 +1,52 @@
+html,body{
+    font-family: "微软雅黑";
+}
+ul,li{
+    list-style: none;
+    padding:0px;
+    margin:0px;
+}
+.content-wrap{
+    padding:0px 20px;
+}
+.breadcrumbs h3{
+    height: 40px;
+    line-height: 40px;
+    background: url(../images/bread.png) no-repeat left center ;
+    color:#fff;
+    font-size: 12px;
+    padding-left: 10px;
+}
+.logo-wrap{
+    height: 61px;
+    width: 186px;
+    padding-left: 15px;
+}
+.logo-wrap img{
+    display: block;
+    height: 61px;
+    width:186px;
+}
+.product-desc{
+    margin:0;
+    padding:10px 0px;
+}
+.product-name,.product-beta,.product-own{
+    height: 30px;
+    line-height: 30px;
+}
+.footer ul{
+    overflow: hidden;
+    background: #ccc;
+    padding:10px;
+}
+.footer ul li{
+    float: left;
+    margin-right: 50px;
+}
+.footer ul li img{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    margin-right: 10px;
+}

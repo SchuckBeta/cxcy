@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.scr.dao.ScoRapplyMemberDao">
+
+	<sql id="scoRapplyMemberColumns">
+		a.id AS "id",
+		a.app_id AS "apply.id",
+		a.uid AS "user.id",
+		a.rate AS "rate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="scoMemberListColumns">
+		a.id AS "id",
+		a.app_id AS "apply.id",
+		a.uid AS "user.id",
+		u.`name` AS "user.name",
+		u.`no` AS "user.no",
+		u.email AS "user.email",
+		u.mobile AS "user.mobile",
+		u.photo AS "user.photo",
+		o.`name` AS "user.office.name",
+		o1.`name` AS "user.professional",
+		a.rate AS "rate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		sr.val AS "scoRapplyPb.val",
+		sr.score AS "scoRapplyPb.score"
+	</sql>
+
+	<sql id="scoMemberListJoins">
+		LEFT JOIN sys_user u on a.uid = u.id and u.del_flag=0
+		LEFT JOIN sys_office o on o.id = u.office_id and o.del_flag=0
+		LEFT JOIN sys_office o1 on o1.id = u.professional and o1.del_flag=0
+		LEFT JOIN sco_rapply_pb sr on sr.uid = a.uid and sr.app_id = a.app_id
+	</sql>
+
+
+	<sql id="scoRapplyMemberJoins">
+		LEFT JOIN sys_user u on a.uid = u.id and u.del_flag=0
+	</sql>
+
+	<select id="get" resultType="ScoRapplyMember">
+		SELECT
+			<include refid="scoRapplyMemberColumns"/>
+		FROM sco_rapply_member a
+		<include refid="scoRapplyMemberJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="ajaxValidScoMemberList" resultType="com.oseasy.scr.modules.scr.entity.ScoRapplyValid">
+		SELECT
+		a.id AS "id",
+		a.app_id AS "apply.id",
+		a.uid AS "user.id",
+		a.rate AS "rate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+		from  sco_rapply_member a
+		LEFT JOIN sco_rapply r on a.app_id=r.id and r.del_flag=0
+		where a.del_flag=0 and a.uid=#{user.id} and r.uid !=#{user.id} and r.rdid=#{apply.rdetail.id}
+	</select>
+
+	<select id="ajaxValidScoRapplyList" resultType="com.oseasy.scr.modules.scr.entity.ScoRapplyValid">
+		SELECT
+		m.id AS "id",
+		m.id AS "apply.id",
+		m.uid AS "user.id",
+		m.create_by AS "createBy.id",
+		m.create_date AS "createDate",
+		m.update_by AS "updateBy.id",
+		m.update_date AS "updateDate",
+		m.remarks AS "remarks",
+		m.del_flag AS "delFlag"
+		FROM
+			sco_rapply m
+		LEFT JOIN sco_rule_detail d ON d.id = m.rdid
+		where m.del_flag=0 and d.maxorsum=#{apply.rdetail.maxOrSum} and m.uid=#{user.id} and m.rdid=#{apply.rdetail.id}
+
+	</select>
+
+	<select id="findScoMemberList" resultType="ScoRapplyMember">
+		SELECT
+		<include refid="scoMemberListColumns"/>
+		FROM sco_rapply_member a
+		<include refid="scoMemberListJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="apply != null and apply.id != null and apply.id != ''">
+				AND a.app_id  = #{apply.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findList" resultType="ScoRapplyMember">
+		SELECT
+			<include refid="scoRapplyMemberColumns"/>
+		FROM sco_rapply_member a
+		<include refid="scoRapplyMemberJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="apply != null and apply.id != null and apply.id != ''">
+				AND a.app_id  = #{apply.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ScoRapplyMember">
+		SELECT
+			<include refid="scoRapplyMemberColumns"/>
+		FROM sco_rapply_member a
+		<include refid="scoRapplyMemberJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sco_rapply_member(
+			id,
+			app_id,
+			uid,
+			rate,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{apply.id},
+			#{user.id},
+			#{rate},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO sco_rapply_member(
+			id,
+			app_id,
+			uid,
+			rate,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.appId},
+			#{item.uid},
+			#{item.rate},
+			#{item.createBy.id},
+			#{item.createDate},
+			#{item.updateBy.id},
+			#{item.updateDate},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE sco_rapply_member SET
+			app_id = #{apply.id},
+			uid = #{user.id},
+			rate = #{rate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			del_flag=#{delFlag}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE sco_rapply_member
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="app_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.appId}
+				</foreach>
+			</trim>
+			<trim prefix="uid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.uid}
+				</foreach>
+			</trim>
+			<trim prefix="rate =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rate}
+				</foreach>
+			</trim>
+			<trim prefix="update_by =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateBy.id}
+				</foreach>
+			</trim>
+			<trim prefix="update_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateDate}
+				</foreach>
+			</trim>
+			<trim prefix="remarks =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.remarks}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+
+	<update id="delete">
+		UPDATE sco_rapply_member SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteRapplyMembers">
+		UPDATE sco_rapply_member SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE app_id = #{apply.id}
+	</update>
+
+
+	<update id="deletePL">
+		UPDATE sco_rapply_member SET
+			del_flag = #{DEL_FLAG_DELETE}
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sco_rapply_member WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM sco_rapply_member WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM sco_rapply_member
+	</update>
+</mapper>

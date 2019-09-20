@@ -1,0 +1,2050 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.promodel.dao.ProModelDao">
+
+	<resultMap id="exportMap" type="com.oseasy.pro.modules.workflow.vo.ExpProModelVo">
+		<result column="id" property="id"></result>
+		<result column="p_name" property="pName"></result>
+		<result column="year" property="year"></result>
+		<result column="stage" property="stage"></result>
+		<result column="pro_type" property="proType"></result>
+		<result column="type" property="type"></result>
+		<result column="pro_category" property="proCategory"></result>
+		<result column="level" property="level"></result>
+		<result column="impdata" property="impdata"></result>
+		<result column="short_name" property="shortName"></result>
+		<result column="teamId" property="teamId"></result>
+		<result column="teamName" property="teamName"></result>
+		<result column="office_name" property="officeName"></result>
+		<result column="introduction" property="introduction"></result>
+		<association property="hasfile" javaType="string" column="proModelId"
+			select="com.oseasy.com.fileserver.modules.attachment.dao.SysAttachmentDao.checkHasFile"></association>
+		<collection property="teamLeader" ofType="com.oseasy.pro.modules.workflow.vo.TeamVo">
+			<result column="leader.name" property="name"></result>
+			<result column="leader.no" property="no"></result>
+			<result column="leader.professional" property="profes"></result>
+			<result column="leader.enterDate" property="enter"></result>
+			<result column="leader.graduation" property="outy"></result>
+			<result column="leader.education" property="xueli"></result>
+			<result column="leader.id_no" property="idnum"></result>
+			<result column="leader.mobile" property="mobile"></result>
+			<result column="leader.email" property="email"></result>
+		</collection>
+
+		<collection property="teamOthers"
+			ofType="com.oseasy.pro.modules.workflow.vo.TeamVo" column="teamId"
+			select="com.oseasy.pro.modules.promodel.dao.ProTeamUserHistoryDao.findStudentByTeamId"></collection>
+
+		<collection property="teacherVos"
+			ofType="com.oseasy.pro.modules.workflow.vo.TeacherVo" column="teamId"
+			select="com.oseasy.pro.modules.promodel.dao.ProTeamUserHistoryDao.findTeacherByTeamId"></collection>
+	</resultMap>
+
+	<sql id="proModelColumns">
+		a.id AS "id",
+		a.actyw_id AS "actYwId",
+		a.p_name AS "pName",
+		a.short_name AS "shortName",
+		a.declare_id AS "declareId",
+		a.pro_type AS "proType",
+		a.pro_category AS "proCategory",
+		a.type AS "type",
+		a.is_send AS "isSend",
+		a.step AS "step",
+		a.level AS "level",
+		a.introduction AS "introduction",
+		a.financing_stat AS
+		"financingStat",
+		a.final_status AS "finalStatus",
+		a.end_gnode_id AS "endGnodeId",
+		a.end_gnode_vesion AS "endGnodeVesion",
+		a.state AS "state",
+		a.team_id AS "teamId",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.proc_ins_id AS "procInsId",
+		a.pro_mark AS "proMark",
+		a.source AS "source",
+		a.competition_number AS "competitionNumber",
+		a.project_source AS "projectSource",
+		a.sub_time AS "subTime",
+		a.grade AS "grade",
+		a.g_score AS "gScore",
+		a.year AS "year",
+		a.final_result AS "finalResult",
+		a.sub_status AS "subStatus",
+		a.stage AS "stage",
+		a.impdata AS "impdata",
+		a.project_level_dict AS "projectLevelDict",
+		a.gc_track AS "gcTrack",
+		a.achievement_tf as achievementTf,
+		a.achievement_user as achievementUser,
+		a.co_creation as coCreation,
+		a.idea_stage as ideaStage,
+		a.belongs_field as belongsField,
+		a.bank_name as bankName,
+		a.bank_number as bankNumber,
+		a.ranking,
+
+
+		sa.id AS "logo.id",
+		sa.type AS "logo.ftype",
+		sa.file_step AS "logo.ffileStep",
+		sa.uid AS "logo.uid",
+		sa.url AS "logo.url",
+		sa.name AS "logo.name",
+		sa.size AS "logo.size",
+		sa.gnode_id AS "logo.gnodeId",
+		sa.suffix AS "logo.suffix",
+		sa.update_date AS "logo.updateDate",
+		sa.update_by AS "logo.updateBy.id",
+		sa.create_date AS "logo.createDate",
+		sa.create_by AS "logo.createBy.id",
+
+		yw.id AS "actYw.id",
+		yw.rel_id AS "actYw.relId",
+		yw.group_id AS "actYw.groupId",
+		yw.flow_id AS "actYw.flowId",
+		yw.deployment_id AS "actYw.deploymentId",
+		yw.is_deploy AS "actYw.isDeploy",
+		yw.status AS "status",
+		yw.show_time AS "actYw.showTime",
+		yw.key_Type AS "actYw.keyType",
+
+		pp.id AS "actYw.proProject.id",
+		pp.menu_rid AS "actYw.proProject.menuRid",
+		pp.category_rid AS "actYw.proProject.categoryRid",
+		pp.content AS "actYw.proProject.content",
+		pp.project_name AS "actYw.proProject.projectName",
+		pp.project_mark AS "actYw.proProject.projectMark",
+		pp.state AS "actYw.proProject.state",
+		pp.pro_type AS "actYw.proProject.proType",
+		pp.type AS "actYw.proProject.type",
+		pp.pro_category AS "actYw.proProject.proCategory",
+		pp.level AS "actYw.proProject.level",
+		pp.final_status AS "actYw.proProject.finalStatus",
+		pp.start_date AS "actYw.proProject.startDate",
+		pp.end_date AS "actYw.proProject.endDate",
+		pp.node_state AS "actYw.proProject.nodeState",
+		pp.node_start_date AS "actYw.proProject.nodeStartDate",
+		pp.node_end_date AS "actYw.proProject.nodeEndDate",
+		pp.update_date AS "actYw.proProject.updateDate",
+		pp.update_by AS "actYw.proProject.updateBy.id",
+		pp.create_date AS "actYw.proProject.createDate",
+		pp.create_by AS "actYw.proProject.createBy.id",
+		pp.del_flag AS "actYw.proProject.delFlag",
+
+		u.id AS "deuser.id",
+		u.company_id AS "deuser.company.id",
+		u.office_id AS "deuser.office.id",
+		u.login_name AS "deuser.loginName",
+		u.password AS "deuser.password",
+		u.no AS "deuser.no",
+		u.sex AS "deuser.sex",
+		u.name AS "deuser.name",
+		u.email AS "deuser.email",
+		u.phone AS "deuser.phone",
+		u.mobile AS "deuser.mobile",
+		u.user_type AS "deuser.userType",
+		u.login_ip AS "deuser.loginIp",
+		u.login_date AS "deuser.loginDate",
+		u.remarks AS "deuser.remarks",
+		u.login_flag AS "deuser.loginFlag",
+		u.photo AS "deuser.photo",
+		u.professional AS "deuser.professional",
+		u.professionalName AS "deuser.professionalName",
+		u.school AS "deuser.school",
+		u.create_by AS "deuser.createBy.id",
+		u.create_date AS "deuser.deuser.name",
+		u.update_by AS "deuser.updateBy.id",
+		u.update_date AS "deuser.updateDate",
+		u.del_flag AS "deuser.delFlag",
+		u.id_type AS "deuser.idType",
+		u.birthday AS "deuser.birthday",
+		u.id_no AS "deuser.idNumber",
+		u.national AS "deuser.national",
+		u.political AS "deuser.political",
+		u.country AS "deuser.country",
+		u.qq AS "deuser.qq",
+		u.education AS "deuser.education",
+		u.degree AS "deuser.degree",
+		u.views AS "deuser.views",
+		u.likes AS "deuser.likes",
+		o6.name AS "deuser.office.name",
+		op.id AS "deuser.subject.id",
+		op.name AS "deuser.subject.name",
+
+		t.name AS "team.name",
+		t.number AS "team.number",
+		t.member_num AS "team.memberNum",
+		t.first_teacher AS "team.firstTeacher",
+		t.sch_teacher_names AS "team.schTeacherNames",
+		t.ent_teacher_names AS "team.entTeacherNames"
+	</sql>
+
+	<sql id="proModelJoins">
+		LEFT JOIN act_yw yw ON yw.id = a.actyw_id
+		LEFT JOIN pro_project pp ON pp.id = yw.rel_id
+		LEFT JOIN sys_user u ON u.id = a.declare_id
+		LEFT JOIN sys_office o6 ON o6.id = u.office_id
+		LEFT JOIN sys_office op ON op.id = u.professional
+		LEFT JOIN team t ON t.id = a.team_id
+		LEFT JOIN sys_attachment sa ON sa.uid = a.id and sa.type='11'
+		and sa.file_step='1101'
+	</sql>
+
+	<!-- 项目组成员 -->
+	<sql id="snamesColumns">
+		(SELECT
+			GROUP_CONCAT(u. NAME SEPARATOR '/')
+		FROM
+			team_user_history t
+		LEFT JOIN sys_user u ON t.user_id = u.id
+		AND t.user_type = '1'
+		WHERE
+			t.pro_id = a.id)
+	</sql>
+	<!-- 指导老师-->
+	<sql id="tnamesColumns">
+		(SELECT
+			GROUP_CONCAT(u. NAME SEPARATOR '/')
+		FROM
+			team_user_history t
+		LEFT JOIN sys_user u ON t.user_id = u.id
+		AND t.user_type = '2'
+		WHERE
+			t.pro_id = a.id)
+	</sql>
+
+	<select id="getExcellentById" resultType="ProModel" parameterType="java.lang.String">
+		SELECT
+		a.id AS id,
+		a.team_id AS teamId,
+		a.introduction,
+		a.p_name AS "pName",
+		a.declare_id AS "declareId",
+		a.year AS year,
+		s.label AS sourceName,
+		<include refid="snamesColumns" />
+		AS snames,
+		<include refid="tnamesColumns" />
+		AS tnames
+		FROM pro_model a
+		LEFT JOIN sys_dict s on a.type=s.value and s.type='project_style'
+		<where>
+			a.del_flag = '0' AND a.id = #{id}
+		</where>
+	</select>
+
+	<select id="getGcontestExcellentById" resultType="ProModel" parameterType="java.lang.String">
+		SELECT
+		a.id AS id,
+		a.team_id AS teamId,
+		a.introduction,
+		a.p_name AS "pName",
+		a.declare_id AS "declareId",
+		a.year AS year,
+		s.label AS sourceName,
+		<include refid="snamesColumns" />
+		AS snames,
+		<include refid="tnamesColumns" />
+		AS tnames
+		FROM pro_model a
+		LEFT JOIN sys_dict s on a.type=s.value and s.type='competition_type'
+		<where>
+			a.del_flag = '0' AND a.id = #{id}
+		</where>
+	</select>
+
+	<select id="get" resultType="ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		WHERE a.del_flag = '0'
+		and a.id=#{id}
+	</select>
+
+	<select id="getWith" resultType="ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		WHERE a.del_flag = '0'
+		and a.id=#{id}
+	</select>
+
+	<select id="getByName" resultType="ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		WHERE a.del_flag = '0'
+		AND a.p_name = #{pName} AND a.pro_type=#{proType} AND a.type=#{type}
+	</select>
+
+	<select id="getByProInsId" resultType="ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		WHERE a.del_flag = '0'
+		and a.proc_ins_id = #{procInsId}
+	</select>
+
+	<select id="getByProModel" resultType="ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="actYwId != null and actYwId != ''">
+			AND a.actyw_Id = #{actYwId}
+		</if>
+		<if test="declareId != null and declareId != ''">
+			AND a.declare_id = #{declareId}
+		</if>
+	</select>
+
+	<select id="findIsOverHaveData" resultType="ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		WHERE a.del_flag = '0'
+		<if test="actYwId != null and actYwId != ''">
+			AND a.actyw_Id = #{actYwId}
+		</if>
+		<if test="state != null and state != ''">
+			AND (a.state != '1' || a.state is null)
+		</if>
+
+	</select>
+
+	<select id="findIsHaveData" resultType="ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		WHERE a.del_flag = '0'
+		<if test="actYwId != null and actYwId != ''">
+			AND a.actyw_Id = #{actYwId}
+		</if>
+	</select>
+
+	<select id="getListByGroupId" resultType="ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		WHERE a.del_flag = '0' and yw.is_pre_release != '1'
+		<if test="groupId != null and groupId != ''">
+			AND yw.group_id = #{groupId}
+		</if>
+	</select>
+
+	<select id="getPromodelList" resultType="ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="actYwId != null and actYwId != ''">
+			AND a.actyw_Id = #{actYwId}
+		</if>
+	</select>
+
+
+	<select id="findListByIds" resultType="ProModel">
+		SELECT distinct
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		LEFT JOIN pro_gtasks o on a.id = o.id and a.tenant_id = o.tenantId
+		<where>
+			a.del_flag = 0  and a.sub_status = 1
+			<if test="gnodeIdList != null and gnodeIdList != ''">
+				AND FIND_IN_SET(o.gnodeId,#{gnodeIdList})
+			</if>
+			<if test="competitionNumber != null and competitionNumber != ''">
+				AND a.competition_number = #{competitionNumber}
+			</if>
+
+			<if test="year != null and year != ''">
+				AND a.year = #{year}
+			</if>
+			<if test="pName != null and pName != ''">
+				AND a.p_name LIKE concat('%',#{pName},'%')
+			</if>
+			<if test="proCategoryList!= null and proCategoryList.size()>0">
+				AND a.pro_category in
+				<foreach item="item" collection="proCategoryList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="projectLevelList!= null and projectLevelList.size()>0">
+				AND a.final_status in
+				<foreach item="item" collection="projectLevelList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+
+			<if test="officeIdList!= null and officeIdList.size()>0">
+				AND o6.id in
+				<foreach item="item" collection="officeIdList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="beginDate != null ">
+				AND a.sub_time &gt;= #{beginDate}
+			</if>
+			<if test="endDate != null">
+				AND a.sub_time &lt;=  #{endDate}
+			</if>
+
+			<if test="queryStr != null and queryStr != ''">
+				AND (
+				a.p_name LIKE concat('%',#{queryStr},'%')
+				OR a.competition_number LIKE concat('%',#{queryStr},'%')
+				OR u.name LIKE concat('%',#{queryStr},'%')
+				OR <include refid="snamesColumns" /> LIKE concat('%',#{queryStr},'%')
+				OR <include refid="tnamesColumns" /> LIKE concat('%',#{queryStr},'%')
+				)
+			</if>
+			<if test="gcTrack != null and gcTrack != ''">
+				AND a.gc_track =#{gcTrack}
+			</if>
+			<if test="belongsField != null and belongsField != ''">
+				AND a.belongs_field =#{belongsField}
+			</if>
+			<if test="ideaStage != null and ideaStage != ''">
+				AND a.idea_stage =#{ideaStage}
+			</if>
+			<if test="level != null and level != ''">
+				AND a.level =#{level}
+			</if>
+		</where>
+		ORDER BY a.ranking is null,a.ranking asc,a.sub_time desc
+	</select>
+
+
+	<select id="findListByIdsOfSt" resultType="ProModel">
+		SELECT distinct
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		LEFT JOIN st_test o on a.id = o.id and a.tenant_id = o.tenantId
+		<where>
+			a.del_flag = 0  and a.sub_status = 1 and yw.id =#{actYwId}
+			<if test="roleFlag != null and roleFlag == 1">
+				AND o6.id = #{officeId}
+			</if>
+			<if test="roleFlag != null and roleFlag == 2">
+				AND (o.ASSIGNEE =#{professor} or o.CANDIDATE = #{professor})
+			</if>
+			<if test="gnodeIdList != null and gnodeIdList != ''">
+				AND FIND_IN_SET(o.TASK_DEF_KEY_,#{gnodeIdList})
+			</if>
+			<if test="competitionNumber != null and competitionNumber != ''">
+				AND a.competition_number = #{competitionNumber}
+			</if>
+
+			<if test="year != null and year != ''">
+				AND a.year = #{year}
+			</if>
+			<if test="pName != null and pName != ''">
+				AND a.p_name LIKE concat('%',#{pName},'%')
+			</if>
+			<if test="proCategoryList!= null and proCategoryList.size()>0">
+				AND a.pro_category in
+				<foreach item="item" collection="proCategoryList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="projectLevelList!= null and projectLevelList.size()>0">
+				AND a.final_status in
+				<foreach item="item" collection="projectLevelList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+
+			<if test="officeIdList!= null and officeIdList.size()>0">
+				AND o6.id in
+				<foreach item="item" collection="officeIdList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="beginDate != null ">
+				AND a.sub_time &gt;= #{beginDate}
+			</if>
+			<if test="endDate != null">
+				AND a.sub_time &lt;=  #{endDate}
+			</if>
+
+			<if test="queryStr != null and queryStr != ''">
+				AND (
+				a.p_name LIKE concat('%',#{queryStr},'%')
+				OR a.competition_number LIKE concat('%',#{queryStr},'%')
+				OR u.name LIKE concat('%',#{queryStr},'%')
+				OR <include refid="snamesColumns" /> LIKE concat('%',#{queryStr},'%')
+				OR <include refid="tnamesColumns" /> LIKE concat('%',#{queryStr},'%')
+				)
+			</if>
+			<if test="gcTrack != null and gcTrack != ''">
+				AND a.gc_track =#{gcTrack}
+			</if>
+			<if test="belongsField != null and belongsField != ''">
+				AND a.belongs_field =#{belongsField}
+			</if>
+			<if test="ideaStage != null and ideaStage != ''">
+				AND a.idea_stage =#{ideaStage}
+			</if>
+			<if test="level != null and level != ''">
+				AND a.level =#{level}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.ranking ,a.sub_time desc
+			</otherwise>
+		</choose>
+
+	</select>
+
+
+	<select id="findListByIdsOfBefore" resultType="ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		<where>
+			a.del_flag = 0 and yw.id =#{actYwId} and a.sub_status = 1
+			<if test="roleFlag != null and roleFlag == 1">
+				AND o6.id = #{officeId}
+			</if>
+			<if test="competitionNumber != null and competitionNumber != ''">
+				AND a.competition_number = #{competitionNumber}
+			</if>
+
+			<if test="year != null and year != ''">
+				AND a.year = #{year}
+			</if>
+			<if test="pName != null and pName != ''">
+				AND a.p_name LIKE concat('%',#{pName},'%')
+			</if>
+			<if test="proCategoryList!= null and proCategoryList.size()>0">
+				AND a.pro_category in
+				<foreach item="item" collection="proCategoryList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="projectLevelList!= null and projectLevelList.size()>0">
+				AND a.final_status in
+				<foreach item="item" collection="projectLevelList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+
+			<if test="officeIdList!= null and officeIdList.size()>0">
+				AND o6.id in
+				<foreach item="item" collection="officeIdList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="beginDate != null ">
+				AND a.sub_time &gt;= #{beginDate}
+			</if>
+			<if test="endDate != null">
+				AND a.sub_time &lt;=  #{endDate}
+			</if>
+
+			<if test="queryStr != null and queryStr != ''">
+				AND (
+				a.p_name LIKE concat('%',#{queryStr},'%')
+				OR a.competition_number LIKE concat('%',#{queryStr},'%')
+				OR u.name LIKE concat('%',#{queryStr},'%')
+				OR <include refid="snamesColumns" /> LIKE concat('%',#{queryStr},'%')
+				OR <include refid="tnamesColumns" /> LIKE concat('%',#{queryStr},'%')
+				)
+			</if>
+			<if test="gcTrack != null and gcTrack != ''">
+				AND a.gc_track =#{gcTrack}
+			</if>
+			<if test="belongsField != null and belongsField != ''">
+				AND a.belongs_field =#{belongsField}
+			</if>
+			<if test="ideaStage != null and ideaStage != ''">
+				AND a.idea_stage =#{ideaStage}
+			</if>
+			<if test="level != null and level != ''">
+				AND a.level =#{level}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.ranking ,a.sub_time desc
+			</otherwise>
+		</choose>
+
+	</select>
+
+
+	<select id="findListByIdsOfProfessor" resultType="ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		LEFT JOIN act_yw_gassign o on a.id = o.promodel_id and o.del_flag ='0'
+		<where>
+			a.del_flag = 0 and yw.id =#{actYwId} and a.sub_status = 1 and o.yw_id = #{actYwId}
+
+			<if test="roleFlag != null and roleFlag == 2">
+				AND o.rev_user_id =#{professor}
+			</if>
+			<if test="competitionNumber != null and competitionNumber != ''">
+				AND a.competition_number = #{competitionNumber}
+			</if>
+
+			<if test="year != null and year != ''">
+				AND a.year = #{year}
+			</if>
+			<if test="pName != null and pName != ''">
+				AND a.p_name LIKE concat('%',#{pName},'%')
+			</if>
+			<if test="proCategoryList!= null and proCategoryList.size()>0">
+				AND a.pro_category in
+				<foreach item="item" collection="proCategoryList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="projectLevelList!= null and projectLevelList.size()>0">
+				AND a.final_status in
+				<foreach item="item" collection="projectLevelList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+
+			<if test="officeIdList!= null and officeIdList.size()>0">
+				AND o6.id in
+				<foreach item="item" collection="officeIdList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="beginDate != null ">
+				AND a.sub_time &gt;= #{beginDate}
+			</if>
+			<if test="endDate != null">
+				AND a.sub_time &lt;=  #{endDate}
+			</if>
+
+			<if test="queryStr != null and queryStr != ''">
+				AND (
+				a.p_name LIKE concat('%',#{queryStr},'%')
+				OR a.competition_number LIKE concat('%',#{queryStr},'%')
+				OR u.name LIKE concat('%',#{queryStr},'%')
+				OR <include refid="snamesColumns" /> LIKE concat('%',#{queryStr},'%')
+				OR <include refid="tnamesColumns" /> LIKE concat('%',#{queryStr},'%')
+				)
+			</if>
+			<if test="gcTrack != null and gcTrack != ''">
+				AND a.gc_track =#{gcTrack}
+			</if>
+			<if test="belongsField != null and belongsField != ''">
+				AND a.belongs_field =#{belongsField}
+			</if>
+			<if test="ideaStage != null and ideaStage != ''">
+				AND a.idea_stage =#{ideaStage}
+			</if>
+			<if test="level != null and level != ''">
+				AND a.level =#{level}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.ranking ,a.sub_time desc
+			</otherwise>
+		</choose>
+
+	</select>
+
+	<select id="findListByIdsUnAudit" resultType="ProModel">
+
+		SELECT
+		<include refid="proModelColumns" />
+		,ifnull(tempayg.cc,0) cc
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		left join (
+		select ayg.promodel_id,(case when count(ayg.promodel_id)=0
+		then 0 else 1 end ) cc from act_yw_gassign ayg
+		where ayg.del_flag='0'
+		and ayg.gnode_id=#{gnodeId}
+		and ayg.yw_id=#{actYwId}
+		<if test="ids != null and ids.size >0">
+		and (
+		<foreach item="item" collection="ids" separator=" or ">
+			ayg.promodel_id=#{item}
+		</foreach>
+		)
+		</if>
+		group by ayg.promodel_id
+		) tempayg on tempayg.promodel_id=a.id
+		left join
+		act_ru_execution ex
+		on ex.ACT_ID_ like concat('%',#{gnodeId},'%') and
+		ex.PROC_INST_ID_=a.proc_ins_id
+		and ex.IS_ACTIVE_='0' and ex.IS_CONCURRENT_='1'
+		<where>
+			a.del_flag = 0 and ex.ID_ is null
+			<if test="ids != null and ids.size >0">
+				AND a.id in
+				<foreach item="item" collection="ids" open="(" separator=","
+					close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="proCategoryList!= null and proCategoryList.size()>0">
+				AND a.pro_category in
+				<foreach item="item" collection="proCategoryList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="projectLevelList!= null and projectLevelList.size()>0">
+				AND a.final_status in
+				<foreach item="item" collection="projectLevelList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="officeIdList!= null and officeIdList.size()>0">
+				AND o6.id in
+				<foreach item="item" collection="officeIdList" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="beginDate != null ">
+				AND a.sub_time &gt;= #{beginDate}
+			</if>
+			<if test="endDate != null">
+				AND a.sub_time &lt;=  #{endDate}
+			</if>
+			<if test="competitionNumber != null and competitionNumber != ''">
+				AND a.competition_number = #{competitionNumber}
+			</if>
+
+			<if test="year != null and year != ''">
+				AND a.year = #{year}
+			</if>
+			<if test="pName != null and pName != ''">
+				AND a.p_name LIKE concat('%',#{pName},'%')
+			</if>
+			<if test="queryStr != null and queryStr != ''">
+				AND (
+				a.p_name LIKE concat('%',#{queryStr},'%')
+				OR a.competition_number LIKE concat('%',#{queryStr},'%')
+				OR u.name LIKE concat('%',#{queryStr},'%')
+				OR <include refid="snamesColumns" /> LIKE concat('%',#{queryStr},'%')
+				OR <include refid="tnamesColumns" /> LIKE concat('%',#{queryStr},'%')
+				)
+			</if>
+			<if test="hasAssigns == '0'.toString()">
+				and (tempayg.cc is null or tempayg.cc=0)
+			</if>
+			<if test="hasAssigns == '1'.toString()">
+				and tempayg.cc=1
+			</if>
+		</where>
+		<choose>
+		<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+			ORDER BY a.${page.orderBy} ${page.orderByType}
+		</when>
+		<otherwise>
+			ORDER BY a.sub_time DESC
+		</otherwise>
+		</choose>
+
+	</select>
+
+	<select id="findListByIdsAssign" resultType="ProModel">
+			SELECT
+			<include refid="proModelColumns" />
+			,st.school_name AS schoolName
+			,ifnull(tempayg.cc,0) cc
+			FROM pro_model a
+			<include refid="proModelJoins" />
+			left join sys_tenant st on st.tenant_id = a.tenant_id and st.del_flag = '0'
+			left join (
+			select ayg.promodel_id,(case when count(ayg.promodel_id)=0
+			then 0 else 1 end ) cc from act_yw_gassign ayg
+			where ayg.del_flag='0'
+			and ayg.gnode_id=#{gnodeId}
+			and ayg.yw_id=#{actYwId}
+            and ayg.tenant_id =#{tenantId}
+			<if test="ids != null and ids.size >0">
+			and (
+			<foreach item="item" collection="ids" separator=" or ">
+				ayg.promodel_id=#{item}
+			</foreach>
+			)
+			</if>
+			group by ayg.promodel_id
+			) tempayg on tempayg.promodel_id=a.id
+			<where>
+				a.del_flag = 0 and a.tenant_id =#{tenantId}
+				<if test="ids != null and ids.size >0">
+					AND a.id in
+					<foreach item="item" collection="ids" open="(" separator=","
+						close=")">
+						#{item}
+					</foreach>
+				</if>
+				<if test="officeId != null and officeId != ''">
+					AND o6.id = #{officeId}
+				</if>
+			</where>
+			<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.sub_time DESC
+			</otherwise>
+			</choose>
+
+		</select>
+
+
+	<select id="findListByIdsAssignToClear" resultType="ProModel">
+		SELECT
+		a.id AS "id"
+		,ifnull(tempayg.cc,0) cc
+		FROM pro_model a
+
+		left join (
+		select ayg.promodel_id,(case when count(ayg.promodel_id)=0
+		then 0 else 1 end ) cc from act_yw_gassign ayg
+		where ayg.del_flag='0'
+		and ayg.gnode_id=#{gnodeId}
+		and ayg.yw_id=#{actYwId}
+		<if test="ids != null and ids.size >0">
+			and (
+			<foreach item="item" collection="ids" separator=" or ">
+				ayg.promodel_id=#{item}
+			</foreach>
+			)
+		</if>
+		group by ayg.promodel_id
+		) tempayg on tempayg.promodel_id=a.id
+		<where>
+			a.del_flag = 0
+			<if test="ids != null and ids.size >0">
+				AND a.id in
+				<foreach item="item" collection="ids" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.sub_time DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByIdsAssignOfSchool" resultType="ProModel">
+		SELECT
+		a.id AS "id",
+		ifnull(tempayg.cc,0) cc
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		left join (
+		select ayg.promodel_id,(case when count(ayg.promodel_id)=0
+		then 0 else 1 end ) cc from act_yw_gassign ayg
+		where ayg.del_flag='0'
+		and ayg.gnode_id=#{gnodeId}
+		and ayg.yw_id=#{actYwId}
+        and ayg.tenant_id =#{tenantId}
+		<if test="ids != null and ids.size >0">
+			and (
+			<foreach item="item" collection="ids" separator=" or ">
+				ayg.promodel_id=#{item}
+			</foreach>
+			)
+		</if>
+		group by ayg.promodel_id
+		) tempayg on tempayg.promodel_id=a.id
+		<where>
+			a.del_flag = 0 and a.tenant_id =#{tenantId}
+			<if test="ids != null and ids.size >0">
+				AND a.id in
+				<foreach item="item" collection="ids" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="officeId != null and officeId != ''">
+				AND o6.id = #{officeId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.sub_time DESC
+			</otherwise>
+		</choose>
+
+	</select>
+
+	<select id="findProvListByIdsAssign" resultType="ProModel">
+		SELECT prov.id AS provId,
+		<include refid="proModelColumns" />
+		,st.school_name AS schoolName
+		,ifnull(tempayg.cc,0) cc
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		left join province_pro_model prov on prov.model_id=a.id
+		left join sys_tenant st on st.tenant_id = a.tenant_id and st.del_flag='0'
+		left join (
+		select ayg.promodel_id,(case when count(ayg.promodel_id)=0
+		then 0 else 1 end ) cc from act_yw_gassign ayg
+		where ayg.del_flag='0'
+		and ayg.gnode_id=#{gnodeId}
+		and ayg.yw_id=#{actYwId}
+		and ayg.tenant_id =#{tenantId}
+		<if test="ids != null and ids.size >0">
+		and (
+		<foreach item="item" collection="ids" separator=" or ">
+			ayg.promodel_id=#{item}
+		</foreach>
+		)
+		</if>
+		group by ayg.promodel_id
+		) tempayg on tempayg.promodel_id=a.id
+		<where>
+			a.del_flag = 0
+			<if test="ids != null and ids.size >0">
+				AND prov.id in
+				<foreach item="item" collection="ids" open="(" separator=","
+					close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="officeId != null and officeId != ''">
+				AND o6.id = #{officeId}
+			</if>
+		</where>
+		<choose>
+		<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+			ORDER BY a.${page.orderBy} ${page.orderByType}
+		</when>
+		<otherwise>
+			ORDER BY a.sub_time DESC
+		</otherwise>
+		</choose>
+
+	</select>
+
+
+	<select id="findProvListByIdsAssignOfId" resultType="ProModel">
+		SELECT
+		prov.id as id
+		,ifnull(tempayg.cc,0) cc
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		left join province_pro_model prov on prov.model_id=a.id
+		left join (
+		select ayg.promodel_id,(case when count(ayg.promodel_id)=0
+		then 0 else 1 end ) cc from act_yw_gassign ayg
+		where ayg.del_flag='0'
+		and ayg.gnode_id=#{gnodeId}
+		and ayg.yw_id=#{actYwId}
+		<if test="ids != null and ids.size >0">
+			and (
+			<foreach item="item" collection="ids" separator=" or ">
+				ayg.promodel_id=#{item}
+			</foreach>
+			)
+		</if>
+		group by ayg.promodel_id
+		) tempayg on tempayg.promodel_id=a.id
+		<where>
+			a.del_flag = 0
+			<if test="ids != null and ids.size >0">
+				AND prov.id in
+				<foreach item="item" collection="ids" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="officeId != null and officeId != ''">
+				AND o6.id = #{officeId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.sub_time DESC
+			</otherwise>
+		</choose>
+
+	</select>
+
+	<select id="findImportList" resultType="ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		<where>
+			a.del_flag = 0
+			AND a.state = '1'
+			<if test="actYwId != null and actYwId != ''">
+				AND a.actyw_id = #{actYwId}
+			</if>
+			AND (a.proc_ins_id is null or a.proc_ins_id ='')
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByIdsWithoutJoin" resultType="java.lang.String">
+		SELECT
+		a.id
+		FROM pro_model a LEFT JOIN sys_user u on a.declare_id =u.id
+		<where>
+			a.del_flag = 0 and u.del_flag = '0'
+			<if test="ids != null and ids.size >0">
+				AND a.id in
+				<foreach item="item" collection="ids" open="(" separator=","
+					close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="roleFlag != null and roleFlag == 1">
+				AND u.office_id = #{officeId}
+			</if>
+		</where>
+
+		ORDER BY a.update_date DESC
+	</select>
+
+	<select id="findProModelByTeamId" resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		FROM pro_model a
+		LEFT JOIN team t ON a.team_id=t.id
+		WHERE (a.state is null or a.state='0' or a.state='') AND
+		a.team_id=#{teamId} AND a.del_flag='0'
+		AND t.del_flag='0'
+	</select>
+
+	<select id="findList" resultType="ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="ids != null and ids.size >0">
+				AND a.id in
+				<foreach item="item" collection="ids" open="(" separator=","
+					close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="actYwId != null and actYwId != ''">
+				AND a.actyw_Id = #{actYwId}
+			</if>
+			<if test="pName != null and pName != ''">
+				AND a.p_name LIKE concat('%',#{pName},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<!--<select id="findListByLeader" resultType="ProModel" parameterType="java.lang.String">-->
+		<!--SELECT-->
+		<!--p.id AS "id",-->
+		<!--p.`name` AS "pName",-->
+		<!--p.leader AS "declareId",-->
+		<!--p.leader AS "deuser.id",-->
+		<!--'1,' AS "proType",-->
+		<!--dpp.type AS "type",-->
+		<!--p.team_id AS "teamId",-->
+		<!--p.actyw_id AS "actYwId",-->
+		<!--p.actyw_id AS "actYw.id",-->
+		<!--p.proc_ins_id AS "procInsId",-->
+		<!--p.status AS "state",-->
+		<!--t.name AS "team.name",-->
+		<!--t.state AS "team.state",-->
+		<!--t.summary AS "team.summary",-->
+		<!--t.enterprise_teacher_num AS "team.enterpriseTeacherNum",-->
+		<!--t.school_teacher_num AS "team.schoolTeacherNum",-->
+		<!--t.member_num AS "team.memberNum",-->
+		<!--t.local_college AS "team.localCollege"-->
+		<!--FROM-->
+		<!--project_declare p-->
+		<!--LEFT JOIN team t ON t.id = p.team_id-->
+		<!--LEFT JOIN act_yw day ON day.id = p.actyw_id-->
+		<!--LEFT JOIN pro_project dpp ON dpp.id = day.rel_id-->
+		<!--WHERE-->
+		<!--p.leader = #{uid}-->
+		<!--UNION ALL SELECT-->
+		<!--p.id AS "id",-->
+		<!--p.p_name AS "pName",-->
+		<!--p.declare_id AS "declareId",-->
+		<!--p.declare_id AS "deuser.id",-->
+		<!--ppp.pro_type AS "proType",-->
+		<!--ppp.type AS "type",-->
+		<!--p.team_id AS "teamId",-->
+		<!--p.actyw_id AS "actYwId",-->
+		<!--p.actyw_id AS "actYw.id",-->
+		<!--p.proc_ins_id AS "procInsId",-->
+		<!--p.state AS "state",-->
+		<!--t.name AS "team.name",-->
+		<!--t.state AS "team.state",-->
+		<!--t.summary AS "team.summary",-->
+		<!--t.enterprise_teacher_num AS "team.enterpriseTeacherNum",-->
+		<!--t.school_teacher_num AS "team.schoolTeacherNum",-->
+		<!--t.member_num AS "team.memberNum",-->
+		<!--t.local_college AS "team.localCollege"-->
+		<!--FROM-->
+		<!--pro_model p-->
+		<!--LEFT JOIN team t ON t.id = p.team_id-->
+		<!--LEFT JOIN act_yw pay ON pay.id = p.actyw_id-->
+		<!--LEFT JOIN pro_project ppp ON ppp.id = pay.rel_id-->
+		<!--WHERE-->
+		<!--p.declare_id = #{uid}-->
+	<!--</select>-->
+
+	<select id="findListAllByLeader" resultType="ProModel" parameterType="java.lang.String">
+		SELECT
+		a.id AS "id",
+		a.`name` AS "pName",
+		a.leader AS "declareId",
+		a.leader AS "deuser.id",
+		'1,' AS "proType",
+		dpp.type AS "type",
+		a.team_id AS "teamId",
+		a.actyw_id AS "actYwId",
+		a.actyw_id AS "actYw.id",
+		a.proc_ins_id AS "procInsId",
+		a.status AS "state",
+		a.introduction AS "introduction",
+		t.name AS "team.name",
+		t.state AS "team.state",
+		t.summary AS "team.summary",
+		t.enterprise_teacher_num AS "team.enterpriseTeacherNum",
+		t.school_teacher_num AS "team.schoolTeacherNum",
+		t.member_num AS "team.memberNum",
+		t.local_college AS "team.localCollege"
+		FROM project_declare a
+		LEFT JOIN team t ON t.id = a.team_id
+		LEFT JOIN act_yw day ON day.id = a.actyw_id
+		LEFT JOIN pro_project dpp ON dpp.id = day.rel_id
+		WHERE a.leader = #{uid}
+		AND a.del_flag='0' AND a.proc_ins_id is not null
+		UNION ALL SELECT
+		a.id AS "id",
+		a.p_name AS "pName",
+		a.declare_id AS "declareId",
+		a.declare_id AS "deuser.id",
+		ppp.pro_type AS "proType",
+		ppp.type AS "type",
+		a.team_id AS "teamId",
+		a.actyw_id AS "actYwId",
+		a.actyw_id AS "actYw.id",
+		a.proc_ins_id AS "procInsId",
+		a.state AS "state",
+		a.introduction AS "introduction",
+		t.name AS "team.name",
+		t.state AS "team.state",
+		t.summary AS "team.summary",
+		t.enterprise_teacher_num AS "team.enterpriseTeacherNum",
+		t.school_teacher_num AS "team.schoolTeacherNum",
+		t.member_num AS "team.memberNum",
+		t.local_college AS "team.localCollege"
+		FROM pro_model a
+		LEFT JOIN team t ON t.id = a.team_id
+		LEFT JOIN act_yw pay ON pay.id = a.actyw_id
+		LEFT JOIN pro_project ppp ON ppp.id = pay.rel_id
+		WHERE a.declare_id =
+		#{uid} AND a.del_flag='0' AND a.sub_status='1'
+		UNION ALL
+		SELECT
+		a.id AS "id",
+		a.p_name AS "pName",
+		a.declare_id AS "declareId",
+		a.declare_id AS "deuser.id",
+		'7,' AS "proType",
+		gpp.type AS "type",
+		a.team_id AS "teamId",
+		a.actyw_id AS "actYwId",
+		a.actyw_id AS "actYw.id",
+		a.proc_ins_id AS "procInsId",
+		a.audit_state AS "state",
+		a.introduction AS "introduction",
+		t.name AS "team.name",
+		t.state AS "team.state",
+		t.summary AS "team.summary",
+		t.enterprise_teacher_num AS "team.enterpriseTeacherNum",
+		t.school_teacher_num AS "team.schoolTeacherNum",
+		t.member_num AS "team.memberNum",
+		t.local_college AS "team.localCollege"
+		FROM g_contest a
+		LEFT JOIN team t ON t.id = a.team_id
+		LEFT JOIN act_yw gay ON gay.id = a.actyw_id
+		LEFT JOIN pro_project gpp ON gpp.id = gay.rel_id
+		WHERE a.declare_id =#{uid} AND a.del_flag='0' AND a.proc_ins_id is not null
+	</select>
+
+	<select id="getProModelAuditListCount" resultType="java.lang.Integer">
+		SELECT
+		COUNT(1)
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="actYwId != null and actYwId != ''">
+				AND a.actyw_Id = #{actYwId}
+			</if>
+			<if test="pName != null and pName != ''">
+				AND a.p_name LIKE concat('%',#{pName},'%')
+			</if>
+		</where>
+	</select>
+
+	<select id="findAllList" resultType="ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="findRolesByIds" resultType="ProRole">
+		SELECT
+			p.promodel_id AS "pmId",
+			p.gn_id AS "gnodeId",
+			a.id,
+			a.office_id AS "office.id",
+			a.name,
+			a.rinit,
+			a.rtype,
+			a.regval,
+			a.rid,
+			a.enname,
+			a.role_type AS roleType,
+			a.role_group AS roleGroup,
+			a.biz_type AS bizType,
+			a.data_scope AS dataScope,
+			a.remarks,
+			a.create_by AS "createBy.id",
+			a.create_date,
+			a.update_by AS "updateBy.id",
+			a.update_date,
+			a.del_flag,
+			a.useable AS useable,
+			a.is_sys AS sysData
+		FROM (
+			SELECT
+				ap.del_flag,
+				ap.promodel_id,
+				ap.gnode_id AS "gn_id"
+			FROM (
+				SELECT
+				ai.*
+				FROM
+				act_yw_audit_info ai
+				ORDER BY
+				ai.create_date DESC
+			) ap
+			GROUP BY ap.promodel_id
+			ORDER BY ap.create_date DESC
+		) p
+		LEFT JOIN act_yw_grole gr ON p.gn_id = gr.gnode_id
+		LEFT JOIN sys_role a ON a.id = gr.role_id
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND p.promodel_id in
+			<foreach collection="ids" item="id"  open="("
+					 close=")" separator=" , ">
+				#{id}
+			</foreach>
+		</where>
+		GROUP BY p.promodel_id, gr.role_id
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pro_model(
+		id,
+		actyw_id,
+		p_name,
+		short_name,
+		declare_id,
+		pro_type,
+		type,
+		is_send,
+		step,
+		pro_category,
+		level,
+		introduction,
+		financing_stat,
+		final_status,
+		end_gnode_id,
+		end_gnode_vesion,
+		team_id,
+		update_date,
+		update_by,
+		create_date,
+		create_by,
+		del_flag,
+		proc_ins_id,
+		pro_mark,
+		source,
+		competition_number,
+		sub_time,
+		sub_status,
+		stage,
+		impdata,
+		project_source,
+		grade,
+		state,
+		g_score,
+		project_level_dict,
+		year,
+		final_result,
+		gc_track,
+		achievement_tf,
+		achievement_user,
+		co_creation,
+		idea_stage,
+		belongs_field,
+		bank_name,
+		bank_number,
+		ranking
+		) VALUES (
+		#{id},
+		#{actYwId},
+		#{pName},
+		#{shortName},
+		#{declareId},
+		#{proType},
+		#{type},
+		#{isSend},
+		#{step},
+		#{proCategory},
+		#{level},
+		#{introduction},
+		#{financingStat},
+		#{finalStatus},
+		#{endGnodeId},
+		#{endGnodeVesion},
+		#{teamId},
+		#{updateDate},
+		#{updateBy.id},
+		#{createDate},
+		#{createBy.id},
+		#{delFlag},
+		#{procInsId},
+		#{proMark},
+		#{source},
+		#{competitionNumber},
+		#{subTime},
+		#{subStatus},
+		#{stage},
+		#{impdata},
+		#{projectSource},
+		#{grade},
+		#{state},
+		#{gScore},
+		#{projectLevelDict},
+		#{year},
+		#{finalResult},
+		#{gcTrack},
+		#{achievementTf},
+		#{achievementUser},
+		#{coCreation},
+		#{ideaStage},
+		#{belongsField},
+		#{bankName},
+		#{bankNumber},
+		#{ranking}
+		)
+	</insert>
+
+
+	<insert id="insertOfTopic">
+		INSERT INTO pro_model(
+			id,
+			actyw_id,
+			p_name,
+			short_name,
+			declare_id,
+			pro_type,
+			type,
+			is_send,
+			step,
+			pro_category,
+			level,
+			introduction,
+			financing_stat,
+			final_status,
+			end_gnode_id,
+			end_gnode_vesion,
+			team_id,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag,
+			proc_ins_id,
+			pro_mark,
+			source,
+			competition_number,
+			sub_time,
+			sub_status,
+			stage,
+			impdata,
+			project_source,
+			grade,
+			state,
+			g_score,
+			project_level_dict,
+			year,
+			final_result,
+			gc_track,
+			achievement_tf,
+			achievement_user,
+			co_creation,
+			idea_stage,
+			belongs_field,
+			tenant_id,
+			bank_name,
+			bank_number,
+			ranking
+		) VALUES (
+					 #{id},
+					 #{actYwId},
+					 #{pName},
+					 #{shortName},
+					 #{declareId},
+					 #{proType},
+					 #{type},
+					 #{isSend},
+					 #{step},
+					 #{proCategory},
+					 #{level},
+					 #{introduction},
+					 #{financingStat},
+					 #{finalStatus},
+					 #{endGnodeId},
+					 #{endGnodeVesion},
+					 #{teamId},
+					 #{updateDate},
+					 #{updateBy.id},
+					 #{createDate},
+					 #{createBy.id},
+					 #{delFlag},
+					 #{procInsId},
+					 #{proMark},
+					 #{source},
+					 #{competitionNumber},
+					 #{subTime},
+					 #{subStatus},
+					 #{stage},
+					 #{impdata},
+					 #{projectSource},
+					 #{grade},
+					 #{state},
+					 #{gScore},
+					 #{projectLevelDict},
+					 #{year},
+					 #{finalResult},
+					 #{gcTrack},
+					 #{achievementTf},
+					 #{achievementUser},
+					 #{coCreation},
+					 #{ideaStage},
+					 #{belongsField},
+					 #{tenantId},
+					 #{bankName},
+					 #{bankNumber},
+					 #{ranking}
+				 )
+	</insert>
+
+	<update id="update">
+		UPDATE pro_model SET
+		p_name = #{pName},
+		short_name = #{shortName},
+		actYw_id = #{actYwId},
+		is_send = #{isSend},
+		step = #{step},
+		declare_id = #{declareId},
+		sub_time = #{subTime},
+		sub_status =#{subStatus},
+		stage=#{stage},
+		impdata=#{impdata},
+		project_level_dict=#{projectLevelDict},
+		<if test="{proType!=null and proType!=''}">
+			pro_type = #{proType},
+		</if>
+		type = #{type},
+		end_gnode_id = #{endGnodeId},
+		end_gnode_vesion = #{endGnodeVesion},
+		pro_category = #{proCategory},
+		level = #{level},
+		introduction = #{introduction},
+		financing_stat = #{financingStat},
+		team_id = #{teamId},
+		update_date = #{updateDate},
+		update_by = #{updateBy.id},
+		proc_ins_id = #{procInsId},
+		pro_mark = #{proMark},
+		source = #{source},
+		final_status =#{finalStatus},
+		competition_number = #{competitionNumber},
+		project_source = #{projectSource},
+		grade = #{grade},
+		state = #{state},
+		g_score = #{gScore},
+		year = #{year},
+		gc_track = #{gcTrack},
+		achievement_tf=#{achievementTf},
+		achievement_user=#{achievementUser},
+		co_creation=#{coCreation},
+		idea_stage=#{ideaStage},
+		belongs_field=#{belongsField},
+		bank_name=#{bankName},
+		bank_number=#{bankNumber},
+		ranking=#{ranking}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE pro_model SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<update id="myDelete">
+		UPDATE pro_model SET
+		del_flag = '1'
+		WHERE id = #{id} and sub_status='0'
+	</update>
+	<update id="updateResult">
+		UPDATE pro_model SET
+		grade = #{result}
+		WHERE id = #{pid}
+	</update>
+
+	<update id="updateFinalStatusPl">
+		UPDATE pro_model SET
+		final_status = #{finalStatus}
+		WHERE
+		<if test="idsList != null and idsList.size >0">
+			id in
+			<foreach item="item" collection="idsList" open="(" separator=","
+				close=")">
+				#{item}
+			</foreach>
+		</if>
+	</update>
+
+	<update id="updateFinalStatus">
+		UPDATE pro_model SET
+		final_status = #{finalStatus}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateLogo">
+		UPDATE pro_model SET
+		final_status = #{finalStatus}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateState">
+		UPDATE pro_model SET
+		state = #{state}
+		WHERE id = #{id}
+	</update>
+	<update id="modifyLeaderAndTeam">
+		UPDATE pro_model SET
+		declare_id =#{uid}
+		<if test="tid!=null and tid !='' ">
+			,team_id=#{tid}
+		</if>
+		WHERE id = #{pid}
+	</update>
+	<select id="getUnSubProIdByCdn" resultType="String">
+		select a.id from pro_model a
+		where a.pro_type=#{protype} and a.type=#{subtype} and
+		a.del_flag='0'
+		and a.declare_id=#{uid} and a.sub_status='0' and
+		(a.state!='1' or a.state is null)
+		order by a.create_date desc
+		limit 1
+	</select>
+	<select id="getGcontestExpData" resultType="com.oseasy.pro.modules.promodel.vo.GcontestExpData">
+		select a.id promodelid,
+		a.p_name name,
+		s1.label type,
+		s2.label
+		groupName,
+		u.name leaderName,
+		date_format(se.enterDate,'%Y') leaderEnter,
+		p.name leaderPro,
+		(case when u.id_type='1' then u.id_no else '' end) leaderIdNo,
+		u.no leaderNo,u.mobile leaderMobile,1
+		teamNum,o.name office,a.introduction summary
+		from pro_model a
+		left join sys_dict s1 on s1.type='competition_net_type' and s1.value=a.pro_category
+		left join sys_dict s2 on s2.type='gcontest_level' and s2.value=a.level
+		left join sys_user u on a.declare_id=u.id
+		left join sys_student_expansion se on se.user_id=u.id
+		left join sys_office p on u.professional=p.id
+		left join sys_office o on u.office_id=o.id
+		where a.id in
+		<foreach collection="ids" item="id" open="(" close=")"
+			separator=" , ">
+			#{id}
+		</foreach>
+		<if test="year != null and year != ''">
+			AND a.year = #{year}
+		</if>
+		<if test="deuser != null">
+			<if test="deuser.office != null">
+				<if test="deuser.office.id != null and deuser.office.id != ''">
+					AND o.id = #{deuser.office.id}
+				</if>
+			</if>
+		</if>
+		<if test="queryStr != null and queryStr != ''">
+			AND (
+			a.p_name LIKE concat('%',#{queryStr},'%')
+			OR a.competition_number LIKE concat('%',#{queryStr},'%')
+			OR u.name LIKE concat('%',#{queryStr},'%')
+			)
+		</if>
+		order by a.sub_time
+	</select>
+
+	<select id="getGcontestStuExpData" resultType="com.oseasy.pro.modules.promodel.vo.GcontestStuExpData">
+		select t.id promodelid,
+		u.name,
+		o.name office,
+		p.name
+		profess,date_format(se.enterDate,'%Y') enter,
+		(case when
+		se.curr_state='1' then s1.label else s2.label end) xueli,
+		(case when
+		u.id_type='1' then u.id_no else '' end) idNo,
+		u.no,u.mobile
+		from
+		pro_model t
+		left join team_user_history team on team.pro_id=t.id and
+		team.user_type='1' and team.user_id!=t.declare_id and team.del_flag='0'
+		left join sys_user u on team.user_id=u.id
+		left join
+		sys_student_expansion se on se.user_id=u.id
+		left join sys_dict s1 on
+		s1.type='degree_type' and s1.value=se.instudy
+		left join sys_dict s2 on
+		s2.type='enducation_level' and s2.value=u.education
+		left join
+		sys_office p on u.professional=p.id
+		left join sys_office o on
+		u.office_id=o.id
+		left join sys_user ul on t.declare_id=ul.id
+		where t.id
+		in
+		<foreach collection="ids" item="id" open="(" close=")"
+			separator=" , ">
+			#{id}
+		</foreach>
+		<if test="year != null and year != ''">
+			AND t.year = #{year}
+		</if>
+		<if test="deuser != null">
+			<if test="deuser.office != null">
+				<if test="deuser.office.id != null and deuser.office.id != ''">
+					AND ul.office_id = #{deuser.office.id}
+				</if>
+			</if>
+		</if>
+		<if test="queryStr != null and queryStr != ''">
+			AND (
+			t.p_name LIKE concat('%',#{queryStr},'%')
+			OR t.competition_number LIKE concat('%',#{queryStr},'%')
+			OR ul.name LIKE concat('%',#{queryStr},'%')
+			)
+		</if>
+		order by u.create_date
+	</select>
+	<select id="getGcontestTeaExpData" resultType="com.oseasy.pro.modules.promodel.vo.GcontestTeaExpData">
+		select a.id promodelid,u.name,
+		u.no,te.technical_title zhicheng
+		from
+		pro_model a
+		left join team_user_history team on team.pro_id=a.id and
+		team.user_type='2' and team.del_flag='0'
+		left join sys_user u on
+		team.user_id=u.id
+		left join sys_teacher_expansion te on te.user_id=u.id
+		left join sys_user ul on a.declare_id=ul.id
+		where a.id in
+		<foreach collection="ids" item="id" open="(" close=")"
+			separator=" , ">
+			#{id}
+		</foreach>
+		<if test="year != null and year != ''">
+			AND a.year = #{year}
+		</if>
+		<if test="deuser != null">
+			<if test="deuser.office != null">
+				<if test="deuser.office.id != null and deuser.office.id != ''">
+					AND ul.office_id = #{deuser.office.id}
+				</if>
+			</if>
+		</if>
+		<if test="queryStr != null and queryStr != ''">
+			AND (
+			a.p_name LIKE concat('%',#{queryStr},'%')
+			OR a.competition_number LIKE concat('%',#{queryStr},'%')
+			OR ul.name LIKE concat('%',#{queryStr},'%')
+			)
+		</if>
+		order by u.create_date
+	</select>
+
+	<update id="deleteByActywid">
+		UPDATE pro_model SET
+		del_flag = '1'
+		WHERE actyw_id = #{actywid}
+	</update>
+	<update id="deleteTeamUserHisByActywid">
+		update team_user_history t
+		inner join pro_model p
+		on p.id=t.pro_id
+		set t.del_flag='1'
+		where p.actyw_id=#{actywid}
+	</update>
+	<update id="deleteReportByActywid">
+		update pro_report t
+		inner join pro_model p
+		on p.id=t.promodel_id
+		set t.del_flag='1'
+		where p.actyw_id=#{actywid}
+	</update>
+	<select id="getProcinsidByActywid" resultType="java.lang.String">
+		select a.proc_ins_id from pro_model a
+		where a.actyw_id=#{actywid} and a.sub_status='1' and a.del_flag='0' and
+		a.proc_ins_id is not null
+	</select>
+
+	<update id="deleteTeamUserHisByProModelId">
+		update team_user_history t
+		inner join pro_model p
+		on p.id=t.pro_id
+		set t.del_flag='1'
+		where p.id=#{id}
+	</update>
+
+	<update id="deleteReportByProModelId">
+		update pro_report t
+		inner join pro_model p
+		on p.id=t.promodel_id
+		set t.del_flag='1'
+		where p.id=#{id}
+	</update>
+	<update id="updateSubStatus">
+		update pro_model t
+		set t.sub_status=#{subStatus}
+		where
+		t.id=#{pid}
+	</update>
+	<select id="getCountByName" resultType="java.lang.Integer">
+		select count(1) from pro_model a where a.pro_type=#{protype} and
+		a.type=#{type} and a.p_name=#{name} and a.sub_status='1' and
+		a.del_flag='0'
+	</select>
+
+	<select id="getByNumberAndId" resultType="java.lang.Integer">
+		SELECT
+		count(1)
+		FROM pro_model a
+		WHERE a.competition_number = #{number} AND a.del_flag
+		= '0'
+		<if test="id != null and id != ''">
+			and a.id!=#{id}
+		</if>
+	</select>
+
+
+	<select id="checkNumberByActYwId" resultType="java.lang.Integer">
+		SELECT
+		count(1)
+		FROM pro_model a
+		WHERE a.competition_number = #{number} AND a.del_flag = '0' and a.actyw_id = #{actYwId}
+		<if test="id != null and id != ''">
+			and a.id!=#{id}
+		</if>
+	</select>
+
+	<select id="export" parameterType="proModel" resultMap="exportMap">
+		SELECT
+		a.id proModelId,
+		a.p_name,
+		a.year,
+		a.stage,
+		a.pro_type,
+		a.type,
+		a.pro_category,
+		(CASE WHEN (a.pro_type = '1,') THEN
+		a.final_status
+		WHEN (a.pro_type = '7,') THEN a.level
+		ELSE '' END) AS "level",
+		a.short_name,
+		a.introduction introduction,
+		t.id AS
+		teamId,
+		t.name AS teamName,
+		o6.name "office_name",
+		lstu.name
+		"leader.name",
+		lstu.no "leader.no",
+		lop.name "leader.professional",
+		lss.enterDate "leader.enterDate",
+		lss.graduation "leader.graduation",
+		sd.label "leader.education",
+		lstu.id_no "leader.id_no",
+		lstu.mobile
+		"leader.mobile",
+		lstu.email "leader.email"
+
+		FROM pro_model a
+		LEFT JOIN
+		act_yw yw ON yw.id = a.actyw_id
+		LEFT JOIN sys_user u ON u.id =	a.declare_id
+		LEFT JOIN sys_office o6 ON o6.id = u.office_id
+		<!-- LEFT JOIN sys_dict pc ON pm.pro_category = pc.value AND pc.type =
+			'competition_net_type' AND pc.del_flag = '0' LEFT JOIN sys_dict le ON pm.level
+			= le.value AND le.type = 'gcontest_level' AND le.del_flag = '0' -->
+
+		LEFT JOIN team t ON t.id = a.team_id
+		/** 团队负责人 **/
+		<!-- LEFT JOIN team_user_history ltuh ON ltuh.team_id = t.id AND ltuh.u_type
+			= 1 AND t.sponsor = ltuh.user_id LEFT JOIN sys_user lstu ON ltuh.user_id
+			= lstu.id -->
+		LEFT JOIN sys_user lstu ON lstu.id = a.declare_id
+		LEFT JOIN sys_student_expansion lss ON lstu.id = lss.user_id
+		LEFT JOIN sys_office lop ON lop.id = lstu.professional
+		LEFT JOIN sys_dict sd ON lstu.education = sd.value AND sd.type = 'enducation_level'
+		<where>
+			yw.id = #{actYwId} AND a.del_flag = '0'
+			<if test="year != null and year != ''">
+				AND a.year = #{year}
+			</if>
+			<if test="deuser != null">
+				<if test="deuser.office != null">
+					<if test="deuser.office.id != null and deuser.office.id != ''">
+						AND o6.id = #{deuser.office.id}
+					</if>
+				</if>
+			</if>
+			<if test="queryStr != null and queryStr != ''">
+				AND (
+				a.p_name LIKE concat('%',#{queryStr},'%')
+				OR
+				a.competition_number LIKE concat('%',#{queryStr},'%')
+				OR u.name LIKE
+				concat('%',#{queryStr},'%')
+				)
+			</if>
+			<if test="ids != null and ids.size() != 0">
+				AND a.id in
+				<foreach collection="ids" item="id" open="(" close=")"
+					separator=" , ">
+					#{id}
+				</foreach>
+			</if>
+		</where>
+		GROUP BY a.id
+	</select>
+
+	<!--更新级别 -->
+	<update id="updateLevel">
+		UPDATE pro_model SET
+		project_level = #{level}
+		WHERE id = #{id}
+	</update>
+
+	<select id="checkProName" resultType="java.lang.Integer">
+        select count(1) from pro_model a where a.del_flag='0'
+		and a.p_name=#{pname}
+		<if test=" pid !=null and pid !='' ">
+		and a.id !=#{pid}
+		</if>
+		and a.actyw_id=#{actywId}
+	</select>
+	<insert id="bulk" >
+		INSERT INTO pro_model(
+		id,
+		actyw_id,
+		p_name,
+		short_name,
+		declare_id,
+		pro_type,
+		type,
+		pro_category,
+		level,
+		introduction,
+		financing_stat,
+		final_status,
+		end_gnode_id,
+		end_gnode_vesion,
+		team_id,
+		update_date,
+		update_by,
+		create_date,
+		create_by,
+		del_flag,
+		proc_ins_id,
+		pro_mark,
+		source,
+		competition_number,
+		sub_time,
+		sub_status,
+		stage,
+		impdata,
+		project_source,
+		grade,
+		state,
+		g_score,
+		project_level_dict,
+		year,
+		final_result
+		) VALUES
+		<foreach item="item" collection="list" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.actYwId},
+			#{item.pName},
+			#{item.shortName},
+			#{item.declareId},
+			#{item.proType},
+			#{item.type},
+			#{item.proCategory},
+			#{item.level},
+			#{item.introduction},
+			#{item.financingStat},
+			#{item.finalStatus},
+			#{item.endGnodeId},
+			#{item.endGnodeVesion},
+			#{item.teamId},
+			#{item.updateDate},
+			#{item.updateBy.id},
+			#{item.createDate},
+			#{item.createBy.id},
+			#{item.delFlag},
+			#{item.procInsId},
+			#{item.proMark},
+			#{item.source},
+			#{item.competitionNumber},
+			#{item.subTime},
+			#{item.subStatus},
+			#{item.stage},
+			#{item.impdata},
+			#{item.projectSource},
+			#{item.grade},
+			#{item.state},
+			#{item.gScore},
+			#{item.projectLevelDict},
+			#{item.year},
+			#{item.finalResult}
+		</foreach>
+		)
+	</insert>
+
+	<update id="updateIsSendById" >
+		update pro_model set is_send =#{isSend} where id=#{id}
+	</update>
+
+
+	<select id="getProModelId" resultType="com.oseasy.pro.modules.promodel.entity.ProModel">
+		SELECT
+		<include refid="proModelColumns" />
+		FROM pro_model a
+		<include refid="proModelJoins" />
+		WHERE a.del_flag = '0'
+		and a.id=#{id}
+	</select>
+
+	<update id="updateByProId" >
+		update pro_model set ranking =#{ranking} where id=#{id}
+	</update>
+
+	<select id="getIdsByRanking" resultType="java.lang.String">
+		select a.id
+		FROM pro_model a  where a.ranking = #{ranking} and a.del_flag ='0' and a.id !=#{id} and a.actyw_id=#{actYwId}
+	</select>
+
+
+</mapper>

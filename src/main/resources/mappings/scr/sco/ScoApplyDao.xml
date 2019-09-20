@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.sco.dao.ScoApplyDao">
+    
+	<sql id="scoApplyColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.course_id AS "courseId",
+		a.proc_ins_id AS "procInsId",
+		a.course_status AS "courseStatus",
+		a.audit_status AS "auditStatus",
+		a.real_time AS "realTime",
+		a.real_score AS "realScore",
+		a.score AS "score",
+		a.apply_date AS "applyDate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="scoCourseColumns">
+		c.id  AS "scoCourse.id",
+		c.code AS "scoCourse.code",
+		c.name AS "scoCourse.name",
+		c.type AS "scoCourse.type",
+		c.nature AS "scoCourse.nature",
+		c.plan_score AS "scoCourse.planScore",
+		c.plan_time AS "scoCourse.planTime",
+		c.over_score AS "scoCourse.overScore"
+	</sql>
+
+	<sql id="scoCourseJoins">
+		LEFT JOIN sco_course c on c.id = a.course_id
+	</sql>
+
+
+    
+	<select id="get" resultType="ScoApply">
+		SELECT 
+			<include refid="scoApplyColumns"/>
+		FROM sco_apply a
+		WHERE a.id = #{id}
+	</select>
+
+	<!--前台学生查询课程学分列表-->
+	<select id="findList" resultType="ScoApply">
+		SELECT 
+			<include refid="scoApplyColumns"/>,
+		    <include refid="scoCourseColumns"/>
+		FROM sco_apply a
+		<include refid="scoCourseJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="userId != null and userId !='' ">
+				and a.user_id = #{userId}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				and (c.code like concat('%',#{keyword},'%') OR
+				c.name like concat('%',#{keyword},'%')
+				)
+			</if>
+			<if test="auditStatus != null and auditStatus != ''">
+				<if test="auditStatus == 0">
+					and a.audit_status  != #{auditStatus}
+				</if>
+			</if>
+			<if test="beginDate != null">
+				and a.apply_date  &gt;= #{beginDate}
+			</if>
+			<if test="endDate != null">
+				and a.apply_date  &lt;= #{endDate}
+			</if>
+			<if test="scoCourse !=null and scoCourse.nature!=''">
+				and c.nature = #{scoCourse.nature}
+			</if>
+			<if test="courseId != null and courseId !=null ">
+				and a.course_id = #{courseId}
+			</if>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ScoApply">
+		SELECT 
+			<include refid="scoApplyColumns"/>
+		FROM sco_apply a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sco_apply(
+			id,
+			user_id,
+			course_id,
+			proc_ins_id,
+			course_status,
+			audit_status,
+			real_time,
+			real_score,
+			score,
+			apply_date,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{userId},
+			#{courseId},
+			#{procInsId},
+			#{courseStatus},
+			#{auditStatus},
+			#{realTime},
+			#{realScore},
+			#{score},
+			#{applyDate},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sco_apply SET 	
+			user_id = #{userId},
+			course_id = #{courseId},
+			proc_ins_id = #{procInsId},
+			course_status = #{courseStatus},
+			audit_status = #{auditStatus},
+			real_time = #{realTime},
+			real_score = #{realScore},
+			score = #{score},
+			apply_date = #{applyDate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE sco_apply SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<select id="getCount" resultType="java.lang.Long">
+		select count(1) from sco_apply a where a.del_flag='0'  and a.audit_status=#{auditStatus}
+	</select>
+</mapper>

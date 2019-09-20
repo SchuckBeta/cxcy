@@ -1,0 +1,409 @@
+
+.content {
+    height: 100%;
+    float: left;
+    margin-left: 12px;
+    margin-top: 20px;
+    min-width: 80%;
+    margin-bottom: 100px;
+}
+
+.tabel_head {
+    margin-left: -12px;
+    margin-top: 28px;
+    position: relative;
+}
+
+.tabel_head .tlt {
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    position: absolute;
+    left: 18%;
+    margin-top: 4px;
+}
+
+.content  .projectDetails li{
+    overflow: hidden;
+    width: 85%;
+    margin: auto;
+}
+
+.content  .projectDetails li .l_details{
+    float: left;
+}
+
+.content  .projectDetails li .r_details{
+     float: right;
+}
+
+.content  .projectDetails li .project_title{
+    font-size: 14px;
+    font-weight:bold;
+}
+
+.projectDetails {
+    padding-bottom:12px;
+    border-bottom:1px solid red;
+}
+
+.items_first{
+    margin-top: 20px;
+    overflow:hidden;
+}
+
+.items_first h3{
+    float:left;
+}
+
+
+.table_{
+    width: 90%;
+    margin: auto;
+}
+
+.table_ {
+    border-left: none;
+    margin-top: 20px;
+    width: 90%;
+}
+
+.table_  ul{
+    overflow:hidden;
+    border: 1px solid #555555;
+    border-left: none;
+    margin-top: 20px;
+}
+
+.table_  ul li{
+    border-bottom:1px solid #555555;
+    border-left: none;
+    color:#424242 ;
+    font-size: 13px;
+    overflow:hidden;
+}
+
+.table_  ul li .txt_bold{
+    text-align: center;
+    display:inline-block;
+    width: 153px;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 10px;
+    color:#000;
+    background-color:#cccccc;
+    border:1px solid #555555;
+    border-bottom: none;
+    border-top: none;
+}
+
+.table_  ul li .ldl{
+    width: 90px;
+}
+
+
+.table_  ul li .wid_{
+    display:inline-block;
+    width:365px;
+
+}
+
+.table_  ul li .wdl{
+    width: 254px;
+    display: inline-block;
+}
+
+
+.table_  ul li .l_eft{
+    float:left;
+}
+
+.table_  ul li .r_gh{
+    overflow:hidden;
+}
+
+.table_  ul li .padd{
+    padding:26px 10px;
+}
+
+.table_  ul li  .tel_tit:nth-child(1){
+    border-left: none;
+}
+
+.table_  ul li .lrt_x .tel_info{
+        width: 198px;
+    height: 36px;
+    display:inline-block;
+    text-align: center;
+    font-weight: bold;
+     border:1px solid #555555;
+     border-top: none;
+     border-right: none;
+     line-height: 36px;
+}
+
+.table_  ul li .lrt_x  .tel_info:nth-child(1){
+     border-left: none;
+}
+
+.table_  ul li  .tel_tit{
+    width: 198px;
+    height: 36px;
+    display:inline-block;
+    text-align: center;
+    font-weight: bold;
+     border:1px solid #555555;
+     border-top: none;
+     border-right: none;
+     border-bottom: none;
+     line-height: 36px;
+}
+
+.text_box{
+     border:1px solid #555555;
+     padding:10px 0;
+     text-indent: 33px;
+    width: 1034px;
+    margin-top: 10px;
+    margin:10px auto;
+}
+
+.table_  ul li table{
+    border-bottom: none;
+    border-top: none;
+}
+
+.table_  ul li table .hed{
+    width:173px;
+    background-color: #cccccc;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.table_  ul li table tr td{
+    border:1px solid #555555;
+    text-align: center;
+    border-top: none;
+    border-left: none;
+}
+
+.table_  ul li table tr td:first-child{
+    border: none;
+    border-right: 1px solid #555555 ;
+    border-left:1px solid #555555 ;
+}
+
+.table_  ul li table tr .tag_h{
+    border-bottom: none;
+}
+
+.table_  ul li table tr .tag_j{
+    border-right: none;
+}
+
+.table_  ul li table tr .tag_a{
+    border-left: transparent !important;
+    border-bottom:1px solid #555555 !important;
+}
+
+.table_  ul li table tr .tag_k{
+    border-bottom: none !important;
+}
+
+.table_  ul li table tr:nth-child(1)>td{
+    font-weight: bold;
+    padding:10px 0;
+}
+.table_  ul li table tr:nth-child(2)>td{
+    padding:10px 0;
+}
+.table_  ul li table tr:nth-child(3)>td{
+    padding:10px 0;
+}
+
+.table_  ul li .txt_bold,.tgd_j{
+    display:inline-block;
+}
+
+.table_  ul li .tgd_j p{
+    position:relative;
+    left:30%;
+}
+
+.table_  ul li .tgd_j p:nth-child(1){
+    top:-4px;
+}
+
+.table_  ul li .tgd_j p:nth-child(2){
+    top:17px;
+}
+
+.table_  ul li .tgd_j p label{
+    margin: 0 17px;
+}
+
+.table_  ul li  .tga_{
+    padding:30px 10px;
+}
+
+.table_  ul li  .tag_l{
+    height:52px;
+}
+
+.table_  ul li .thg_o{
+    position: relative;
+    left: 11%;
+}
+
+.table_  ul li .thg_o label{
+    margin: 0px 63px;
+}
+
+.table_  ul li .oth_z{
+    position:relative;
+    left:11%;
+}
+
+.table_  ul li .oth_z label{
+    margin: 0px 63px;
+}
+
+.table_  ul li:last-child{
+    border-bottom:none;
+}
+
+.Projectprofile{
+    border:1px solid #555555;
+    padding:10px 0;
+    text-indent: 30px;
+    max-width: 1000px;
+    margin: auto;
+    margin-top: 12px;
+}
+.project_hefkl{
+    overflow:hidden;
+    margin-top: 12px;
+}
+
+.project_hefkl img{
+    vertical-align: middle;
+}
+.project_hefkl  .project_BOX{
+    float:left;
+    margin-left: 55px;
+}
+
+.Auditrecord{
+    overflow:hidden;
+    margin-top: 12px;
+}
+
+.Auditrecord .Audit_BOX{
+    border:1px solid #555555;
+}
+
+.Auditrecord .Audit_BOX table  tr:first-child th{
+    font-size: 14px;
+    padding: 10px 108px;
+    background-color: #cccccc;
+    border-bottom:1px solid #555555;
+    border-right: 1px solid #555555;
+    word-break:break-all;
+}
+
+.Auditrecord .Audit_BOX table  tr:first-child th:last-child{
+    border-right: none;
+}
+
+.Auditrecord .Audit_BOX table  tr:last-child th:last-child{
+     border-right: none;
+}
+
+.Auditrecord .Audit_BOX table  tr:last-child th{
+    font-size: 14px;
+    font-weight: normal;
+    padding:25px 10px;
+    border-right: 1px solid #555555;
+    white-space: normal;
+    word-break:break-all;
+}
+
+.Auditrecord .Audit_BOX table  tr .Aud_t{
+
+    word-break:break-all;
+}
+
+.Auditrecord .Audit_BOX table  tr  .Aud_k{
+   max-width:500px;
+}
+
+.score{
+    margin-top: 20px;
+}
+
+.score span{
+    font-weight: bold;
+    font-size: 15px;
+    margin-left: 50px;
+    display:inline-block;
+    width: 100px;
+    text-align: right;
+}
+
+.score input{
+    border:1px  solid #C4C4C4;
+    height:25px;
+    margin-left: 5px;
+    border-radius: 3px;
+    font-family: 'Microsoft yahei';
+    padding-left: 10px;
+}
+
+.score .tgh_{
+    margin-top: 10px;
+}
+
+.score textarea{
+    padding:10px 10px;
+    width: 721px;
+    height: 121px;
+    max-width: 800px;
+    max-height: 500px;
+    border-radius: 3px;
+    resize: none;
+    font-size: 15px;
+    font-family: 'Microsoft yahei';
+    vertical-align: top;
+    border:1px  solid #C4C4C4;
+}
+
+.conmit{
+    text-align: center;
+    margin-top: 20px;
+}
+
+#save{
+    border:1px solid  #C4C4C4;
+    height:40px;
+    width: 100px;
+    margin: auto;
+    margin-left: 24px;
+    border-radius: 3px;
+    color:#CD4F39;
+    display:inline-block;
+    cursor: pointer;
+}
+
+#return{
+    border: 1px solid #C4C4C4;
+    height: 39px;
+    width: 100px;
+    line-height: 39px;
+    margin: auto;
+    margin-left: 24px;
+    border-radius: 3px;
+    color: #CD4F39;
+    display: inline-block;
+    background-color: #dddddd;
+}

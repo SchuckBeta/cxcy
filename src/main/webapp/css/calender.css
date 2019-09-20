@@ -1,0 +1,202 @@
+html,body{
+	font-family: "微软雅黑";
+}
+.self-container-wrap{
+	padding: 30px 17.7%;
+}
+.head-btn{
+	height: 40px;
+	line-height: 40px;
+	overflow:hidden;
+}
+.head-btn a{
+	padding:5px 12px;
+	border:none;
+	background: #e7e7e7;
+	font-size: 14px;
+	float: right;
+	margin-left: 10px;
+}
+.head-btn a:hover{
+	background: #e7e7e7;
+	color:#fff;
+}
+.head-btn a.competion-list-btn{
+	background:#df4526 ;
+}
+.head-btn a.competion-list-btn:hover{
+	background: -webkit-linear-gradient(#e8422d, #ba3424); /* Safari 5.1 - 6.0 */
+	background: -o-linear-gradient(#e8422d, #ba3424); /* Opera 11.1 - 12.0 */
+	background: -moz-linear-gradient(#e8422d, #ba3424); /* Firefox 3.6 - 15 */
+	background: linear-gradient(#e8422d, #ba3424); /* 标准的语法 */
+	color:#fff;
+}
+.prj-desc{
+	height: 40px;
+	line-height: 40px;
+	overflow: hidden;
+	background: #e7e7e7;
+}
+.prj-desc h4{
+	float: left;
+	color:#df4526;
+	font-size:19px;
+	font-weight: bold;
+	padding-left: 5px; 
+}
+.prj-desc .prj-num{
+	float: right;
+	padding-right: 5px;
+}
+.outer-wrap{
+	border:1px solid #cecece;
+	padding:20px;
+}
+.calender-list{
+	border:1px solid #cecece;
+	box-shadow: 0px 0px 8px #ccc;
+	border-radius: 5px;
+	overflow:hidden;  
+}
+.month-label{
+	background: #f2f2f2;
+}
+.mon-wrap{
+	position: relative;
+	top: 50%;
+	margin-top: -50px;
+}
+.evt-list{
+	padding:10px 30px;
+	position: relative;
+	width: 86.5%;
+}
+.list-wrap{
+	border-bottom:1px solid #cecece;
+	height: auto;
+}
+.evt-list-span{
+	position: absolute;
+	top:0px;
+	left: 0;
+	z-index: -1;
+	margin-right: 1px;
+	border:1px solid #df4526;
+	display: none;
+}
+.left-arrow{
+	position: absolute;
+	left: 0px;
+	top:45%;
+	width: 0px;
+	border-top:6px solid transparent;
+	border-bottom:6px solid transparent;
+	border-left:6px solid #df4526;
+
+}
+.bottom-arrow{
+	position: absolute;
+	left: 50%;
+	top:100%;
+	width: 0px;
+	border-right:6px solid transparent;
+	border-bottom:6px solid #df4526;
+	border-left:6px solid transparent;	
+}
+.right-arrow{
+	position: absolute;
+	right: 0;
+	top:45%;
+	width: 0px;
+	border-bottom:6px solid transparent;
+	border-top:6px solid transparent;
+	border-right:6px solid #df4526;	
+}
+.top-arrow{
+	position: absolute;
+	left: 50%;
+	top:0;
+	width: 0px;
+	border-top:6px solid #df4526;
+	border-left:6px solid transparent;
+	border-right:6px solid transparent;	
+}
+.list-wrap:hover  .evt-list-span{
+	display: block;
+}
+.list-wrap:hover .month-label{
+	background: #df4526;
+	position: relative;
+}
+.month-label{
+	padding:20px 10px;
+}
+.date strong{
+	color:#666;
+	font-size: 36px;
+}
+.list-wrap:hover .en-month{
+	color:#fff;
+}
+.list-wrap:hover .date strong{
+	color:#fff;
+}
+.list-wrap:hover .events{
+	color:#fff;
+}
+.en-month,.date,.events{
+	text-align: center;
+	padding:2px 0;
+	color:#666;
+}
+.month-label .en-month{
+	font-size:16px;
+	font-weight: bold;
+	text-align: left;
+	position: absolute;
+	left: 20px;
+	top:0px;
+}
+.month-label .date{
+	font-weight: bold;
+	font-size: 37px;
+}
+.month-label .events{
+	color:#df4526;
+	font-size: 14px;
+}
+.txt-list img{
+	margin-right: 10px;
+	height:20px;
+	width: 20px; 
+}
+.txt-list a{
+	font-size: 14px;
+	// color:#666;
+}
+.txt-list a:hover{
+	color:#df4526;
+}
+.prj-title-desc{
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
+	overflow:hidden;
+	padding:0;
+	margin:0;
+}
+.prj-title-desc p{
+	float: left;
+	margin-right: 50px;
+}
+table th{
+	background: #f4e6d4;
+	text-align: center;
+	color:#656565;
+	font-size:13px;
+}
+table tr td{
+	text-align: center;
+	color:#656565;
+	font-size:13px;
+}

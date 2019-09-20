@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwApplyRecordDao">
+
+	<sql id="pwApplyRecordColumns">
+		a.id AS "id",
+		a.eid AS "eid",
+		a.type AS "type",
+		a.parent_id AS "parentId",
+		a.status AS "status",
+		a.term AS "term",
+		a.declare_id AS "declareId",
+		a.declare_time AS "declareTime",
+		u1.name AS "declareName",
+		a.audit_id AS "auditId",
+		a.audit_time AS "auditTime",
+		u2.name AS "auditName",
+		a.bgremarks AS "bgremarks",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="pwApplyRecordJoins">
+		LEFT JOIN sys_user u1 ON u1.id=a.declare_id
+		LEFT JOIN sys_user u2 ON u2.id=a.audit_id
+	</sql>
+
+	<select id="get" resultType="PwApplyRecord">
+		SELECT
+			<include refid="pwApplyRecordColumns"/>
+		FROM pw_apply_record a
+		<include refid="pwApplyRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="PwApplyRecord">
+		SELECT
+			<include refid="pwApplyRecordColumns"/>
+		FROM pw_apply_record a
+		<include refid="pwApplyRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findCountByType" resultType="Long">
+		SELECT COUNT(a.id) FROM pw_apply_mrecord a
+		<where> a.del_flag = '0' AND a.status = '0'
+			<if test="type != null and type != ''">
+				and a.type LIKE concat('%',#{type},'%')
+			</if>
+		</where>
+		GROUP BY a.type
+	</select>
+
+	<select id="getListByPwApplyRecord" resultType="PwApplyRecord">
+		SELECT
+			<include refid="pwApplyRecordColumns"/>
+		FROM pw_apply_record a
+		<include refid="pwApplyRecordJoins"/>
+		<where>
+			a.del_flag = '0' and a.type not in ('90','100','110')
+			<if test="type != null and type != ''">
+				and a.type LIKE concat('%',#{type},'%')
+			</if>
+			<if test="status != null and status != ''">
+				and a.status =#{status}
+			</if>
+			<if test="eid != null and eid != ''">
+				and (a.eid = #{eid} or a.parent_id= #{eid})
+			</if>
+		</where>
+		ORDER BY a.update_date DESC
+	</select>
+
+	<select id="getChangeAppByEid" resultType="PwApplyRecord">
+		SELECT
+			<include refid="pwApplyRecordColumns"/>
+		FROM pw_apply_record a
+		<include refid="pwApplyRecordJoins"/>
+		<where>
+			a.del_flag = '0' and (a.eid = #{eid} or a.parent_id= #{eid}) and a.status='0'
+			and a.type not in ('10','20','30','40','90','100','110','120')
+		</where>
+		ORDER BY a.update_date DESC
+	</select>
+
+	<select id="getLastAuditByEid" resultType="PwApplyRecord">
+		SELECT
+			<include refid="pwApplyRecordColumns"/>
+		FROM pw_apply_record a
+		<include refid="pwApplyRecordJoins"/>
+		<where>
+			a.del_flag = '0' and (a.eid = #{eid} or a.parent_id= #{eid}) and a.status='0'
+			and a.type not in ('90','100','110','120')
+		</where>
+		ORDER BY a.update_date DESC
+		LIMIT 1
+	</select>
+
+	<select id="getLastByEid" resultType="PwApplyRecord">
+		SELECT
+			<include refid="pwApplyRecordColumns"/>
+		FROM pw_apply_record a
+		<include refid="pwApplyRecordJoins"/>
+		<where>
+			a.del_flag = '0' and (a.eid = #{eid} or a.parent_id= #{eid})
+			and a.type not in ('90','100','110','120')
+		</where>
+		ORDER BY a.update_date DESC
+		LIMIT 1
+	</select>
+
+	<select id="getFrontAuditList" resultType="PwApplyRecord">
+			SELECT
+				<include refid="pwApplyRecordColumns"/>
+			FROM pw_apply_record a
+				<include refid="pwApplyRecordJoins"/>
+			<where>
+				a.del_flag = '0' and a.type not in ('90','100','110')
+				<if test="type != null and type != ''">
+					and a.type LIKE concat('%',#{type},'%')
+				</if>
+				<!--<if test="status != null and status != ''">-->
+					<!--and a.status != #{status}-->
+				<!--</if>-->
+				<if test="eid != null and eid != ''">
+					and  ( a.eid = #{eid} or a.parent_id= #{eid})
+				</if>
+			</where>
+			ORDER BY a.create_date
+		</select>
+
+	<select id="getAuditList" resultType="PwApplyRecord">
+		SELECT
+			<include refid="pwApplyRecordColumns"/>
+		FROM pw_apply_record a
+			<include refid="pwApplyRecordJoins"/>
+		<where>
+			a.del_flag = '0'
+			<if test="type != null and type != ''">
+				and a.type LIKE concat('%',#{type},'%')
+			</if>
+			<!--<if test="status != null and status != ''">-->
+				<!--and a.status != #{status}-->
+			<!--</if>-->
+			<if test="eid != null and eid != ''">
+				and  ( a.eid = #{eid} or a.parent_id= #{eid})
+			</if>
+		</where>
+		ORDER BY a.create_date
+	</select>
+
+	<select id="getBackAuditList" resultType="PwApplyRecord">
+			SELECT
+				<include refid="pwApplyRecordColumns"/>
+			FROM pw_apply_record a
+				<include refid="pwApplyRecordJoins"/>
+			<where>
+				a.del_flag = '0' and a.audit_id is not null
+				<if test="type != null and type != ''">
+					and a.type LIKE concat('%',#{type},'%')
+				</if>
+				<!--<if test="status != null and status != ''">-->
+					<!--and a.status != #{status}-->
+				<!--</if>-->
+				<if test="eid != null and eid != ''">
+					and  ( a.eid = #{eid} or a.parent_id= #{eid})
+				</if>
+			</where>
+			ORDER BY a.create_date
+		</select>
+
+	<select id="findAllList" resultType="PwApplyRecord">
+		SELECT
+			<include refid="pwApplyRecordColumns"/>
+		FROM pw_apply_record a
+		<include refid="pwApplyRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pw_apply_record(
+			id,
+			eid,
+			type,
+			parent_id,
+			status,
+			declare_id,
+			declare_time,
+			audit_id,
+			audit_time,
+			term,
+			bgremarks,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{eid},
+			#{type},
+			#{parentId},
+			#{status},
+			#{declareId},
+			#{declareTime},
+			#{auditId},
+			#{auditTime},
+			#{term},
+			#{bgremarks},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO pw_apply_record(
+			id,
+			eid,
+			type,
+			parent_id,
+			status,
+			declare_id,
+			declare_time,
+			audit_id,
+			audit_time,
+			term,
+			bgremarks,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.eid},
+			#{item.type},
+			#{parentId},
+			#{item.status},
+			#{item.declareId},
+			#{item.declareTime},
+			#{item.auditId},
+			#{item.auditTime},
+			#{item.term},
+			#{item.bgremarks},
+			#{item.updateDate},
+			#{item.updateBy.id},
+			#{item.createDate},
+			#{item.createBy.id},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE pw_apply_record SET
+			eid = #{eid},
+			parent_id = #{parentId},
+			type = #{type},
+			status = #{status},
+			term = #{term},
+			audit_id= #{auditId},
+			audit_time= #{auditTime},
+			bgremarks = #{bgremarks},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE pw_apply_record
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="eid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.eid}
+				</foreach>
+			</trim>
+			<trim prefix="type =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.type}
+				</foreach>
+			</trim>
+			<trim prefix="status =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.status}
+				</foreach>
+			</trim>
+			<trim prefix="term =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.term}
+				</foreach>
+			</trim>
+			<trim prefix="bgremarks =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.bgremarks}
+				</foreach>
+			</trim>
+			<trim prefix="update_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateDate}
+				</foreach>
+			</trim>
+			<trim prefix="update_by =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateBy.id}
+				</foreach>
+			</trim>
+			<trim prefix="remarks =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.remarks}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="updateFailByEid" parameterType="String" >
+		UPDATE pw_apply_record SET status = '2' WHERE status = '0' AND eid = #{id}
+	</update>
+
+
+	<update id="delete">
+		UPDATE pw_apply_record SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deletePL">
+		UPDATE pw_apply_record SET
+			del_flag = #{DEL_FLAG_DELETE}
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM pw_apply_record WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM pw_apply_record WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM pw_apply_record
+	</update>
+</mapper>

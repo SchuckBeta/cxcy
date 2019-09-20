@@ -1,0 +1,388 @@
+@charset "utf-8";
+
+.btn-link-primary {
+    line-height: 2;
+    color: #e9432d;
+    text-decoration: none;
+}
+
+.container-fluid {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.left-aside {
+    float: left;
+    width: 232px;
+    padding: 0 0 0 15px;
+}
+
+.btn-back {
+    color: #fff;
+    background: rgb(221, 72, 20);
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+.btn-back:hover {
+    color: #fff;
+    background: rgb(221, 72, 20);
+    text-decoration: none;
+}
+
+.user-info {
+    width: 214px;
+    border: 1px solid #ddd;
+    z-index: 1000;
+}
+
+.user-inner {
+    padding:6px;
+}
+
+.up-content{
+    margin-top: 10px;
+}
+
+.user-info-content .edit-bar-left {
+    margin-top: -10px;
+}
+
+.btn-link-edit {
+    vertical-align: middle;
+    text-decoration: none;
+}
+
+.btn-link-edit .icon-edit {
+    color: #ccc;
+}
+
+.btn-link-edit:hover, .btn-link-edit.editing {
+    color: #dd4814;
+    text-decoration: none;
+}
+
+.btn-link-edit:hover .icon-edit, .btn-link-edit.editing .icon-edit {
+    color: #dd4814;
+}
+
+.back-box {
+    margin-bottom: 10px;
+}
+
+.table-none-border > tbody > tr > td {
+    border: 0;
+}
+.edit-bar {
+    margin-bottom: 15px;
+}
+.edit-bar-left {
+    position: relative;
+}
+
+.edit-bar-left > span {
+    position: relative;
+    padding: 0 15px 0 0;
+    color: #e9432d;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 2.5;
+    background: #fff;
+    z-index: 1;
+}
+
+.edit-bar-left .line {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    right: 0;
+    border-top: 1px solid rgb(243, 213, 175);
+}
+
+.img-content {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+}
+
+.user-pic .btn {
+    display: block;
+    width: auto;
+    padding: 3px 11px;
+    margin: 0 auto 5px;
+    background: #dd4814;
+    color: #fff;
+    border-radius: 3px;
+}
+
+.user-pic .z-btn {
+    display: none;
+}
+
+.user-img {
+    display: block;
+    width: 100%;
+}
+
+.user-like {
+    font-size: 0;
+    margin-bottom: 10px;
+}
+
+.user-lk-item {
+    display: inline-block;
+    width: 50%;
+    font-size: 14px;
+    color: #333;
+    font-weight: 700;
+}
+
+.user-lk-item > span {
+    font-weight: normal;
+}
+
+.user-project-panels .user-panel {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.user-project-panels .user-panel > li {
+    margin: 10px 0;
+    font-size: 0;
+    font-weight: normal;
+    overflow: hidden;
+}
+.user-project-panels .user-panel label{
+    float: left;
+    width: 86px;
+    font-weight: normal;
+    margin-bottom: 0;
+    font-size: 12px;
+}
+.user-project-panels .user-panel span{
+    display: block;
+    margin-left: 88px;
+    text-align: left;
+    font-size: 12px;
+}
+.user-info-content {
+    margin-left: 232px;
+    padding: 0 15px 30px;
+    min-height: 400px;
+    overflow: hidden;
+}
+
+
+
+.user-info-form .table .control-label {
+    white-space: nowrap;
+    font-weight: normal;
+    color: #333;
+    width: 100%;
+}
+
+.user-info-form .table .form-control {
+    width: 152px;
+}
+
+.user-info-form .table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+.user-info-form .icon-require {
+    font-style: normal;
+    color: #d73435;
+}
+
+.input-append {
+    height: 34px;
+}
+
+@media (min-width: 768px) {
+    .form-inline .control-label {
+        text-align: right !important;
+    }
+}
+
+.btn-save {
+    color: #fff;
+    background: #e9432d;
+}
+
+.btn-save:hover, .btn-save:focus {
+    color: #fff;
+    background: #e9432d;
+}
+
+.tdi-wrapper {
+    border-top: 1px solid #ddd;
+}
+
+.tdi-list-wrap {
+    padding: 0 15px;
+}
+
+.user-info-form .ud-title {
+    margin-top: -6px;
+    margin-bottom: 8px;
+}
+
+.ud-title {
+    position: relative;
+    padding-left: 8px;
+    margin-bottom: 20px;
+    line-height: 2;
+    font-size: 16px;
+    color: #000;
+    border-bottom: 1px solid rgb(243, 213, 175);
+}
+
+.ud-title:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 16px;
+    margin-top: -8px;
+    width: 2px;
+    background-color: #fa5a45;
+}
+
+.info-cards {
+    padding: 0 15px;
+}
+
+.info-card {
+    position: relative;
+    padding-top: 20px;
+    padding-left: 52px;
+    margin-bottom: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.info-card-title {
+    position: absolute;
+    left: 40px;
+    top: -10px;
+    height: 20px;
+    padding: 0 20px;
+    margin: 0;
+    color: #333;
+    background-color: #fff;
+}
+
+.card-item-span {
+    display: block;
+    float: left;
+    width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.5;
+}
+
+.card-item-box {
+    float: left;
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+
+.info-card-table {
+    margin-bottom: 0;
+}
+
+.info-card-table > tr > td {
+    text-align: left;
+}
+
+
+
+.user-info-form .control-label {
+    float: left;
+    width: 86px;
+    margin-bottom: 0;
+    font-weight: normal;
+}
+.user-info-form label{
+    font-weight: normal;
+}
+.user-info-form .input-box {
+    margin-left: 96px;
+}
+
+.user-info-form .input-box > span {
+    padding-top: 7px;
+    margin-top: 0;
+    margin-bottom: 0;
+    position: relative;
+    display: inline-block;
+    padding-left: 20px;
+    font-weight: 400;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.user-info-form .input-box > span + span {
+    margin-left: 10px;
+}
+
+.user-info-form .input-box input[type="checkbox"] {
+    position: absolute;
+    margin-top: 4px \9;
+    margin-left: -20px;
+}
+
+.user-info-form .error {
+    /*display: block;*/
+    margin-top: 5px;
+    color: red;
+}
+
+.user-info-form .form-group {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.user-label-control {
+    float: left;
+    width: 72px;
+    line-height: 2;
+    margin-bottom: 0;
+    text-align: right;
+    color: #666;
+}
+
+.user-val {
+    margin-left: 72px;
+    line-height: 2;
+}
+
+.user-info-box div[class^="col-"] {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    overflow: hidden;
+}
+
+.ud-inner {
+    padding: 0 15px;
+}
+
+.ic-box {
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.info-comment .user-label-control {
+    width: 100px;
+}
+
+.info-comment .user-val {
+    margin-left: 100px;
+}
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input{
+    height: 34px;
+    padding: 6px 12px;
+}

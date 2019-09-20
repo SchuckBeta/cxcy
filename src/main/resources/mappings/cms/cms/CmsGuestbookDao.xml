@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.cms.modules.cms.dao.CmsGuestbookDao">
+<resultMap id="cmsGuestbookMap" type="com.oseasy.cms.modules.cms.entity.CmsGuestbook">
+		<id property="id" column="id" />
+		<result property="type" column="type" />
+		<result property="content" column="content" />
+		<result property="name" column="name"/>
+		<result property="email" column="email"/>
+		<result property="phone" column="phone"/>
+		<result property="qq" column="qq" />
+		<result property="auditstatus" column="auditstatus" />
+		<result property="isRecommend" column="isRecommend" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="reUser.id" column="reUser.id" />
+		<result property="reDate" column="reDate" />
+		<result property="reContent" column="reContent" />
+		<result property="reDate" column="reDate" />
+		<result property="delFlag" column="delFlag" />
+		<result property="createBy.name" column="createBy.name" />
+		<result property="createBy.photo" column="createBy.photo" />
+		<result property="reUser.name" column="reUser.name" />
+		<result property="reUser.photo" column="reUser.photo" />
+		<collection property="filess" ofType="SysAttachment" column="id"
+		select="com.oseasy.com.fileserver.modules.attachment.dao.SysAttachmentDao.findAttListByUid">
+		</collection>
+
+	</resultMap>
+
+	<sql id="cmsGuestbookColumns">
+		a.id AS "id",
+		a.type AS "type",
+		a.content AS "content",
+		a.name AS "name",
+		a.email AS "email",
+		a.phone AS "phone",
+		a.qq AS "qq",
+		a.auditstatus AS "auditstatus",
+		a.is_recommend AS "isRecommend",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.re_user_id AS "reUser.id",
+		a.re_date AS "reDate",
+		a.re_content AS "reContent",
+		a.del_flag AS "delFlag",
+		u.name AS "createBy.name",
+		u.photo AS "createBy.photo",
+		u11.name AS "reUser.name",
+		u11.photo AS "reUser.photo",
+
+		f.id AS "filess.id",
+		f.type AS "filess.ftype",
+		f.file_step AS "filess.ffileStep",
+		f.uid AS "filess.uid",
+		f.url AS "filess.url",
+		f.name AS "filess.name",
+		f.size AS "filess.size",
+		f.gnode_id AS "filess.gnodeId",
+		f.suffix AS "filess.suffix",
+		f.update_date AS "filess.updateDate",
+		f.update_by AS "filess.updateBy.id",
+		f.create_date AS "filess.createDate",
+		f.create_by AS "filess.createBy.id"
+	</sql>
+
+	<sql id="cmsGuestbookJoins">
+		LEFT JOIN sys_user u ON u.id = a.create_by
+		LEFT JOIN sys_user u11 ON u11.id = a.re_user_id
+		LEFT JOIN sys_attachment f ON a.id=f.uid and f.file_step='40000' and f.type='40000'
+	</sql>
+
+	<select id="get" resultMap="cmsGuestbookMap">
+		SELECT
+			<include refid="cmsGuestbookColumns"/>
+		FROM cms_guestbook a
+		<include refid="cmsGuestbookJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultMap="cmsGuestbookMap">
+		SELECT
+			<include refid="cmsGuestbookColumns"/>
+		FROM cms_guestbook a
+		<include refid="cmsGuestbookJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="auditstatus != null and auditstatus != ''">
+				AND a.auditstatus = #{auditstatus}
+			</if>
+			<if test="content != null and content != ''">
+				AND a.content = #{content}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="email != null and email != ''">
+				AND a.email = #{email}
+			</if>
+			<if test="phone != null and phone != ''">
+				AND a.phone = #{phone}
+			</if>
+			<if test="qq != null and qq != ''">
+				AND a.qq = #{qq}
+			</if>
+			<if test="reContent != null and reContent != ''">
+				AND a.re_content = #{reContent}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+		</where>
+		GROUP BY a.id
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.is_recommend DESC, ${page.orderBy} ${page.orderByType}, a.update_date DESC, a.create_date DESC, a.re_date DESC
+			</when>
+			<otherwise>
+				ORDER BY a.is_recommend DESC, a.update_date DESC, a.create_date DESC, a.re_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultMap="cmsGuestbookMap">
+		SELECT
+			<include refid="cmsGuestbookColumns"/>
+		FROM cms_guestbook a
+		<include refid="cmsGuestbookJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY a.is_recommend DESC, ${page.orderBy} ${page.orderByType}, a.update_date DESC, a.create_date DESC, a.re_date DESC
+			</when>
+			<otherwise>
+				ORDER BY a.is_recommend DESC, a.update_date DESC, a.create_date DESC, a.re_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert" parameterType="cmsGuestbook">
+		<selectKey resultType="String" keyProperty="id" order="AFTER" >
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		INSERT INTO cms_guestbook(
+			<!-- id, -->
+			type,
+			content,
+			name,
+			email,
+			phone,
+			qq,
+			auditstatus,
+			is_recommend,
+			create_by,
+			create_date,
+			update_date,
+			re_user_id,
+			re_date,
+			re_content,
+			del_flag
+		) VALUES (
+			<!-- #{id}, -->
+			#{type},
+			#{content},
+			#{name},
+			#{email},
+			#{phone},
+			#{qq},
+			#{auditstatus},
+			#{isRecommend},
+			#{createBy.id},
+			#{createDate},
+			#{updateDate},
+			#{reUser.id},
+			#{reDate},
+			#{reContent},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE cms_guestbook SET
+			type = #{type},
+			content = #{content},
+			name = #{name},
+			email = #{email},
+			phone = #{phone},
+			qq = #{qq},
+			auditstatus = #{auditstatus},
+			is_recommend = #{isRecommend},
+			re_user_id = #{reUser.id},
+			re_date = #{reDate},
+			create_date = #{createDate},
+			update_date = #{updateDate},
+			re_content = #{reContent},
+			del_flag = #{delFlag}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePLAudit" parameterType="java.util.List" >
+			UPDATE cms_guestbook
+			<trim prefix="set" suffixOverrides=",">
+				<trim prefix="auditstatus =case" suffix="end,">
+					<foreach item="item" collection="entitys" index="index">
+						when id=#{item.id} then #{item.auditstatus}
+					</foreach>
+				</trim>
+			</trim>
+			WHERE id in
+			<foreach item="item" collection="entitys" separator="," open="("
+				close=")">
+				#{item.id}
+			</foreach>
+		</update>
+
+	<update id="delete">
+		UPDATE cms_guestbook SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deletePL">
+		UPDATE cms_guestbook SET del_flag = #{DEL_FLAG_DELETE} WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM cms_guestbook WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM cms_guestbook WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+</mapper>

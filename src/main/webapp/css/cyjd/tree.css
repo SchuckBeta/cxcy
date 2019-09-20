@@ -1,0 +1,146 @@
+*{
+	list-style: none;
+	text-decoration: none;
+	color: black;
+	margin: 0;
+	padding: 0;
+}
+
+ul{
+	margin:0;
+}
+
+.tree-head{
+	background: #F5E7D5;
+	padding:2px 0;
+	border-top:1px solid #DDDDDD;
+	font-weight: bold;
+}
+
+#tree{
+	margin-bottom: 0px;
+}
+
+.tree-school-root li{
+	width: 100%;
+	font-size: 12px;
+}
+
+.tree-school-root li ul{
+	/* margin: 6px 0; */
+}
+
+.tree-school-root li ul li{
+
+}
+
+.root-div{
+	font-size: 12px;
+}
+
+.root-center{
+	/*padding: 0px 0 2px 0px;*/
+}
+
+.root-hover:hover{
+	background-color: #F5F5F5;
+}
+
+.root-name{
+	float: none;
+	margin: 0;
+	display: inline-block;
+	width: 23%;
+	text-align: center;
+	height:34px;
+	line-height:34px;
+}
+
+.root-name a{
+	color: #E9432D;
+}
+
+.name-indent{
+	text-indent: 25px;
+}
+
+.root-time{
+	width: 19%;
+	display: inline-block;
+	text-align: center;
+}
+
+.root-example{
+	width: 34%;
+	display: inline-block;
+	text-align: center;
+}
+
+.root-button{
+	display: inline-block;
+	width: 22%;
+}
+
+.root-alabel-button{
+	text-align: right;
+}
+
+.root-button a{
+	margin-top:-2px;
+}
+
+.root-alabel-change{
+	margin-right: 10px;
+}
+
+.root-border-bottom{
+	border-bottom: 1px solid #DDDDDD;
+}
+
+#all-hide{
+	margin-top:-2px;
+}
+
+.all-down{
+	font-size:12px;
+	color:#555555;
+}
+
+
+
+/* .click{
+	width:40px;
+	height:20px;
+	position: relative;
+	top: -30px;
+	left: 140px;
+} */
+
+/* .tree-school-root li::after,.tree-school-root li::before{
+	content: '';
+	position: absolute;
+	right: auto;
+	left: -18px;
+}
+
+.tree-school-root li::before{
+	border-left:1px dotted #CDCDCD;
+	height: 100%;
+	top: 2px;
+	left: -32px;
+	bottom: 100px;
+	width: 1px;
+}
+
+.tree-school-root li::after{
+	border-top:1px dotted #CDCDCD;
+	height:20px;
+    top:30px;
+    width:30px;
+    left: -32px;
+}
+
+.tree-school-root li:last-child::before{
+	height:29px;
+} */
+

@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.iep.dao.IepTplDao">
+
+	<sql id="iepTplColumns">
+		a.id AS "id",
+		a.parent_id AS "parent.id",
+		a.parent_ids AS "parentIds",
+		a.name AS "name",
+		a.type AS "type",
+		a.level AS "level",
+		a.sort AS "sort",
+		a.path AS "path",
+		a.epath AS "epath",
+		a.oper_type AS "operType",
+		a.ftype AS "ftype",
+		a.step AS "step",
+		a.filters AS "filters",
+		a.curr AS "curr",
+		a.has_file AS "hasFile",
+		a.has_fgf AS "hasFgf",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		p.parent_id AS "parent.parent.id",
+		p.parent_ids AS "parent.parentIds",
+		p.name AS "parent.name",
+		p.type AS "parent.type",
+		p.level AS "parent.level",
+		p.sort AS "parent.sort",
+		p.path AS "parent.path",
+		p.epath AS "parent.epath",
+		p.oper_type AS "parent.operType",
+		p.ftype AS "parent.ftype",
+		p.step AS "parent.step",
+		p.filters AS "parent.filters",
+		p.curr AS "parent.curr",
+		p.has_file AS "parent.hasFile",
+		p.has_fgf AS "parent.hasFgf",
+		p.update_date AS "parent.updateDate",
+		p.update_by AS "parent.updateBy.id",
+		p.create_date AS "parent.createDate",
+		p.create_by AS "parent.createBy.id",
+		p.remarks AS "parent.remarks",
+		p.del_flag AS "parent.delFlag"
+	</sql>
+
+	<sql id="iepTplJoins">
+		LEFT JOIN iep_tpl p ON p.id = a.parent_id
+	</sql>
+
+	<select id="get" resultType="IepTpl">
+		SELECT
+			<include refid="iepTplColumns"/>
+		FROM iep_tpl a
+		<include refid="iepTplJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="IepTpl">
+		SELECT
+			<include refid="iepTplColumns"/>
+		FROM iep_tpl a
+		<include refid="iepTplJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="parentIds != null and parentIds != ''">
+				AND a.parent_ids LIKE
+					<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="level != null and level != ''">
+				AND a.level = #{level}
+			</if>
+			<if test="operType != null and operType != ''">
+				AND a.oper_type = #{operType}
+			</if>
+			<if test="ftype != null and ftype != ''">
+				AND a.ftype = #{ftype}
+			</if>
+		</where>
+		ORDER BY a.parent_ids DESC, a.sort ASC
+	</select>
+
+	<select id="findListBySteps" resultType="IepTpl">
+		SELECT
+			<include refid="iepTplColumns"/>
+		FROM iep_tpl a
+		<include refid="iepTplJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids LIKE concat('',#{parentIds},'%') AND a.level = #{level}
+		</where>
+		ORDER BY a.parent_ids ASC, a.sort ASC
+	</select>
+
+	<select id="findAllList" resultType="IepTpl">
+		SELECT
+			<include refid="iepTplColumns"/>
+		FROM iep_tpl a
+		<include refid="iepTplJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+	</select>
+
+	<select id="findByParentIdsLike" resultType="IepTpl">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM iep_tpl a
+		<include refid="iepTplJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.parent_ids LIKE concat('',#{parentIds},'%')
+		</where>
+		ORDER BY a.parent_ids ASC, a.sort ASC
+	</select>
+
+	<select id="findTreeById" resultType="IepTpl">
+		SELECT
+			<include refid="iepTplColumns"/>
+		FROM iep_tpl a
+		<include refid="iepTplJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND (a.parent_ids LIKE concat('',#{parentIds},'%') OR a.id = #{id})
+		</where>
+		ORDER BY a.parent_ids ASC, a.sort ASC
+	</select>
+
+	<insert id="insert">
+		INSERT INTO iep_tpl(
+			id,
+			parent_id,
+			parent_ids,
+			name,
+			type,
+			level,
+			sort,
+			path,
+			epath,
+			oper_type,
+			ftype,
+			step,
+			filters,
+			curr,
+			has_file,
+			has_fgf,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{parent.id},
+			#{parentIds},
+			#{name},
+			#{type},
+			#{level},
+			#{sort},
+			#{path},
+			#{epath},
+			#{operType},
+			#{ftype},
+			#{step},
+			#{filters},
+			#{curr},
+			#{hasFile},
+			#{hasFgf},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO iep_tpl(
+			id,
+			parent_id,
+			parent_ids,
+			name,
+			type,
+			level,
+			sort,
+			path,
+			epath,
+			oper_type,
+			ftype,
+			step,
+			filters,
+			curr,
+			has_file,
+			has_fgf,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.parent.id},
+			#{item.parentIds},
+			#{item.name},
+			#{item.type},
+			#{item.level},
+			#{item.sort},
+			#{item.path},
+			#{item.epath},
+			#{item.operType},
+			#{item.ftype},
+			#{item.step},
+			#{item.filters},
+			#{item.curr},
+			#{item.hasFile},
+			#{item.hasFgf},
+			#{item.updateDate},
+			#{item.updateBy.id},
+			#{item.createDate},
+			#{item.createBy.id},
+			#{item.remarks},
+			#{item.delFlag}
+		</foreach>
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE iep_tpl SET
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds},
+			name = #{name},
+			type = #{type},
+			level = #{level},
+			sort = #{sort},
+			path = #{path},
+			epath = #{epath},
+			oper_type = #{operType},
+			ftype = #{ftype},
+			step = #{step},
+			filters = #{filters},
+			curr = #{curr},
+			has_file = #{hasFile},
+			has_fgf = #{hasFgf},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE iep_tpl
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="parent_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.parent.id}
+				</foreach>
+			</trim>
+			<trim prefix="parent_ids =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.parentIds}
+				</foreach>
+			</trim>
+			<trim prefix="name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.name}
+				</foreach>
+			</trim>
+			<trim prefix="type =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.type}
+				</foreach>
+			</trim>
+			<trim prefix="level =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.level}
+				</foreach>
+			</trim>
+			<trim prefix="sort =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.sort}
+				</foreach>
+			</trim>
+			<trim prefix="path =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.path}
+				</foreach>
+			</trim>
+			<trim prefix="epath =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.epath}
+				</foreach>
+			</trim>
+			<trim prefix="oper_type =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.operType}
+				</foreach>
+			</trim>
+			<trim prefix="ftype =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.ftype}
+				</foreach>
+			</trim>
+			<trim prefix="step =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.step}
+				</foreach>
+			</trim>
+			<trim prefix="filters =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.filters}
+				</foreach>
+			</trim>
+			<trim prefix="curr =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.curr}
+				</foreach>
+			</trim>
+			<trim prefix="has_file =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.hasFile}
+				</foreach>
+			</trim>
+			<trim prefix="has_fgf =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.hasFgf}
+				</foreach>
+			</trim>
+			<trim prefix="update_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateDate}
+				</foreach>
+			</trim>
+			<trim prefix="update_by =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateBy.id}
+				</foreach>
+			</trim>
+			<trim prefix="remarks =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.remarks}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+
+	<update id="updateParentIds">
+		UPDATE iep_tpl SET
+			parent_id = #{parent.id},
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE iep_tpl SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
+	</update>
+
+	<update id="deletePL">
+		UPDATE iep_tpl SET
+			del_flag = #{DEL_FLAG_DELETE}
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM iep_tpl WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM iep_tpl WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM iep_tpl
+	</update>
+</mapper>

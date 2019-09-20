@@ -1,0 +1,18 @@
+/* 内容管理系统表格页样式 */
+.table-page {margin: 27px 27px 0 27px;}
+.table-page .breadcrumbs {color: gray;margin-bottom: 27px;}
+.table-page .nav {margin-bottom: 0;}
+.table-page .nav + form {margin-top: 8px;}
+.table-page .breadcrumb {margin-top: 0!important;margin-bottom: 0;border-radius: 0;border-left:1px solid #ddd;border-right:1px solid #ddd;}
+.table-page .table-bordered {border-radius: 0 0 4px 4px;}
+
+.table-page .table-bordered thead:first-child tr:first-child>th:first-child,
+.table-page .table-bordered tbody:first-child tr:first-child>td:first-child,
+.table-page .table-bordered tbody:first-child tr:first-child>th:first-child {border-top-left-radius: 0;}
+
+.table-page .table-bordered thead:first-child tr:first-child>th:last-child,
+.table-page .table-bordered tbody:first-child tr:first-child>td:last-child,
+.table-page .table-bordered tbody:first-child tr:first-child>th:last-child {border-top-right-radius: 0;}
+
+.table-page .form-actions .btn + .btn {margin-left: 20px;}
+.table-page .cke_skin_kama .cke_focus {outline: none;}

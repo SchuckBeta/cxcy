@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.impdata.dao.ProModelErrorDao">
+
+	<sql id="proModelErrorColumns">
+		a.id AS "id",
+		a.imp_id AS "impId",
+		a.office AS "office",
+		a.name AS "name",
+		a.number AS "number",
+		a.type AS "type",
+		a.leader AS "leader",
+		a.introduction AS "introduction",
+		a.hasfile AS "hasfile",
+		a.no AS "no",
+		a.mobile AS "mobile",
+		a.email AS "email",
+		a.profes AS "profes",
+		a.members AS "members",
+		a.teachers AS "teachers",
+		a.tea_no AS "teaNo",
+		a.tea_title AS "teaTitle",
+		a.result AS "result",
+		a.level AS "level",
+		a.stage AS "stage",
+		a.project_source AS "projectSource",
+		a.year AS "year",
+		a.team_id AS "teamId",
+		a.team_name AS "teamName",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id"
+	</sql>
+
+	<sql id="proModelErrorJoins">
+	</sql>
+
+	<select id="get" resultType="ProModelError">
+		SELECT
+			<include refid="proModelErrorColumns"/>
+		FROM pro_model_error a
+		<include refid="proModelErrorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ProModelError">
+		SELECT
+			<include refid="proModelErrorColumns"/>
+		FROM pro_model_error a
+		<include refid="proModelErrorJoins"/>
+		<where>
+
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ProModelError">
+		SELECT
+			<include refid="proModelErrorColumns"/>
+		FROM pro_model_error a
+		<include refid="proModelErrorJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pro_model_error(
+			id,
+			imp_id,
+			office,
+			name,
+			number,
+			type,
+			leader,
+			introduction,
+			hasfile,
+			no,
+			mobile,
+			email,
+			profes,
+			members,
+			teachers,
+			tea_no,
+			tea_title,
+			result,
+			level,
+			stage,
+			project_source,
+			year,
+			team_id,
+			team_name,
+			update_date,
+			update_by,
+			create_date,
+			create_by
+		) VALUES (
+			#{id},
+			#{impId},
+			#{office},
+			#{name},
+			#{number},
+			#{type},
+			#{leader},
+			#{introduction},
+			#{hasfile},
+			#{no},
+			#{mobile},
+			#{email},
+			#{profes},
+			#{members},
+			#{teachers},
+			#{teaNo},
+			#{teaTitle},
+			#{result},
+			#{level},
+			#{stage},
+			#{projectSource},
+			#{year},
+			#{teamId},
+			#{teamName},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pro_model_error SET
+			imp_id = #{impId},
+			office = #{office},
+			name = #{name},
+			number = #{number},
+			type = #{type},
+			leader = #{leader},
+			introduction = #{introduction},
+			hasfile = #{hasfile},
+			no = #{no},
+			mobile = #{mobile},
+			email = #{email},
+			profes = #{profes},
+			members = #{members},
+			teachers = #{teachers},
+			tea_no = #{teaNo},
+			tea_title = #{teaTitle},
+			result = #{result},
+			level = #{level},
+			stage = #{stage},
+			project_source = #{projectSource},
+			year = #{year},
+			team_id = #{teamId},
+			team_name = #{teamName},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE pro_model_error
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="imp_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.impId}
+				</foreach>
+			</trim>
+			<trim prefix="office =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.office}
+				</foreach>
+			</trim>
+			<trim prefix="name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.name}
+				</foreach>
+			</trim>
+			<trim prefix="number =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.number}
+				</foreach>
+			</trim>
+			<trim prefix="type =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.type}
+				</foreach>
+			</trim>
+			<trim prefix="leader =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.leader}
+				</foreach>
+			</trim>
+			<trim prefix="introduction =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.introduction}
+				</foreach>
+			</trim>
+			<trim prefix="hasfile =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.hasfile}
+				</foreach>
+			</trim>
+			<trim prefix="no =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.no}
+				</foreach>
+			</trim>
+			<trim prefix="mobile =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.mobile}
+				</foreach>
+			</trim>
+			<trim prefix="email =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.email}
+				</foreach>
+			</trim>
+			<trim prefix="profes =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.profes}
+				</foreach>
+			</trim>
+			<trim prefix="members =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.members}
+				</foreach>
+			</trim>
+			<trim prefix="teachers =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.teachers}
+				</foreach>
+			</trim>
+			<trim prefix="tea_no =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.teaNo}
+				</foreach>
+			</trim>
+			<trim prefix="tea_title =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.teaTitle}
+				</foreach>
+			</trim>
+			<trim prefix="result =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.result}
+				</foreach>
+			</trim>
+			<trim prefix="level =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.level}
+				</foreach>
+			</trim>
+			<trim prefix="stage =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.stage}
+				</foreach>
+			</trim>
+			<trim prefix="project_source =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.projectSource}
+				</foreach>
+			</trim>
+			<trim prefix="year =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.year}
+				</foreach>
+			</trim>
+			<trim prefix="team_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.teamId}
+				</foreach>
+			</trim>
+			<trim prefix="team_name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.teamName}
+				</foreach>
+			</trim>
+			<trim prefix="update_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateDate}
+				</foreach>
+			</trim>
+			<trim prefix="update_by =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateBy.id}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="delete">
+		DELETE FROM pro_model_error
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM pro_model_error WHERE id = #{id}
+	</update>
+	<select id="getListByImpId" resultType="java.util.HashMap"
+		parameterType="java.lang.String">
+		SELECT
+		t.*
+		FROM
+		pro_model_error t
+		WHERE
+		t.imp_id = #{impid}
+		order by
+		t.create_date
+	</select>
+	<update id="deleteByImpId" parameterType="java.lang.String">
+		DELETE FROM
+		pro_model_error
+		WHERE imp_id = #{impid}
+	</update>
+</mapper>

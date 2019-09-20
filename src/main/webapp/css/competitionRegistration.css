@@ -1,0 +1,993 @@
+select {border: 1px solid #cbcbcb;}
+h4{
+	width: 100%;
+	overflow: hidden;
+	text-align: center;
+	font-size:30px;
+	line-height: 100px;
+	color: #1b1b1b;
+	margin-top: 50px;
+}
+
+.wholebox{
+	width: 1242px;
+	overflow: hidden;
+	margin: 20px auto 77px auto;
+	border: 1px solid #cecece;
+}
+
+.wholebox .datenameprint{
+	width: 100%;
+	height: 30px;
+	overflow: hidden;
+	line-height: 30px;
+}
+
+.wholebox .datenameprint span{
+	margin-right: 5px;
+	font-size: 14px;
+	color: #656565;
+	margin-left: 12px;
+}
+
+.wholebox .datenameprint small{
+	margin-right: 20px;
+	color: #656565;
+	font-size: 14px;
+}
+
+.wholebox .datenameprint a{
+	float: right;
+	line-height: 30px;
+	margin-right: 10px;
+	color: #656565;
+	font-size: 14px;
+	padding-left: 24px;
+	background: url(../img/print.png) no-repeat left center;
+	cursor: pointer;
+}
+
+.wholebox .datenameprint a:hover{
+	background: url(../img/printon.png) no-repeat left center;
+}
+
+.wholebox .title{
+	width: 100%;
+	height: 40px;
+	line-height: 40px;
+	color:#656565;
+	background-color:#f4e6d4 ;
+	font-size:16px;
+	font-weight: bold;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding-left: 10px;
+}
+
+.content{
+	overflow: hidden;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 50px 140px;	
+}
+
+.content label.error {
+	float: none !important;
+	display: block;
+	margin-left: 101px;
+	width: auto !important;
+	clear: both;
+	height: 16px !important;
+	line-height: 16px !important;
+	font-size:12px !important;
+}
+
+.content .personalinfor{
+	width: 100%;
+}
+
+.content .personalinfor li{
+	float: left;
+	width:460px;
+	height:30px;
+	margin-bottom:15px;
+	position: relative;
+}
+
+
+.content .personalinfor li label{
+	float: left;
+	width:140px;
+	color:#656565;
+	font-size:14px;
+	text-align: left;
+	font-weight: normal;
+	line-height: 30px;
+}
+.content .personalinfor li:nth-child(even) label {width: 101px;}
+.content .personalinfor li label.error{
+	display: block;
+	font-size: 12px;
+	margin-left: 165px;
+	text-align: left;
+	position: static !important;
+}
+
+.content .personalinfor li label span{
+	color:#e9442d;
+	font-size:14px;
+	line-height: 30px;
+	margin-right: 5px;
+}
+
+.content .personalinfor li input{
+	float:left;
+	width:178px;
+	height:30px;
+	border: 1px solid #cbcbcb;
+	text-indent: 5px;
+	border-radius: 3px;
+}
+
+.content .personalinfor li input#nianfen{
+	float:left;
+	width:60px;
+	height:30px;
+	margin-left: 10px;
+	margin-right: 10px;
+	border: 1px solid #cbcbcb;
+	text-indent: 5px;
+	border-radius: 3px;
+}
+
+.content .personalinfor li small{
+	font-size:14px;
+	line-height: 30px;
+}
+
+.content .personalinfor li select{
+	float:left;
+	width:178px;
+	height:30px;
+	border: 1px solid #cbcbcb;
+	text-indent: 5px;
+	border-radius: 3px;
+}
+
+.content .iteminfor{
+	width: 100%;
+	overflow: hidden;
+}
+
+
+.content .iteminfor .biaoti{
+	width: 100%;
+	height:30px;
+	border-bottom: 1px solid #f3d5af;
+	position: relative;
+	overflow: visible !important;
+	margin-bottom: 30px;
+}
+
+.content .iteminfor .biaoti span{
+	display: block;
+	width:100px;
+	height:30px;
+	background: white;
+	color:#343434;
+	font-size:15px;
+	line-height: 30px;
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+}
+
+.content .iteminfor p{
+	clear: both;
+	width: 100%;
+	min-height: 30px;
+	margin-bottom: 15px;
+}
+
+.content .iteminfor p label.linehead{
+	float: left;
+	width: 112px;
+	color:#656565;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 30px;
+}
+
+.content .iteminfor p label.linehead span{
+	float: left;
+	color: #e9442d;
+	margin-right: 5px;
+}
+
+.content .iteminfor p label.error{
+	color: red;
+	font-size: 12px;
+}
+
+.content .iteminfor p input[type="text"]{
+	width:435px;
+	height:30px;
+	border: 1px solid #cbcbcb;
+	text-indent: 5px;
+	border-radius: 3px;
+}
+
+.content .iteminfor p select{
+	float: left;
+	width:160px;
+	height: 30px;
+	border: 1px solid #cbcbcb;
+	border-radius: 3px;
+	margin-right: 30px;
+}
+
+/*.content .iteminfor p.selecbox label.error{*/
+	/*display: none !important;*/
+/*}*/
+
+.content .iteminfor p select:last-child{
+	margin-right: 0px;
+}
+
+.content .iteminfor p#myradiobox input{
+	float: left;
+	margin-top: 8px;
+	margin-right: 5px;
+}
+
+
+.content .iteminfor p#myradiobox label{
+	float: left;
+}
+
+.content .iteminfor p#myradiobox label.error{
+	float: left;
+	font-size: 12px;
+	line-height:30px;
+}
+
+.content .iteminfor p#myradiobox select{
+	float: left;
+}
+
+
+
+
+
+
+
+
+
+.content .teaminfor{
+	width: 100%;
+	overflow: hidden;
+}
+
+/*.content .teaminfor p label.error{*/
+	/*display: none !important;*/
+/*}*/
+
+.content .teaminfor .biaoti{
+	width: 100%;
+	height:30px;
+	border-bottom: 1px solid #f3d5af;
+	position: relative;
+	overflow: visible !important;
+	margin-bottom: 30px;
+}
+
+.content .teaminfor .biaoti span{
+	display: block;
+	width:100px;
+	height:30px;
+	background: white;
+	color:#343434;
+	font-size:16px;
+	line-height: 30px;
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+}
+.content .teaminfor .biaoti span.char4{
+	display: block;
+	width:70px;
+	height:30px;
+	background: white;
+	color:#343434;
+	font-size:16px;
+	line-height: 30px;
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+}
+
+.content .teaminfor .biaoti span.char2{
+	display: block;
+	width:40px;
+	height:30px;
+	background: white;
+	color:#343434;
+	font-size:16px;
+	line-height: 30px;
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+}
+.content .teaminfor p{
+	width: 100%;
+	height: 30px;
+	margin-bottom: 15px;
+	color:#656565;
+	font-size: 14px;
+	line-height: 33px;
+}
+
+.content .teaminfor p label{
+	float: left;
+	width: 101px;
+	color:#656565;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 30px;
+}
+.content .teaminfor p label.error {margin-left: 101px;}
+
+.content .teaminfor p label span{
+	float: left;
+	color: #e9442d;
+	margin-right: 5px;
+}
+
+.content .teaminfor p select{
+	float: left;
+	width:180px;
+	height: 30px;
+	border: 1px solid #cbcbcb;
+	border-radius: 3px;
+	margin-right: 70px;
+}
+
+.content .teaminfor .studentteam{
+	width: 100%;
+	height: 28px;
+	margin-bottom: 0px;
+	
+}
+
+.content .teaminfor .studentteam span{
+	display: block;
+	width: 80px;
+	height: 28px;
+	text-align: center;
+	line-height: 28px;
+	background: #ebebeb;
+	color:#656565;
+	font-size:14px;
+	border-radius: 3px 3px 0 0;
+}
+
+
+.content .teaminfor .studenttb{
+	width:100%;
+	border: none;
+	border-collapse: collapse;
+	border-spacing: none;
+	text-align: center;
+	margin-bottom: 25px;
+}
+
+.content .teaminfor .studenttb th,.content .teaminfor .studenttb td{
+	border: 1px solid #d4d4d4;
+	text-align: center;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 5px;
+	font-size: 14px;
+	color: #656565;
+}
+
+.content .teaminfor .studenttb th{
+	background: #f4e6d4;
+}
+
+
+.content .teaminfor .guideteacher{
+	width: 100%;
+	height: 28px;
+	margin-bottom: 0px;
+}
+
+.content .teaminfor .guideteacher span{
+	display: block;
+	width: 80px;
+	height: 28px;
+	text-align: center;
+	line-height: 28px;
+	background: #ebebeb;
+	color:#656565;
+	font-size:14px;
+	border-radius: 3px 3px 0 0;
+}
+
+
+.content .teaminfor .teachertb{
+	width:100%;
+	border: none;
+	border-collapse: collapse;
+	border-spacing: none;
+	text-align: center;
+	margin-bottom: 25px;
+}
+
+.content .teaminfor .teachertb th,.content .teaminfor .teachertb td{
+	border: 1px solid #d4d4d4;
+	text-align: center;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 5px;
+	font-size: 14px;
+	color: #656565;
+}
+
+.content .teaminfor .teachertb th{
+	background: #f4e6d4;
+}
+
+
+
+
+
+
+
+.content .itemintro{
+	width: 100%;
+	overflow: hidden;
+}
+
+.content .itemintro .biaoti{
+	width: 100%;
+	height:30px;
+	border-bottom: 1px solid #f3d5af;
+	position: relative;
+	overflow: visible !important;
+	margin-bottom: 30px;
+}
+
+.content .itemintro .biaoti span{
+	display: block;
+	width:100px;
+	height:30px;
+	background: white;
+	color:#343434;
+	font-size:15px;
+	line-height: 30px;
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+}
+
+.content .itemintro .biaoti span.char4{
+	width:70px;
+}
+
+.content .itemintro .biaoti span.char2{
+	width:40px;
+}
+
+
+.content .itemintro p{
+	width: 100%;
+	height: 30px;
+	margin-bottom: 15px;
+}
+
+.content .itemintro p label{
+	float: left;
+	color:#656565;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 30px;
+}
+
+/*.prepare  + label.error,.introarea + label.error {font-size: 13px;margin-top: -10px;display: block;margin-bottom: 10px;}*/
+.exceptresult textarea {margin-bottom: 15px;}
+.content textarea + label.error {font-size: 13px;margin-top: -18px;display: block;margin-bottom: 10px;margin-left:2px;}
+.content td textarea + label.error {margin-bottom: 0;}
+.content td input + label.error {font-size: 13px;margin-top: 0;display: block;margin-bottom: 0px;margin-left:2px;}
+
+.content .itemintro p label span{
+	float: left;
+	color: #e9442d;
+	margin-right: 5px;
+}
+
+.content .itemintro .introarea{
+	width: 100%;
+	height: 90px;
+	border: 1px solid #d4d4d4;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding:5px 10px;
+	margin-bottom: 15px;
+}
+
+.content .itemintro .prepare{
+	width: 100%;
+	height: 90px;
+	border: 1px solid #d4d4d4;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding:5px 10px;
+	margin-bottom: 15px;
+}
+
+.content .itemintro .yuantb{
+	width:100%;
+	border: none;
+	border-collapse: collapse;
+	border-spacing: none;
+	text-align: center;
+	margin-bottom: 25px;
+}
+
+.content .itemintro .yuantb td.timeerrorbox label.error{
+	float: left;
+	width: 100%;
+}
+
+.content .itemintro .yuantb th,.content .itemintro .yuantb td{
+	border: 1px solid #d4d4d4;
+	text-align: center;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	font-size: 14px;
+	color: #656565;
+}
+
+.content .itemintro .yuantb th{
+	background: #f4e6d4;
+	padding: 5px;
+}
+
+.content .itemintro .yuantb td textarea{
+	width: 100%;
+	height:76px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 5px;
+	border-width: 0;
+}
+
+.content .itemintro .yuantb td input{
+	display: inline-block;
+	width:120px;
+	height: 30px;
+	border: 1px solid #cecece;
+	border-radius: 3px;
+}
+
+
+
+
+
+
+.content .itemintro .task{
+	width:100%;
+	border: none;
+	border-collapse: collapse;
+	border-spacing: none;
+	text-align: center;
+	margin-bottom: 25px;
+}
+
+.content .itemintro .task td.timeerrorbox label.error{
+	float: left;
+	width: 100%;
+}
+
+.content .itemintro .task th,.content .itemintro .task td{
+	border: 1px solid #d4d4d4;
+	text-align: center;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	font-size: 14px;
+	color: #656565;
+}
+
+.content .itemintro .task th{
+	background: #f4e6d4;
+	padding: 5px;
+}
+
+.content .itemintro .task td textarea{
+	width: 100%;
+	height:47px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 5px;
+	border-width: 0px;
+}
+
+.content .itemintro .task td input{
+	display: inline-block;
+	width:120px;
+	height: 30px;
+	border: 1px solid #cecece;
+	border-radius: 3px;
+}
+
+.content .itemintro .task td a{
+	display: inline-block;
+	width:19px;
+	height:19px;
+	background: url(../img/minuse.png) no-repeat;
+}
+
+.content .itemintro .task td a:hover{
+	background: url(../img/minus2.png) no-repeat;
+}
+
+.content .itemintro .task td a.plus{
+	background: url(../img/plus.png) no-repeat;
+}
+
+.content .itemintro .task td a.plus:hover{
+	background: url(../img/plus2.png) no-repeat;
+}
+
+.content .itemintro .task tbody tr td:last-child a.plus{
+	display: none;
+}
+
+.content .itemintro .task tbody tr:last-child td:last-child a.plus{
+	display: inline-block;
+}
+
+
+
+.content .exceptresult{
+	width: 100%;
+	overflow: hidden;
+}
+
+.content .exceptresult .biaoti{
+	width: 100%;
+	height:30px;
+	border-bottom: 1px solid #f3d5af;
+	position: relative;
+	overflow: visible !important;
+	margin-bottom: 30px;
+}
+
+.content .exceptresult .biaoti span{
+	display: block;
+	width:100px;
+	height:30px;
+	background: white;
+	color:#343434;
+	font-size:16px;
+	line-height: 30px;
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+}
+
+
+.content .exceptresult p{
+	width: 100%;
+	height: 30px;
+	margin-bottom: 15px;
+}
+
+.content .exceptresult p.nocheckerror{
+	width: 100%;
+	height: 15px;
+	font-size: 12px;
+	color: red;
+	margin-bottom:20px;
+	margin-top: -15px;
+	box-sizing:border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing:border-box;
+	padding-left:10px;
+	display: none;
+}
+
+.content .exceptresult p label{
+	float: left;
+	color:#656565;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 30px;
+}
+
+
+
+.content .exceptresult p label span{
+	float: left;
+	color: #e9442d;
+	margin-right: 5px;
+}
+
+.content .exceptresult p input[type="checkbox"]{
+	float: left;
+	margin-top: 8px;
+	margin-left: 15px;
+	margin-right: 5px;
+}
+
+.content .exceptresult textarea{
+	width: 100%;
+	height: 90px;
+	overflow: hidden;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border: 1px solid #cbcbcb;
+	padding: 5px;
+}
+
+
+
+
+
+.content .exceptcost{
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 25px;
+}
+
+.content .exceptcost .biaoti{
+	width: 100%;
+	height:30px;
+	border-bottom: 1px solid #f3d5af;
+	position: relative;
+	overflow: visible !important;
+	margin-bottom: 30px;
+}
+
+.content .exceptcost .biaoti span{
+	display: block;
+	width:100px;
+	height:30px;
+	background: white;
+	color:#343434;
+	font-size:16px;
+	line-height: 30px;
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+}
+
+
+.content .exceptcost p{
+	width: 100%;
+	height: 30px;
+	margin-bottom: 15px;
+}
+
+.content .exceptcost p label{
+	float: left;
+	color:#656565;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 30px;
+}
+
+.content .exceptcost p label span{
+	float: left;
+	color: #e9442d;
+	margin-right: 5px;
+}
+
+.content .exceptcost textarea{
+	width: 100%;
+	height: 90px;
+	overflow: hidden;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border: 1px solid #cbcbcb;
+	padding: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+.content .other{
+	width: 100%;
+	overflow: hidden;
+}
+
+.content .other .biaoti{
+	width: 100%;
+	height:30px;
+	border-bottom: 1px solid #f3d5af;
+	position: relative;
+	overflow: visible !important;
+	margin-bottom: 30px;
+	padding-top: 5px;
+}
+
+.content .other .biaoti span{
+	display: block;
+	width:100px;
+	height:30px;
+	background: white;
+	color:#343434;
+	font-size:16px;
+	line-height: 30px;
+	position: absolute;
+	left: 0px;
+	bottom: -15px;
+}
+
+.content .other .biaoti a{
+	position: absolute;
+	right: 0px;
+	top: 0;
+	display: block;
+	width:102px;
+	height:30px;
+	line-height: 30px;
+	color:white;
+	background:#e9442d;
+	font-size:14px;
+	text-align: center;
+	cursor: pointer;
+	border-radius: 3px;
+}
+
+
+.content .other p{
+	height: 30px;
+	line-height: 30px;
+	margin: 0px;
+	margin-left: 22px;
+	display:block;
+	font-size: 12px;
+}
+
+.content .btngroup{
+	width: 100%;
+	height: 30px;
+	overflow: hidden;
+	margin-top: 20px;
+	text-align: center;
+}
+
+.content .btngroup a{
+	float: none !important;
+	display: inline-block;
+	min-width:30px;
+	height: 30px;
+	background:#e9442d;
+	color: white;
+	font-size: 14px;
+	line-height: 30px;
+	padding: 0px 20px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+.content .btngroup a + a {margin-left: 30px;}
+
+.content .btngroup button{
+	float: right;
+	min-width:30px;
+	height: 30px;
+	background:#e9442d;
+	color: white;
+	font-size: 14px;
+	line-height: 30px;
+	padding: 0px 20px;
+	margin-left: 15px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+label.error{
+	color:red !important;}
+
+#file li{
+	margin-bottom: 10px;
+}
+
+ #add{
+ 	display: inline-block;
+    float: right;
+    height:32px;
+    width:70px;
+    background-color: #e9442d;
+    margin:0 5px;
+    color:#FFF;
+    -ms-border-radius:3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+    border-radius:3px;
+    cursor:pointer;
+ }
+
+#file  .del{
+	display: inline-block;
+	vertical-align: top;
+    cursor: pointer;
+}
+
+#file img {vertical-align: middle;margin-right: 5px;}
+#file .icon-remove-sign {color: #aaa;display: none;}
+
+#file  .del .ico{
+	font-size: 15px;
+}
+
+#file li:hover{
+	background-color: #D3D3D3;
+}
+
+#file li:hover .icon-remove-sign{
+	color:#e9442d;display: inline-block;position: relative;top: -7px; left: 3px;
+}
+
+#mycheckbox > span {display: inline-block;margin-right: 53px;}
+#mycheckbox span:first-child {margin-right: 0;}
+#mycheckbox > span:after {clear:left;content:'';}
+#mycheckbox span label {white-space: nowrap;width: auto;}
+
+.selecbox{
+	overflow:hidden;
+}
+
+.selecbox .label-wrap{
+	float:left;
+	width: 460px;
+	margin-bottom: 15px !important;
+}
+
+.label-wrap label{
+	width: 112px;
+	display: inline-block;
+	font-size:14px;
+	color:#656565;
+	font-weight: normal;
+}
+.label-wrap select {margin-left: 0;width:180px;}
+.content .iteminfor .label-wrap .error + label {display: block !important;}
+
+.label-wrap label span{
+	float: left;
+    color: #e9442d;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+.input-xlarge{
+	height:30px;
+	margin-left:35px;
+	border-radius:3px;
+	border-color:#cbcbcb;
+}
+
+.label-wrap  .input-xlarge-left{
+	margin-left:0px;
+}

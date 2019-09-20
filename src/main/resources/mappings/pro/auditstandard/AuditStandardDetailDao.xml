@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.auditstandard.dao.AuditStandardDetailDao">
+    
+	<sql id="auditStandardDetailColumns">
+		a.id AS "id",
+		a.manage_id AS "manageId",
+		a.check_point AS "checkPoint",
+		a.check_element AS "checkElement",
+		a.view_score AS "viewScore",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.sort AS "sort"
+	</sql>
+	
+	<sql id="auditStandardDetailJoins">
+	</sql>
+    
+	<select id="get" resultType="AuditStandardDetail">
+		SELECT 
+			<include refid="auditStandardDetailColumns"/>
+		FROM audit_standard_detail a
+		<include refid="auditStandardDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="AuditStandardDetail">
+		SELECT 
+			<include refid="auditStandardDetailColumns"/>
+		FROM audit_standard_detail a
+		<include refid="auditStandardDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="AuditStandardDetail">
+		SELECT 
+			<include refid="auditStandardDetailColumns"/>
+		FROM audit_standard_detail a
+		<include refid="auditStandardDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO audit_standard_detail(
+			id,
+			manage_id,
+			check_point,
+			check_element,
+			view_score,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			sort
+		) VALUES (
+			#{id},
+			#{manageId},
+			#{checkPoint},
+			#{checkElement},
+			#{viewScore},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{sort}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE audit_standard_detail SET 	
+			manage_id = #{manageId},
+			check_point = #{checkPoint},
+			check_element = #{checkElement},
+			view_score = #{viewScore},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+
+	<!--根据节点node找到评分标准-->
+	<select id="findStandardDetailByNode" parameterType="java.lang.String"
+			resultType="com.oseasy.pro.modules.project.vo.ProjectStandardDetailVo" >
+		SELECT a.check_point AS "checkPoint",
+				a.check_element AS "checkElement",
+				a.view_score AS "viewScore",
+				b.is_escore_nodes AS "isEescoreNodes",
+				a.sort AS "sort"
+		from audit_standard_detail a
+		inner join audit_standard_flow b on a.manage_id = b.audit_standard_id
+		where  a.del_flag = '0' AND b.del_flag='0' and  b.node = #{node} and b.flow=#{flow}
+				order by a.sort asc
+	</select>
+	
+	<update id="delete">
+		UPDATE audit_standard_detail SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<update id="delByFid">
+		DELETE FROM audit_standard_detail 
+		WHERE manage_id = #{fid}
+	</update>
+	
+	<select id="findByFid" resultType="AuditStandardDetail">
+		SELECT 
+			<include refid="auditStandardDetailColumns"/>
+		FROM audit_standard_detail a
+		where a.del_flag='0' and a.manage_id=#{fid} order by a.sort
+	</select>
+</mapper>

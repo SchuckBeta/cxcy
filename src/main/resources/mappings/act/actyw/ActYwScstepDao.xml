@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwScstepDao">
+	<resultMap id="actYwScstepResult" type="com.oseasy.act.modules.actyw.entity.ActYwScstep">
+		<id property="id" column="id" />
+		<result property="provinceActywId" column="provinceActywId" />
+		<result property="schoolTenantId" column="schoolTenantId" />
+		<result property="step" column="step" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+	</resultMap>
+
+	<sql id="actYwScstepColumns">
+		a.id AS "id",
+		a.province_actyw_id AS "provinceActywId",
+		pp.project_name AS "provinceActywName",
+		a.school_tenant_id AS "schoolTenantId",
+		a.step AS "step",
+		p.school_name AS "schoolName",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+
+
+	<sql id="actYwScstepJoins">
+		LEFT  JOIN sys_tenant p on p.tenant_id = a.school_tenant_id AND p.del_flag=0
+		LEFT JOIN act_yw ay on ay.id = a.province_actyw_id
+		LEFT JOIN pro_project pp on ay.rel_id = pp.id
+	</sql>
+
+	<select id="get" resultMap="actYwScstepResult">
+		SELECT
+		<include refid="actYwScstepColumns"/>
+		FROM act_yw_scstep a
+		<include refid="actYwScstepJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getStepList" resultMap="actYwScstepResult">
+		SELECT
+		<include refid="actYwScstepColumns"/>
+		FROM act_yw_scstep a
+		<include refid="actYwScstepJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			and (a.step is null or a.step !='4')
+			<if test="schoolTenantId!=null and schoolTenantId!=''">
+				and a.school_tenant_id=#{schoolTenantId}
+			</if>
+		</where>
+	</select>
+
+	<select id="findList" resultMap="actYwScstepResult">
+		SELECT
+		<include refid="actYwScstepColumns"/>
+		FROM act_yw_scstep a
+		<include refid="actYwScstepJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultMap="actYwScstepResult">
+		SELECT
+		<include refid="actYwScstepColumns"/>
+		FROM act_yw_Scstep a
+		<include refid="actYwScstepJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_scstep(
+			id,
+			province_actyw_id,
+			school_tenant_id,
+			step,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{provinceActywId},
+			#{schoolTenantId},
+			#{step},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_scstep SET
+			<if test="provinceActywId!=null and provinceActywId!=''">
+				province_actyw_id = #{provinceActywId},
+			</if>
+			<if test="schoolTenantId!=null and schoolTenantId!=''">
+				school_tenant_id = #{schoolTenantId},
+			</if>
+			step = #{step},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<insert id="saveAll" parameterType="java.util.List">
+		insert into act_yw_scstep (
+			id,
+			province_actyw_id,
+			school_tenant_id,
+			step,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+			#{item.id},
+			#{item.provinceActywId},
+			#{item.schoolTenantId},
+			#{item.step},
+			#{item.updateDate},
+			#{item.updateBy.id},
+			#{item.createDate},
+			#{item.createBy.id},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<update id="delete">
+		UPDATE act_yw_scstep SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

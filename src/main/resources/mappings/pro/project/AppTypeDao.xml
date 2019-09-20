@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.project.dao.AppTypeDao">
+	<resultMap id="treeMap" type="com.oseasy.sys.common.utils.Tree">
+		<id property="id" column="id" />
+		<result property="text" column="text" />
+		<result property="parentId" column="parent_id" />
+
+		<!--<collection property="childList" ofType="Tree">-->
+			<!--<id property="id" column="childList.id" />-->
+			<!--<result property="text" column="childList.text" />-->
+			<!--<result property="parentId" column="childList.parent_id" />-->
+		<!--</collection>-->
+	</resultMap>
+
+	<sql id="nodeColumns">
+		a.id AS "id",
+		pp.project_name AS "text",
+		#{parentId} AS "parent_id"
+	</sql>
+
+	<sql id="nodeJoins">
+		LEFT JOIN act_yw_group b ON b.id = a.group_id and b.del_flag='0'
+		LEFT JOIN project_declare pd ON pd.id = a.rel_id
+		LEFT JOIN pro_project pp ON pp.id = a.rel_id and pp.del_flag='0'
+		LEFT JOIN sys_menu m ON m.id = pp.menu_rid
+		LEFT JOIN act_yw_year ay ON ay.actyw_id = a.id
+	</sql>
+
+	<select id="getAppTypeList" parameterType="java.util.Map" resultMap="treeMap">
+		SELECT
+		<include refid="nodeColumns"/>
+		FROM act_yw a
+		<include refid="nodeJoins"/>
+		<where>
+			pp.type !='1'
+			<if test="flowType != null and flowType != ''">
+				AND b.flow_type = #{flowType}
+			</if>
+		</where>
+		GROUP BY a.id
+		ORDER BY a.id
+	</select>
+</mapper>

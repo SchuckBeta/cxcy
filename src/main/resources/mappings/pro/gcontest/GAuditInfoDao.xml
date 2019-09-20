@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.gcontest.dao.GAuditInfoDao">
+    
+	<sql id="gAuditInfoColumns">
+		a.id AS "id",
+		a.g_id AS "gId",
+		a.grade AS "grade",
+		a.audit_id AS "auditId",
+		a.audit_level AS "auditLevel",
+		a.audit_name AS "auditName",
+		a.org_id AS "orgId",
+		a.suggest AS "suggest",
+		a.score AS "score",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.proc_ins_id AS "procInsId"
+	</sql>
+	
+	<sql id="gAuditInfoJoins">
+	</sql>
+
+	<!-- 审核意见 -->
+	<select id="getInfo" resultType="GAuditInfo">
+		SELECT
+		 <include refid="gAuditInfoColumns"/>
+		FROM g_audit_info a
+		WHERE a.g_id = #{gId}
+		AND   a.audit_level = #{auditLevel}
+		AND   a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="auditId != null and auditId != '' ">
+			AND   a.audit_id = #{auditId}
+		</if>
+		ORDER BY  create_date ASC
+	</select>
+
+	<!-- 审核意见 -->
+	<select id="getInfoByLoginname" resultType="GAuditInfo">
+		SELECT
+		 <include refid="gAuditInfoColumns"/>
+		FROM g_audit_info a
+		WHERE a.g_id = #{gId}
+		AND   a.audit_level = #{auditLevel}
+		AND   a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="auditId != null and auditId != '' ">
+			AND   a.audit_id = #{auditId}
+		</if>
+		ORDER BY  create_date ASC limit 1
+	</select>
+
+	<!-- 审核意见 -->
+		<select id="getInfoByUserId" resultType="GAuditInfo">
+			SELECT
+			 <include refid="gAuditInfoColumns"/>
+			FROM g_audit_info a
+			WHERE a.g_id = #{gId}
+			AND   a.audit_level = #{auditLevel}
+			AND   a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="auditId != null and auditId != '' ">
+				AND   a.audit_id = #{auditId}
+			</if>
+			ORDER BY  create_date ASC limit 1
+		</select>
+
+	<select id="getSortByAudit" resultType="GAuditInfo">
+		SELECT
+			a.audit_level AS "auditLevel",
+			a.audit_name AS "auditName",
+			AVG(a.score) as score,
+			(select (count(*)+1) from
+				(Select AVG(gai.score) as score ,gai.g_id  from  g_audit_info gai
+					LEFT JOIN g_contest g ON g.id =gai.g_id
+					left join sys_user u on g.declare_id=u.id
+					left join sys_office o on u.office_id=o.id
+				where gai.audit_level=#{auditLevel}
+				<if test="collegeId != null and collegeId != '' ">
+					 and o.id=#{collegeId}
+				</if>
+				group by gai.g_id
+				) k
+			where k.score>
+					(select AVG(inga.score)
+					from g_audit_info inga
+					WHERE inga.g_id =  #{gId}
+					AND   inga.audit_level = #{auditLevel}
+					AND   inga.del_flag = '0'
+					group by inga.g_id
+					)
+			)as "sort"
+		FROM g_audit_info a
+		WHERE a.g_id = #{gId}
+		AND   a.audit_level =  #{auditLevel}
+		AND   a.del_flag = '0'
+		group by a.g_id
+		ORDER BY  create_date ASC
+
+	</select>
+
+	<!-- 审核意见排名 -->
+	<select id="getSortInfo" resultType="GAuditInfo">
+		SELECT
+			a.id AS "id",
+			a.g_id AS "gId",
+			a.audit_id AS "auditId",
+			a.audit_level AS "auditLevel",
+			a.audit_name AS "auditName",
+			a.org_id AS "orgId",
+			a.suggest AS "suggest",
+			a.score AS "score",
+			a.grade AS "grade",
+			a.create_date AS "createDate",
+			a.create_by AS "createBy.id",
+			(select (count(*)+1) from 
+				(Select * from  g_audit_info gai
+				where gai.audit_level=#{auditLevel}
+				and gai.del_flag= '0'
+				) k
+			where k.score> a.score 
+			)as "sort" 
+		FROM g_audit_info a
+		WHERE a.g_id = #{gId}
+		AND   a.audit_level = #{auditLevel}
+		AND   a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="auditId != null and auditId != '' ">
+			AND   a.audit_id = #{auditId}
+		</if>
+		ORDER BY  create_date ASC
+	</select>
+	
+
+	<!-- 审核意见排名 -->
+	<select id="getSortInfoByIdAndState" resultType="GAuditInfo">
+		SELECT
+			a.id AS "id",
+			a.g_id AS "gId",
+			a.audit_id AS "auditId",
+			a.audit_level AS "auditLevel",
+			a.audit_name AS "auditName",
+			a.org_id AS "orgId",
+			a.suggest AS "suggest",
+			a.score AS "score",
+			a.grade AS "grade",
+			a.create_date AS "createDate",
+			a.create_by AS "createBy.id",
+			(select (count(*)+1) from 
+			(
+			select ga.score,ga.audit_level,ga.audit_name,g.p_name,o.id 
+			from  g_audit_info ga
+			LEFT JOIN g_contest g ON g.id =ga.g_id
+			left join sys_user u on g.declare_id=u.id
+			left join sys_office o on u.office_id=o.id
+			where ga.audit_level=#{auditLevel}
+			and ga.del_flag= '0'
+			<if test="collegeId != null and collegeId != '' ">
+			 and o.id=#{collegeId}
+			</if>
+			
+			) k
+			where k.score> a.score )as "sort" 
+		FROM g_audit_info a
+		WHERE a.g_id = #{gId}
+		AND   a.audit_level = #{auditLevel}
+		AND   a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY  create_date ASC
+	</select>
+	
+	<!-- 审核意见排名 -->
+	<select id="getGAuditInfoByIdAndState" resultType="GAuditInfo">
+		SELECT
+			a.id AS "id",
+			a.g_id AS "gId",
+			a.audit_id AS "auditId",
+			a.audit_level AS "auditLevel",
+			a.audit_name AS "auditName",
+			a.org_id AS "orgId",
+			a.suggest AS "suggest",
+			a.score AS "score",
+			a.grade AS "grade",
+			a.create_date AS "createDate",
+			a.create_by AS "createBy.id"
+		FROM g_audit_info a
+		WHERE a.g_id = #{gId}
+		AND   a.audit_level = #{auditLevel}
+		AND   a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY  create_date ASC
+	</select>
+
+	<select id="getCollegeCount" resultType="java.lang.Integer"  parameterType="java.lang.String">
+		select count(*) from 
+		(select ga.score,ga.audit_level,ga.audit_name,g.p_name,u.`name` as uName,o.`name`  as oName,o.id 
+			from  g_audit_info ga
+			LEFT JOIN g_contest g ON g.id =ga.g_id
+			left join sys_user u on g.declare_id=u.id
+			left join sys_office o on u.office_id=o.id
+			where ga.audit_level=#{state} and o.id=#{collegeId} and ga.del_flag = '0'
+		) m 
+	</select>
+	
+	<select id="getSchoolCount" resultType="java.lang.Integer"  parameterType="java.lang.String">
+		select count(*) from 
+		(select ga.score,ga.audit_level,ga.audit_name,g.p_name,u.`name` as uName,o.`name`  as oName,o.id 
+			from  g_audit_info ga
+			LEFT JOIN g_contest g ON g.id =ga.g_id
+			left join sys_user u on g.declare_id=u.id
+			left join sys_office o on u.office_id=o.id
+			where ga.audit_level=#{state} and 	ga.del_flag = '0'
+		) m 
+	</select>
+    
+	<select id="get" resultType="GAuditInfo">
+		SELECT 
+			<include refid="gAuditInfoColumns"/>
+		FROM g_audit_info a
+		<include refid="gAuditInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GAuditInfo">
+		SELECT 
+			<include refid="gAuditInfoColumns"/>
+		FROM g_audit_info a
+		<include refid="gAuditInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GAuditInfo">
+		SELECT 
+			<include refid="gAuditInfoColumns"/>
+		FROM g_audit_info a
+		<include refid="gAuditInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insertByOther">
+		INSERT INTO g_audit_info(
+			id,
+			g_id,
+			audit_id,
+			audit_level,
+			audit_name,
+			org_id,
+			suggest,
+			score,
+			grade,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag,
+			proc_ins_id
+		) VALUES (
+			#{id},
+			#{gId},
+			#{auditId},
+			#{auditLevel},
+			#{auditName},
+			#{orgId},
+			#{suggest},
+			#{score},
+			#{grade},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag},
+			#{procInsId}
+		)
+	</insert>
+	
+	<update id="updateData">
+		UPDATE g_audit_info SET 	
+			<if test="auditId != null and auditId !=''">
+			audit_id = #{auditId},
+			</if>
+			<if test="suggest != null and suggest !=''">
+			suggest = #{suggest},
+			</if>
+			<if test="score != null and score !=''">
+			score = #{score},
+			</if>
+			<if test="grade != null and grade !=''">
+			grade = #{grade},
+			</if>
+			<if test="gId != null and gId !=''">
+			g_id = #{gId},
+			</if>
+			org_id = #{orgId}
+			
+		WHERE id = #{id}
+	</update>
+	
+	<insert id="insert">
+		INSERT INTO g_audit_info(
+			id,
+			g_id,
+			audit_id,
+			audit_level,
+			audit_name,
+			org_id,
+			suggest,
+			score,
+			grade,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag,
+			proc_ins_id
+		) VALUES (
+			#{id},
+			#{gId},
+			#{auditId},
+			#{auditLevel},
+			#{auditName},
+			#{orgId},
+			#{suggest},
+			#{score},
+			#{grade},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag},
+			#{procInsId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE g_audit_info SET 	
+			g_id = #{gId},
+			audit_id = #{auditId},
+			audit_level = #{auditLevel},
+			audit_name = #{auditName},
+			org_id = #{orgId},
+			suggest = #{suggest},
+			score = #{score},
+			grade = #{grade},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			proc_ins_id = #{procInsId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE g_audit_info SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByGid">
+		UPDATE g_audit_info SET 
+			del_flag = '1'
+		WHERE g_id = #{gid}
+	</update>
+	
+	
+</mapper>

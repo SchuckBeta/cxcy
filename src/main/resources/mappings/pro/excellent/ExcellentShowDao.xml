@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.excellent.dao.ExcellentShowDao">
+
+	<sql id="excellentShowColumns">
+		a.id AS "id",
+		a.cover_img AS "coverImg",
+		a.type AS "type",
+		a.foreign_id AS "foreignId",
+		a.content AS "content",
+		a.is_release AS
+		"isRelease",
+		a.is_top AS "isTop",
+		a.is_comment AS "isComment",
+		a.views AS
+		"views",
+		a.likes AS "likes",
+		a.comments AS "comments",
+		a.update_date AS
+		"updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS
+		"createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.release_date AS "releaseDate",
+		a.sub_type AS "subType",
+		a.managed AS "managed"
+	</sql>
+
+	<sql id="excellentShowJoins">
+	</sql>
+
+	<select id="get" resultType="ExcellentShow">
+		SELECT
+		<include refid="excellentShowColumns" />
+		FROM excellent_show a
+		<include refid="excellentShowJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ExcellentShow">
+		SELECT
+		<include refid="excellentShowColumns" />
+		FROM excellent_show a
+		<include refid="excellentShowJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ExcellentShow">
+		SELECT
+		<include refid="excellentShowColumns" />
+		FROM excellent_show a
+		<include refid="excellentShowJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO excellent_show(
+		id,
+		cover_img,
+		type,
+		foreign_id,
+		content,
+		is_release,
+		is_top,
+		is_comment,
+		update_date,
+		update_by,
+		create_date,
+		create_by,
+		del_flag,
+		release_date,
+		sub_type,
+		managed
+		) VALUES (
+		#{id},
+		#{coverImg},
+		#{type},
+		#{foreignId},
+		#{content},
+		#{isRelease},
+		#{isTop},
+		#{isComment},
+		#{updateDate},
+		#{updateBy.id},
+		#{createDate},
+		#{createBy.id},
+		#{delFlag},
+		#{releaseDate},
+		#{subType},
+		#{managed}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE excellent_show SET
+		cover_img = #{coverImg},
+		type = #{type},
+		foreign_id = #{foreignId},
+		content = #{content},
+		is_release = #{isRelease},
+		is_top = #{isTop},
+		is_comment = #{isComment},
+		update_date =
+		#{updateDate},
+		update_by = #{updateBy.id},
+		release_date=#{releaseDate},
+		sub_type=#{subType},
+		managed=#{managed}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE excellent_show SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<select id="findAllProjectShow" resultType="java.util.HashMap" parameterType="java.util.Map">
+		select 	m.id,m.type,m.coverImg,m.officeId,m.leaderId,m.likes,m.views,m.comments,m.is_release,
+		m.name,m.introduction,m.is_top,m.update_date,m.subType
+		from (
+		select
+		t.id,t.type,t.cover_img coverImg,t.likes,t.views,t.comments,t.is_release,p.name,
+		p.org_id officeId,p.leader leaderId,p.introduction,t.is_top,t.update_date,s.label subType  from
+		excellent_show t
+		left join project_declare p on p.id=t.foreign_id
+		left join sys_dict s on t.sub_type=s.value and s.type='project_style'
+		where
+		t.del_flag='0' and t.type='0000000075' and p.id is not null
+		UNION all
+		select
+		t.id,t.type,t.cover_img coverImg,t.likes,t.views,t.comments,t.is_release,p.p_name name,
+		p.university_id officeId,p.declare_id leaderId,p.introduction ,t.is_top,t.update_date,s.label subType from excellent_show t
+		left join g_contest p on
+		p.id=t.foreign_id
+		left join sys_dict s on t.sub_type=s.value and s.type='competition_type'
+		where t.del_flag='0' and t.type='0000000076' and p.id is not null
+		union all
+		select t.id,t.type,t.cover_img coverImg,t.likes,t.views,t.comments,t.is_release,p.p_name name,
+		u.office_id officeId,p.declare_id leaderId,p.introduction,t.is_top,t.update_date,s.label subType  from
+		excellent_show t
+		left join pro_model p on p.id=t.foreign_id
+		left join sys_user u on p.declare_id=u.id
+		left join sys_dict s on t.sub_type=s.value and s.type='project_style'
+		where
+		t.del_flag='0' and t.type='0000000075' and p.id is not null
+		union all
+		select t.id,t.type,t.cover_img coverImg,t.likes,t.views,t.comments,t.is_release,p.p_name name,
+		u.office_id officeId,p.declare_id leaderId,p.introduction,t.is_top,t.update_date,s.label subType  from
+		excellent_show t
+		left join pro_model p on p.id=t.foreign_id
+		left join sys_user u on p.declare_id=u.id
+		left join sys_dict s on t.sub_type=s.value and s.type='competition_type'
+		where
+		t.del_flag='0' and t.type='0000000076' and p.id is not null
+		) as m
+		left JOIN sys_user u on m.leaderId=u.id
+		left join sys_office f on u.office_Id=f.id
+		where 1=1
+		<if test="type != null and type !=''">
+			AND m.type =#{type}
+		</if>
+			AND m.is_release ='1'
+		<if test="key != null and key !=''">
+			AND (m.name like CONCAT('%',#{key},'%')
+				or f.name like CONCAT('%',#{key},'%')
+				or u.name like CONCAT('%',#{key},'%')
+			)
+		</if>
+		order by m.is_top desc,m.update_date desc
+		limit #{offset},#{pageSize}
+	</select>
+
+	<select id="findAllProjectShowCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1)
+		from (
+		select
+		t.id,t.type,t.cover_img coverImg,t.likes,t.views,t.comments,t.is_release,p.name,
+		p.org_id officeId,p.leader leaderId,p.introduction,t.is_top,t.update_date,s.label subType  from
+		excellent_show t
+		left join project_declare p on p.id=t.foreign_id
+		left join sys_dict s on t.sub_type=s.value and s.type='project_style'
+		where
+		t.del_flag='0' and t.type='0000000075' and p.id is not null
+		UNION all
+		select
+		t.id,t.type,t.cover_img coverImg,t.likes,t.views,t.comments,t.is_release,p.p_name name,
+		p.university_id officeId,p.declare_id leaderId,p.introduction ,t.is_top,t.update_date,s.label subType from excellent_show t
+		left join g_contest p on
+		p.id=t.foreign_id
+		left join sys_dict s on t.sub_type=s.value and s.type='competition_type'
+		where t.del_flag='0' and t.type='0000000076' and p.id is not null
+		union all
+		select t.id,t.type,t.cover_img coverImg,t.likes,t.views,t.comments,t.is_release,p.p_name name,
+		u.office_id officeId,p.declare_id leaderId,p.introduction,t.is_top,t.update_date,s.label subType  from
+		excellent_show t
+		left join pro_model p on p.id=t.foreign_id and p.id is not null
+		left join sys_user u on p.declare_id=u.id
+		left join sys_dict s on t.sub_type=s.value and s.type='project_style'
+		where
+		t.del_flag='0' and t.type='0000000075' and p.id is not null
+		union all
+		select t.id,t.type,t.cover_img coverImg,t.likes,t.views,t.comments,t.is_release,p.p_name name,
+		u.office_id officeId,p.declare_id leaderId,p.introduction,t.is_top,t.update_date,s.label subType  from
+		excellent_show t
+		left join pro_model p on p.id=t.foreign_id
+		left join sys_user u on p.declare_id=u.id
+		left join sys_dict s on t.sub_type=s.value and s.type='competition_type'
+		where
+		t.del_flag='0' and t.type='0000000076' and p.id is not null
+		) as m
+		where 1=1	AND m.is_release ='1'
+		<if test="type != null and type !=''">
+			AND m.type =#{type}
+		</if>
+
+	</select>
+
+	<select id="findProjectForIndex" resultType="java.util.Map">
+		select tem.* from(select
+		t.id,t.cover_img coverImg,t.likes,t.views,t.comments,p.name,p.introduction,t.is_top,t.update_date,u.name leadername,
+		(select GROUP_CONCAT(u22.name SEPARATOR '、')
+		from team_user_history r  left join sys_user u22 on
+		r.user_id=u22.id
+		where p.id=r.pro_id  and r.user_type='2') teas,s5.label ptypename
+		from
+		excellent_show t
+		left join project_declare p on p.id=t.foreign_id
+		left join sys_user u on p.leader=u.id
+		LEFT JOIN act_yw ay on p.actyw_id=ay.id
+		LEFT JOIN pro_project pp on ay.rel_id=pp.id
+		LEFT JOIN sys_dict s5 on pp.type=s5.value AND s5.type='project_style'
+		where
+		t.del_flag='0' and t.type='0000000075' AND t.is_release ='1' and p.id is not null
+union all
+select
+		t.id,t.cover_img coverImg,t.likes,t.views,t.comments,p.p_name name,p.introduction,t.is_top,t.update_date,u.name leadername,
+		(select GROUP_CONCAT(u22.name SEPARATOR '、')
+		from team_user_history r  left join sys_user u22 on
+		r.user_id=u22.id
+		where p.id=r.pro_id  and r.user_type='2') teas,s5.label ptypename
+		from
+		excellent_show t
+		left join pro_model p on p.id=t.foreign_id
+		left join sys_user u on p.declare_id=u.id
+		LEFT JOIN act_yw ay on p.actyw_id=ay.id
+		LEFT JOIN pro_project pp on ay.rel_id=pp.id
+		LEFT JOIN sys_dict s5 on pp.type=s5.value AND s5.type='project_style'
+		where
+		t.del_flag='0' and t.type='0000000075' AND t.is_release ='1' and p.id is not null) tem
+		order by tem.is_top desc,tem.update_date desc
+		limit 3
+	</select>
+	<select id="findGcontestForIndex" resultType="java.util.Map">
+		select tem.* from(select
+		t.id,t.cover_img coverImg,t.likes,t.views,t.comments,p.p_name
+		name,p.introduction,t.is_top,t.update_date,u.name leadername,
+		(select GROUP_CONCAT(u22.name SEPARATOR '、')
+		from team_user_history r  left join sys_user u22 on
+		r.user_id=u22.id
+		where p.id=r.pro_id  and r.user_type='2') teas,s5.label ptypename
+		from excellent_show t
+		left join g_contest p on p.id=t.foreign_id
+		left join sys_user u on p.declare_id=u.id
+		LEFT JOIN act_yw ay on p.actyw_id=ay.id
+		LEFT JOIN pro_project pp on ay.rel_id=pp.id
+		LEFT JOIN sys_dict s5 on pp.type=s5.value AND s5.type='competition_type'
+		where t.del_flag='0' and t.type='0000000076' AND t.is_release ='1' and p.id is not null
+union all
+select
+		t.id,t.cover_img coverImg,t.likes,t.views,t.comments,p.p_name
+		name,p.introduction,t.is_top,t.update_date,u.name leadername,
+		(select GROUP_CONCAT(u22.name SEPARATOR '、')
+		from team_user_history r  left join sys_user u22 on
+		r.user_id=u22.id
+		where p.id=r.pro_id  and r.user_type='2') teas,s5.label ptypename
+		from excellent_show t
+		left join pro_model p on p.id=t.foreign_id
+		left join sys_user u on p.declare_id=u.id
+		LEFT JOIN act_yw ay on p.actyw_id=ay.id
+		LEFT JOIN pro_project pp on ay.rel_id=pp.id
+		LEFT JOIN sys_dict s5 on pp.type=s5.value AND s5.type='competition_type'
+		where t.del_flag='0' and t.type='0000000076' AND t.is_release ='1' and p.id is not null) tem
+		order by tem.is_top desc,tem.update_date desc
+		limit 3
+	</select>
+
+
+	<select id="getProjectInfo" resultType="java.util.Map">
+		select
+		t.id AS "id",
+		t.name AS "name",
+		o.name AS "oname",
+		u.name AS "lname",
+		DATE_FORMAT(t.create_date,'%Y-%m-%d') AS "createDate",
+		'1' AS "subtype"
+		from project_declare t
+		left join sys_user u on t.leader=u.id
+		left join sys_office o on u.office_id=o.id
+		where t.id=#{projectId}
+	</select>
+	<select id="getProjectInfoFromProModel" resultType="java.util.Map">
+		select
+		t.id AS "id",
+		t.p_name AS "name",
+		o.name AS "oname",
+		u.name AS "lname",
+		DATE_FORMAT(t.create_date,'%Y-%m-%d') AS "createDate",
+		t.type AS "subtype"
+		from pro_model t
+		left join sys_user u on t.declare_id=u.id
+		left join sys_office o on u.office_id=o.id
+		where t.id=#{projectId}
+	</select>
+	<select id="getProjectTeacherInfoFromProModel" resultType="java.util.Map">
+		select u.name
+		uname,o.name oname,e.post_title from pro_model t
+		left join
+		team_user_history s on s.user_type='2' and s.del_flag='0' and t.id=s.pro_id
+		left join sys_user u on
+		s.user_id=u.id
+		left join sys_office o on u.office_id=o.id
+		left join
+		sys_teacher_expansion e on u.id=e.user_id
+		where t.id=#{projectId}
+	</select>
+	<select id="getProjectTeacherInfo" resultType="java.util.Map">
+		select u.name
+		uname,o.name oname,e.post_title from project_declare t
+		left join
+		team_user_history s on s.user_type='2' and s.del_flag='0' and t.id=s.pro_id
+		left join sys_user u on
+		s.user_id=u.id
+		left join sys_office o on u.office_id=o.id
+		left join
+		sys_teacher_expansion e on u.id=e.user_id
+		where t.id=#{projectId}
+	</select>
+	<select id="getGcontestInfoFromProModel" resultType="java.util.Map">
+		select
+		t.id,t.p_name
+		name,o.name oname,u.name lname from pro_model t
+		left join sys_user u on
+		t.declare_id=u.id
+		left join sys_office o on u.office_id=o.id
+		where
+		t.id=#{gcontestId}
+	</select>
+	<select id="getGcontestInfo" resultType="java.util.Map">
+		select
+		t.id,t.p_name
+		name,o.name oname,u.name lname,'1' subtype from g_contest t
+		left join sys_user u on
+		t.declare_id=u.id
+		left join sys_office o on u.office_id=o.id
+		where
+		t.id=#{gcontestId}
+	</select>
+	<select id="getGcontestTeacherInfoFromProModel" resultType="java.util.Map">
+		select u.name
+		uname,o.name oname,e.post_title,t.type subtype from pro_model t
+		left join
+		team_user_history s on s.user_type='2' and s.del_flag='0' and t.id=s.pro_id
+		left join sys_user u on
+		s.user_id=u.id
+		left join sys_office o on u.office_id=o.id
+		left join
+		sys_teacher_expansion e on u.id=e.user_id
+		where t.id=#{gcontestId}
+	</select>
+	<select id="getGcontestTeacherInfo" resultType="java.util.Map">
+		select u.name
+		uname,o.name oname,e.post_title from g_contest t
+		left join
+		team_user_history s on s.user_type='2' and s.del_flag='0' and t.id=s.pro_id
+		left join sys_user u on
+		s.user_id=u.id
+		left join sys_office o on u.office_id=o.id
+		left join
+		sys_teacher_expansion e on u.id=e.user_id
+		where t.id=#{gcontestId}
+	</select>
+	<select id="getByForid" resultType="ExcellentShow">
+		SELECT
+		<include refid="excellentShowColumns" />
+		FROM excellent_show a
+		where a.del_flag='0' and a.foreign_id=#{id} order by a.create_date desc limit 1
+	</select>
+	<update id="updateComments" parameterType="java.util.Map">
+		UPDATE excellent_show SET comments = CASE id
+		<foreach collection="param.keys" item="key" separator=" ">
+			WHEN #{key} THEN ifnull(comments,0)+#{param[${key}]}
+		</foreach>
+		END
+		where id in
+		<foreach collection="param.keys" item="key" open="(" separator="," close=")">
+			#{key}
+		</foreach>
+	</update>
+	<update id="updateViews" parameterType="java.util.Map">
+		UPDATE excellent_show SET views = CASE id
+		<foreach collection="param.keys" item="key" separator=" ">
+			WHEN #{key} THEN ifnull(views,0)+#{param[${key}]}
+		</foreach>
+		END
+		where id in
+		<foreach collection="param.keys" item="key" open="(" separator="," close=")">
+			#{key}
+		</foreach>
+	</update>
+	<update id="updateLikes" parameterType="java.util.Map">
+		UPDATE excellent_show SET likes = CASE id
+		<foreach collection="param.keys" item="key" separator=" ">
+			WHEN #{key} THEN ifnull(likes,0)+#{param[${key}]}
+		</foreach>
+		END
+		where id in
+		<foreach collection="param.keys" item="key" open="(" separator="," close=")">
+			#{key}
+		</foreach>
+	</update>
+	<update id="resall">
+		update excellent_show  set is_release='1' ,is_comment='1',release_date=ifnull(release_date,SYSDATE()) ,update_date=SYSDATE(),update_by=#{uid},managed='1'
+		where foreign_id in
+		<foreach collection="fids" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	<update id="unrelease">
+		update excellent_show  set is_release='0' ,release_date=null ,update_date=SYSDATE(),update_by=#{uid}
+		where id in
+		<foreach collection="ids" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	<update id="deleteAll">
+		update excellent_show  set managed='0',is_release='0' ,release_date=null ,update_date=SYSDATE(),update_by=#{uid}
+		where id in
+		<foreach collection="ids" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<select id="findProjectList" resultType="com.oseasy.cms.modules.cms.vo.ExcellentProjectVo">
+		select tem1.*,'0' ftb from (select es.id,es.foreign_id,t.number,t.name,s3.label typeStr,u.name leader,
+		(select GROUP_CONCAT(u2.name SEPARATOR '/') from team_user_history r  left join sys_user u2 on
+		r.user_id=u2.id where t.id=r.pro_id  and r.user_type='1') members,
+		s2.label levelStr,s1.label resultStr,es.is_release state
+		from excellent_show es left join project_declare t
+		on es.foreign_id=t.id
+		left join sys_dict s1 on
+		t.type=s1.value and s1.type='project_result'
+		left join sys_dict s2 on
+		t.level=s2.value and s2.type='project_degree'
+		left join sys_dict s3 on
+		es.sub_type=s3.value and s3.type='project_style'
+		left join sys_user u on
+		t.leader=u.id
+		where t.del_flag='0' and es.type='0000000075' and t.id is not null and es.managed = '1'
+		<if test="type != null and type !=''">
+			AND es.sub_type =#{type}
+		</if>
+		<if test="subtype != null and subtype !=''">
+			AND t.type =#{subtype}
+		</if>
+		<if test="level != null and level !=''">
+			AND t.level =#{level}
+		</if>
+		<if test="office != null and office !=''">
+			AND u.office_id =#{office}
+		</if>
+		<if test="profession != null and profession !=''">
+			AND u.professional =#{profession}
+		</if>
+		<if test="state != null and state !=''">
+			AND es.is_release =#{state}
+		</if>
+		) tem1 where 1=1
+		<if test="name != null and name !=''">
+			AND tem1.name like concat('%',#{name},'%') or
+				tem1.members like concat('%',#{name},'%')
+		</if>
+UNION ALL
+		select tem2.*,'1' ftb from (select es.id,es.foreign_id,t.competition_number number,t.p_name name,s3.label typeStr,u.name leader,
+		(select GROUP_CONCAT(u2.name SEPARATOR '/') from team_user_history r  left join sys_user u2 on
+		r.user_id=u2.id where t.id=r.pro_id  and r.user_type='1') members,
+		s2.label levelStr,s1.label resultStr,es.is_release state
+		from excellent_show es left join pro_model t
+		on es.foreign_id=t.id
+		left join sys_dict s1 on
+		t.type=s1.value and s1.type='project_result'
+		left join sys_dict s2 on
+		t.level=s2.value and s2.type='project_degree'
+		left join sys_dict s3 on
+		es.sub_type=s3.value and s3.type='project_style'
+		left join sys_user u on
+		t.declare_id=u.id
+		where t.del_flag='0' and es.type='0000000075' and t.id is not null and es.managed ='1'
+		<if test="type != null and type !=''">
+			AND es.sub_type =#{type}
+		</if>
+		<if test="subtype != null and subtype !=''">
+			AND t.pro_category =#{subtype}
+		</if>
+		<if test="level != null and level !=''">
+			AND t.level =#{level}
+		</if>
+		<if test="office != null and office !=''">
+			AND u.office_id =#{office}
+		</if>
+		<if test="profession != null and profession !=''">
+			AND u.professional =#{profession}
+		</if>
+		<if test="state != null and state !=''">
+			AND es.is_release =#{state}
+		</if>
+		) tem2 where 1=1
+		<if test="name != null and name !=''">
+			AND tem2.name like concat('%',#{name},'%') or
+				tem2.members like concat('%',#{name},'%')
+		</if>
+	</select>
+
+	<select id="findGcontestList" resultType="com.oseasy.cms.modules.cms.vo.ExcellentGcontestVo">
+	select tem1.*,'0' ftb from (select es.id,es.foreign_id,t.competition_number number,t.p_name name,s3.label typeStr,u.name leader,
+	(select GROUP_CONCAT(u2.name SEPARATOR '/') from team_user_history r  left join sys_user u2 on
+		r.user_id=u2.id where t.id=r.pro_id   and r.user_type='1') members,
+		s2.label levelStr,s1.label subtypeStr,es.is_release state
+		from excellent_show es left join g_contest t
+		on es.foreign_id=t.id
+		left join sys_dict s1 on
+		t.type=s1.value and s1.type='competition_net_type'
+		left join sys_dict s2 on
+		t.schoolend_result=s2.value and s2.type='competition_college_prise'
+		left join sys_dict s3 on
+		es.sub_type=s3.value and s3.type='competition_type'
+		left join sys_user u on
+		t.declare_id=u.id
+		where t.del_flag='0' and es.type='0000000076' and t.id is not null and es.managed = '1'
+		<if test="type != null and type !=''">
+			AND es.sub_type =#{type}
+		</if>
+		<if test="subtype != null and subtype !=''">
+			AND t.type =#{subtype}
+		</if>
+		<if test="level != null and level !=''">
+			AND t.schoolend_result =#{level}
+		</if>
+		<if test="office != null and office !=''">
+			AND u.office_id =#{office}
+		</if>
+		<if test="profession != null and profession !=''">
+			AND u.professional =#{profession}
+		</if>
+		<if test="state != null and state !=''">
+			AND es.is_release =#{state}
+		</if>
+		) tem1 where 1=1
+		<if test="name != null and name !=''">
+			AND tem1.name like concat('%',#{name},'%') or
+				tem1.members like concat('%',#{name},'%')
+		</if>
+UNION ALL
+		select tem2.*,'1' ftb from (select es.id,es.foreign_id,t.competition_number number,t.p_name name,s3.label typeStr,u.name leader,
+		(select GROUP_CONCAT(u2.name SEPARATOR '/') from team_user_history r  left join sys_user u2 on
+		r.user_id=u2.id where t.id=r.pro_id  and  r.user_type='1') members,
+		s2.label levelStr,s1.label resultStr,es.is_release state
+		from excellent_show es left join pro_model t
+		on es.foreign_id=t.id
+		left join sys_dict s1 on
+		t.type=s1.value and s1.type='competition_net_type'
+		left join sys_dict s2 on
+		t.grade=s2.value and s2.type='competition_college_prise'
+		left join sys_dict s3 on
+		es.sub_type=s3.value and s3.type='competition_type'
+		left join sys_user u on
+		t.declare_id=u.id
+		where t.del_flag='0' and es.type='0000000076' and t.id is not null and es.managed ='1'
+		<if test="type != null and type !=''">
+			AND es.sub_type =#{type}
+		</if>
+		<if test="subtype != null and subtype !=''">
+			AND t.pro_category =#{subtype}
+		</if>
+		<if test="level != null and level !=''">
+			AND t.grade =#{level}
+		</if>
+		<if test="office != null and office !=''">
+			AND u.office_id =#{office}
+		</if>
+		<if test="profession != null and profession !=''">
+			AND u.professional =#{profession}
+		</if>
+		<if test="state != null and state !=''">
+			AND es.is_release =#{state}
+		</if>
+		) tem2 where 1=1
+		<if test="name != null and name !=''">
+			AND tem2.name like concat('%',#{name},'%') or
+				tem2.members like concat('%',#{name},'%')
+		</if>
+	</select>
+</mapper>

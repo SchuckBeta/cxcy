@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.sys.modules.sys.dao.SysNumberRuleDao">
+
+	<resultMap id="ruleMap" type="SysNumberRule">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="appType" column="app_type" />
+		<result property="appTypeName" column="app_type_name" />
+		<result property="rule" column="rule" />
+		<result property="increNum" column="incre_num" />
+		<result property="levelIndex" column="level_index" />
+        <result property="updateDate" column="update_date" />
+        <result property="updateBy.id" column="updateBy.id" />
+        <result property="createDate" column="create_date" />
+        <result property="createBy.id" column="createBy.id" />
+		<result property="isPublish" column="isPublish" />
+
+		<collection property="sysNumberRuleDetailList" ofType="SysNumberRuleDetail">
+			<id property="id" column="detailId" />
+			<result property="ruleType" column="ruleType" />
+			<result property="text" column="text" />
+			<result property="numLength" column="numLength" />
+			<result property="typeValue" column="typeValue" />
+			<result property="proNumberRuleId" column="proNumberRuleId" />
+			<result property="sort" column="sort" />
+		</collection>
+	</resultMap>
+
+	<sql id="sysNumberRuleColumns">
+		a.id,
+		a.name,
+		a.app_type,
+		a.app_type_name,
+		a.rule AS "rule",
+		a.incre_num,
+		a.level_index,
+		a.create_date,
+		a.create_by AS "createBy.id",
+		a.update_date,
+		a.update_by AS "updateBy.id",
+		a.del_flag,
+		ay.is_deploy AS isPublish,
+		b.id as "detailId",
+		b.rule_type as "ruleType",
+		b.text as "text",
+		b.type_value as "typeValue",
+		b.num_length as "numLength",
+		b.pro_number_rule_id as "proNumberRuleId",
+		b.sort as "sort"
+	</sql>
+
+	<sql id="sysNumberRuleJoins">
+		LEFT JOIN sys_number_rule_detail b ON a.id = b.pro_number_rule_id
+		LEFT JOIN act_yw ay ON ay.id = a.app_type
+	</sql>
+
+	<select id="get" resultType="SysNumberRule">
+		SELECT *
+			<!--<include refid="sysNumberRuleColumns"/>-->
+		FROM sys_number_rule a
+		<!--<include refid="sysNumberRuleJoins"/>-->
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getRuleByAppType" resultType="SysNumberRule">
+		SELECT * FROM sys_number_rule a
+		<where> 1=1
+			<if test="appType != null and appType != ''"> AND a.app_type = #{appType}</if>
+			<if test="id != null and id != ''"> AND a.id != #{id}</if>
+		</where>
+	</select>
+
+	<select id="findList" resultMap="ruleMap">
+		SELECT
+			<include refid="sysNumberRuleColumns"/>
+		FROM sys_number_rule a
+		<include refid="sysNumberRuleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+-- 		GROUP BY a.id
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC, b.sort asc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysNumberRule">
+		SELECT
+			<include refid="sysNumberRuleColumns"/>
+		FROM sys_number_rule a
+		<include refid="sysNumberRuleJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_number_rule(
+			id,
+			name,
+			app_type,
+			app_type_name,
+			rule,
+			incre_num,
+			level_index,
+			create_date,
+			create_by,
+			update_date,
+			update_by,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{appType},
+			#{appTypeName},
+			#{rule},
+			#{increNum},
+			#{levelIndex},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_number_rule SET
+			name = #{name},
+			app_type = #{appType},
+			app_type_name = #{appTypeName},
+			rule = #{rule},
+			incre_num = #{increNum},
+			level_index = #{levelIndex},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_number_rule SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sys_number_rule WHERE id = #{id}
+	</update>
+</mapper>

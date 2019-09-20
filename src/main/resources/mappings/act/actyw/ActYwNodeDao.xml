@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwNodeDao">
+
+	<sql id="actYwNodeColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.type AS "type",
+		a.is_form AS "isForm",
+		a.is_visible AS "isVisible",
+		a.icon_url AS "iconUrl",
+		a.ui_operate AS "uiOperate",
+        a.ui_json AS "uiJson",
+
+		a.node_type AS "nodeType",
+		a.node_key AS "nodeKey",
+		a.node_icon AS "nodeIcon",
+		a.node_roles AS "nodeRoles",
+		a.node_xml AS "nodeXml",
+
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="actYwNodeJoins">
+	</sql>
+
+	<select id="get" resultType="ActYwNode">
+		SELECT
+			<include refid="actYwNodeColumns"/>
+		FROM act_yw_node a
+		<include refid="actYwNodeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ActYwNode">
+		SELECT
+			<include refid="actYwNodeColumns"/>
+		FROM act_yw_node a
+		<include refid="actYwNodeJoins"/>
+		<where>
+                        a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="isForm != null and isForm != ''">
+				AND a.is_form = #{isForm}
+			</if>
+			<if test="isVisible != null and isVisible != ''">
+				AND a.is_visible = #{isVisible}
+			</if>
+			<if test="nodeType != null and nodeType != ''">
+				AND a.node_type = #{nodeType}
+			</if>
+			<if test="nodeKey != null and nodeKey != ''">
+				AND a.node_key = #{nodeKey}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.type ASC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByTypeNoZero" resultType="ActYwNode">
+		SELECT
+			<include refid="actYwNodeColumns"/>
+		FROM act_yw_node a
+		<include refid="actYwNodeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.type <![CDATA[ <> ]]> 0
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="isForm != null and isForm != ''">
+				AND a.is_form = #{isForm}
+			</if>
+			<if test="isVisible != null and isVisible != ''">
+				AND a.is_visible = #{isVisible}
+			</if>
+			<if test="nodeType != null and nodeType != ''">
+				AND a.node_type = #{nodeType}
+			</if>
+			<if test="nodeKey != null and nodeKey != ''">
+				AND a.node_key = #{nodeKey}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.type ASC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwNode">
+		SELECT
+			<include refid="actYwNodeColumns"/>
+		FROM act_yw_node a
+		<include refid="actYwNodeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.type ASC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_node(
+			id,
+			name,
+			type,
+			is_form,
+			is_visible,
+			icon_url,
+			ui_operate,
+                        ui_json,
+			node_type,
+			node_key,
+			node_icon,
+			node_roles,
+			node_xml,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{type},
+			#{isForm},
+			#{isVisible},
+			#{iconUrl},
+			#{uiOperate},
+                        #{uiJson},
+			#{nodeType},
+			#{nodeKey},
+			#{nodeIcon},
+			#{nodeRoles},
+			#{nodeXml},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_node SET
+			name = #{name},
+			type = #{type},
+			is_form = #{isForm},
+			is_visible = #{isVisible},
+			icon_url = #{iconUrl},
+			ui_operate = #{uiOperate},
+                        ui_json = #{uiJson},
+			node_type = #{nodeType},
+			node_key = #{nodeKey},
+			node_icon = #{nodeIcon},
+			node_roles = #{nodeRoles},
+			node_xml = #{nodeXml},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE act_yw_node SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

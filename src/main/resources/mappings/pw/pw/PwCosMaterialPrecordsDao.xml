@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwCosMaterialPrecordsDao">
+    
+	<sql id="pwCosMaterialPrecordsColumns">
+		a.id AS "id",
+		a.cmid AS "cmid",
+		a.prname AS "prname",
+		a.phone AS "phone",
+		a.mobile AS "mobile",
+		a.time AS "time",
+		a.num AS "num",
+		a.price AS "price",
+		a.total_price AS "totalPrice",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="pwCosMaterialPrecordsJoins">
+	</sql>
+    
+	<select id="get" resultType="PwCosMaterialPrecords">
+		SELECT 
+			<include refid="pwCosMaterialPrecordsColumns"/>
+		FROM pw_cos_material_precords a
+		<include refid="pwCosMaterialPrecordsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PwCosMaterialPrecords">
+		SELECT 
+			<include refid="pwCosMaterialPrecordsColumns"/>
+		FROM pw_cos_material_precords a
+		<include refid="pwCosMaterialPrecordsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="cmid != null and cmid != ''">
+				AND a.cmid = #{cmid}
+			</if>
+			<if test="prname != null and prname != ''">
+				AND a.prname LIKE 
+					<if test="dbName == 'oracle'">'%'||#{prname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{prname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{prname},'%')</if>
+			</if>
+			<if test="phone != null and phone != ''">
+				AND a.phone = #{phone}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND a.mobile = #{mobile}
+			</if>
+			<if test="time != null and time != ''">
+				AND a.time = #{time}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PwCosMaterialPrecords">
+		SELECT 
+			<include refid="pwCosMaterialPrecordsColumns"/>
+		FROM pw_cos_material_precords a
+		<include refid="pwCosMaterialPrecordsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pw_cos_material_precords(
+			id,
+			cmid,
+			prname,
+			phone,
+			mobile,
+			time,
+			num,
+			price,
+			total_price,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{cmid},
+			#{prname},
+			#{phone},
+			#{mobile},
+			#{time},
+			#{num},
+			#{price},
+			#{totalPrice},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pw_cos_material_precords SET 	
+			cmid = #{cmid},
+			prname = #{prname},
+			phone = #{phone},
+			mobile = #{mobile},
+			time = #{time},
+			num = #{num},
+			price = #{price},
+			total_price = #{totalPrice},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE pw_cos_material_precords SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

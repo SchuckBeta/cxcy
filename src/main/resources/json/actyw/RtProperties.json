@@ -1,0 +1,14 @@
+{
+	"process_id": "",
+	"name": "",
+	"documentation": "",
+	"process_author": "",
+	"process_version": "",
+	"documentation": "自定义工作流",
+	"process_namespace": "http://www.activiti.org/processdef",
+	"executionlisteners": "{\"executionListeners\":\"[]\"}",
+	"eventlisteners": "{\"eventListeners\":\"[]\"}",
+	"signaldefinitions": "\"[]\"",
+	"messagedefinitions": "\"[]\"",
+	"messages": []
+}

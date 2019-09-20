@@ -1,0 +1,279 @@
+html,body{
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.box{
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.downbox{
+	width: 100%;
+	height: ;/*通过js获取*/
+	overflow: hidden;
+	position: relative;
+}
+
+.downbox .leftbox{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width:216px;
+	height: 100%;
+	overflow: hidden;
+}
+
+
+.left{
+	position: absolute;
+	left: 0px;
+	top: 28px;
+	width:216px;
+}
+
+
+.left .borderimg{
+	display: block;
+	width: 100%;
+}
+
+.left .title{
+	width:100%;
+	height:45px;
+}
+
+.left .title img{
+	float: left;
+	margin: 0px 18px 0px 15px;
+}
+
+.left .title big{
+	line-height: 48px;
+	color: #222;
+	font-size: 18px;
+}
+
+.left ul{
+	width: 100%;
+	overflow: hidden;
+	}
+
+.left ul li{
+	width: 100%;
+	height: 48px;
+	position: relative;
+	background:#f7f7f7;
+	text-align: center;
+	line-height: 48px;
+	color: #222222;
+	font-size: 16px;
+}
+
+.left ul li img{
+	display: none;
+	position: absolute;
+	right: -6px;
+	top: 0px;
+}
+
+.left ul li.current{
+	color:#e9432d;
+}
+
+
+.left ul li.current img{
+	display: block;
+}
+
+
+
+
+
+
+
+
+
+.downbox .rightbox{
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding-left: 230px;
+}
+
+.downbox .leftbox .content{
+	width: 235px;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+.downbox .rightbox .content{
+	width: 100%;
+	height: 100%;
+	overflow:auto;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding-top: 40px;
+}
+
+.downbox .rightbox .content .itemname{
+	width:1440px;
+	height: 40px;
+	background:#e7e7e7;
+	font-size: 20px;
+	color:#e9442d;
+	line-height: 40px;
+	font-weight: bold;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding-left:10px;
+}
+
+.downbox .rightbox .content ul{
+	width:1400px;
+	overflow: hidden;
+	margin-top: 20px;
+	margin-left: 40px;
+}
+
+.downbox .rightbox .content ul li{
+	float: left;
+}
+
+.downbox .rightbox .content ul li span{
+	float: left;
+	width: 80px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 12px;
+	margin-bottom: 15px;
+}
+
+
+.downbox .rightbox .content ul li input,.downbox .rightbox .content ul li select{
+	width: 150px;
+	height: 30px;
+	overflow: hidden;
+	border-radius: 3px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border: 1px solid #cbcbcb;
+	margin-right: 15px;
+	margin-bottom: 15px;
+}
+
+
+.downbox .rightbox .content ul li button{
+	width: 80px;
+	height: 30px;
+	background: #e9442d;
+	text-align: center;
+	line-height: 30px;
+	color: white;
+	border-radius: 3px;
+}
+
+.downbox .rightbox .content table{
+	width:1366px;
+	border: none;
+	border-collapse: collapse;
+	border-spacing: none;
+	margin-left: 40px;
+	
+}
+
+.downbox .rightbox .content table td,.downbox .rightbox .content th{
+	border: 1px solid #cbcbcb;
+	text-align: center;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 5px;
+	font-size: 14px;
+}
+
+.downbox .rightbox .content table td a{
+	display: inline-block;
+	height:25px;
+	line-height:25px;
+	border: 1px solid #cecece;
+	background:#e5e5e5;
+	padding: 0px 10px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.downbox .rightbox .content table td a:last-child{
+	color:#e9442d;
+}
+
+
+.downbox .rightbox .content table td span.red{
+	color: red;
+}
+
+
+.fenyebox{
+	width:1366px;
+	overflow: hidden;
+	margin-top: 30px;
+	font-size: 12px;
+	margin-bottom: 100px;
+}
+
+.fenyebox .fenye{
+	float: left;
+	margin-left: 40px;
+}
+
+.fenyebox .fenye a{
+	float: left;
+	width:64px;
+	height:28px;
+	border: 1px solid #d4d4d4;
+	text-align: center;
+	line-height:28px;
+	margin: 0px 2px;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+
+.fenyebox .fenye span,.fenyebox .fenye small{
+	float: left;
+	width:28px;
+	height:28px;
+	border: 1px solid #d4d4d4;
+	text-align: center;
+	line-height:28px;
+	margin: 0px 2px;
+}
+
+.fenyebox .fenye span{
+	cursor: pointer;
+}
+
+.fenyebox .fenye span.current{
+	border: 1px solid #df4526;
+	background: #df4526;
+	color: white;
+}
+
+.fenyebox .fenye small{
+	border: none;
+}
+
+.fenyebox p{
+	float:right;
+	font-size: 14px;
+	line-height: 28px;
+}

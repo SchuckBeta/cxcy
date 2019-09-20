@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwEnterRelDao">
+
+	<sql id="pwEnterRelByGroupColumns">
+		a.id AS "id",
+		a.edid AS "pwEnterDetail.id",
+		a.apply_id AS "actYwApply.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+
+		ay.rel_id AS "actYwApply.relId",
+		ay.yw_id AS "actYwApply.actYw.id",
+		ay.proc_ins_id AS "actYwApply.procInsId",
+		ay.no AS "actYwApply.no",
+		ay.type AS "actYwApply.type",
+		ay.apply_user_id AS "actYwApply.applyUser.id",
+		ay.remarks AS "actYwApply.remarks",
+		ay.create_date AS "actYwApply.createDate",
+		ay.create_by AS "actYwApply.createBy.id",
+
+		b.id AS "pwEnterDetail.pwEnter.id",
+		b.no AS "pwEnterDetail.pwEnter.no",
+		b.applicant AS "pwEnterDetail.pwEnter.applicant.id",
+		b.status AS "pwEnterDetail.pwEnter.status",
+		b.term AS "pwEnterDetail.pwEnter.term",
+		b.cursel AS "pwEnterDetail.pwEnter.cursel",
+		b.term_num AS "pwEnterDetail.pwEnter.termNum",
+		b.exit_date AS "pwEnterDetail.pwEnter.exitDate",
+		b.re_date AS "pwEnterDetail.pwEnter.reDate",
+		b.start_date AS "pwEnterDetail.pwEnter.startDate",
+		b.end_date AS "pwEnterDetail.pwEnter.endDate",
+		b.update_date AS "pwEnterDetail.pwEnter.updateDate",
+		b.update_by AS "pwEnterDetail.pwEnter.updateBy.id",
+		b.create_date AS "pwEnterDetail.pwEnter.createDate",
+		b.create_by AS "pwEnterDetail.pwEnter.createBy.id",
+		b.remarks AS "pwEnterDetail.pwEnter.remarks",
+		b.del_flag AS "pwEnterDetail.pwEnter.delFlag",
+
+		er.id AS "erooms.id",
+		er.num AS "erooms.num",
+		er.eid AS "erooms.pwEnter.id",
+		er.rid AS "erooms.pwRoom.id",
+		er.update_date AS "erooms.updateDate",
+		er.update_by AS "erooms.updateBy.id",
+		er.create_date AS "erooms.createDate",
+		er.create_by AS "erooms.createBy.id",
+		er.remarks AS "erooms.remarks",
+		er.del_flag AS "erooms.delFlag",
+
+		er.rname AS "erooms.pwRoom.name",
+		er.ralias AS "erooms.pwRoom.alias",
+		er.rperson AS "erooms.pwRoom.person",
+		er.rphone AS "erooms.pwRoom.phone",
+		er.rmobile AS "erooms.pwRoom.mobile",
+		er.rtype AS "erooms.pwRoom.type",
+		er.rcolor AS "erooms.pwRoom.color",
+		er.rnum AS "erooms.pwRoom.num",
+		er.ris_allowm AS "erooms.pwRoom.isAllowm",
+		er.ris_usable AS "erooms.pwRoom.isUsable",
+		er.rsid AS "erooms.pwRoom.sid",
+
+		er.psparent_id AS "erooms.pwRoom.pwSpace.parent.id",
+		er.psparent_ids AS "erooms.pwRoom.pwSpace.parentIds",
+		er.psname AS "erooms.pwRoom.pwSpace.name",
+		er.psperson AS "erooms.pwRoom.pwSpace.person",
+		er.pstype AS "erooms.pwRoom.pwSpace.type",
+		er.psphone AS "erooms.pwRoom.pwSpace.phone",
+		er.psmobile AS "erooms.pwRoom.pwSpace.mobile",
+		er.psopen_week AS "erooms.pwRoom.pwSpace.openWeek",
+		er.psam_open_start_time AS "erooms.pwRoom.pwSpace.amOpenStartTime",
+		er.psam_open_end_time AS "erooms.pwRoom.pwSpace.amOpenEndTime",
+		er.pspm_open_start_time AS "erooms.pwRoom.pwSpace.pmOpenStartTime",
+		er.pspm_open_end_time AS "erooms.pwRoom.pwSpace.pmOpenEndTime",
+		er.psfloor_num AS "erooms.pwRoom.pwSpace.floorNum",
+		er.psarea AS "erooms.pwRoom.pwSpace.area",
+		er.psupdate_date AS "erooms.pwRoom.pwSpace.updateDate",
+		er.psupdate_by AS "erooms.pwRoom.pwSpace.updateBy.id",
+		er.pscreate_date AS "erooms.pwRoom.pwSpace.createDate",
+		er.pscreate_by AS "erooms.pwRoom.pwSpace.createBy.id",
+		er.psremarks AS "erooms.pwRoom.pwSpace.remarks",
+		er.psdel_flag AS "erooms.pwRoom.pwSpace.delFlag",
+
+		er.pspparent_id AS "erooms.pwRoom.pwSpace.parent.parent.id",
+		er.pspparent_ids AS "erooms.pwRoom.pwSpace.parent.parentIds",
+		er.pspname AS "erooms.pwRoom.pwSpace.parent.name",
+
+		er.psppparent_id AS "erooms.pwRoom.pwSpace.parent.parent.parent.id",
+		er.psppparent_ids AS "erooms.pwRoom.pwSpace.parent.parent.parentIds",
+		er.psppname AS "erooms.pwRoom.pwSpace.parent.parent.name",
+
+		er.pspppparent_id AS "erooms.pwRoom.pwSpace.parent.parent.parent.parent.id",
+		er.pspppparent_ids AS "erooms.pwRoom.pwSpace.parent.parent.parent.parentIds",
+		er.pspppname AS "erooms.pwRoom.pwSpace.parent.parent.parent.name",
+
+		er.psppppparent_id AS "erooms.pwRoom.pwSpace.parent.parent.parent.parent.parent.id",
+		er.psppppparent_ids AS "erooms.pwRoom.pwSpace.parent.parent.parent.parent.parentIds",
+		er.psppppname AS "erooms.pwRoom.pwSpace.parent.parent.parent.parent.name",
+
+		u3.name AS "pwEnterDetail.pwEnter.applicant.name",
+		u3.no AS "pwEnterDetail.pwEnter.applicant.no",
+		u3.sex AS "pwEnterDetail.pwEnter.applicant.sex",
+		u3.email AS "pwEnterDetail.pwEnter.applicant.email",
+		u3.phone AS "pwEnterDetail.pwEnter.applicant.phone",
+		u3.mobile AS "pwEnterDetail.pwEnter.applicant.mobile",
+		u3.id_type AS "pwEnterDetail.pwEnter.applicant.idType",
+		u3.id_no AS "pwEnterDetail.pwEnter.applicant.idNumber",
+		u3.professional AS "pwEnterDetail.pwEnter.applicant.professional",
+		o.name AS "pwEnterDetail.pwEnter.applicant.office.name"
+	</sql>
+
+	<sql id="pwEnterRelByDetailColumns">
+		a.id AS "id",
+		a.edid AS "pwEnterDetail.id",
+		a.apply_id AS "actYwApply.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+
+		ay.rel_id AS "actYwApply.relId",
+		ay.yw_id AS "actYwApply.actYw.id",
+		ay.proc_ins_id AS "actYwApply.procInsId",
+		ay.no AS "actYwApply.no",
+		ay.type AS "actYwApply.type",
+		ay.apply_user_id AS "actYwApply.applyUser.id",
+		ay.remarks AS "actYwApply.remarks",
+		ay.create_date AS "actYwApply.createDate",
+		ay.create_by AS "actYwApply.createBy.id",
+
+		bd.eid AS "pwEnterDetail.pwEnter.id",
+		bd.rid AS "pwEnterDetail.rid",
+		bd.type AS "pwEnterDetail.type",
+		bd.update_date AS "pwEnterDetail.updateDate",
+		bd.update_by AS "pwEnterDetail.updateBy.id",
+		bd.create_date AS "pwEnterDetail.createDate",
+		bd.create_by AS "pwEnterDetail.createBy.id",
+		bd.remarks AS "pwEnterDetail.remarks",
+		bd.del_flag AS "pwEnterDetail.delFlag",
+
+		b.no AS "pwEnterDetail.pwEnter.no",
+		b.applicant AS "pwEnterDetail.pwEnter.applicant.id",
+		b.status AS "pwEnterDetail.pwEnter.status",
+		b.term AS "pwEnterDetail.pwEnter.term",
+		b.cursel AS "pwEnterDetail.pwEnter.cursel",
+		b.term_num AS "pwEnterDetail.pwEnter.termNum",
+		b.exit_date AS "pwEnterDetail.pwEnter.exitDate",
+		b.re_date AS "pwEnterDetail.pwEnter.reDate",
+		b.start_date AS "pwEnterDetail.pwEnter.startDate",
+		b.end_date AS "pwEnterDetail.pwEnter.endDate",
+		b.update_date AS "pwEnterDetail.pwEnter.updateDate",
+		b.update_by AS "pwEnterDetail.pwEnter.updateBy.id",
+		b.create_date AS "pwEnterDetail.pwEnter.createDate",
+		b.create_by AS "pwEnterDetail.pwEnter.createBy.id",
+		b.remarks AS "pwEnterDetail.pwEnter.remarks",
+		b.del_flag AS "pwEnterDetail.pwEnter.delFlag",
+
+		u3.name AS "pwEnterDetail.pwEnter.applicant.name",
+		u3.no AS "pwEnterDetail.pwEnter.applicant.no",
+		u3.sex AS "pwEnterDetail.pwEnter.applicant.sex",
+		u3.email AS "pwEnterDetail.pwEnter.applicant.email",
+		u3.phone AS "pwEnterDetail.pwEnter.applicant.phone",
+		u3.mobile AS "pwEnterDetail.pwEnter.applicant.mobile",
+		u3.id_type AS "pwEnterDetail.pwEnter.applicant.idType",
+		u3.id_no AS "pwEnterDetail.pwEnter.applicant.idNumber",
+		u3.professional AS "pwEnterDetail.pwEnter.applicant.professional",
+		o.name AS "pwEnterDetail.pwEnter.applicant.office.name"
+	</sql>
+
+	<sql id="pwEnterByGroupRoomColumns">
+		er.id AS "id",
+		er.eid AS "eid",
+		er.rid AS "rid",
+		er.update_date AS "update_date",
+		er.update_by AS "update_by",
+		er.create_date AS "create_date",
+		er.create_by AS "create_by",
+		er.remarks AS "remarks",
+		er.del_flag AS "del_flag",
+
+		pr.name AS "rname",
+		pr.alias AS "ralias",
+		pr.person AS "rperson",
+		pr.phone AS "rphone",
+		pr.mobile AS "rmobile",
+		pr.type AS "rtype",
+		pr.color AS "rcolor",
+		pr.num AS "rnum",
+		pr.is_allowm AS "ris_allowm",
+		pr.is_usable AS "ris_usable",
+		pr.sid AS "rsid",
+
+		ps.parent_id AS "psparent_id",
+		ps.parent_ids AS "psparent_ids",
+		ps.name AS "psname",
+		ps.person AS "psperson",
+		ps.type AS "pstype",
+		ps.phone AS "psphone",
+		ps.mobile AS "psmobile",
+		ps.open_week AS "psopen_week",
+		ps.am_open_start_time AS "psam_open_start_time",
+		ps.am_open_end_time AS "psam_open_end_time",
+		ps.pm_open_start_time AS "pspm_open_start_time",
+		ps.pm_open_end_time AS "pspm_open_end_time",
+		ps.floor_num AS "psfloor_num",
+		ps.area AS "psarea",
+		ps.update_date AS "psupdate_date",
+		ps.update_by AS "psupdate_by",
+		ps.create_date AS "pscreate_date",
+		ps.create_by AS "pscreate_by",
+		ps.del_flag AS "psdel_flag",
+		ps.remarks AS "psremarks",
+
+		psp.parent_id AS "pspparent_id",
+		psp.parent_ids AS "pspparent_ids",
+		psp.name AS "pspname",
+
+		pspp.parent_id AS "psppparent_id",
+		pspp.parent_ids AS "psppparent_ids",
+		pspp.name AS "psppname",
+
+		psppp.parent_id AS "pspppparent_id",
+		psppp.parent_ids AS "pspppparent_ids",
+		psppp.name AS "pspppname",
+
+		pspppp.parent_id AS "psppppparent_id",
+		pspppp.parent_ids AS "psppppparent_ids",
+		pspppp.name AS "psppppname"
+	</sql>
+
+	<sql id="pwEnterByGroupRoomJoins">
+		LEFT JOIN (
+			SELECT
+				<include refid="pwEnterByGroupRoomColumns"/>
+			FROM pw_enter_room er
+			LEFT JOIN pw_room pr ON pr.id = er.rid
+			LEFT JOIN pw_space ps ON ps.id = pr.sid
+			LEFT JOIN pw_space psp ON psp.id = ps.parent_id
+			LEFT JOIN pw_space pspp ON pspp.id = psp.parent_id
+			LEFT JOIN pw_space psppp ON psppp.id = pspp.parent_id
+			LEFT JOIN pw_space pspppp ON pspppp.id = psppp.parent_id
+		) er ON er.eid = b.id
+	</sql>
+
+	<sql id="pwEnterRelByGroupJoins">
+		LEFT JOIN act_yw_apply ay ON ay.id = a.apply_id
+		LEFT JOIN pw_enter b ON b.id = ay.rel_id
+		LEFT JOIN sys_user u3 ON u3.id = b.applicant
+		LEFT JOIN sys_office o ON o.id = u3.office_id
+		<include refid="pwEnterByGroupRoomJoins"/>
+	</sql>
+
+	<sql id="pwEnterRelByDetailJoins">
+		LEFT JOIN act_yw_apply ay ON ay.id = a.apply_id
+		LEFT JOIN pw_enter_detail bd ON bd.id = a.edid
+		LEFT JOIN pw_enter b ON b.id = bd.eid
+		LEFT JOIN sys_user u3 ON u3.id = b.applicant
+	</sql>
+
+	<select id="get" resultType="PwEnterRel">
+		SELECT
+			<include refid="pwEnterRelByGroupColumns"/>
+		FROM pw_enter_rel a
+		<include refid="pwEnterRelByGroupJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="PwEnterRel">
+		SELECT
+			<include refid="pwEnterRelByGroupColumns"/>
+		FROM pw_enter_rel a
+		<include refid="pwEnterRelByGroupJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="pwEnterDetail != null">
+				<if test="pwEnterDetail.id != null and pwEnterDetail.id != ''">
+					AND a.edid = #{pwEnterDetail.id}
+				</if>
+				<if test="pwEnterDetail.pwEnter != null">
+					<if test="pwEnterDetail.pwEnter.id != null and pwEnterDetail.pwEnter.id != ''">
+						AND b.id = #{pwEnterDetail.pwEnter.id}
+					</if>
+					<if test="pwEnterDetail.pwEnter.applicant != null">
+						<if test="pwEnterDetail.pwEnter.applicant.id != null and pwEnterDetail.pwEnter.applicant.id != ''">
+							AND b.applicant = #{pwEnterDetail.pwEnter.applicant.id}
+						</if>
+					</if>
+				</if>
+			</if>
+			<if test="actYwApply != null">
+				<if test="actYwApply.id != null and actYwApply.id != ''">
+					AND a.apply_id = #{actYwApply.id}
+				</if>
+			</if>
+		GROUP BY a.apply_id
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, b.applicant ASC, b.status ASC, b.no DESC, a.update_date DESC
+			</when>
+			<otherwise>
+				ORDER BY b.applicant ASC, b.status ASC, b.no DESC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="PwEnterRel">
+		SELECT
+			<include refid="pwEnterRelByGroupColumns"/>
+		FROM pw_enter_rel a
+		<include refid="pwEnterRelByGroupJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pw_enter_rel(
+			id,
+			edid,
+			apply_id,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{pwEnterDetail.id},
+			#{actYwApply.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pw_enter_rel SET
+			edid = #{pwEnterDetail.id},
+			apply_id = #{actYwApply.id},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE pw_enter_rel SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

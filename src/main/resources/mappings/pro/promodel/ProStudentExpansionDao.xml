@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.promodel.dao.ProStudentExpansionDao">
+	<select id="findProjectByStudentId" resultType="com.oseasy.pro.modules.project.vo.ProjectExpVo"
+		parameterType="java.lang.String">
+		select temp.*, sa.id AS "logo.id", sa.url AS "logo.url" from(
+		SELECT a.id AS id , pp.start_date startDate,
+		pp.end_date endDate,
+		a.name,
+		s3.label proName,
+		s1.label level,
+		s2.label result,
+		a.leader leaderId,
+		th.user_type userType,
+		th.finish,
+		a.apply_time orderDate,
+		a.year AS year,
+		a.actyw_id AS actywId,
+		a.introduction AS introduction
+		FROM project_declare a
+		LEFT JOIN act_yw ay ON ay.id=a.actyw_id
+		LEFT JOIN pro_project pp ON ay.rel_id=pp.id
+		left join sys_dict s1 on s1.type="project_degree" AND s1.value=a.level
+		left join sys_dict s2 on s2.type="project_result" AND
+		s2.value=a.final_result
+		left join sys_dict s3 on pp.type=s3.value and s3.type='project_style'
+		left JOIN team_user_history th on th.pro_id = a.id
+		where th.pro_type='1,' and th.finish in('0','1') and a.del_flag='0'
+		and th.user_id=#{userId}
+		UNION all
+		SELECT pm.id AS id , pp.start_date startDate ,
+		pp.end_date endDate,
+		pm.p_name name,
+		s3.label proName,
+		s1.label level,
+		s2.label result,
+		pm.declare_id leaderId,
+		th.user_type userType,
+		th.finish,
+		pm.sub_time orderDate,
+		pm.year AS year,
+		pm.actyw_id AS actywId,
+		pm.introduction AS introduction
+		FROM pro_model pm
+		LEFT JOIN act_yw ay ON ay.id=pm.actyw_id
+		LEFT JOIN pro_project pp ON ay.rel_id=pp.id
+		left join sys_dict s1 on s1.type="project_degree" AND
+		s1.value=pm.final_status
+		left join sys_dict s2 on s2.type="project_result" AND s2.value=pm.grade
+		left join sys_dict s3 on pp.type=s3.value and s3.type='project_style'
+		left JOIN team_user_history th on th.pro_id = pm.id
+		WHERE pm.del_flag='0' and th.finish in('0','1')
+		and th.pro_type='1,' and th.user_id=#{userId}
+		)temp
+		LEFT JOIN sys_attachment sa ON sa.uid = temp.id AND sa.type = '11' AND sa.file_step = '1101'
+		order by temp.finish,temp.orderDate desc
+	</select>
+
+	<select id="findContestByUserId"
+		resultType="com.oseasy.pro.modules.promodel.entity.GContestUndergo"
+		parameterType="java.lang.String">
+		SELECT
+		an.type as "type",
+		g.create_date as "createDate",
+		g.p_name as "pName",
+		gca.award as "award",
+		t.sponsor as "sponsor",
+		g.id
+		games_id
+		FROM g_contest g
+		LEFT JOIN g_contest_award gca
+		ON
+		gca.contest_id=g.id
+		LEFT JOIN team t
+		ON g.team_id = t.id
+		LEFT JOIN
+		g_contest_announce an
+		ON g.announce_id=an.id
+		WHERE g.team_id IN (
+		SELECT
+		tur.team_id FROM team_user_relation tur LEFT JOIN sys_user u ON
+		tur.user_id = u.id WHERE u.id =#{userId} AND team_id !='null'
+		) AND
+		g.audit_state BETWEEN '1' AND '8' ORDER BY g.create_date DESC LIMIT 1
+	</select>
+
+	<select id="findGContestByStudentId"
+		resultType="com.oseasy.pro.modules.promodel.entity.GContestUndergo"
+		parameterType="java.lang.String">
+		select temp.*, sa.id AS "logo.id", sa.url AS "logo.url" from(
+		SELECT
+		g.id,
+		s3.label type,
+		g.sub_time createDate,
+		g.p_name pName,
+		s5.label award,
+		g.declare_id leaderId,
+		th.user_type userType,
+		th.finish,
+		g.introduction AS introduction,
+		g.actyw_id AS actywId,
+		g.year AS year
+		FROM g_contest g
+		LEFT JOIN g_contest_award gca ON gca.contest_id=g.id
+		LEFT JOIN act_yw ay ON ay.id=g.actyw_id
+		LEFT JOIN pro_project pp ON ay.rel_id=pp.id
+		left join sys_dict s3 on pp.type=s3.value and s3.type='competition_type'
+		left join sys_dict s5 on gca.award=s5.value and
+		s5.type='competition_college_prise'
+		left JOIN team_user_history th on th.pro_id = g.id
+		WHERE g.del_flag='0' and th.finish in('0','1')
+		and th.pro_type='7,' and th.user_id=#{userId}
+		UNION all
+		SELECT
+		p.id,
+		s3.label type,
+		p.sub_time createDate,
+		p.p_name pName,
+		'' award,
+		p.declare_id leaderId,
+		th.user_type userType,
+		th.finish,
+		p.introduction AS introduction,
+		p.actyw_id AS actywId,
+		p.year AS year
+		FROM pro_model p
+		LEFT JOIN act_yw ay ON ay.id=p.actyw_id
+		LEFT JOIN pro_project pp ON ay.rel_id=pp.id
+		left join sys_dict s3 on pp.type=s3.value and s3.type='competition_type'
+		left JOIN team_user_history th on th.pro_id = p.id
+		WHERE p.del_flag='0'
+		and th.finish in('0','1')
+		and th.pro_type='7,' and th.user_id=#{userId}
+		)temp
+		LEFT JOIN sys_attachment sa ON sa.uid = temp.id AND sa.type = '11' AND sa.file_step = '1101'
+		order by temp.finish,temp.createDate desc
+	</select>
+</mapper>

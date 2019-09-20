@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.sco.dao.ScoAffirmDao">
+
+	<sql id="scoAffirmColumns">
+		a.id AS "id",
+		a.proc_ins_id AS "procInsId",
+		a.type AS "type",
+		a.pro_id AS "proId",
+		a.pro_type AS "proType",
+		a.pro_level_type AS "proLevelType",
+		a.pro_ptype AS "proPtype",
+		a.pro_result AS "proResult",
+		a.pro_score AS "proScore",
+		a.score_val AS "scoreVal",
+		a.score_standard AS "scoreStandard",
+		a.affirm_date AS "affirmDate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="scoAffirmJoins">
+	</sql>
+
+	<select id="get" resultType="ScoAffirm">
+		SELECT
+			<include refid="scoAffirmColumns"/>
+		FROM sco_affirm a
+		<include refid="scoAffirmJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ScoAffirm">
+		SELECT
+			<include refid="scoAffirmColumns"/>
+		FROM sco_affirm a
+		<include refid="scoAffirmJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="proId != null and proId != ''">
+				AND a.pro_id = #{proId}
+			</if>
+			<if test="proType != null and proType != ''">
+				AND a.pro_type = #{proType}
+			</if>
+			<if test="proLevelType != null and proLevelType != ''">
+				AND a.pro_level_type = #{proLevelType}
+			</if>
+			<if test="proPtype != null and proPtype != ''">
+				AND a.pro_ptype = #{proPtype}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<!--addBy张正 学生前台查询创新创业学分评定  传入项目Id得到-->
+	<select id="findProjectScore" resultType="com.oseasy.scr.modules.sco.entity.ScoAffirm">
+		SELECT
+				a.pro_id AS "proId",
+				a.score_val AS "scoreVal",
+				a.score_standard AS "scoreStandard",
+				a.affirm_date AS "affirmDate"
+		FROM sco_affirm a
+		<where>
+			    a.del_flag = '0'
+			and a.pro_id = #{proId}
+		</where>
+	</select>
+
+	<!--根据userId 找到其对应的创新学分项目 -->
+	<select id="findInnovationList"
+			parameterType="com.oseasy.scr.modules.sco.vo.ScoProjectVo"
+			resultType="com.oseasy.scr.modules.sco.vo.ScoProjectVo">
+			SELECT  a.id AS "projectDeclare.id",
+					a.name AS "projectDeclare.name",
+					a.number AS "projectDeclare.number",
+					a.leader AS "projectDeclare.leader",
+			        a.type AS "projectDeclare.type",
+			        a.team_id AS "projectDeclare.teamId",
+			        (SELECT weight_val from team_user_history tur
+			        		WHERE tur.team_id=a.team_id and tur.user_id =  #{userId} and tur.pro_id=a.id)
+			        		AS "weightVal",
+					(select  COALESCE(sum(tur.weight_val),0) FROM team_user_history  tur
+							WHERE tur.team_id=a.team_id  and tur.pro_id=a.id group by tur.team_id)
+							AS "weightTotal",
+			        ( SELECT label
+							FROM sys_dict dict
+		                    WHERE TYPE="project_type" AND dict.value=a.type)
+		                    AS "projectDeclare.typeString",
+			        (SELECT GROUP_CONCAT(u.name SEPARATOR '/')
+							FROM team_user_relation t
+							LEFT JOIN sys_user u ON t.user_id = u.id
+							AND t.user_type='1' WHERE t.team_id=a.team_id AND t.state='0'
+							GROUP BY t.team_id ) AS "teamUsers",
+					a.level AS "projectDeclare.level",
+					(SELECT SUBSTR(gca.pro_type,1,1) FROM pro_project gca
+								left join act_yw ay on gca.id=ay.rel_id
+								where a.actyw_id=ay.id)
+					 	AS  "pType",
+					( SELECT label
+							FROM sys_dict dict
+							WHERE TYPE="project_degree"
+							AND dict.value=a.level) AS "projectDeclare.levelString",
+					a.final_result AS "projectDeclare.finalResult",
+					( SELECT label
+						FROM sys_dict dict
+						WHERE TYPE="project_result" AND dict.value=a.final_result) AS "projectDeclare.finalResultString",
+					sa.affirm_date AS "scoAffirm.affirmDate",
+					sa.score_standard AS "scoAffirm.scoreStandard"
+					FROM project_declare a inner join sco_affirm sa on  a.id=sa.pro_id
+			WHERE   a.del_flag='0'
+				    and ( a.type ='1' or a.type='2')
+			     AND  #{userId} IN (SELECT tur.user_id FROM team_user_history tur   WHERE  tur.team_id = a.team_id and tur.pro_id=a.id   )
+			ORDER BY a.update_date DESC
+	</select>
+
+	<!--根据userId 找到其对应的创业学分项目 -->
+	<select id="findBusinessList"
+			parameterType="com.oseasy.scr.modules.sco.vo.ScoProjectVo"
+			resultType="com.oseasy.scr.modules.sco.vo.ScoProjectVo">
+		SELECT  a.id AS "projectDeclare.id",
+					a.name AS "projectDeclare.name",
+					a.number AS "projectDeclare.number",
+					a.leader AS "projectDeclare.leader",
+			        a.type AS "projectDeclare.type",
+			        a.team_id AS "projectDeclare.teamId",
+			        (SELECT weight_val from team_user_history tur
+			        		WHERE tur.team_id=a.team_id and tur.user_id =  #{userId} and tur.pro_id=a.id  )
+			        		AS "weightVal",
+					(select COALESCE(sum(tur.weight_val),0) FROM team_user_history  tur
+							WHERE tur.team_id=a.team_id  and tur.pro_id=a.id
+							 group by tur.team_id)
+							AS 'weightTotal',
+			        ( SELECT label
+							FROM sys_dict dict
+		                    WHERE TYPE="project_type" AND dict.value=a.type)
+		                    AS "projectDeclare.typeString",
+			        (SELECT GROUP_CONCAT(u.name SEPARATOR '/')
+							FROM team_user_relation t
+							LEFT JOIN sys_user u ON t.user_id = u.id
+							AND t.user_type='1' WHERE t.team_id=a.team_id  AND t.state='0'
+							GROUP BY t.team_id ) AS "teamUsers",
+					a.level AS "projectDeclare.level",
+					(SELECT SUBSTR(gca.pro_type,1,1) FROM pro_project gca
+								left join act_yw ay on gca.id=ay.rel_id
+								where a.actyw_id=ay.id)
+					 	AS  "pType",
+					( SELECT label
+							FROM sys_dict dict
+							WHERE TYPE="project_degree"
+							AND dict.value=a.level) AS "projectDeclare.levelString",
+					a.final_result AS "projectDeclare.finalResult",
+					( SELECT label
+						FROM sys_dict dict
+						WHERE TYPE="project_result" AND dict.value=a.final_result) AS "projectDeclare.finalResultString",
+						sa.affirm_date AS "scoAffirm.affirmDate",
+					sa.score_standard AS "scoAffirm.scoreStandard"
+					FROM project_declare a  inner join sco_affirm sa on  a.id=sa.pro_id
+			WHERE   a.del_flag='0'
+				    and a.type ='3'
+			     AND  #{userId} IN (SELECT tur.user_id FROM team_user_history tur   WHERE  tur.team_id = a.team_id  and tur.pro_id=a.id )
+			ORDER BY a.update_date DESC
+	</select>
+
+	<select id="findQualityList"
+			parameterType="com.oseasy.scr.modules.sco.vo.ScoProjectVo"
+			resultType="com.oseasy.scr.modules.sco.vo.ScoProjectVo">
+	SELECT a.id AS "gContest.id" ,
+       		a.competition_number AS "gContest.competitionNumber",
+       		a.p_name AS "gContest.pName",
+       		a.declare_id AS "gContest.declareId",
+       		a.schoolend_score AS "gContest.schoolendScore",
+       		a.schoolend_result AS "gContest.schoolendResult",
+       		(SELECT weight_val from team_user_history tur
+			        		WHERE tur.team_id=a.team_id and tur.pro_id=a.id and tur.user_id =  #{userId}  )
+			        		AS "weightVal",
+					(select COALESCE(sum(tur.weight_val),0) FROM team_user_history  tur
+							WHERE tur.team_id=a.team_id and tur.pro_id=a.id  group by tur.team_id)
+							AS "weightTotal",
+       		(SELECT GROUP_CONCAT(u.name SEPARATOR '/')
+					FROM team_user_relation t
+					LEFT JOIN sys_user u ON t.user_id = u.id
+					AND t.user_type='1' WHERE t.team_id=a.team_id  AND t.state='0'
+					GROUP BY t.team_id ) AS "teamUsers",
+			(SELECT SUBSTR(gca.pro_type,1,1) FROM pro_project gca
+						left join act_yw ay on gca.id=ay.rel_id
+						where a.actyw_id=ay.id) AS "pType",
+			(SELECT gca.contest_level FROM g_contest_announce gca where gca.id=a.announce_id) AS "comType",
+						sa.affirm_date AS "scoAffirm.affirmDate",
+					sa.score_standard AS "scoAffirm.scoreStandard"
+    FROM g_contest a inner join sco_affirm sa on  a.id=sa.pro_id
+	WHERE   a.del_flag='0'
+		AND  a.audit_state='7'
+		AND  #{userId} IN (SELECT tur.user_id FROM team_user_history tur   WHERE  tur.team_id = a.team_id and tur.pro_id=a.id  )
+      ORDER BY a.update_date DESC
+	</select>
+
+	 <!--根据项目id或者大赛id删除记录-->
+	<delete id="deleteByProId" parameterType="java.lang.String">
+		DELETE FROM sco_affirm where pro_id = #{proId}
+	</delete>
+
+	<select id="getScoGradeQuality" parameterType="java.lang.String" resultType="com.oseasy.scr.modules.sco.vo.ScoProjectVo">
+		select u.no as 'user.no',
+				u.name as 'user.name',
+				tur.weight_val as 'weightVal',
+				(select COALESCE(sum(tur.weight_val),0) FROM team_user_history  tur
+						WHERE tur.team_id=g.team_id  and tur.pro_id=g.id
+						 group by tur.team_id)
+						AS 'weightTotal',
+				tur.user_id as 'user.id',
+				sa.score_Val as 'scoAffirm.scoreVal',
+				g.declare_id as 'gContest.declareId',
+				g.p_name as 'gContest.pName'
+		from  sco_affirm sa
+		inner JOIN g_contest g on sa.pro_id=g.id
+		inner join team_user_history tur on g.team_id=tur.team_id and tur.pro_id=g.id
+		left join sys_user u on u.id=tur.user_id
+		WHERE sa.id = #{id} and tur.user_type='1' and sa.del_flag='0'
+	</select>
+
+	<select id="getScoGradeProject" parameterType="java.lang.String" resultType="com.oseasy.scr.modules.sco.vo.ScoProjectVo">
+		select u.no as 'user.no',
+					u.name as 'user.name',
+					tur.weight_val as 'weightVal',
+					(select COALESCE(sum(tur.weight_val),0) FROM team_user_history  tur
+							WHERE tur.team_id=p.team_id  and tur.pro_id=p.id group by tur.team_id)
+							as 'weightTotal',
+					tur.user_id as 'user.id',
+					sa.score_Val as 'scoAffirm.scoreVal',
+					sa.score_standard as 'scoAffirm.scoreStandard',
+					p.leader as 'projectDeclare.leader',
+					p.name as 'projectDeclare.name'
+			from  sco_affirm sa
+			inner JOIN project_declare p on sa.pro_id=p.id
+			inner join team_user_history tur on p.team_id=tur.team_id and tur.pro_id=p.id
+			left join sys_user u on u.id=tur.user_id
+			WHERE sa.id = #{id} and tur.user_type='1' and sa.del_flag='0'
+	</select>
+
+	<select id="findScoGontestVoList"
+			parameterType="com.oseasy.scr.modules.sco.vo.ScoProjectVo"
+			resultType="com.oseasy.scr.modules.sco.vo.ScoProjectVo">
+	SELECT a.id AS "gContest.id" ,
+       		a.competition_number AS "gContest.competitionNumber",
+       		a.p_name AS "gContest.pName",
+       		a.declare_id AS "gContest.declareId",
+       		a.schoolend_score AS "gContest.schoolendScore",
+       		a.schoolend_result AS "gContest.schoolendResult",
+       		sa.score_val as "scoAffirm.scoreVal",
+			sa.score_standard as "scoAffirm.scoreStandard",
+			sa.id as "scoAffirm.id",
+			su.id AS "user.id",
+			su.no AS "user.no",
+			su.name AS "user.name",
+			su.professional AS "user.professional",
+			so.id AS "office.id",
+			so.name AS "office.name",
+       		(SELECT GROUP_CONCAT(u.name SEPARATOR '/')
+					FROM team_user_history t
+					LEFT JOIN sys_user u ON t.user_id = u.id AND t.user_type='1'
+					WHERE t.team_id=a.team_id and t.del_flag='0' and t.pro_id=a.id
+					GROUP BY t.team_id ) AS "teamUsers",
+			(SELECT count(1)
+					FROM team_user_history t
+					LEFT JOIN sys_user u ON t.user_id = u.id
+					WHERE t.team_id=a.team_id and t.del_flag='0'AND t.user_type='1'
+						and t.pro_id=a.id
+					GROUP BY t.team_id ) AS "userNum",
+				(SELECT  pp.type  FROM act_yw pa left join pro_project pp on pa.rel_id=pp.id
+									WHERE pa.id = a.actyw_id ) AS "pType",
+			(SELECT gca.contest_level FROM g_contest_announce gca where gca.id=a.announce_id) AS "comType"
+    FROM sco_affirm sa
+    INNER JOIN g_contest a on sa.pro_id=a.id
+	LEFT JOIN act_yw act ON a.actyw_id = act.id
+	INNER JOIN pro_project pp ON pp.id = act.rel_id
+    inner join sys_user su on su.id=a.declare_id
+    inner join sys_office so on so.id=su.office_id
+	WHERE  a.del_flag='0'  and  sa.del_flag='0'
+		<if test="keyWord != null and keyWord != ''">
+			AND (a.p_name LIKE
+			<if test="dbName == 'mysql'">concat('%',#{keyWord},'%')</if>
+			or
+			(
+			SELECT GROUP_CONCAT(u.name SEPARATOR '/')
+			FROM team_user_history t
+			LEFT JOIN sys_user u ON t.user_id = u.id AND t.user_type='1'
+			WHERE t.team_id=a.team_id and t.del_flag='0' and t.pro_id=a.id
+			GROUP BY t.team_id
+			) LIKE
+			<if test="dbName == 'mysql'">concat('%',#{keyWord},'%')</if>
+			)
+		</if>
+		<if test="user!=null and user.no != null and user.no != ''">
+			AND su.no LIKE
+				<if test="dbName == 'oracle'">'%'||#{user.no}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{user.no}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{user.no},'%')</if>
+		</if>
+		<if test="office!=null and office.id != null and  office.id != ''">
+			AND so.id =#{ office.id}
+		</if>
+		<if test="user!=null and user.professional != null and  user.professional != ''">
+			AND su.professional =#{user.professional }
+		</if>
+		<if test="GContest!=null and GContest.schoolendResult != null and  GContest.schoolendResult != ''">
+			AND a.schoolend_result =#{GContest.schoolendResult}
+		</if>
+		<if test="pType != null and pType != ''">
+			AND  SUBSTRING(pp.pro_type,'1','1') =#{pType}
+		</if>
+		<if test="comType != null and comType != ''">
+			AND gcaa.contest_level=#{comType}
+		</if>
+		<if test="GContest!=null and GContest.competitionNumber != null and  GContest.competitionNumber != ''">
+			AND a.competition_number like concat('%',#{GContest.competitionNumber},'%')
+		</if>
+		<if test="beginDate != null ">
+			AND sa.affirm_date &gt;= #{beginDate}
+		</if>
+		<if test="endDate != null">
+			AND sa.affirm_date &lt;= #{endDate}
+		</if>
+	ORDER BY a.update_date DESC
+	</select>
+
+	<select id="findScoProjectCreateVoPage"
+				parameterType="com.oseasy.scr.modules.sco.vo.ScoProjectVo"
+				resultType="com.oseasy.scr.modules.sco.vo.ScoProjectVo">
+		SELECT  a.id AS "projectDeclare.id",
+				a.name AS "projectDeclare.name",
+				a.number AS "projectDeclare.number",
+				a.leader AS "projectDeclare.leader",
+				a.type AS "projectDeclare.type",
+				a.team_id AS "projectDeclare.teamId",
+	       		sa.score_val as "scoAffirm.scoreVal",
+				sa.affirm_date AS "scoAffirm.affirmDate",
+				sa.score_standard AS "scoAffirm.scoreStandard",
+				sa.id as "scoAffirm.id",
+				su.no AS "user.no",
+				su.name AS "user.name",
+				su.professional AS "user.professional",
+				so.id AS "office.id",
+				so.name AS "office.name",
+				(SELECT GROUP_CONCAT(u.name SEPARATOR '/')
+							FROM team_user_history t
+							LEFT JOIN sys_user u ON t.user_id = u.id AND t.user_type='1'
+							WHERE t.team_id=a.team_id and t.del_flag='0' and t.pro_id=a.id
+							GROUP BY t.team_id ) AS "teamUsers",
+				(SELECT count(1)
+						FROM team_user_history t
+						LEFT JOIN sys_user u ON t.user_id = u.id
+						WHERE t.team_id=a.team_id and t.del_flag='0' AND t.user_type='1'
+							and t.pro_id=a.id
+						GROUP BY t.team_id ) AS "userNum",
+				( SELECT pp.type  FROM act_yw pa left join pro_project pp on pa.rel_id=pp.id
+							WHERE pa.id = a.actyw_id ) AS "pType",
+				(SELECT label FROM sys_dict dict WHERE TYPE="project_type" AND dict.value=a.type)
+				AS "projectDeclare.typeString",
+		( SELECT label FROM sys_dict dict WHERE TYPE="project_degree" AND dict.value=a.level)
+		AS "projectDeclare.levelString",
+		a.final_result AS "projectDeclare.finalResult",
+		( SELECT label FROM sys_dict dict WHERE TYPE="project_result" AND dict.value=a.final_result)
+		AS "projectDeclare.finalResultString"
+	    FROM sco_affirm sa
+	    INNER JOIN project_declare a on sa.pro_id=a.id
+		LEFT JOIN act_yw act ON a.actyw_id = act.id
+		INNER JOIN pro_project pp ON pp.id = act.rel_id
+	    inner join sys_user su on su.id=a.leader
+	    inner join sys_office so on so.id=su.office_id
+		WHERE a.del_flag='0'  and  sa.del_flag='0'
+		and sa.type='1'
+			<if test="keyWord != null and keyWord != ''">
+				AND (a.name LIKE
+				<if test="dbName == 'mysql'">concat('%',#{keyWord},'%')</if>
+				or
+				(
+				SELECT GROUP_CONCAT(u.name SEPARATOR '/')
+				FROM team_user_history t
+				LEFT JOIN sys_user u ON t.user_id = u.id AND t.user_type='1'
+				WHERE t.team_id=a.team_id and t.del_flag='0' and t.pro_id=a.id
+				GROUP BY t.team_id
+				) LIKE
+				<if test="dbName == 'mysql'">concat('%',#{keyWord},'%')</if>
+				)
+			</if>
+			<if test="user!=null and user.no != null and user.no != ''">
+				AND su.no LIKE
+					<if test="dbName == 'oracle'">'%'||#{user.no}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{user.no}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{user.no},'%')</if>
+			</if>
+			<if test="office!=null and office.id != null and  office.id != ''">
+				AND so.id =#{ office.id}
+			</if>
+			<if test="user!=null and user.professional != null and  user.professional != ''">
+				AND su.professional =#{user.professional }
+			</if>
+			<if test="projectDeclare!=null and projectDeclare.finalResult != null and  projectDeclare.finalResult != ''">
+				AND a.final_result =#{projectDeclare.finalResult}
+			</if>
+			<if test="pType != null and pType != ''">
+				AND  SUBSTRING(pp.pro_type,'1','1') =#{pType}
+			</if>
+			<if test="projectDeclare!=null and projectDeclare.number != null and  projectDeclare.number != ''">
+				AND a.number like concat('%',#{projectDeclare.number},'%')
+			</if>
+			<if test="beginDate != null ">
+				AND sa.affirm_date &gt;= #{beginDate}
+			</if>
+			<if test="endDate != null">
+				AND sa.affirm_date &lt;=  #{endDate}
+			</if>
+		ORDER BY a.update_date DESC
+	</select>
+
+	<select id="findScoProjectStartVoPage"
+					parameterType="com.oseasy.scr.modules.sco.vo.ScoProjectVo"
+					resultType="com.oseasy.scr.modules.sco.vo.ScoProjectVo">
+			SELECT  a.id AS "projectDeclare.id",
+					a.name AS "projectDeclare.name",
+					a.number AS "projectDeclare.number",
+					a.leader AS "projectDeclare.leader",
+					a.type AS "projectDeclare.type",
+					a.team_id AS "projectDeclare.teamId",
+					sa.score_val as "scoAffirm.scoreVal",
+					sa.affirm_date AS "scoAffirm.affirmDate",
+					sa.score_standard AS "scoAffirm.scoreStandard",
+					sa.id as "scoAffirm.id",
+					su.no AS "user.no",
+					su.name AS "user.name",
+					su.professional AS "user.professional",
+					so.id AS "office.id",
+					so.name AS "office.name",
+		(SELECT GROUP_CONCAT(u.name SEPARATOR '/')
+							FROM team_user_history t
+							LEFT JOIN sys_user u ON t.user_id = u.id AND t.user_type='1'
+							WHERE t.team_id=a.team_id and t.del_flag='0' and t.pro_id=a.id
+							GROUP BY t.team_id ) AS "teamUsers",
+					(SELECT count(1)
+							FROM team_user_history t
+							LEFT JOIN sys_user u ON t.user_id = u.id
+							WHERE t.team_id=a.team_id and t.del_flag='0'AND t.user_type='1'
+								and t.pro_id=a.id
+							GROUP BY t.team_id ) AS "userNum",
+					( SELECT pp.type FROM act_yw pa left join pro_project pp on pa.rel_id=pp.id
+					WHERE pa.id = a.actyw_id ) AS "pType",
+			( SELECT label FROM sys_dict dict WHERE TYPE="project_degree" AND dict.value=a.level)
+			AS "projectDeclare.levelString",
+			(SELECT label FROM sys_dict dict WHERE TYPE="project_type" AND dict.value=a.type)
+					AS "projectDeclare.typeString",
+			a.final_result AS "projectDeclare.finalResult",
+			( SELECT label FROM sys_dict dict WHERE TYPE="project_result" AND dict.value=a.final_result)
+			AS "projectDeclare.finalResultString"
+		    FROM sco_affirm sa
+		    INNER JOIN project_declare a on sa.pro_id=a.id
+			LEFT JOIN act_yw act ON a.actyw_id = act.id
+			INNER JOIN pro_project pp ON pp.id = act.rel_id
+		    inner join sys_user su on su.id=a.leader
+		    inner join sys_office so on so.id=su.office_id
+			WHERE   a.del_flag='0'  and  sa.del_flag='0'
+			and sa.type='2'
+				<if test="keyWord != null and keyWord != ''">
+					AND (a.name LIKE
+					<if test="dbName == 'mysql'">concat('%',#{keyWord},'%')</if>
+					or
+					(
+					SELECT GROUP_CONCAT(u.name SEPARATOR '/')
+					FROM team_user_history t
+					LEFT JOIN sys_user u ON t.user_id = u.id AND t.user_type='1'
+					WHERE t.team_id=a.team_id and t.del_flag='0' and t.pro_id=a.id
+					GROUP BY t.team_id
+					) LIKE
+					<if test="dbName == 'mysql'">concat('%',#{keyWord},'%')</if>
+					)
+				</if>
+				<if test="user!=null and user.no != null and user.no != ''">
+					AND su.no LIKE
+						<if test="dbName == 'oracle'">'%'||#{user.no}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{user.no}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{user.no},'%')</if>
+				</if>
+				<if test="office!=null and office.id != null and  office.id != ''">
+					AND so.id =#{ office.id}
+				</if>
+				<if test="user!=null and user.professional != null and  user.professional != ''">
+					AND su.professional =#{user.professional }
+				</if>
+				<if test="projectDeclare!=null and projectDeclare.finalResult != null and  projectDeclare.finalResult != ''">
+					AND a.final_result =#{projectDeclare.finalResult}
+				</if>
+				<if test="pType != null and pType != ''">
+					AND  SUBSTRING(pp.pro_type,'1','1')  =#{pType}
+				</if>
+				<if test="projectDeclare!=null and projectDeclare.number != null and  projectDeclare.number != ''">
+					AND a.number like concat('%',#{projectDeclare.number},'%')
+				</if>
+
+				<if test="beginDate != null ">
+					AND sa.affirm_date &gt;= #{beginDate}
+				</if>
+				<if test="endDate != null">
+					AND sa.affirm_date &lt;=  #{endDate}
+				</if>
+			ORDER BY a.update_date DESC
+		</select>
+
+	<select id="findAllList" resultType="ScoAffirm">
+		SELECT
+			<include refid="scoAffirmColumns"/>
+		FROM sco_affirm a
+		<include refid="scoAffirmJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sco_affirm(
+			id,
+			proc_ins_id,
+			type,
+			pro_id,
+			pro_type,
+			pro_level_type,
+			pro_ptype,
+			pro_result,
+			pro_score,
+			score_val,
+			score_standard,
+			affirm_date,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{procInsId},
+			#{type},
+			#{proId},
+			#{proType},
+			#{proLevelType},
+			#{proPtype},
+			#{proResult},
+			#{proScore},
+			#{scoreVal},
+			#{scoreStandard},
+			#{affirmDate},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sco_affirm SET
+			proc_ins_id = #{procInsId},
+			type = #{type},
+			pro_id = #{proId},
+			pro_type = #{proType},
+			pro_level_type = #{proLevelType},
+			pro_ptype = #{proPtype},
+			pro_result = #{proResult},
+			pro_score = #{proScore},
+			score_val = #{scoreVal},
+			score_standard = #{scoreStandard},
+			affirm_date = #{affirmDate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sco_affirm SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

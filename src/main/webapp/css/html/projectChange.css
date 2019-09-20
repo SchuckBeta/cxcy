@@ -1,0 +1,179 @@
+table tr td{
+    border-left: none;
+    border-top: none;
+}
+
+table tr td:first-child{
+    border-left: 1px solid #C5C1AA;
+    
+}
+table tr:first-child>td{
+    border-top: 1px solid #C5C1AA;
+}
+
+.tabel_select ul li select{
+    height:30px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+    -mas-border-radius:3px;
+    border-radius:3px;
+    font-size: 14px;
+    font-family: 'Microsoft yahei';
+    border:1px solid #B8B8B8;
+}
+
+.tabel_select {
+    margin-top: 4px;
+}
+
+.tabel_select ul li {
+    float: left;
+    margin-left: 10px;
+}
+
+.tabel_select ul li label {
+    font-size: 14px;
+}
+
+.tabel_select ul li:nth-child(4) {
+    margin-left: 160px;
+}
+
+.tabel_select ul li:nth-child(6) a {
+    display: inline-block;
+    padding: 6px 5px;
+    border-radius: 3px;
+    color: #fff;
+    background: rgb(233,68,46);
+}
+
+.tabel_select ul li input {
+    border: 1px solid rgb(169, 169, 169) !important;
+    height: 30px;
+    width: 95px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -mas-border-radius: 3px;
+    border-radius: 3px;
+    font-size: 14px;
+    font-family: 'Microsoft yahei';
+}
+
+.pages {
+    margin-top: 20px;
+}
+
+
+
+table {
+    margin-top: 10px;
+}
+
+table, tr, td, th {
+    font-family: 'Microsoft yahei';
+}
+table thead tr {
+    background-color: rgba(112, 24, 12, 0.0666666666666667);
+}
+
+table thead tr th {
+    font-size: 12px;
+    padding: 10px 10px;
+    white-space: nowrap;
+}
+
+table tr td .clo_red {
+    color: red;
+    font-size: 12px;
+}
+
+table tr .norm_br a {
+    border-radius: 3px;
+    color: #9E9E9E;
+    display: block;
+    background-color: #fff;
+    height: 30px;
+    width: 60px;
+    font-size: 12px;
+    line-height: 30px;
+    padding: 0 1px;
+    margin: 5px 10px;
+    border: 1px solid #8A8A8A;
+}
+
+table td {
+    border: 1px solid #C5C1AA;
+    font-size: 12px;
+    text-align: center;
+    padding: 8px 0;
+    white-space: normal;
+    word-break: break-all;
+    width: 20px;
+}
+
+table .col_hh {
+    color: #828282;
+}
+
+
+
+
+.outer::after {
+    clear: both;
+    content: '.';
+    display: block;
+    height: 0px;
+    visibility: hidden;
+}
+
+.tabel_head {
+    margin-left: -12px;
+    margin-top: 28px;
+    position: relative;
+}
+
+.tabel_head .tlt {
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    position: absolute;
+    left: 21%;
+    margin-top: 4px;
+}
+
+.content {
+    height: 100%;
+    float: left;
+    margin-left: 12px;
+    width: 80%;
+}
+
+.pages ul {
+    float: left;
+}
+
+.pages ul li {
+    float: left;
+    margin-left: 5px;
+    height: 30px;
+    width: 26px;
+    border: 1px solid #eee;
+    text-align: center;
+    line-height: 30px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.pages .bg_color {
+    background-color: #CD3333;
+    color: #fff;
+}
+
+.page_cloum {
+    float: right;
+    font-size: 15px;
+}
+
+select {
+    outline: none;
+}

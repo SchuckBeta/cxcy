@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.gcontest.dao.GContestAnnounceDao">
+    
+	<sql id="gContestAnnounceColumns">
+		a.id AS "id",
+		a.apply_start AS "applyStart",
+		a.apply_end AS "applyEnd",
+		a.content AS "content",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.flow_id AS "flowId",
+		a.g_name AS "gName",
+		a.type AS "type",
+		a.contest_level AS "contestLevel",
+		a.college_start AS "collegeStart",
+		a.college_end AS "collegeEnd",
+		a.school_start AS "schoolStart",
+		a.school_end AS "schoolEnd",
+		a.province_start AS "provinceStart",
+		a.province_end AS "provinceEnd",
+		a.country_start AS "countryStart",
+		a.country_end AS "countryEnd"
+	</sql>
+	<sql id="gContestMyColumns">
+		a.id AS "id",
+		a.apply_start AS "applyStart",
+		a.apply_end AS "applyEnd",
+		a.content AS "content",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.flow_id AS "flowId",
+		a.g_name AS "gName",
+		a.type AS "type",
+		a.contest_level AS "contestLevel",
+		a.college_start AS "collegeStart",
+		a.college_end AS "collegeEnd",
+		a.school_start AS "schoolStart",
+		a.school_end AS "schoolEnd",
+		a.province_start AS "provinceStart",
+		a.province_end AS "provinceEnd",
+		a.country_start AS "countryStart",
+		a.country_end AS "countryEnd",
+		b.status AS "status"
+	</sql>
+	
+	<sql id="gContestAnnounceJoins">
+	</sql>
+    
+	<select id="get" resultType="GContestAnnounce">
+		SELECT 
+			<include refid="gContestAnnounceColumns"/>
+		FROM g_contest_announce a
+		<include refid="gContestAnnounceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	
+	 
+	<select id="getGContestAnnounce" resultType="GContestAnnounce">
+		SELECT 
+			<include refid="gContestAnnounceColumns"/>
+		FROM g_contest_announce a LEFT JOIN oa_notify b ON a.id=b.s_id
+		<include refid="gContestAnnounceJoins"/>
+		WHERE a.type = #{type}
+		and b.status= #{status}
+		ORDER BY a.update_date DESC
+	</select>
+	
+	
+	<select id="findList" resultType="GContestAnnounce">
+		SELECT 
+			<include refid="gContestMyColumns"/>
+		FROM g_contest_announce a LEFT JOIN oa_notify b ON a.id=b.s_id
+		<include refid="gContestAnnounceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="type!=null">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY b.status,a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GContestAnnounce">
+		SELECT 
+			<include refid="gContestAnnounceColumns"/>
+		FROM g_contest_announce a LEFT JOIN oa_notify b ON a.id=b.s_id
+		<include refid="gContestAnnounceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO g_contest_announce(
+			id,
+			apply_start,
+			apply_end,
+			content,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag,
+			flow_id,
+			g_name,
+			type,
+			contest_level,
+			college_start,
+			college_end,
+			school_start,
+			school_end,
+			province_start,
+			province_end,
+			country_start,
+			country_end
+		) VALUES (
+			#{id},
+			#{applyStart},
+			#{applyEnd},
+			#{content},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag},
+			#{flowId},
+			#{gName},
+			#{type},
+			#{contestLevel},
+			#{collegeStart},
+			#{collegeEnd},
+			#{schoolStart},
+			#{schoolEnd},
+			#{provinceStart},
+			#{provinceEnd},
+			#{countryStart},
+			#{countryEnd}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE g_contest_announce SET 	
+			apply_start = #{applyStart},
+			apply_end = #{applyEnd},
+			content = #{content},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			flow_id = #{flowId},
+			g_name = #{gName},
+			type = #{type},
+			contest_level = #{contestLevel},
+			college_start = #{collegeStart},
+			college_end = #{collegeEnd},
+			school_start = #{schoolStart},
+			school_end = #{schoolEnd},
+			province_start = #{provinceStart},
+			province_end = #{provinceEnd},
+			country_start = #{countryStart},
+			country_end = #{countryEnd}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE g_contest_announce SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getGContestByName" resultType="GContestAnnounce">
+		select 
+			<include refid="gContestAnnounceColumns"/>
+		FROM g_contest_announce a
+		where a.g_name=#{name} AND a.del_flag=0
+	</select>
+	
+</mapper>

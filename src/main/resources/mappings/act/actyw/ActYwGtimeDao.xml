@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwGtimeDao">
+
+	<sql id="actYwGtimeColumns">
+		a.id AS "id",
+		a.project_id AS "projectId",
+		a.year_id AS "yearId",
+		a.grounp_id AS "grounpId",
+		a.gnode_id AS "gnodeId",
+		a.begin_date AS "beginDate",
+		a.end_date AS "endDate",
+		a.status AS "status",
+		a.rate AS "rate",
+		a.has_tpl AS "hasTpl",
+		gn.name AS "gnodeName",
+		a.excel_tpl_path AS "excelTplPath",
+		a.excel_tpl_clazz AS "excelTplClazz",
+		a.rate_status AS "rateStatus",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		gn.id AS "gnode.id",
+        gn.parent_id AS "gnode.parent.id",
+        gn.parent_ids AS "gnode.parentIds",
+        gn.group_id AS "gnode.group.id",
+        gn.name AS "gnode.name",
+        gn.type AS "gnode.type",
+        gn.node_id AS "gnode.node.id",
+        gn.pre_id AS "gnode.preId",
+        gn.is_show AS "gnode.isShow",
+        gn.is_form AS "gnode.isForm",
+        gn.icon_url AS "gnode.iconUrl",
+        gn.task_type AS "gnode.taskType",
+        gn.level AS "gnode.level",
+
+        n.name AS "gnode.node.name",
+        n.type AS "gnode.node.type",
+        n.is_form AS "gnode.node.isForm",
+        n.icon_url AS "gnode.node.iconUrl",
+        n.node_type AS "gnode.node.nodeType",
+        n.node_key AS "gnode.node.nodeKey"
+	</sql>
+
+	<sql id="actYwGtimeJoins">
+		LEFT JOIN act_yw_gnode gn on gn.id= a.gnode_id
+		LEFT JOIN act_yw_node n on n.id= gn.node_id
+	</sql>
+
+	<select id="get" resultType="ActYwGtime">
+		SELECT
+			<include refid="actYwGtimeColumns"/>
+		FROM act_yw_gtime a
+		<include refid="actYwGtimeJoins"/>
+		WHERE a.id = #{id} ORDER BY gn.parent_ids ASC, gn.level ASC, a.update_date DESC
+	</select>
+
+	<select id="getTimeByGnodeId" resultType="ActYwGtime">
+		SELECT
+			<include refid="actYwGtimeColumns"/>
+		FROM act_yw_gtime a
+		<include refid="actYwGtimeJoins"/>
+		WHERE a.gnode_id = #{gnodeId}
+		and a.grounp_id = #{grounpId}
+		and a.project_id = #{projectId}
+		ORDER BY gn.parent_ids ASC, gn.level ASC, a.update_date DESC
+	</select>
+
+	<select id="getTimeByYnodeId" resultType="ActYwGtime">
+		SELECT
+			<include refid="actYwGtimeColumns"/>
+		FROM act_yw_gtime a
+		LEFT JOIN act_yw yw on yw.group_id= a.grounp_id AND yw.rel_id = a.project_id
+		<include refid="actYwGtimeJoins"/>
+		WHERE a.gnode_id = #{gnodeId}
+		and yw.id = #{ywId}
+		ORDER BY gn.parent_ids ASC, gn.level ASC, a.update_date DESC
+	</select>
+
+
+	<select id="findList" resultType="ActYwGtime">
+		SELECT
+			<include refid="actYwGtimeColumns"/>
+		FROM act_yw_gtime a
+		<include refid="actYwGtimeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="projectId != null and projectId != ''">
+				AND a.project_id = #{projectId}
+			</if>
+			<if test="yearId != null and yearId != ''">
+				AND a.year_id = #{yearId}
+			</if>
+			<if test="grounpId != null and grounpId != ''">
+				AND a.grounp_id = #{grounpId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY gn.parent_ids ASC, gn.level ASC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwGtime">
+		SELECT
+			<include refid="actYwGtimeColumns"/>
+		FROM act_yw_gtime a
+		<include refid="actYwGtimeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} ORDER BY gn.parent_ids ASC, gn.level ASC, a.update_date DESC
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY gn.parent_ids ASC, gn.level ASC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_gtime(
+			id,
+			project_id,
+			year_id,
+			grounp_id,
+			gnode_id,
+			begin_date,
+			end_date,
+			status,
+			rate,
+			has_tpl,
+			excel_tpl_path,
+			excel_tpl_clazz,
+			rate_status,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{projectId},
+			#{yearId},
+			#{grounpId},
+			#{gnodeId},
+			#{beginDate},
+			#{endDate},
+			#{status},
+			#{rate},
+			#{hasTpl},
+			#{excelTplPath},
+			#{excelTplClazz},
+			#{rateStatus},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_gtime SET
+			project_id = #{projectId},
+			year_id = #{yearId},
+			grounp_id = #{grounpId},
+			gnode_id = #{gnodeId},
+			begin_date = #{beginDate},
+			end_date = #{endDate},
+			status = #{status},
+			rate = #{rate},
+			has_tpl = #{hasTpl},
+			excel_tpl_path = #{excelTplPath},
+			excel_tpl_clazz = #{excelTplClazz},
+			rate_status = #{rateStatus},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE act_yw_gtime SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteByGroupId">
+		DELETE FROM  act_yw_gtime WHERE project_id = #{projectId}
+	</update>
+
+	<insert id="savePl" >
+		INSERT INTO act_yw_gtime(
+			id,
+			project_id,
+			grounp_id,
+			gnode_id,
+			begin_date,
+			end_date,
+			status,
+			rate,
+			has_tpl,
+			excel_tpl_path,
+			excel_tpl_clazz,
+			rate_status,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+				 separator=",">
+			(
+				#{item.id},
+				#{item.projectId},
+				#{item.grounpId},
+				#{item.gnodeId},
+				#{item.beginDate},
+				#{item.endDate},
+				#{item.status},
+				#{item.rate},
+				#{item.hasTpl},
+				#{item.excelTplPath},
+				#{item.excelTplClazz},
+				#{item.rateStatus},
+				#{item.updateDate},
+				#{item.updateBy.id},
+				#{item.createDate},
+				#{item.createBy.id},
+				#{item.remarks},
+				#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+    <update id="deletePlwl">
+            DELETE FROM act_yw_gtime WHERE grounp_id = #{groupId} AND gnode_id = #{gnodeId}
+    </update>
+
+	<update id="deleteYearPlwl">
+			DELETE FROM act_yw_gtime WHERE project_id = #{projectId} AND year_id = #{yearId}
+	</update>
+
+    <update id="deletePlwlByGroup">
+            DELETE FROM act_yw_gtime WHERE grounp_id = #{groupId}
+    </update>
+
+	<select id="getProByProjectIdAndYear" resultType="java.lang.String">
+		SELECT a.id
+		FROM act_yw_gtime a
+		WHERE a.project_id = #{projectId} and a.year_Id= #{year}
+	</select>
+
+	<select id="checkTimeIndex" resultType="java.lang.Integer">
+		SELECT count(*)
+		FROM act_yw_gtime a
+		LEFT JOIN act_yw_year ayy ON a.year_id=ayy.id
+		LEFT JOIN act_yw ay ON ayy.actyw_id=ay.id
+		WHERE ay.id = #{actywId} and a.begin_date is not NULL and a.end_date is not null
+	</select>
+
+</mapper>

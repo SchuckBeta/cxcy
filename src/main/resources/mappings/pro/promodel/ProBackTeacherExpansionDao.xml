@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.promodel.dao.ProBackTeacherExpansionDao">
+
+
+	<sql id="backTeacherExpansionColumns">
+		DISTINCT a.id AS "id",
+		a.arrangement AS "arrangement",
+		a.discipline AS "discipline",
+		a.industry AS "industry",
+		a.technical_title AS "technicalTitle",
+		a.service_intention AS "serviceIntention",
+		a.work_unit AS "workUnit",
+		a.address AS "address",
+		a.resume AS "resume",
+		a.recommended_units AS "recommendedUnits",
+		a.result AS "result",
+		a.award AS "award",
+		a.role_type AS "roleType",
+		a.level AS "level",
+		a.review_name AS "reviewName",
+		a.join_review_time AS "joinReviewTime",
+		a.first_bank AS "firstBank",
+		a.bank_account AS "bankAccount",
+		a.mainExp AS "mainExp",
+		a.post_title AS "postTitle",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.teacherType AS "teachertype",
+		a.expert_type AS "expertType",
+		a.education_type AS "educationType",
+		a.is_open AS "isOpen",
+		a.first_show AS "firstShow",
+		a.site_show AS "siteShow",
+		a.top_show AS "topShow",
+		a.category AS "category",
+		a.work_unit_type AS "workUnitType",
+		u.id AS "user.id",
+		u.name AS "user.name",
+		u.company_id AS "user.company.id",
+		u.office_id AS "user.office.id",
+		u.login_name AS "user.loginName",
+		u.password AS "user.password",
+		u.no AS "user.no",
+		u.email AS "user.email",
+		u.phone AS "user.phone",
+		u.mobile AS "user.mobile",
+		u.user_type AS "user.userType",
+		u.login_ip AS "user.loginIp",
+		u.photo AS "user.photo",
+		u.login_date AS "user.loginDate",
+		u.login_flag AS "user.loginFlag",
+		u.create_by AS "user.createBy",
+		u.create_date AS "user.createDate",
+		u.update_by AS "user.updateBy",
+		u.update_date AS "user.updateDate",
+		u.del_flag AS "user.delFlag",
+		u.national AS "user.national",
+		u.political AS "user.political",
+		u.professional AS "user.professional",
+		u.id_type AS "user.idType",
+		u.birthday AS "user.birthday",
+		u.sex AS "user.sex",
+		u.country AS "user.country",
+		u.area AS "user.area",
+		u.domain AS "user.domain",
+		u.degree AS "user.degree",
+		u.education AS "user.education",
+		u.id_no AS "user.idNumber",
+		u.post_code AS "user.postCode",
+		u.likes AS "user.likes",
+		u.views AS "user.views",
+		so.name AS "user.office.name"
+
+	</sql>
+	<select id="findProjectByTeacherId" resultType="com.oseasy.pro.modules.project.vo.ProjectExpVo" parameterType="java.lang.String">
+		select temp.* from(
+		SELECT
+		a.id AS id,
+		pp.start_date AS startDate,
+		pp.end_date AS endDate,
+		a.name AS name,
+		s3.label AS proName,
+		s1.label AS level,
+		s2.label AS result,
+		a.leader AS leaderId,
+		th.user_type AS userType,
+		th.finish AS finish,
+		a.apply_time AS orderDate,
+		a.year AS "year",
+		sa.id AS "logo.id",
+		sa.type AS "logo.ftype",
+		sa.file_step AS "logo.ffileStep",
+		sa.uid AS "logo.uid",
+		sa.url AS "logo.url",
+		sa.name AS "logo.name",
+		sa.size AS "logo.size",
+		sa.gnode_id AS "logo.gnodeId",
+		sa.suffix AS "logo.suffix",
+		sa.update_date AS "logo.updateDate",
+		sa.update_by AS "logo.updateBy.id",
+		sa.create_date AS "logo.createDate",
+		sa.create_by AS "logo.createBy.id"
+		FROM project_declare a
+		LEFT JOIN act_yw ay ON ay.id=a.actyw_id
+		LEFT JOIN pro_project pp ON ay.rel_id=pp.id
+		left join sys_dict s1 on s1.type="project_degree" AND s1.value=a.level
+		left join sys_dict s2 on s2.type="project_result" AND s2.value=a.final_result
+		left join sys_dict s3 on pp.type=s3.value and s3.type='project_style'
+		LEFT JOIN team_user_history th on th.pro_id = a.id
+		LEFT JOIN sys_attachment sa ON sa.uid = a.id and sa.type='11' and sa.file_step='1101'
+		where th.pro_type='1,' and th.finish in('0','1') and a.del_flag='0' and th.user_id=#{userId}
+		UNION all
+		SELECT
+		pm.id AS id,
+		pp.start_date AS startDate ,
+		pp.end_date AS endDate,
+		pm.p_name AS name,
+		s3.label AS proName,
+		s1.label AS level,
+		s2.label AS result,
+		pm.declare_id AS leaderId,
+		th.user_type AS userType,
+		th.finish AS finish,
+		pm.sub_time AS orderDate,
+		pm.year AS "year",
+		sa.id AS "logo.id",
+		sa.type AS "logo.ftype",
+		sa.file_step AS "logo.ffileStep",
+		sa.uid AS "logo.uid",
+		sa.url AS "logo.url",
+		sa.name AS "logo.name",
+		sa.size AS "logo.size",
+		sa.gnode_id AS "logo.gnodeId",
+		sa.suffix AS "logo.suffix",
+		sa.update_date AS "logo.updateDate",
+		sa.update_by AS "logo.updateBy.id",
+		sa.create_date AS "logo.createDate",
+		sa.create_by AS "logo.createBy.id"
+		FROM pro_model pm
+		LEFT JOIN act_yw ay ON ay.id=pm.actyw_id
+		LEFT JOIN pro_project pp ON ay.rel_id=pp.id
+		LEFT JOIN sys_dict s1 on s1.type="project_degree" AND s1.value=pm.final_status
+		LEFT JOIN sys_dict s2 on s2.type="project_result" AND s2.value=pm.grade
+		LEFT JOIN sys_dict s3 on pp.type=s3.value and s3.type='project_style'
+		LEFT JOIN team_user_history th on th.pro_id = pm.id
+		LEFT JOIN sys_attachment sa ON sa.uid = pm.id and sa.type='11' and sa.file_step='1101'
+		WHERE  pm.del_flag='0' and th.finish in('0','1') and th.pro_type='1,' and th.user_id=#{userId}
+		)temp order by temp.finish, temp.orderDate desc
+	</select>
+
+	<select id="findGContestByTeacherId" resultType="com.oseasy.pro.modules.promodel.entity.GContestUndergo"
+			parameterType="java.lang.String">
+		select temp.* from(
+		SELECT
+		g.id,
+		s3.label type,
+		g.sub_time createDate,
+		g.p_name pName,
+		s5.label award,
+		g.declare_id leaderId,
+		g.`year` AS "year",
+		th.user_type userType,
+		th.finish
+		FROM g_contest g
+		LEFT JOIN g_contest_award gca ON gca.contest_id=g.id
+		LEFT JOIN act_yw ay ON ay.id=g.actyw_id
+		LEFT JOIN pro_project pp ON ay.rel_id=pp.id
+		left join sys_dict s3 on pp.type=s3.value and s3.type='competition_type'
+		left join sys_dict s5 on gca.award=s5.value and s5.type='competition_college_prise'
+		left JOIN team_user_history th on th.pro_id = g.id
+		WHERE g.del_flag='0' and th.finish in('0','1')
+		and th.pro_type='7,' and th.user_id=#{userId}
+		UNION all
+		SELECT
+		p.id,
+		s3.label type,
+		p.sub_time createDate,
+		p.p_name  pName,
+		'' award,
+		p.declare_id leaderId,
+		p.`year` AS "year",
+		th.user_type userType,
+		th.finish
+		FROM pro_model p
+		LEFT JOIN act_yw ay ON ay.id=p.actyw_id
+		LEFT JOIN pro_project pp ON ay.rel_id=pp.id
+		left join sys_dict s3 on pp.type=s3.value and s3.type='competition_type'
+		left JOIN team_user_history th on th.pro_id = p.id
+		WHERE p.del_flag='0'
+		and th.finish in('0','1')
+		and th.pro_type='7,' and th.user_id=#{userId}
+		)temp order by temp.finish,temp.createDate desc
+	</select>
+
+	<!-- 专家任务列表查询 -->
+	<select id="getUserToDoTaskList" resultType="BackTeacherExpansion">
+		SELECT
+		<include refid="backTeacherExpansionColumns"/>
+		FROM sys_user u
+		LEFT JOIN sys_teacher_expansion a ON u.id = a.user_id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+		LEFT JOIN sys_user_role sur ON sur.user_id = u.id
+		<where>
+			u.del_flag = 0
+			<if test="roleId != null and roleId != ''">
+				AND sur.role_id =#{roleId}
+			</if>
+			<if test="queryStr!=null and queryStr!=''">
+				AND ( u.no like concat('%',#{queryStr},'%')
+				or  u.name like concat('%',#{queryStr},'%')
+				or  so.name like concat('%',#{queryStr},'%')
+				)
+			</if>
+			<if test="expertType != null and expertType != ''">
+				AND a.expert_type like concat('%',#{expertType},'%')
+			</if>
+			<if test="officeId != null and officeId != ''">
+				AND u.office_id = #{officeId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY  a.update_date desc,u.no DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<!-- 专家任务列表查询 -->
+	<select id="getUserTaskList" resultType="BackTeacherExpansion">
+		SELECT
+		<include refid="backTeacherExpansionColumns"/>
+		FROM sys_user u
+		LEFT JOIN sys_teacher_expansion a ON u.id = a.user_id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+		LEFT JOIN sys_user_role sur ON sur.user_id = u.id
+		left join sys_role r on r.id = sur.role_id
+		<where>
+			u.del_flag = 0 and r.rtype='40'
+			and u.id in (
+			select DISTINCT ayg.rev_user_id FROM act_yw_gassign ayg
+			where ayg.del_flag = '0' and ayg.yw_id = #{actywId} and ayg.gnode_id = #{gnodeId}
+			)
+			<if test="queryStr!=null and queryStr!=''">
+				AND ( u.no like concat('%',#{queryStr},'%')
+				or  u.name like concat('%',#{queryStr},'%')
+				)
+			</if>
+			<if test="officeId != null and officeId != ''">
+				AND u.office_id = #{officeId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY  a.update_date desc,u.no DESC
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

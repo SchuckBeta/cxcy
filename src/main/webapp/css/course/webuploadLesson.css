@@ -1,0 +1,360 @@
+@charset "UTF-8";
+
+
+.webuploader-container{
+}
+
+
+.filelist .file-item{
+    position: relative;
+}
+#uploadCover .filelist .info{
+    position: absolute;
+    left: 4px;
+    bottom: 4px;
+    right: 4px;
+    height: 20px;
+    line-height: 20px;
+    text-indent: 5px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    z-index: 10;
+}
+.filelist li div.error{
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    background: red;
+    color: white;
+    text-align: center;
+    height: 20px;
+    font-size: 12px;
+    line-height: 20px;
+}
+.filelist{
+    overflow: hidden;
+}
+
+
+.filelist li{
+    width: 110px;
+    height: 110px;
+    background: url(/images/videobg.png);
+    text-align: center;
+    margin-bottom: 8px;
+    position: relative;
+    display: inline;
+    float: left;
+    overflow: hidden;
+    font-size: 12px;
+}
+.filelist li p.imgWrap{
+    position: relative;
+    z-index: 2;
+    line-height: 110px;
+    vertical-align: middle;
+    overflow: hidden;
+    width: 110px;
+    height: 110px;
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webit-transition: 200ms ease-out;
+    -moz-transition: 200ms ease-out;
+    -o-transition: 200ms ease-out;
+    -ms-transition: 200ms ease-out;
+    transition: 200ms ease-out;
+}
+
+
+
+
+
+#uploadCover{
+    width: 120px;
+}
+#uploadCover .filelist li{
+    margin-right: 0;
+    margin-bottom: 10px;
+}
+
+.filelist li p.progress {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    height: 8px;
+    overflow: hidden;
+    z-index: 50;
+    margin: 0;
+    border-radius: 0;
+    background: none;
+    -webkit-box-shadow: 0 0 0;
+}
+.filelist li p.progress span {
+    display: none;
+    overflow: hidden;
+    width: 0;
+    height: 100%;
+    background: #1483d8 url(/img/progress.png) repeat-x;
+
+    -webit-transition: width 200ms linear;
+    -moz-transition: width 200ms linear;
+    -o-transition: width 200ms linear;
+    -ms-transition: width 200ms linear;
+    transition: width 200ms linear;
+
+    -webkit-animation: progressmove 2s linear infinite;
+    -moz-animation: progressmove 2s linear infinite;
+    -o-animation: progressmove 2s linear infinite;
+    -ms-animation: progressmove 2s linear infinite;
+    animation: progressmove 2s linear infinite;
+
+    -webkit-transform: translateZ(0);
+}
+
+@-webkit-keyframes progressmove {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 17px 0;
+    }
+}
+@-moz-keyframes progressmove {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 17px 0;
+    }
+}
+@keyframes progressmove {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 17px 0;
+    }
+}
+#uploadVideo .filelist li {
+    width: 113px;
+    height: 113px;
+    background: url(/images/videobg.png);
+    text-align: center;
+    margin-bottom: 8px;
+    position: relative;
+    display: block;
+    float: left;
+    overflow: hidden;
+    font-size: 12px;
+}
+#uploadVideo .filelist li p.imgWrap.notimage{
+    margin-top: 0;
+    width: 111px;
+    height: 111px;
+    border: 1px #eeeeee solid;
+}
+#uploadVideo .filelist li p.title{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    top: 5px;
+    line-height: 18px;
+    text-indent: 5px;
+    text-align: left;
+}
+#uploadVideo .filelist li p.imgWrap.notimage i.file-preview{
+    margin-top: 15px;
+}
+
+#uploadVideo .filelist li p.error {
+    background: #f43838;
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 28px;
+    line-height: 28px;
+    width: 100%;
+    z-index: 100;
+    margin-bottom: 0;
+    display:none;
+}
+#uploadVideo{
+    float: left;
+    width: 120px;
+}
+.preview-video{
+    display: none;
+    float: left;
+    width: 400px;
+    height: 225px;
+    padding: 5px;
+    border-radius: 3px;
+    margin-left: 5px;
+    border: 1px solid #ccc;
+}
+.preview-video video{
+    width: 100%;
+    height:100%;
+}
+
+#fileLessonList .thumbnail{
+    float: none;
+    background: none;
+    display: block;
+    width: auto;
+    height: auto;
+    border: 0;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    box-shadow: none;
+    text-align: left;
+    margin-bottom: 8px;
+}
+#fileLessonList .thumbnail img{
+    height: 20px;
+    vertical-align: top;
+    margin-right: 5px;
+}
+#fileLessonList .thumbnail:hover{
+    background-color: #cecece;
+}
+#fileLessonList .thumbnail:hover p.title a{
+    color: #dd4814;
+}
+#fileLessonList .thumbnail:hover .icon-remove-sign{
+    display: inline;
+    vertical-align: top;
+
+}
+#fileLessonList .thumbnail p{
+    line-height: 20px;
+    margin-bottom: 0;
+    height: 20px;
+    overflow: hidden;
+}
+#fileLessonList .thumbnail p.title a{
+    color: #337ab7;
+    font-size: 14px;
+    line-height: 20px;
+    margin-right: 15px;
+    text-decoration: none;
+}
+#fileLessonList .thumbnail p.title a:hover{
+    color: #dd4814;
+}
+#fileLessonList .icon-remove-sign{
+    display: none;
+    font-size: 18px;
+    color: #dd4814;
+}
+/* 在线文件的文件预览图标 */
+i.file-preview {
+    display: block;
+    margin: 10px auto;
+    width: 70px;
+    height: 70px;
+    background-image: url("/images/file-icons.png");
+    /*background-image: url("/images/file-icons.gif") \9;*/
+    background-position: -140px center;
+    background-repeat: no-repeat;
+}
+i.file-preview.file-type-dir{
+    background-position: 0 center;
+}
+i.file-preview.file-type-file{
+    background-position: -140px center;
+}
+i.file-preview.file-type-filelist{
+    background-position: -210px center;
+}
+i.file-preview.file-type-zip,
+i.file-preview.file-type-rar,
+i.file-preview.file-type-7z,
+i.file-preview.file-type-tar,
+i.file-preview.file-type-gz,
+i.file-preview.file-type-bz2{
+    background-position: -280px center;
+}
+i.file-preview.file-type-xls,
+i.file-preview.file-type-xlsx{
+    background-position: -350px center;
+}
+i.file-preview.file-type-doc,
+i.file-preview.file-type-docx{
+    background-position: -420px center;
+}
+i.file-preview.file-type-ppt,
+i.file-preview.file-type-pptx{
+    background-position: -490px center;
+}
+i.file-preview.file-type-vsd{
+    background-position: -560px center;
+}
+i.file-preview.file-type-pdf{
+    background-position: -630px center;
+}
+i.file-preview.file-type-txt,
+i.file-preview.file-type-md,
+i.file-preview.file-type-json,
+i.file-preview.file-type-htm,
+i.file-preview.file-type-xml,
+i.file-preview.file-type-html,
+i.file-preview.file-type-js,
+i.file-preview.file-type-css,
+i.file-preview.file-type-php,
+i.file-preview.file-type-jsp,
+i.file-preview.file-type-asp{
+    background-position: -700px center;
+}
+i.file-preview.file-type-apk{
+    background-position: -770px center;
+}
+i.file-preview.file-type-exe{
+    background-position: -840px center;
+}
+i.file-preview.file-type-ipa{
+    background-position: -910px center;
+}
+i.file-preview.file-type-mp4,
+i.file-preview.file-type-swf,
+i.file-preview.file-type-mkv,
+i.file-preview.file-type-avi,
+i.file-preview.file-type-flv,
+i.file-preview.file-type-mov,
+i.file-preview.file-type-mpg,
+i.file-preview.file-type-mpeg,
+i.file-preview.file-type-ogv,
+i.file-preview.file-type-webm,
+i.file-preview.file-type-rm,
+i.file-preview.file-type-rmvb{
+    background-position: -980px center;
+}
+i.file-preview.file-type-ogg,
+i.file-preview.file-type-wav,
+i.file-preview.file-type-wmv,
+i.file-preview.file-type-mid,
+i.file-preview.file-type-mp3{
+    background-position: -1050px center;
+}
+i.file-preview.file-type-jpg,
+i.file-preview.file-type-jpeg,
+i.file-preview.file-type-gif,
+i.file-preview.file-type-bmp,
+i.file-preview.file-type-png,
+i.file-preview.file-type-psd{
+    background-position: -140px center;
+}

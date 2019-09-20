@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<jsonparam>
+	<![CDATA[{
+		    'banners': [
+		        {
+		            'title': '标题1',
+		            'img': '图片1',
+		            'left_btn_url': '左按钮链接',
+		            'left_btn_name': '左按钮名称',
+		            'right_btn_url': '右按钮链接',
+		            'right_btn_name': '右按钮名称'
+		        },
+		        {
+		            'title': '标题2',
+		            'img': '图片2',
+		            'left_btn_url': '左按钮链接',
+		            'left_btn_name': '左按钮名称',
+		            'right_btn_url': '右按钮链接',
+		            'right_btn_name': '右按钮名称'
+		        }
+		    ]
+		}]]>
+	</jsonparam>
+	<content>
+		<![CDATA[<div class="bannerBox">
+	<div id="slideBox" class="slideBox">
+		<div class="bd">
+			<ul>
+				<#list banners as banner>
+					<li>
+					<p>${banner.title}</p> <img src="${freemarkerGetFtpUrl(banner.img)}">
+					 <!--<a class="btn1" href="${banner.left_btn_url}">${banner.left_btn_name}</a>-->
+					 <!--<a style="margin-left: -70px;width: 140px;text-align:center;text-decoration:none" class="btn2"href="${banner.right_btn_url }">${banner.right_btn_name}</a>-->
+					</li>
+				</#list>
+			</ul>
+		</div>
+		<!-- 圆点 分页 开始 -->
+		<div class="hd">
+			　<ul></ul>
+		</div>
+		<!-- 圆点 分页 结束 -->
+		<a class="prev" href="javascript:void(0)"></a>
+		<a class="next" href="javascript:void(0)"></a>
+	</div>
+</div>]]>
+	</content>
+</template>

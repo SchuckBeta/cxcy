@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<content>
+		<![CDATA[&lt;style&gt;
+		.classBox {
+			position: relative;
+		}
+
+		.classBoxone {
+			position: relative;
+			text-align: center;
+			width: 636px;
+			height: 693px;
+			margin: auto;
+		}
+
+		.classBoxone img:nth-child(1) {
+			width: 100%;
+			height: 100%;
+		}
+
+		.classBoxone img:nth-child(2) {
+			position: absolute;
+			left: -86px;
+			top: 0;
+		}
+
+		.classBoxone img:nth-child(3) {
+			position: absolute;
+			right: -41px;
+			top: 0;
+		}
+
+		.classBoxone img:nth-child(4) {
+			position: absolute;
+			bottom: 182px;
+			left: -30px;
+		}
+
+		.classBoxone img:nth-child(5) {
+			position: absolute;
+			bottom: 85px;
+			right: 10px;
+		}
+
+		.classBoxone img:nth-child(6) {
+			position: absolute;
+			top: 217px;
+			left: 138px;
+		}
+
+		.classBox .content {
+			width: 302px;
+		}
+
+		.classBox .content_one {
+			position: absolute;
+			top: 100px;
+			left: -51px;
+			overflow: hidden; /*自动隐藏文字*/
+			display: none;
+		}
+
+		.classBox .content_one, .content_second, .content_three, .content_four,
+		.content_five h4, p {
+			overflow: hidden; /*自动隐藏文字*/
+			text-overflow: ellipsis; /*文字隐藏后添加省略号*/
+			white-space: nowrap; /*强制不换行*/
+		}
+
+		.classBox .content_second {
+			position: absolute;
+			top: 159px;
+			right: -25px;
+			display: none;
+		}
+
+		.classBox .content_three {
+			position: absolute;
+			left: 23px;
+			bottom: 0;
+			display: none;
+		}
+
+		.classBox .content_four {
+			position: absolute;
+			right: -54px;
+			bottom: 0;
+			display: none;
+		}
+
+		.classBox  .content_five {
+			position: absolute;
+			top: -49px;
+			left: 50%;
+			margin-left: -151px;
+			display: none;
+		}&lt;/style&gt;&lt;div class=&quot;introduction&quot;&gt;&lt;div class=&quot;introduction_info&quot;&gt;&lt;h4&gt;
+			项目介绍&lt;img src=&quot;/img/footerline.png&quot;/&gt;&lt;/h4&gt;&lt;div class=&quot;xmone&quot;&gt;&lt;ul&gt;&lt;li&gt;项目简介&lt;/li&gt;&lt;li&gt;&lt;img src=&quot;/img/yxxmteach.jpg&quot;/&gt;&lt;/li&gt;&lt;li&gt;本产品是一款利用红外装置识别手指运动的智能硬件，在手势控制领域有着诸多应用。
+					项目应用IPV6作为手势数据传输协议，将研发的手&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;div class=&quot;xmtwo&quot;&gt;&lt;ul&gt;&lt;li&gt;我们的客户&lt;/li&gt;&lt;li&gt;&lt;img src=&quot;/img/yxxmteach.jpg&quot;/&gt;&lt;/li&gt;&lt;li&gt;本产品是一款利用红外装置识别手指运动的智能硬件，在手势控制领域有着诸多应用。
+					项目应用IPV6作为手势数据传输协议，将研发的手&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;div class=&quot;xmthree&quot;&gt;&lt;ul&gt;&lt;li&gt;我们的发展方向&lt;/li&gt;&lt;li&gt;&lt;img src=&quot;/img/yxxmteach.jpg&quot;/&gt;&lt;/li&gt;&lt;li&gt;本产品是一款利用红外装置识别手指运动的智能硬件，在手势控制领域有着诸多应用。
+					项目应用IPV6作为手势数据传输协议，将研发的手&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;product container&quot;&gt;&lt;h4&gt;
+		产品展示&lt;img src=&quot;/img/footerline.png&quot;/&gt;&lt;/h4&gt;&lt;div class=&quot;productdisplay&quot;&gt;&lt;div id=&quot;one&quot;&gt;&lt;img src=&quot;/img/yxsj.jpg&quot; style=&quot;width: 100%; height: inherit;&quot;/&gt;&lt;/div&gt;&lt;div id=&quot;two&quot;&gt;&lt;img src=&quot;/img/yxxmteach.jpg&quot; style=&quot;width: 100%; height: inherit;&quot;/&gt;&lt;/div&gt;&lt;div id=&quot;three&quot;&gt;&lt;img src=&quot;/img/yxsj05.jpg&quot; style=&quot;width: 100%; height: inherit;&quot;/&gt;&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;clear: both;&quot;&gt;&lt;/div&gt;&lt;div class=&quot;productdisplayone&quot;&gt;&lt;div id=&quot;one&quot;&gt;&lt;img src=&quot;/img/yxsj03.jpg&quot; style=&quot;width: 100%; height: inherit;&quot;/&gt;&lt;/div&gt;&lt;div id=&quot;two&quot;&gt;&lt;img src=&quot;/img/yxsj01.jpg&quot; style=&quot;width: 100%; height: inherit;&quot;/&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;team container&quot;&gt;&lt;h4&gt;
+		团队风采&lt;img src=&quot;/img/footerline.png&quot;/&gt;&lt;/h4&gt;
+
+	&lt;!--团队风采--&gt;&lt;div class=&quot;classBox&quot;&gt;&lt;div class=&quot;classBoxone&quot;&gt;&lt;img src=&quot;/img/yxxmzs.jpg&quot;/&gt; &lt;img src=&quot;/img/yxperson01.png&quot; class=&quot;IMG&quot;/&gt; &lt;img src=&quot;/img/yxperson02.png&quot; class=&quot;IMG&quot;/&gt;&lt;img src=&quot;/img/yxperson03.png&quot; class=&quot;IMG&quot;/&gt; &lt;img src=&quot;/img/yxperson04.png&quot; class=&quot;IMG&quot;/&gt; &lt;img src=&quot;/img/yxperson07.png&quot; class=&quot;IMG&quot;/&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;]]>
+	</content>
+</template>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.project.dao.ProjectAuditInfoDao">
+    
+	<sql id="projectAuditInfoColumns">
+		a.id AS "id",
+		a.project_id AS "projectId",
+		a.audit_id AS "auditId",
+		a.audit_step AS "auditStep",
+		a.audit_name AS "auditName",
+		a.org_id AS "orgId",
+		a.suggest AS "suggest",
+		a.grade AS "grade",
+		a.score AS "score",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.gnode_vesion AS "gnodeVesion",
+		a.proc_ins_id AS "procInsId"
+	</sql>
+
+	<sql id="userColums">
+        u.id AS "userId",
+		u.name AS "userName"
+	</sql>
+
+	<sql id="userJoins">
+		left join sys_user u on u.id=a.create_by
+	</sql>
+	
+	<sql id="projectAuditInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="ProjectAuditInfo">
+		SELECT 
+			<include refid="projectAuditInfoColumns"/>
+		FROM project_audit_info a
+		<include refid="projectAuditInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<!-- 审核意见 -->
+	<select id="getInfo" resultType="ProjectAuditInfo">
+		SELECT
+		 <include refid="projectAuditInfoColumns"/>,
+		 <include refid="userColums"/>
+		FROM project_audit_info a
+		 <include refid="userJoins"/>
+		WHERE a.project_id = #{projectId}
+		AND   a.audit_step = #{auditStep}
+		<if test="gnodeVesion != null and gnodeVesion !=''">
+			AND a.gnode_vesion = #{gnodeVesion}
+		</if>
+		AND   a.del_flag = #{DEL_FLAG_NORMAL}
+		ORDER BY  a.create_date ASC
+	</select>
+
+	<select id="findInfoByUserId" resultType="ProjectAuditInfo">
+		SELECT
+		<include refid="projectAuditInfoColumns"/>
+		FROM project_audit_info a
+		WHERE a.project_id = #{projectId}
+		AND  a.audit_step = #{auditStep}
+		AND   a.del_flag = #{DEL_FLAG_NORMAL}
+		AND a.create_by = #{createBy.id}
+		limit 1;
+	</select>
+	<select id="findProjectDeclareChangeGnode" resultType="ProjectAuditInfo">
+		select p.id AS "id",
+				p.project_id AS "projectId",
+				p.audit_step AS "auditStep"
+		from (
+		select MIN(a.create_date)  as minTime, a.*
+		from project_audit_info a
+		where a.project_id=#{projectId}
+		group BY a.audit_step
+		) p
+		ORDER BY p.minTime
+	</select>
+
+	
+	<select id="findList" resultType="ProjectAuditInfo">
+		SELECT 
+			<include refid="projectAuditInfoColumns"/>
+		FROM project_audit_info a
+		<include refid="projectAuditInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProjectAuditInfo">
+		SELECT 
+			<include refid="projectAuditInfoColumns"/>
+		FROM project_audit_info a
+		<include refid="projectAuditInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO project_audit_info(
+			id,
+			project_id,
+			gnode_vesion,
+			audit_id,
+			audit_step,
+			audit_name,
+			org_id,
+			suggest,
+			grade,
+			score,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag,
+			proc_ins_id
+		) VALUES (
+			#{id},
+			#{projectId},
+			#{gnodeVesion},
+			#{auditId},
+			#{auditStep},
+			#{auditName},
+			#{orgId},
+			#{suggest},
+			#{grade},
+			#{score},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag},
+			#{procInsId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE project_audit_info SET 	
+			project_id = #{projectId},
+			audit_id = #{auditId},
+			audit_step = #{auditStep},
+			audit_name = #{auditName},
+			gnode_vesion = #{gnodeVesion},
+			org_id = #{orgId},
+			suggest = #{suggest},
+			grade = #{grade},
+			score = #{score},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			proc_ins_id = #{procInsId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE project_audit_info SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<!--addBy zhangzheng 根据projectId和audit_step删除信息-->
+	<update id="deleteByPidAndStep">
+		UPDATE project_audit_info SET
+			del_flag = #{DEL_FLAG_DELETE}
+	  	WHERE project_id = #{projectId} AND audit_step = #{auditStep}
+	</update>
+
+	<!-- addBy zhangzheng 根据projectId删除信息 -->
+	<delete id="deleteByPid" parameterType="java.lang.String">
+		DELETE FROM project_audit_info WHERE project_id = #{projectId}
+	</delete>
+
+
+	
+</mapper>

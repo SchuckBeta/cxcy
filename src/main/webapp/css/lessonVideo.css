@@ -1,0 +1,306 @@
+@charset "UTF-8";
+.breadcrumb{
+    margin-top: 30px;
+    padding-left: 0;
+    background-color: #fff;
+}
+.breadcrumb a{
+    text-decoration: none;
+}
+.breadcrumb{
+    margin-top: 40px;
+}
+.breadcrumb>li>a{
+    color: #333;
+}
+.breadcrumb>li{
+    color: #777;
+}
+.container .row{
+    margin-left: -15px !important;
+    margin-right: -15px !important;
+}
+.page-title{
+    position: relative;
+    margin-bottom: 40px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #000;
+}
+.page-title .line{
+    position: absolute;
+    left: 0;
+    right: 22px;
+    bottom: 5px;
+    height:2px;
+    background-color: #f3f3f3;
+}
+.page-title .text{
+    position: relative;
+    padding-right: 8px;
+    background-color: #fff;
+    z-index: 100;
+}
+
+.page-title .block{
+    position: absolute;
+    right: 0;
+    bottom: 5px;
+    width: 18px;
+    height: 9px;
+    background-color: #e9422d;
+}
+
+.lesson-videos{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.lesson-videos .lesson-video{
+    margin-bottom: 60px;
+    border: 1px solid #e1e1e1;
+}
+.lesson-videos .lesson-video .video{
+    float: left;
+    display: block;
+    width: 240px;
+    height: 168px;
+    background-position: center;
+    background-repeat:no-repeat;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.lesson-videos .lesson-video .lesson-info{
+    margin-left: 240px;
+    padding-top: 15px;
+    height: 168px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.lesson-videos .lesson-video .lesson-title{
+    margin-top: 0;
+    margin-left: -15px;
+    padding-left: 15px;
+    border-left: 2px solid #de3b0a;
+}
+.lesson-videos .lesson-video .lesson-title a{
+    font-size: 15px;
+    font-weight: 700;
+    color: #333;
+    text-overflow: ellipsis;
+    white-space: normal;
+    overflow: hidden;
+}
+.lesson-videos .lesson-video .lesson-title a:hover{
+    color: #de3b0a;
+    text-decoration: underline;
+}
+.lesson-videos .lesson-video .description{
+    display: -webkit-box;
+    margin-top: 15px;
+    height: 40px;
+    font-size: 13px;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+}
+.lesson-videos .lesson-video .teachers{
+    margin-bottom: 15px;
+    font-size: 13px;
+}
+.lesson-videos .lesson-video .teachers>span{
+    margin-right: 8px;
+}
+.lesson-videos .lesson-video .lesson-info-footer{
+    border-top: 1px solid #eceeef;
+    height: 32px;
+}
+
+.lesson-videos .lesson-video .create-info{
+    float: left;
+    line-height: 32px;
+    font-size: 14px;
+}
+.lesson-videos .lesson-video .create-info span{
+    display: inline-block;
+    height: 32px;
+    overflow: hidden;
+    vertical-align: top;
+    margin-right: 8px;
+    font-size: 12px;
+}
+.lesson-videos .lesson-video .create-info span:first-child{
+    margin-right: 20px;
+}
+.lesson-videos .lesson-video .create-info .iconfont{
+    margin-right: 4px;
+}
+
+.lesson-videos .lesson-video .lesson-down{
+    float: right;
+}
+
+.lesson-videos .lesson-video .lesson-down .btn{
+    width: auto;
+    height: 28px;
+    font-size: 12px;
+    border:1px solid #fff;
+}
+.lesson-videos .lesson-video .lesson-down .btn:hover,.lesson-videos .lesson-video .lesson-down .btn:focus,.btn-group.open .dropdown-toggle{
+    background-color: #fff;
+    text-shadow: none;
+    box-shadow: none;
+}
+
+.lesson-videos .lesson-video .lesson-down  .dropdown-menu{
+    left: auto;
+    right: 0;
+}
+
+.form-search-box{
+    position: relative;
+    height: 36px;
+    border: 1px solid #D9D9D9;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    padding-right: 40px;
+    border-radius: 4px;
+}
+
+.form-search-box .search-ic{
+    display: block;
+    position: absolute;
+    right: 0;
+    top:0;
+    line-height: 36px;
+    height: 24px;
+    width: 40px;
+    color: red;
+    text-align: center;
+    cursor: pointer;
+}
+.form-search-box .line{
+    position: absolute;
+    right: 40px;
+    top:4px;
+    bottom: 4px;
+    width: 1px;
+    background-color: #D9D9D9;
+}
+.form-control-teacher{
+    display: block;
+    padding: 6px 12px;
+    width: 100%;
+    outline: none;
+    border: 1px solid transparent;
+}
+
+.sidebar-title{
+    line-height: 2;
+    font-size: 18px;
+    color: #CD0000;
+    font-weight: 700;
+    margin: 10px 0 30px;
+    border-bottom: 2px solid #efefef;
+}
+
+.lesson-type-title{
+    color: #000;
+    font-size: 14px;
+}
+.lesson-type .tags{
+    display: block;
+    font-size: 0;
+    margin: 0 -8px 30px 0;
+}
+.lesson-type .tags>span{
+    position: relative;
+    display: inline-block;
+    font-size: 14px;
+    padding: 6px 12px;
+    margin-right: 8px;
+    border: 1px solid #e7e6e6;
+    margin-bottom: 15px;
+}
+.lesson-type .tags>span input{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    margin: 0;
+    left: 0;
+    top:0;
+    cursor: pointer;
+}
+.lesson-type .tags>span label{
+    font-weight: normal;
+    margin-bottom: 0;
+}
+.lesson-type .tags>span:hover,.lesson-type .tags>span.active{
+    border-color: #e9422d;
+    color: #fff;
+    background-color: #e9422d;
+}
+
+.teacher-list{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.teacher-list>li{
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+.teacher-list>li .teacher-pic-box{
+    float: left;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.teacher-list>li .teacher-info{
+    margin-left: 130px;
+    vertical-align: middle;
+}
+.teacher-list>li .teacher-info p{
+    line-height: 2;
+    margin: 0;
+}
+.teacher-list>li .teacher-info .name{
+    margin-top: 35px;
+    color: #7a7a7a;
+    font-weight: 700;
+    font-size: 16px;
+}
+.teacher-list>li .teacher-info .name span{
+    margin-left: 20px;
+}
+.teacher-list>li .teacher-info .school{
+    font-size: 13px;
+    color: #7a7a7a;
+}
+.pagination_list{
+    padding:  0 15px;
+}
+
+.pagination_list a{
+    display: block;
+    color: #333;
+}
+
+.pagination_list .current{
+    border-color: #e9432d;
+}
+.pagination_list .current a{
+    color: #fff;
+}
+.pagination_list li:hover{
+    border-color: #e9432d;
+    background-color: #e9432d;
+}
+.pagination_list li:hover a{
+    color: #fff;
+}

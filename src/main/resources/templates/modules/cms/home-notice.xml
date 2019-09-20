@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<jsonparam>
+	<![CDATA[{
+		    'title': '标题'
+		}]]>
+	</jsonparam>
+	<content>
+		<![CDATA[<div class="notice-module">
+            <div class="w1240">
+                <div id="myCarousel" class="carousel-notice carousel slide">
+                    <input id="userId" type="hidden" value="${user.id!''}"/>
+                    <!-- 轮播（Carousel）项目 -->
+                    <div class="carousel-head">
+                        <img class="icon-notice" src="/img/index-notify2.png" title="${title}">
+                        <span style="color:#fff;">${title}：</span>
+                    </div>
+                    <div class="carousel-inner" id="wrap"></div>
+                    <a class="in-notice-list" href="/f/frontNotice/noticeList">更多...</a>
+                </div>
+            </div>
+        </div>]]>
+	</content>
+</template>

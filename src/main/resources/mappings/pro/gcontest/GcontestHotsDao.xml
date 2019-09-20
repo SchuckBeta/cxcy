@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pro.modules.gcontest.dao.GcontestHotsDao">
+    
+	<sql id="gcontestHotsColumns">
+		a.id AS "id",
+		a.cover_img AS "coverImg",
+		a.content AS "content",
+		a.is_release AS "isRelease",
+		a.is_top AS "isTop",
+		a.is_comment AS "isComment",
+		a.views AS "views",
+		a.likes AS "likes",
+		a.comments AS "comments",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.release_date AS "releaseDate",
+		a.source AS "source",
+		a.title AS "title"
+	</sql>
+	
+	<sql id="gcontestHotsJoins">
+	</sql>
+    
+	<select id="get" resultType="GcontestHots">
+		SELECT 
+			<include refid="gcontestHotsColumns"/>
+		FROM gcontest_hots a
+		<include refid="gcontestHotsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GcontestHots">
+		SELECT 
+			<include refid="gcontestHotsColumns"/>
+		FROM gcontest_hots a
+		<include refid="gcontestHotsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} 
+			<if test="title !=null and title !='' ">
+				and a.title like concat('%',#{title},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GcontestHots">
+		SELECT 
+			<include refid="gcontestHotsColumns"/>
+		FROM gcontest_hots a
+		<include refid="gcontestHotsJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gcontest_hots(
+			id,
+			cover_img,
+			content,
+			is_release,
+			is_top,
+			is_comment,
+			views,
+			likes,
+			comments,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag,
+			release_date,
+			source,
+			title
+		) VALUES (
+			#{id},
+			#{coverImg},
+			#{content},
+			#{isRelease},
+			#{isTop},
+			#{isComment},
+			#{views},
+			#{likes},
+			#{comments},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag},
+			#{releaseDate},
+			#{source},
+			#{title}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gcontest_hots SET 	
+			cover_img = #{coverImg},
+			content = #{content},
+			is_release = #{isRelease},
+			is_top = #{isTop},
+			is_comment = #{isComment},
+			views = #{views},
+			likes = #{likes},
+			comments = #{comments},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			release_date = #{releaseDate},
+			source=#{source},
+			title=#{title}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gcontest_hots SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getTop" resultType="GcontestHots">
+		SELECT 
+			<include refid="gcontestHotsColumns"/>
+		FROM gcontest_hots a
+		WHERE a.del_flag = '0' and a.is_release='1'
+		order by a.is_top desc,a.update_date desc limit 1
+	</select>
+	<select id="getMore" resultType="java.util.Map">
+		select temp.title,temp.id,temp.release_date from (SELECT distinct a.title,a.id,a.release_date ,a.is_top,a.update_date
+		FROM gcontest_hots a left join gcontest_hots_keyword b on a.id=b.gcontest_hots_id
+		WHERE a.del_flag = '0' and a.is_release='1' 
+		<if test="id !=null and id !='' ">
+			and a.id!=#{id}
+		</if>
+		<if test="keys !=null and keys.size>0">
+			and 
+			<foreach collection="keys" item="key" open="(" separator=" or " close=")">
+				b.keyword like concat('%',#{key},'%')
+			</foreach>
+		</if>) temp
+		order by temp.is_top desc,temp.update_date desc limit 4
+	</select>
+	<update id="updateViews" parameterType="java.util.Map">
+		UPDATE gcontest_hots SET views = CASE id
+		<foreach collection="param.keys" item="key" separator=" ">
+			WHEN #{key} THEN ifnull(views,0)+#{param[${key}]}
+		</foreach>
+		END
+		where id in 
+		<foreach collection="param.keys" item="key" open="(" separator="," close=")">
+			#{key}
+		</foreach>
+	</update>
+</mapper>

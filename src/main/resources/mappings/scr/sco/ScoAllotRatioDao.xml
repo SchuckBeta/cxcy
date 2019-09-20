@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.sco.dao.ScoAllotRatioDao">
+    
+	<sql id="scoAllotRatioColumns">
+		a.id AS "id",
+		a.affirm_conf_id AS "affirmConfId",
+		a.number AS "number",
+		a.ratio AS "ratio",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="scoAllotRatioJoins">
+	</sql>
+    
+	<select id="get" resultType="ScoAllotRatio">
+		SELECT 
+			<include refid="scoAllotRatioColumns"/>
+		FROM sco_allot_ratio a
+		<include refid="scoAllotRatioJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ScoAllotRatio">
+		SELECT 
+			<include refid="scoAllotRatioColumns"/>
+		FROM sco_allot_ratio a
+		<include refid="scoAllotRatioJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ScoAllotRatio">
+		SELECT 
+			<include refid="scoAllotRatioColumns"/>
+		FROM sco_allot_ratio a
+		<include refid="scoAllotRatioJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 根据 type（学分类型)、item（学分项）、category（课程、项目、大赛、技能大类）、subdivision（课程、项目、大赛小类）、number(人数)获得学分配比-->
+	<select id="findRatio"  parameterType="com.oseasy.scr.modules.sco.vo.ScoRatioVo"
+			                  resultType="com.oseasy.scr.modules.sco.vo.ScoRatioVo">
+		SELECT
+			a.type AS "type",
+			a.item AS "item",
+			a.category AS "category",
+			a.subdivision AS "subdivision",
+			b.ratio AS "ratio",
+			b.number AS "number"
+			FROM  sco_affirm_conf a
+			INNER JOIN sco_allot_ratio b ON b.affirm_conf_id = a.id
+			WHERE a.del_flag='0' AND b.del_flag='0'
+			<if test="type!=null and type!=''">
+				AND a.type = #{type}
+			</if>
+			<if test="item!=null and item!=''">
+				AND a.item = #{item}
+			</if>
+			<if test="category!=null and category!=''">
+				AND a.category = #{category}
+			</if>
+			<if test="subdivision!=null and subdivision!=''">
+				AND a.subdivision = #{subdivision}
+			</if>
+			<if test="number!=null">
+				AND b.number = #{number}
+			</if>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sco_allot_ratio(
+			id,
+			affirm_conf_id,
+			number,
+			ratio,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{affirmConfId},
+			#{number},
+			#{ratio},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sco_allot_ratio SET 	
+			affirm_conf_id = #{affirmConfId},
+			number = #{number},
+			ratio = #{ratio},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE sco_allot_ratio SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<select id="findAll" resultType="ScoAllotRatio">
+		SELECT 
+			<include refid="scoAllotRatioColumns"/>
+		FROM sco_allot_ratio a
+		<include refid="scoAllotRatioJoins"/>
+		<where>
+			a.del_flag ='0'
+			and a.affirm_conf_id=#{confId}
+		</where>
+		ORDER BY a.number
+	</select>
+	<select id="checkNumber" resultType="java.lang.Integer">
+		select count(1) from
+		sco_allot_ratio a
+		where a.del_flag='0' and a.number=#{number} and a.affirm_conf_id=#{confid}
+		<if test=" id != null and id != '' ">
+			and a.id!=#{id}
+		</if>
+	</select>
+	<update id="delByFid">
+		DELETE FROM sco_allot_ratio 
+		WHERE affirm_conf_id = #{fid}
+	</update>
+</mapper>

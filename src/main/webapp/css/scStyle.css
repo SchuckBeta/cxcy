@@ -1,0 +1,52 @@
+.scinfonavigation ul li:first-child{
+	margin-top: -2px;
+}
+.scinfonavigation ul li{
+	float: left;
+	letter-spacing: 3px;
+	margin-left: 10px;
+}
+
+.sctitle h3,.sctitle h5{
+	text-align: center;
+}
+.sctitle h5{
+	color: #A5A5A5;
+	margin-top: 45px;
+}
+.sctitle h4{
+	margin-top: 70px;
+	text-align: center;
+}
+.sctitle p{
+	margin-top: 40px;
+	text-indent: 28px;
+}
+
+.sctitle img{
+	max-width: 100%;
+	margin:auto 266px;
+	margin-top: 76px;
+}
+
+
+.more h3{
+	margin-top: 112px;
+	
+}
+
+.newinfo{
+	margin-top: 30px;	
+}
+.newinfo ul li{
+	padding-top: 20px;
+}
+.newinfo ul li a{
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.newinfo ul li span{
+	float: right;
+	margin-left: 20px;
+}

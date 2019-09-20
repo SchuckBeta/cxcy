@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwGuserDao">
+
+	<sql id="actYwGuserColumns">
+		a.id AS "id",
+		a.group_id AS "group.id",
+		a.gnode_id AS "gnode.id",
+		a.user_id AS "user.id",
+		u2.name AS "user.name"
+	</sql>
+
+	<sql id="actYwGuserJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+
+	<select id="get" resultType="ActYwGuser">
+		SELECT
+			<include refid="actYwGuserColumns"/>
+		FROM act_yw_guser a
+		<include refid="actYwGuserJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ActYwGuser">
+		SELECT
+			<include refid="actYwGuserColumns"/>
+		FROM act_yw_guser a
+		<include refid="actYwGuserJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwGuser">
+		SELECT
+			<include refid="actYwGuserColumns"/>
+		FROM act_yw_guser a
+		<include refid="actYwGuserJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_guser(
+			id,
+			group_id,
+			gnode_id,
+			user_id
+		) VALUES (
+			#{id},
+			#{group.id},
+			#{gnode.id},
+			#{user.id}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_guser SET
+			id = #{id},
+			group_id = #{group.id},
+			gnode_id = #{gnode.id},
+			user_id = #{user.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM act_yw_guser
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM act_yw_guser WHERE id = #{id}
+	</update>
+
+	<insert id="savePl" >
+		INSERT INTO act_yw_guser(
+			id,
+			group_id,
+			gnode_id,
+			user_id
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+				 separator=",">
+			(
+               #{item.id},
+               #{item.group.id},
+               #{item.gnode.id},
+               #{item.user.id}
+			)
+		</foreach>
+	</insert>
+
+    <update id="deletePlwl">
+            DELETE FROM act_yw_guser WHERE group_id = #{groupId} AND gnode_id = #{gnodeId}
+    </update>
+
+    <update id="deletePlwlByGroup">
+            DELETE FROM act_yw_guser WHERE group_id = #{groupId}
+    </update>
+</mapper>

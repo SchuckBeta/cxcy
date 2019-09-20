@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.impdata.dao.ProMdApprovalErrorDao">
+    
+	<sql id="proMdApprovalErrorColumns">
+		a.id AS "id",
+		a.imp_id AS "impId",
+		a.pro_category AS "proCategory",
+		a.level AS "level",
+		a.p_number AS "pNumber",
+		a.p_name AS "pName",
+		a.leader_name AS "leaderName",
+		a.no AS "no",
+		a.mobile AS "mobile",
+		a.pro_source AS "proSource",
+		a.source_project_name AS "sourceProjectName",
+		a.source_project_type AS "sourceProjectType",
+		a.teachers1 AS "teachers1",
+		a.teachers2 AS "teachers2",
+		a.teachers3 AS "teachers3",
+		a.teachers4 AS "teachers4",
+		a.rufu AS "rufu",
+		a.members1 AS "members1",
+		a.members2 AS "members2",
+		a.members3 AS "members3",
+		a.result AS "result",
+		a.pro_model_md_id AS "proModelMdId",
+		a.gnodeid AS "gnodeid",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.sheet_index AS "sheetIndex"
+	</sql>
+	
+	<sql id="proMdApprovalErrorJoins">
+	</sql>
+    
+	<select id="get" resultType="ProMdApprovalError">
+		SELECT 
+			<include refid="proMdApprovalErrorColumns"/>
+		FROM pro_md_approval_error a
+		<include refid="proMdApprovalErrorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ProMdApprovalError">
+		SELECT 
+			<include refid="proMdApprovalErrorColumns"/>
+		FROM pro_md_approval_error a
+		<include refid="proMdApprovalErrorJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProMdApprovalError">
+		SELECT 
+			<include refid="proMdApprovalErrorColumns"/>
+		FROM pro_md_approval_error a
+		<include refid="proMdApprovalErrorJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pro_md_approval_error(
+			id,
+			imp_id,
+			pro_category,
+			level,
+			p_number,
+			p_name,
+			leader_name,
+			no,
+			mobile,
+			pro_source,
+			source_project_name,
+			source_project_type,
+			teachers1,
+			teachers2,
+			teachers3,
+			teachers4,
+			rufu,
+			members1,
+			members2,
+			members3,
+			result,
+			pro_model_md_id,
+			gnodeid,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			sheet_index
+		) VALUES (
+			#{id},
+			#{impId},
+			#{proCategory},
+			#{level},
+			#{pNumber},
+			#{pName},
+			#{leaderName},
+			#{no},
+			#{mobile},
+			#{proSource},
+			#{sourceProjectName},
+			#{sourceProjectType},
+			#{teachers1},
+			#{teachers2},
+			#{teachers3},
+			#{teachers4},
+			#{rufu},
+			#{members1},
+			#{members2},
+			#{members3},
+			#{result},
+			#{proModelMdId},
+			#{gnodeid},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{sheetIndex}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pro_md_approval_error SET 	
+			imp_id = #{impId},
+			pro_category = #{proCategory},
+			level = #{level},
+			p_number = #{pNumber},
+			p_name = #{pName},
+			leader_name = #{leaderName},
+			no = #{no},
+			mobile = #{mobile},
+			pro_source = #{proSource},
+			source_project_name = #{sourceProjectName},
+			source_project_type = #{sourceProjectType},
+			teachers1 = #{teachers1},
+			teachers2 = #{teachers2},
+			teachers3 = #{teachers3},
+			teachers4 = #{teachers4},
+			rufu = #{rufu},
+			members1 = #{members1},
+			members2 = #{members2},
+			members3 = #{members3},
+			result = #{result},
+			pro_model_md_id = #{proModelMdId},
+			gnodeid = #{gnodeid},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			sheet_index=#{sheetIndex}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM pro_md_approval_error
+		WHERE id = #{id}
+	</update>
+	<select id="getListByImpIdAndSheet" resultType="java.util.HashMap"
+		parameterType="java.lang.String">
+		SELECT
+		t.*
+		FROM
+		pro_md_approval_error t
+		WHERE
+		t.imp_id = #{impid} and t.sheet_index=#{sheet}
+		order by
+		t.create_date
+	</select>
+	<update id="deleteByImpId"
+		parameterType="java.lang.String">
+		DELETE FROM pro_md_approval_error
+		WHERE imp_id =  #{impid}
+	</update>
+</mapper>

@@ -1,0 +1,88 @@
+.Sidebar{
+    width: 18%;
+    height:100%;
+    float:left;
+    padding-bottom:300px;
+    background-color: #f2f2f2;
+}
+
+.Sidebar .title{
+    height: 50px;
+    background: -webkit-linear-gradient(270deg, rgba(247, 247, 247, 1) 0%, rgba(247, 247, 247, 1) 1%, rgba(244, 244, 244, 1) 20%, rgba(228, 228, 228, 1) 60%, rgba(228, 228, 228, 1) 100%);
+    background: -moz-linear-gradient(180deg, rgba(247, 247, 247, 1) 0%, rgba(247, 247, 247, 1) 1%, rgba(244, 244, 244, 1) 20%, rgba(228, 228, 228, 1) 60%, rgba(228, 228, 228, 1) 100%);
+    background: linear-gradient(180deg, rgba(247, 247, 247, 1) 0%, rgba(247, 247, 247, 1) 1%, rgba(244, 244, 244, 1) 20%, rgba(228, 228, 228, 1) 60%, rgba(228, 228, 228, 1) 100%);
+       vertical-align:middle;
+       padding-bottom: 4px;
+       border-bottom: 3px solid #E9432C;
+}
+
+.Sidebar .title img{
+    margin:5px 0;
+    margin-left: 4px;
+    float:left;
+} 
+
+.Sidebar .title span{
+    font-size: 18px;
+    color:#E9432C;
+    font-weight: bold;  
+    float: left;
+    margin:-30px 1px -31px 54px;
+}
+
+.Sidebar .chidl_title{
+    background-color: rgba(247, 247, 247, 1);
+    text-align: center;
+    padding: 8px 0;
+    position:relative;
+    top:10px;
+}
+
+.Sidebar .chidl_title span{
+    height:38px; 
+    font-size: 18px;
+    font-weight: bold;
+    color:  #3D3D3D;
+}
+
+.Sidebar .chidl_title i{
+    width: 0;
+    height: 0;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 14px solid #E9432C;
+    position:absolute;
+    left:95px;
+    top: 40px;
+}
+
+.Sidebar .box{
+     background-color:rgba(242, 242, 242, 1);
+}
+
+.Sidebar .box ul{
+    margin-top:35px;
+    position:relative;
+}
+.Sidebar .box ul li{
+    text-align: left;
+    margin: 6px auto;
+    width:110px;
+}
+
+.Sidebar .box ul li a{
+    color:#4A4A4A;
+    font-size: 14px;
+}
+
+.Sidebar .box ul li strong{
+    margin-right: 4px;
+}
+
+.Sidebar .box ul .mar_top{
+    margin-top: 10px;
+}
+
+

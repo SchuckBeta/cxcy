@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwApplyDao">
+
+	<sql id="actYwApplyColumns">
+		a.id AS "id",
+		a.yw_id AS "actYw.id",
+		a.proc_ins_id AS "procInsId",
+		a.no AS "no",
+		a.type AS "type",
+		a.rel_id AS "relId",
+		a.apply_user_id AS "applyUser.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="actYwApplyJoins">
+	</sql>
+
+	<select id="get" resultType="ActYwApply">
+		SELECT
+			<include refid="actYwApplyColumns"/>
+		FROM act_yw_apply a
+		<include refid="actYwApplyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ActYwApplyVo">
+		SELECT
+			<include refid="actYwApplyColumns"/>
+		FROM act_yw_apply a
+		<include refid="actYwApplyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="applyUser != null">
+				<if test="applyUser.id != null and applyUser != ''">
+					AND a.apply_user_id = #{applyUser.id}
+				</if>
+			</if>
+			<if test="relId != null and relId != ''">
+				AND a.rel_id = #{relId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwApply">
+		SELECT
+			<include refid="actYwApplyColumns"/>
+		FROM act_yw_apply a
+		<include refid="actYwApplyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_apply(
+			id,
+			yw_id,
+			proc_ins_id,
+			no,
+			type,
+			rel_id,
+			apply_user_id,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{actYw.id},
+			#{procInsId},
+			#{no},
+			#{type},
+			#{relId},
+			#{applyUser.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_apply SET
+			yw_id = #{actYw.id},
+			proc_ins_id = #{procInsId},
+			no = #{no},
+			type = #{type},
+			rel_id = #{relId},
+			apply_user_id = #{applyUser.id},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+
+	<update id="updateProcInsId" parameterType="ActYwApplyVo">
+		UPDATE act_yw_apply SET
+			proc_ins_id = #{procInsId},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE act_yw_apply SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+</mapper>

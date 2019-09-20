@@ -1,0 +1,2050 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwEnterDao">
+	<resultMap id="pwEnterTeamMap" type="com.oseasy.pw.modules.pw.entity.PwEnter">
+		<id property="id" column="id" />
+		<result property="parentId" column="parentId" />
+		<result property="isCopy" column="isCopy" />
+		<result property="type" column="type" />
+		<result property="appType" column="appType" />
+		<result property="hasYfp" column="hasYfp" />
+		<result property="no" column="no" />
+		<result property="declareId" column="declareId" />
+		<result property="declarePhoto" column="declarePhoto" />
+		<result property="status" column="status" />
+		<result property="restatus" column="restatus" />
+		<result property="reDate" column="reDate" />
+		<result property="exitDate" column="exitDate" />
+		<result property="startDate" column="startDate" />
+		<result property="endDate" column="endDate" />
+		<result property="cursel" column="cursel" />
+		<result property="isTemp" column="isTemp" />
+		<result property="term" column="term" />
+		<result property="termNum" column="termNum" />
+		<result property="isShow" column="isShow" />
+		<result property="expectWorkNum" column="expectWorkNum" />
+		<result property="expectTerm" column="expectTerm" />
+		<result property="expectRemark" column="expectRemark" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="applicant.id" column="applicant.id" />
+		<result property="applicant.name" column="applicant.name" />
+		<result property="applicant.no" column="applicant.no" />
+		<result property="applicant.sex" column="applicant.sex" />
+		<result property="applicant.email" column="applicant.email" />
+		<result property="applicant.phone" column="applicant.phone" />
+		<result property="applicant.mobile" column="applicant.mobile" />
+		<result property="applicant.idType" column="applicant.idType" />
+		<result property="applicant.idNumber" column="applicant.idNumber" />
+		<result property="applicant.professional" column="applicant.professional" />
+		<result property="applicant.office.id" column="applicant.office.id" />
+		<result property="applicant.office.name" column="applicant.office.name" />
+
+		<result property="eteam.id" column="eteam.id" />
+		<result property="eteam.type" column="eteam.type" />
+		<result property="eteam.rid" column="eteam.rid" />
+		<result property="eteam.tnames" column="eteam.tnames" />
+		<result property="eteam.tnames" column="eteam.tnames" />
+		<result property="eteam.updateDate" column="eteam.updateDate" />
+		<result property="eteam.updateBy.id" column="eteam.updateBy.id" />
+		<result property="eteam.createDate" column="eteam.createDate" />
+		<result property="eteam.createBy.id" column="eteam.createBy.id" />
+		<result property="eteam.remarks" column="eteam.remarks" />
+		<result property="eteam.delFlag" column="eteam.delFlag" />
+
+		<result property="eteam.team.id" column="eteam.team.id" />
+		<result property="eteam.team.name" column="eteam.team.name" />
+	</resultMap>
+
+	<resultMap id="pwEnterProjectMap" type="com.oseasy.pw.modules.pw.entity.PwEnter">
+		<id property="id" column="id" />
+		<result property="parentId" column="parentId" />
+		<result property="isCopy" column="isCopy" />
+		<result property="type" column="type" />
+		<result property="appType" column="appType" />
+		<result property="hasYfp" column="hasYfp" />
+		<result property="no" column="no" />
+		<result property="declareId" column="declareId" />
+		<result property="declarePhoto" column="declarePhoto" />
+		<result property="status" column="status" />
+		<result property="restatus" column="restatus" />
+		<result property="reDate" column="reDate" />
+		<result property="exitDate" column="exitDate" />
+		<result property="startDate" column="startDate" />
+		<result property="endDate" column="endDate" />
+		<result property="cursel" column="cursel" />
+		<result property="isTemp" column="isTemp" />
+		<result property="term" column="term" />
+		<result property="termNum" column="termNum" />
+		<result property="isShow" column="isShow" />
+		<result property="expectWorkNum" column="expectWorkNum" />
+		<result property="expectTerm" column="expectTerm" />
+		<result property="expectRemark" column="expectRemark" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="applicant.id" column="applicant.id" />
+		<result property="applicant.name" column="applicant.name" />
+		<result property="applicant.no" column="applicant.no" />
+		<result property="applicant.sex" column="applicant.sex" />
+		<result property="applicant.email" column="applicant.email" />
+		<result property="applicant.phone" column="applicant.phone" />
+		<result property="applicant.mobile" column="applicant.mobile" />
+		<result property="applicant.idType" column="applicant.idType" />
+		<result property="applicant.idNumber" column="applicant.idNumber" />
+		<result property="applicant.professional" column="applicant.professional" />
+		<result property="applicant.office.name" column="applicant.office.name" />
+
+		<collection property="eprojects" ofType="PwEnterDetail">
+			<id property="id" column="eprojects.id" />
+			<result property="name" column="eprojects.name" />
+			<result property="rid" column="eprojects.rid" />
+			<result property="updateDate" column="eprojects.updateDate" />
+			<result property="updateBy.id" column="eprojects.updateBy.id" />
+			<result property="createDate" column="eprojects.createDate" />
+			<result property="createBy.id" column="eprojects.createBy.id" />
+			<result property="remarks" column="eprojects.remarks" />
+			<result property="delFlag" column="eprojects.delFlag" />
+
+			<result property="project.id" column="eprojects.project.id" />
+			<result property="project.name" column="eprojects.project.name" />
+			<result property="project.stype" column="eprojects.project.stype" />
+			<result property="project.updateDate" column="eprojects.project.updateDate" />
+			<result property="project.updateBy.id" column="eprojects.project.updateBy.id" />
+			<result property="project.createDate" column="eprojects.project.createDate" />
+			<result property="project.createBy.id" column="eprojects.project.createBy.id" />
+			<result property="project.remarks" column="eprojects.project.remarks" />
+			<result property="project.delFlag" column="eprojects.project.delFlag" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="pwEnterCompanyMap" type="com.oseasy.pw.modules.pw.entity.PwEnter">
+		<id property="id" column="id" />
+		<result property="parentId" column="parentId" />
+		<result property="isCopy" column="isCopy" />
+		<result property="type" column="type" />
+		<result property="appType" column="appType" />
+		<result property="hasYfp" column="hasYfp" />
+		<result property="no" column="no" />
+		<result property="declareId" column="declareId" />
+		<result property="declarePhoto" column="declarePhoto" />
+		<result property="status" column="status" />
+		<result property="restatus" column="restatus" />
+		<result property="reDate" column="reDate" />
+		<result property="exitDate" column="exitDate" />
+		<result property="startDate" column="startDate" />
+		<result property="endDate" column="endDate" />
+		<result property="cursel" column="cursel" />
+		<result property="isTemp" column="isTemp" />
+		<result property="term" column="term" />
+		<result property="termNum" column="termNum" />
+		<result property="isShow" column="isShow" />
+		<result property="expectWorkNum" column="expectWorkNum" />
+		<result property="expectTerm" column="expectTerm" />
+		<result property="expectRemark" column="expectRemark" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="applicant.id" column="applicant.id" />
+		<result property="applicant.name" column="applicant.name" />
+		<result property="applicant.no" column="applicant.no" />
+		<result property="applicant.sex" column="applicant.sex" />
+		<result property="applicant.email" column="applicant.email" />
+		<result property="applicant.phone" column="applicant.phone" />
+		<result property="applicant.mobile" column="applicant.mobile" />
+		<result property="applicant.idType" column="applicant.idType" />
+		<result property="applicant.idNumber" column="applicant.idNumber" />
+		<result property="applicant.professional" column="applicant.professional" />
+		<result property="applicant.office.name" column="applicant.office.name" />
+
+		<result property="ecompany.id" column="ecompany.id" />
+		<result property="ecompany.type" column="ecompany.type" />
+		<result property="ecompany.rid" column="ecompany.rid" />
+		<result property="ecompany.updateDate" column="ecompany.updateDate" />
+		<result property="ecompany.updateBy.id" column="ecompany.updateBy.id" />
+		<result property="ecompany.createDate" column="ecompany.createDate" />
+		<result property="ecompany.createBy.id" column="ecompany.createBy.id" />
+		<result property="ecompany.remarks" column="ecompany.remarks" />
+		<result property="ecompany.delFlag" column="ecompany.delFlag" />
+
+		<result property="ecompany.pwCompany.id" column="ecompany.pwCompany.id" />
+		<result property="ecompany.pwCompany.no" column="ecompany.pwCompany.no" />
+		<result property="ecompany.pwCompany.name" column="ecompany.pwCompany.name" />
+		<result property="ecompany.pwCompany.phone" column="ecompany.pwCompany.phone" />
+		<result property="ecompany.pwCompany.mobile" column="ecompany.pwCompany.mobile" />
+		<result property="ecompany.pwCompany.address" column="ecompany.pwCompany.address" />
+		<result property="ecompany.pwCompany.remarks" column="ecompany.pwCompany.remarks" />
+		<result property="ecompany.pwCompany.regMoney" column="ecompany.pwCompany.regMoney" />
+		<result property="ecompany.pwCompany.regMtype" column="ecompany.pwCompany.regMtype" />
+		<result property="ecompany.pwCompany.regPerson" column="ecompany.pwCompany.regPerson" />
+	</resultMap>
+
+	<resultMap id="pwEnterApplyMap" type="com.oseasy.pw.modules.pw.entity.PwEnter">
+		<id property="id" column="id" />
+		<result property="parentId" column="parentId" />
+		<result property="isCopy" column="isCopy" />
+		<result property="type" column="type" />
+		<result property="appType" column="appType" />
+		<result property="hasYfp" column="hasYfp" />
+		<result property="no" column="no" />
+		<result property="declareId" column="declareId" />
+		<result property="declarePhoto" column="declarePhoto" />
+		<result property="status" column="status" />
+		<result property="restatus" column="restatus" />
+		<result property="reDate" column="reDate" />
+		<result property="exitDate" column="exitDate" />
+		<result property="startDate" column="startDate" />
+		<result property="endDate" column="endDate" />
+		<result property="cursel" column="cursel" />
+		<result property="isTemp" column="isTemp" />
+		<result property="term" column="term" />
+		<result property="termNum" column="termNum" />
+		<result property="isShow" column="isShow" />
+		<result property="expectWorkNum" column="expectWorkNum" />
+		<result property="expectTerm" column="expectTerm" />
+		<result property="expectRemark" column="expectRemark" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="applicant.id" column="applicant.id" />
+		<result property="applicant.name" column="applicant.name" />
+		<result property="applicant.no" column="applicant.no" />
+		<result property="applicant.sex" column="applicant.sex" />
+		<result property="applicant.email" column="applicant.email" />
+		<result property="applicant.phone" column="applicant.phone" />
+		<result property="applicant.mobile" column="applicant.mobile" />
+		<result property="applicant.idType" column="applicant.idType" />
+		<result property="applicant.idNumber" column="applicant.idNumber" />
+		<result property="applicant.professional" column="applicant.professional" />
+		<result property="applicant.office.name" column="applicant.office.name" />
+
+		<result property="apply.id" column="apply.id" />
+		<result property="apply.actYw.id" column="apply.actYw.id" />
+		<result property="apply.procInsId" column="apply.procInsId" />
+		<result property="apply.no" column="apply.no" />
+		<result property="apply.type" column="apply.type" />
+		<result property="apply.relId" column="apply.relId" />
+		<result property="apply.applyUser.id" column="apply.applyUser.id" />
+		<result property="apply.updateDate" column="apply.updateDate" />
+		<result property="apply.updateBy.id" column="apply.updateBy.id" />
+		<result property="apply.createDate" column="apply.createDate" />
+		<result property="apply.createBy.id" column="apply.createBy.id" />
+		<result property="apply.remarks" column="apply.remarks" />
+		<result property="apply.delFlag" column="apply.delFlag" />
+	</resultMap>
+
+	<resultMap id="pwEnterApplyRsMap" type="com.oseasy.pw.modules.pw.entity.PwEnter">
+		<id property="id" column="id" />
+		<result property="parentId" column="parentId" />
+		<result property="isCopy" column="isCopy" />
+		<result property="type" column="type" />
+		<result property="appType" column="appType" />
+		<result property="hasYfp" column="hasYfp" />
+		<result property="no" column="no" />
+		<result property="declareId" column="declareId" />
+		<result property="declarePhoto" column="declarePhoto" />
+		<result property="status" column="status" />
+		<result property="restatus" column="restatus" />
+		<result property="reDate" column="reDate" />
+		<result property="exitDate" column="exitDate" />
+		<result property="startDate" column="startDate" />
+		<result property="endDate" column="endDate" />
+		<result property="cursel" column="cursel" />
+		<result property="isTemp" column="isTemp" />
+		<result property="term" column="term" />
+		<result property="termNum" column="termNum" />
+		<result property="isShow" column="isShow" />
+		<result property="expectWorkNum" column="expectWorkNum" />
+		<result property="expectTerm" column="expectTerm" />
+		<result property="expectRemark" column="expectRemark" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="applicant.id" column="applicant.id" />
+		<result property="applicant.name" column="applicant.name" />
+		<result property="applicant.no" column="applicant.no" />
+		<result property="applicant.sex" column="applicant.sex" />
+		<result property="applicant.email" column="applicant.email" />
+		<result property="applicant.phone" column="applicant.phone" />
+		<result property="applicant.mobile" column="applicant.mobile" />
+		<result property="applicant.idType" column="applicant.idType" />
+		<result property="applicant.idNumber" column="applicant.idNumber" />
+		<result property="applicant.professional" column="applicant.professional" />
+		<result property="applicant.office.name" column="applicant.office.name" />
+
+		<collection property="applyRecords" ofType="PwApplyRecord">
+			<result property="id" column="applyRecords.id" />
+			<result property="eid" column="applyRecords.eid" />
+			<result property="type" column="applyRecords.type" />
+			<result property="status" column="applyRecords.status" />
+			<result property="term" column="applyRecords.term" />
+			<result property="updateDate" column="applyRecords.updateDate" />
+			<result property="updateBy.id" column="applyRecords.updateBy.id" />
+			<result property="createDate" column="applyRecords.createDate" />
+			<result property="createBy.id" column="applyRecords.createBy.id" />
+			<result property="remarks" column="applyRecords.remarks" />
+			<result property="delFlag" column="applyRecords.delFlag" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="pwEnterApplyRmaxMap" type="com.oseasy.pw.modules.pw.entity.PwEnter">
+		<id property="id" column="id" />
+		<result property="parentId" column="parentId" />
+		<result property="isCopy" column="isCopy" />
+		<result property="type" column="type" />
+		<result property="appType" column="appType" />
+		<result property="hasYfp" column="hasYfp" />
+		<result property="no" column="no" />
+		<result property="declareId" column="declareId" />
+		<result property="declarePhoto" column="declarePhoto" />
+		<result property="status" column="status" />
+		<result property="restatus" column="restatus" />
+		<result property="reDate" column="reDate" />
+		<result property="exitDate" column="exitDate" />
+		<result property="startDate" column="startDate" />
+		<result property="endDate" column="endDate" />
+		<result property="cursel" column="cursel" />
+		<result property="isTemp" column="isTemp" />
+		<result property="term" column="term" />
+		<result property="termNum" column="termNum" />
+		<result property="isShow" column="isShow" />
+		<result property="expectWorkNum" column="expectWorkNum" />
+		<result property="expectTerm" column="expectTerm" />
+		<result property="expectRemark" column="expectRemark" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="applicant.id" column="applicant.id" />
+		<result property="applicant.name" column="applicant.name" />
+		<result property="applicant.no" column="applicant.no" />
+		<result property="applicant.sex" column="applicant.sex" />
+		<result property="applicant.email" column="applicant.email" />
+		<result property="applicant.phone" column="applicant.phone" />
+		<result property="applicant.mobile" column="applicant.mobile" />
+		<result property="applicant.idType" column="applicant.idType" />
+		<result property="applicant.idNumber" column="applicant.idNumber" />
+		<result property="applicant.professional" column="applicant.professional" />
+		<result property="applicant.office.name" column="applicant.office.name" />
+
+		<result property="applyRecord.id" column="applyRecord.id" />
+		<result property="applyRecord.eid" column="applyRecord.eid" />
+		<result property="applyRecord.type" column="applyRecord.type" />
+		<result property="applyRecord.status" column="applyRecord.status" />
+		<result property="applyRecord.term" column="applyRecord.term" />
+		<result property="applyRecord.updateDate" column="applyRecord.updateDate" />
+		<result property="applyRecord.updateBy.id" column="applyRecord.updateBy.id" />
+		<result property="applyRecord.createDate" column="applyRecord.createDate" />
+		<result property="applyRecord.createBy.id" column="applyRecord.createBy.id" />
+		<result property="applyRecord.remarks" column="applyRecord.remarks" />
+		<result property="applyRecord.delFlag" column="applyRecord.delFlag" />
+	</resultMap>
+
+	<resultMap id="pwEnterRoomMap" type="com.oseasy.pw.modules.pw.entity.PwEnter">
+		<id property="id" column="id" />
+		<result property="parentId" column="parentId" />
+		<result property="isCopy" column="isCopy" />
+		<result property="type" column="type" />
+		<result property="appType" column="appType" />
+		<result property="hasYfp" column="hasYfp" />
+		<result property="no" column="no" />
+		<result property="declareId" column="declareId" />
+		<result property="declarePhoto" column="declarePhoto" />
+		<result property="status" column="status" />
+		<result property="restatus" column="restatus" />
+		<result property="reDate" column="reDate" />
+		<result property="exitDate" column="exitDate" />
+		<result property="startDate" column="startDate" />
+		<result property="endDate" column="endDate" />
+		<result property="cursel" column="cursel" />
+		<result property="isTemp" column="isTemp" />
+		<result property="term" column="term" />
+		<result property="termNum" column="termNum" />
+		<result property="isShow" column="isShow" />
+		<result property="expectWorkNum" column="expectWorkNum" />
+		<result property="expectTerm" column="expectTerm" />
+		<result property="expectRemark" column="expectRemark" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="applicant.id" column="applicant.id" />
+		<result property="applicant.name" column="applicant.name" />
+		<result property="applicant.no" column="applicant.no" />
+		<result property="applicant.sex" column="applicant.sex" />
+		<result property="applicant.email" column="applicant.email" />
+		<result property="applicant.phone" column="applicant.phone" />
+		<result property="applicant.mobile" column="applicant.mobile" />
+		<result property="applicant.idType" column="applicant.idType" />
+		<result property="applicant.idNumber" column="applicant.idNumber" />
+		<result property="applicant.professional" column="applicant.professional" />
+		<result property="applicant.office.name" column="applicant.office.name" />
+
+		<collection property="erooms" ofType="PwEnterRoom">
+			<result property="id" column="erooms.id" />
+			<result property="num" column="erooms.num" />
+			<result property="pwEnter.id" column="erooms.pwEnter.id" />
+			<result property="pwRoom.id" column="erooms.pwRoom.id" />
+			<result property="updateDate" column="erooms.updateDate" />
+			<result property="updateBy.id" column="erooms.updateBy.id" />
+			<result property="createDate" column="erooms.createDate" />
+			<result property="createBy.id" column="erooms.createBy.id" />
+			<result property="remarks" column="erooms.remarks" />
+			<result property="delFlag" column="erooms.delFlag" />
+			<result property="pwRoom.name" column="erooms.pwRoom.name" />
+			<result property="pwRoom.color" column="erooms.pwRoom.color" />
+			<result property="pwRoom.person" column="erooms.pwRoom.person" />
+			<result property="pwRoom.area" column="erooms.pwRoom.area" />
+			<result property="pwRoom.phone" column="erooms.pwRoom.phone" />
+			<result property="pwRoom.mobile" column="erooms.pwRoom.mobile" />
+			<result property="pwRoom.alias" column="erooms.pwRoom.alias" />
+			<result property="pwRoom.type" column="erooms.pwRoom.type" />
+			<result property="pwRoom.num" column="erooms.pwRoom.num" />
+			<result property="pwRoom.numtype" column="erooms.pwRoom.numtype" />
+			<result property="pwRoom.remaindernum" column="erooms.pwRoom.remaindernum" />
+			<result property="pwRoom.isAssign" column="erooms.pwRoom.isAssign" />
+			<result property="pwRoom.isAllowm" column="erooms.pwRoom.isAllowm" />
+			<result property="pwRoom.isUsable" column="erooms.pwRoom.isUsable" />
+			<result property="pwRoom.updateDate" column="erooms.pwRoom.updateDate" />
+			<result property="pwRoom.updateBy.id" column="erooms.pwRoom.updateBy.id" />
+			<result property="pwRoom.createDate" column="erooms.pwRoom.createDate" />
+			<result property="pwRoom.createBy.id" column="erooms.pwRoom.createBy.id" />
+			<result property="pwRoom.remarks" column="erooms.pwRoom.remarks" />
+			<result property="pwRoom.delFlag" column="erooms.pwRoom.delFlag" />
+
+			<result property="pwRoom.pwSpace.id" column="erooms.pwRoom.pwSpace.id" />
+			<result property="pwRoom.pwSpace.parent.id" column="erooms.pwRoom.pwSpace.parent.id" />
+			<result property="pwRoom.pwSpace.parentIds" column="erooms.pwRoom.pwSpace.parentIds" />
+			<result property="pwRoom.pwSpace.name" column="erooms.pwRoom.pwSpace.name" />
+			<result property="pwRoom.pwSpace.person" column="erooms.pwRoom.pwSpace.person" />
+			<result property="pwRoom.pwSpace.type" column="erooms.pwRoom.pwSpace.type" />
+			<result property="pwRoom.pwSpace.phone" column="erooms.pwRoom.pwSpace.phone" />
+			<result property="pwRoom.pwSpace.mobile" column="erooms.pwRoom.pwSpace.mobile" />
+			<result property="pwRoom.pwSpace.openWeek" column="erooms.pwRoom.pwSpace.openWeek" />
+			<result property="pwRoom.pwSpace.amOpenStartTime" column="erooms.pwRoom.pwSpace.amOpenStartTime" />
+			<result property="pwRoom.pwSpace.amOpenEndTime" column="erooms.pwRoom.pwSpace.amOpenEndTime" />
+			<result property="pwRoom.pwSpace.floorNum" column="erooms.pwRoom.pwSpace.floorNum" />
+			<result property="pwRoom.pwSpace.area" column="erooms.pwRoom.pwSpace.area" />
+			<result property="pwRoom.pwSpace.updateDate" column="erooms.pwRoom.pwSpace.updateDate" />
+			<result property="pwRoom.pwSpace.updateBy.id" column="erooms.pwRoom.pwSpace.updateBy.id" />
+			<result property="pwRoom.pwSpace.createDate" column="erooms.pwRoom.pwSpace.createDate" />
+			<result property="pwRoom.pwSpace.createBy.id" column="erooms.pwRoom.pwSpace.createBy.id" />
+			<result property="pwRoom.pwSpace.remarks" column="erooms.pwRoom.pwSpace.remarks" />
+			<result property="pwRoom.pwSpace.delFlag" column="erooms.pwRoom.pwSpace.delFlag" />
+
+			<result property="pwRoom.pwSpace.parent.parent.id" column="erooms.pwRoom.pwSpace.parent.parent.id" />
+			<result property="pwRoom.pwSpace.parent.parentIds" column="erooms.pwRoom.pwSpace.parent.parentIds" />
+			<result property="pwRoom.pwSpace.parent.name" column="erooms.pwRoom.pwSpace.parent.name" />
+
+			<result property="pwRoom.pwSpace.parent.parent.parent.id" column="erooms.pwRoom.pwSpace.parent.parent.parent.id" />
+			<result property="pwRoom.pwSpace.parent.parent.parentIds" column="erooms.pwRoom.pwSpace.parent.parent.parentIds" />
+			<result property="pwRoom.pwSpace.parent.parent.name" column="erooms.pwRoom.pwSpace.parent.parent.name" />
+
+			<result property="pwRoom.pwSpace.parent.parent.parent.parent.id" column="erooms.pwRoom.pwSpace.parent.parent.parent.parent.id" />
+			<result property="pwRoom.pwSpace.parent.parent.parent.parentIds" column="erooms.pwRoom.pwSpace.parent.parent.parent.parentIds" />
+			<result property="pwRoom.pwSpace.parent.parent.parent.name" column="erooms.pwRoom.pwSpace.parent.parent.parent.name" />
+
+			<result property="pwRoom.pwSpace.parent.parent.parent.parent.parent.id" column="erooms.pwRoom.pwSpace.parent.parent.parent.parent.parent.id" />
+			<result property="pwRoom.pwSpace.parent.parent.parent.parent.parentIds" column="erooms.pwRoom.pwSpace.parent.parent.parent.parent.parentIds" />
+			<result property="pwRoom.pwSpace.parent.parent.parent.parent.name" column="erooms.pwRoom.pwSpace.parent.parent.parent.parent.name" />
+
+		</collection>
+	</resultMap>
+
+	<sql id="pwEnterColumns">
+		a.id AS "id",
+		a.parent_id AS "parentId",
+		a.is_copy AS "isCopy",
+		a.type AS "type",
+		a.app_type AS "appType",
+		a.no AS "no",
+		a.applicant AS "declareId",
+		a.declare_photo AS "declarePhoto",
+		a.status AS "status",
+		a.restatus AS "restatus",
+		a.re_date AS "reDate",
+		a.exit_date AS "exitDate",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.cursel AS "cursel",
+		a.is_temp AS "isTemp",
+		a.term AS "term",
+		a.term_num AS "termNum",
+		a.is_show AS "isShow",
+		a.is_show_workNum AS "isShowWorkNum",
+		a.expect_work_num AS "expectWorkNum",
+		a.expect_term AS "expectTerm",
+		a.expect_remark AS "expectRemark",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		(SELECT COUNT(id) FROM pw_enter_room er WHERE er.eid = a.id AND er.del_flag = '0') AS "hasYfp",
+		u3.id AS "applicant.id",
+		u3.name AS "applicant.name",
+		u3.no AS "applicant.no",
+		u3.sex AS "applicant.sex",
+		u3.email AS "applicant.email",
+		u3.phone AS "applicant.phone",
+		u3.mobile AS "applicant.mobile",
+		u3.id_type AS "applicant.idType",
+		u3.id_no AS "applicant.idNumber",
+		u3.country AS "applicant.country",
+		u3.birthday AS "applicant.birthday",
+		u3.professional AS "applicant.professional",
+		u3.introduction AS "applicant.introduction",
+		o.id AS "applicant.office.id",
+		o.name AS "applicant.office.name"
+	</sql>
+
+	<sql id="pwEnterSnamesColumns">
+		(SELECT GROUP_CONCAT(u. NAME SEPARATOR '/') FROM team_user_history t LEFT JOIN sys_user u ON t.user_id = u.id AND t.user_type = '1' AND t.del_flag = '0' WHERE t.pro_id = a.id)
+    </sql>
+	<sql id="pwEnterTnamesColumns">
+		(SELECT GROUP_CONCAT(u. NAME SEPARATOR '/') FROM team_user_history t LEFT JOIN sys_user u ON t.user_id = u.id AND t.user_type = '2' AND t.del_flag = '0' WHERE t.pro_id = a.id)
+    </sql>
+
+	<sql id="pwEnterTeamBygColumns">
+	   	<include refid="pwEnterColumns"/>,
+        et.id AS "eteam.id",
+		et.type AS "eteam.type",
+		et.rid AS "eteam.rid",
+		et.update_date AS "eteam.updateDate",
+		et.update_by AS "eteam.updateBy.id",
+		et.create_date AS "eteam.createDate",
+		et.create_by AS "eteam.createBy.id",
+		et.remarks AS "eteam.remarks",
+		et.del_flag AS "eteam.delFlag",
+		(SELECT GROUP_CONCAT(u. NAME SEPARATOR '/') FROM team_user_history t LEFT JOIN sys_user u ON t.user_id = u.id AND t.user_type = '1' AND t.del_flag = '0' WHERE t.pro_id = a.id)  AS "eteam.snames",
+		(SELECT GROUP_CONCAT(u. NAME SEPARATOR '/') FROM team_user_history t LEFT JOIN sys_user u ON t.user_id = u.id AND t.user_type = '2' AND t.del_flag = '0' WHERE t.pro_id = a.id) AS "eteam.tnames",
+		t.id AS "eteam.team.id",
+		t.name AS "eteam.team.name"
+	</sql>
+
+	<sql id="pwEnterProjectBygColumns">
+    	<include refid="pwEnterColumns"/>,
+        ep.id AS "eprojects.id",
+		ep.type AS "eprojects.type",
+		ep.rid AS "eprojects.rid",
+		ep.update_date AS "eprojects.updateDate",
+		ep.update_by AS "eprojects.updateBy.id",
+		ep.create_date AS "eprojects.createDate",
+		ep.create_by AS "eprojects.createBy.id",
+		ep.remarks AS "eprojects.remarks",
+		ep.del_flag AS "eprojects.delFlag",
+
+        p.id AS "eprojects.project.id",
+		p.name AS "eprojects.project.name",
+		p.stype AS "eprojects.project.stype",
+		p.update_date AS "eprojects.project.updateDate",
+		p.update_by AS "eprojects.project.updateBy.id",
+		p.create_date AS "eprojects.project.createDate",
+		p.create_by AS "eprojects.project.createBy.id",
+		p.remarks AS "eprojects.project.remarks",
+		p.del_flag AS "eprojects.project.delFlag"
+	</sql>
+
+	<sql id="pwEnterCompanyBygColumns">
+    	<include refid="pwEnterColumns"/>,
+        ec.id AS "ecompany.id",
+		ec.type AS "ecompany.type",
+		ec.rid AS "ecompany.rid",
+		ec.update_date AS "ecompany.updateDate",
+		ec.update_by AS "ecompany.updateBy.id",
+		ec.create_date AS "ecompany.createDate",
+		ec.create_by AS "ecompany.createBy.id",
+		ec.remarks AS "ecompany.remarks",
+		ec.del_flag AS "ecompany.delFlag",
+
+		c.id AS "ecompany.pwCompany.id",
+		c.no AS "ecompany.pwCompany.no",
+		c.name AS "ecompany.pwCompany.name",
+		c.phone AS "ecompany.pwCompany.phone",
+		c.mobile AS "ecompany.pwCompany.mobile",
+		c.address AS "ecompany.pwCompany.address",
+		c.remarks AS "ecompany.pwCompany.remarks",
+		c.reg_money AS "ecompany.pwCompany.regMoney",
+		c.reg_mtype AS "ecompany.pwCompany.regMtype",
+		c.reg_person AS "ecompany.pwCompany.regPerson"
+	</sql>
+
+	<sql id="pwEnterApplyBygColumns">
+    	<include refid="pwEnterColumns"/>,
+		ay.id AS "apply.id",
+		ay.yw_id AS "apply.actYw.id",
+		ay.proc_ins_id AS "apply.procInsId",
+		ay.no AS "apply.no",
+		ay.type AS "apply.type",
+		ay.rel_id AS "apply.relId",
+		ay.apply_user_id AS "apply.applyUser.id",
+		ay.update_date AS "apply.updateDate",
+		ay.update_by AS "apply.updateBy.id",
+		ay.create_date AS "apply.createDate",
+		ay.create_by AS "apply.createBy.id",
+		ay.remarks AS "apply.remarks",
+		ay.del_flag AS "apply.delFlag"
+	</sql>
+
+	<sql id="pwEnterApplyRsBygColumns">
+    	<include refid="pwEnterColumns"/>,
+    	ayr.id AS "applyRecords.id",
+		ayr.eid AS "applyRecords.eid",
+		ayr.type AS "applyRecords.type",
+		ayr.status AS "applyRecords.status",
+		ayr.term AS "applyRecords.term",
+		ayr.bgremarks AS "applyRecords.bgremarks",
+		ayr.update_date AS "applyRecords.updateDate",
+		ayr.update_by AS "applyRecords.updateBy.id",
+		ayr.create_date AS "applyRecords.createDate",
+		ayr.create_by AS "applyRecords.createBy.id",
+		ayr.remarks AS "applyRecords.remarks",
+		ayr.del_flag AS "applyRecords.delFlag"
+	</sql>
+
+	<sql id="pwEnterApplyRmaxBygColumns">
+    	<include refid="pwEnterColumns"/>,
+		ayr.id AS "applyRecord.id",
+		ayr.eid AS "applyRecord.eid",
+		ayr.type AS "applyRecord.type",
+		ayr.status AS "applyRecord.status",
+		ayr.term AS "applyRecord.term",
+		ayr.bgremarks AS "applyRecord.bgremarks",
+		ayr.update_date AS "applyRecord.updateDate",
+		ayr.update_by AS "applyRecord.updateBy.id",
+		ayr.create_date AS "applyRecord.createDate",
+		ayr.create_by AS "applyRecord.createBy.id",
+		ayr.remarks AS "applyRecord.remarks",
+		ayr.del_flag AS "applyRecord.delFlag"
+	</sql>
+
+	<sql id="pwEnterRoomBygColumns">
+    	<include refid="pwEnterColumns"/>,
+		er.id AS "erooms.id",
+		er.num AS "erooms.num",
+		er.eid AS "erooms.pwEnter.id",
+		er.rid AS "erooms.pwRoom.id",
+		er.update_date AS "erooms.updateDate",
+		er.update_by AS "erooms.updateBy.id",
+		er.create_date AS "erooms.createDate",
+		er.create_by AS "erooms.createBy.id",
+		er.remarks AS "erooms.remarks",
+		er.del_flag AS "erooms.delFlag",
+
+		pr.id AS "erooms.pwRoom.id",
+		pr.name AS "erooms.pwRoom.name",
+		pr.color AS "erooms.pwRoom.color",
+		pr.person AS "erooms.pwRoom.person",
+		pr.area AS "erooms.pwRoom.area",
+		pr.phone AS "erooms.pwRoom.phone",
+		pr.mobile AS "erooms.pwRoom.mobile",
+		pr.alias AS "erooms.pwRoom.alias",
+		pr.type AS "erooms.pwRoom.type",
+		pr.num AS "erooms.pwRoom.num",
+		pr.num_type AS "erooms.pwRoom.numtype",
+		pr.remainder_num AS "erooms.pwRoom.remaindernum",
+		pr.is_usable AS "erooms.pwRoom.isUsable",
+		pr.is_allowm AS "erooms.pwRoom.isAllowm",
+		pr.is_assign AS "erooms.pwRoom.isAssign",
+		pr.sid AS "erooms.pwRoom.pwSpace.id",
+		pr.update_date AS "erooms.pwRoom.updateDate",
+		pr.update_by AS "erooms.pwRoom.updateBy.id",
+		pr.create_date AS "erooms.pwRoom.createDate",
+		pr.create_by AS "erooms.pwRoom.createBy.id",
+		pr.remarks AS "erooms.pwRoom.remarks",
+		pr.del_flag AS "erooms.pwRoom.delFlag",
+
+		ps.parent_id AS "erooms.pwRoom.pwSpace.parent.id",
+		ps.parent_ids AS "erooms.pwRoom.pwSpace.parentIds",
+		ps.name AS "erooms.pwRoom.pwSpace.name",
+		ps.person AS "erooms.pwRoom.pwSpace.person",
+		ps.type AS "erooms.pwRoom.pwSpace.type",
+		ps.phone AS "erooms.pwRoom.pwSpace.phone",
+		ps.mobile AS "erooms.pwRoom.pwSpace.mobile",
+		ps.open_week AS "erooms.pwRoom.pwSpace.openWeek",
+		ps.am_open_start_time AS "erooms.pwRoom.pwSpace.amOpenStartTime",
+		ps.am_open_end_time AS "erooms.pwRoom.pwSpace.amOpenEndTime",
+		ps.pm_open_start_time AS "erooms.pwRoom.pwSpace.pmOpenStartTime",
+		ps.pm_open_end_time AS "erooms.pwRoom.pwSpace.pmOpenEndTime",
+		ps.floor_num AS "erooms.pwRoom.pwSpace.floorNum",
+		ps.area AS "erooms.pwRoom.pwSpace.area",
+		ps.update_date AS "erooms.pwRoom.pwSpace.updateDate",
+		ps.update_by AS "erooms.pwRoom.pwSpace.updateBy.id",
+		ps.create_date AS "erooms.pwRoom.pwSpace.createDate",
+		ps.create_by AS "erooms.pwRoom.pwSpace.createBy.id",
+		ps.remarks AS "erooms.pwRoom.pwSpace.remarks",
+		ps.del_flag AS "erooms.pwRoom.pwSpace.delFlag",
+
+		psp.parent_id AS "erooms.pwRoom.pwSpace.parent.parent.id",
+		psp.parent_ids AS "erooms.pwRoom.pwSpace.parent.parentIds",
+		psp.name AS "erooms.pwRoom.pwSpace.parent.name",
+
+		pspp.parent_id AS "erooms.pwRoom.pwSpace.parent.parent.parent.id",
+		pspp.parent_ids AS "erooms.pwRoom.pwSpace.parent.parent.parentIds",
+		pspp.name AS "erooms.pwRoom.pwSpace.parent.parent.name",
+
+		psppp.parent_id AS "erooms.pwRoom.pwSpace.parent.parent.parent.parent.id",
+		psppp.parent_ids AS "erooms.pwRoom.pwSpace.parent.parent.parent.parentIds",
+		psppp.name AS "erooms.pwRoom.pwSpace.parent.parent.parent.name",
+
+		pspppp.parent_id AS "erooms.pwRoom.pwSpace.parent.parent.parent.parent.parent.id",
+		pspppp.parent_ids AS "erooms.pwRoom.pwSpace.parent.parent.parent.parent.parentIds",
+		pspppp.name AS "erooms.pwRoom.pwSpace.parent.parent.parent.parent.name"
+	</sql>
+
+	<sql id="pwEnterJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.applicant
+		LEFT JOIN sys_office o ON o.id = u3.office_id
+	</sql>
+
+	<sql id="pwEnterKeysJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.applicant
+		LEFT JOIN sys_office o ON o.id = u3.office_id
+		LEFT JOIN pw_enter_detail et ON et.eid = a.id AND et.type = 0 and et.del_flag = 0
+		LEFT JOIN team t ON t.id = et.rid AND t.del_flag = 0
+		LEFT JOIN pw_enter_detail ec ON ec.eid = a.id AND ec.type = 2 and ec.del_flag = 0
+		LEFT JOIN pw_company c ON c.id = ec.rid AND c.del_flag = 0
+	</sql>
+
+	<sql id="pwEnterRoomKeysJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.applicant
+		LEFT JOIN sys_office o ON o.id = u3.office_id
+		LEFT JOIN pw_enter_detail et ON et.eid = a.id AND et.type = 0 and et.del_flag = 0
+		LEFT JOIN team t ON t.id = et.rid AND t.del_flag = 0
+		LEFT JOIN pw_enter_detail ec ON ec.eid = a.id AND ec.type = 2 and ec.del_flag = 0
+		LEFT JOIN pw_company c ON c.id = ec.rid AND c.del_flag = 0
+		LEFT JOIN pw_enter_room per on per.eid = a.id and per.del_flag=0
+		LEFT JOIN pw_room pr on pr.id = per.rid and pr.del_flag=0
+	</sql>
+
+	<sql id="pwEnterRoomYTFKeysJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.applicant
+		LEFT JOIN sys_office o ON o.id = u3.office_id
+		LEFT JOIN pw_enter_detail et ON et.eid = a.id AND et.type = 0 and et.del_flag = 0
+		LEFT JOIN team t ON t.id = et.rid AND t.del_flag = 0
+		LEFT JOIN pw_enter_detail ec ON ec.eid = a.id AND ec.type = 2 and ec.del_flag = 0
+		LEFT JOIN pw_company c ON c.id = ec.rid AND c.del_flag = 0
+		LEFT JOIN pw_enter_room_record per on per.eid = a.id and per.del_flag=0 and per.type=20 and per.is_exit=1
+		LEFT JOIN pw_room pr on pr.id = per.rid and pr.del_flag=0
+	</sql>
+
+	<sql id="pwEnterRoomYGHKeysJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.applicant
+		LEFT JOIN sys_office o ON o.id = u3.office_id
+		LEFT JOIN pw_enter_detail et ON et.eid = a.id AND et.type = 0 and et.del_flag = 0
+		LEFT JOIN team t ON t.id = et.rid AND t.del_flag = 0
+		LEFT JOIN pw_enter_detail ec ON ec.eid = a.id AND ec.type = 2 and ec.del_flag = 0
+		LEFT JOIN pw_company c ON c.id = ec.rid AND c.del_flag = 0
+		LEFT JOIN (SELECT * from pw_enter_room_record pera where pera.del_flag=0 and pera.type=20 and pera.is_exit=0 ORDER BY pera.create_date desc limit 1) per on per.eid = a.id
+		LEFT JOIN pw_room pr on pr.id = per.rid and pr.del_flag=0
+	</sql>
+
+	<sql id="pwEnterBygJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.applicant
+		LEFT JOIN sys_office o ON o.id = u3.office_id
+	</sql>
+
+	<sql id="pwEnterTeamBygJoins">
+		LEFT JOIN pw_enter_detail et ON et.eid = a.id AND et.type = 0 AND et.del_flag = 0
+		LEFT JOIN team t ON t.id = et.rid AND t.del_flag = 0
+	</sql>
+
+	<sql id="pwEnterProjectBygJoins">
+		LEFT JOIN pw_enter_detail ep ON ep.eid = a.id AND ep.type = 1 AND ep.del_flag = 0
+		LEFT JOIN pw_project p ON p.id = ep.rid AND p.del_flag = 0
+	</sql>
+
+	<sql id="pwEnterCompanyBygJoins">
+		LEFT JOIN pw_enter_detail ec ON ec.eid = a.id AND ec.type = 2 AND ec.del_flag = 0
+		LEFT JOIN pw_company c ON c.id = ec.rid AND c.del_flag = 0
+	</sql>
+
+	<sql id="pwEnterApplyBygJoins">
+		LEFT JOIN act_yw_apply ay ON ay.rel_id = a.id AND ay.del_flag = 0
+	</sql>
+
+	<sql id="pwEnterApplyRsBygJoins">
+		LEFT JOIN pw_apply_record ayr ON ayr.eid = a.id AND ayr.del_flag = 0
+	</sql>
+
+	<sql id="pwEnterApplyRmaxBygJoins">
+		LEFT JOIN pw_apply_mrecord ayr ON ayr.eid = a.id AND ayr.del_flag = 0
+	</sql>
+
+	<sql id="pwEnterRoomBygJoins">
+		LEFT JOIN pw_enter_room er ON er.eid = a.id AND er.del_flag = '0'
+		LEFT JOIN pw_room pr ON pr.id = er.rid
+		LEFT JOIN pw_space ps ON ps.id = pr.sid
+		LEFT JOIN pw_space psp ON psp.id = ps.parent_id
+		LEFT JOIN pw_space pspp ON pspp.id = psp.parent_id
+		LEFT JOIN pw_space psppp ON psppp.id = pspp.parent_id
+		LEFT JOIN pw_space pspppp ON pspppp.id = psppp.parent_id
+	</sql>
+
+	<select id="get" resultType="PwEnter">
+		SELECT
+			<include refid="pwEnterColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByParentId" resultType="PwEnter">
+		SELECT
+			<include refid="pwEnterColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterJoins"/>
+		<where>
+			a.del_flag = '0' AND a.is_copy = '1' AND  a.parent_id=#{parentId}
+		</where>
+	</select>
+
+	<select id="findList" resultType="PwEnter">
+		SELECT
+			<include refid="pwEnterColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterJoins"/>
+		LEFT JOIN pw_enter_detail et ON et.eid = a.id AND et.type = 0 and et.del_flag = 0
+		LEFT JOIN team t ON t.id = et.rid AND t.del_flag = 0
+		LEFT JOIN team_user_relation r on t.id=r.team_id AND  (r.state='0' or r.state='4')
+		AND r.del_flag = 0
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="no != null and no != ''">
+				AND a.no LIKE
+					<if test="dbName == 'oracle'">'%'||#{no}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{no}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{no},'%')</if>
+			</if>
+			<if test="applicant != null">
+				<if test="applicant.id != null and applicant.id != ''">
+					AND (a.applicant = #{applicant.id} or r.user_id = #{applicant.id})
+				</if>
+				<if test="applicant.name != null and applicant.name != ''">
+					AND u3.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{applicant.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{applicant.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{applicant.name},'%')</if>
+				</if>
+				<if test="applicant.office != null">
+					<if test="applicant.office.id != null and applicant.office.id != ''">
+						AND o.id = #{applicant.office.id}
+					</if>
+					<if test="applicant.office.name != null and applicant.office.name != ''">
+						AND o.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{applicant.office.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{applicant.office.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{applicant.office.name},'%')</if>
+					</if>
+				</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="restatus != null and restatus != ''">
+				AND a.restatus = #{restatus}
+			</if>
+			<if test="isTemp != null and isTemp != ''">
+				AND a.is_temp = #{isTemp}
+			</if>
+			<if test="isCopy != null and isCopy != ''">
+				AND a.is_copy = #{isCopy}
+			</if>
+			<if test="hasYfp != null">
+				AND (SELECT COUNT(id) FROM pw_enter_room er WHERE er.eid = a.id AND er.del_flag = '0') = #{hasYfp}
+			</if>
+			<if test="isShow != null and isShow != ''">
+				AND a.is_show = #{isShow}
+			</if>
+			<if test="pstatuss != null">
+				AND a.status in
+				<foreach item="pstatus" collection="pstatuss" open="(" separator="," close=")">
+					#{pstatus}
+				</foreach>
+			</if>
+			<if test="prestatuss != null">
+				AND a.restatus in
+				<foreach item="prestatus" collection="prestatuss" open="(" separator="," close=")">
+					#{prestatus}
+				</foreach>
+			</if>
+			<if test="exitDate != null and exitDate != ''">
+				AND a.exit_date <![CDATA[ >= #{exitDate} ]]>
+			</if>
+			<if test="exitQDate != null and exitQDate != ''">
+				AND a.exit_date <![CDATA[ <= #{exitQDate} ]]>
+			</if>
+			<if test="reDate != null and reDate != ''">
+				AND a.re_date <![CDATA[ >= #{reDate} ]]>
+			</if>
+			<if test="reQDate != null and reQDate != ''">
+				AND a.re_date <![CDATA[ <= #{reQDate} ]]>
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date <![CDATA[ >= #{startDate} ]]>
+			</if>
+			<if test="startQDate != null and startQDate != ''">
+				AND a.start_date <![CDATA[ <= #{startQDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.end_date <![CDATA[ >= #{endDate} ]]>
+			</if>
+			<if test="endQDate != null and endQDate != ''">
+				AND a.end_date <![CDATA[ <= #{endQDate} ]]>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.start_date DESC, a.applicant ASC, a.status ASC, a.no DESC
+			</when>
+			<otherwise>
+				ORDER BY a.start_date DESC, a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findFrontList" resultType="PwEnter">
+			SELECT
+				<include refid="pwEnterColumns"/>
+			FROM pw_enter a
+			<include refid="pwEnterJoins"/>
+			LEFT JOIN pw_enter_detail et ON et.eid = a.id AND et.type = 0 and et.del_flag = 0
+			LEFT JOIN team t ON t.id = et.rid AND t.del_flag = 0
+			LEFT JOIN team_user_relation r on t.id=r.team_id AND  (r.state='0' or r.state='4')
+			AND r.del_flag = 0
+			<where>
+				a.del_flag = #{DEL_FLAG_NORMAL}
+				<if test="no != null and no != ''">
+					AND a.no LIKE
+						<if test="dbName == 'oracle'">'%'||#{no}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{no}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{no},'%')</if>
+				</if>
+				<if test="applicant != null">
+					<if test="applicant.id != null and applicant.id != ''">
+						AND (a.applicant = #{applicant.id} or r.user_id = #{applicant.id})
+					</if>
+				</if>
+				<if test="type != null and type != ''">
+					AND a.type = #{type}
+				</if>
+				<if test="status != null and status != ''">
+					AND a.status = #{status}
+				</if>
+				<if test="restatus != null and restatus != ''">
+					AND a.restatus = #{restatus}
+				</if>
+				<if test="isTemp != null and isTemp != ''">
+					AND a.is_temp = #{isTemp}
+				</if>
+				<if test="isCopy != null and isCopy != ''">
+					AND a.is_copy = #{isCopy}
+				</if>
+				<if test="hasYfp != null">
+					AND (SELECT COUNT(id) FROM pw_enter_room er WHERE er.eid = a.id AND er.del_flag = '0') = #{hasYfp}
+				</if>
+				<if test="isShow != null and isShow != ''">
+					AND a.is_show = #{isShow}
+				</if>
+				<if test="pstatuss != null">
+					AND a.status in
+					<foreach item="pstatus" collection="pstatuss" open="(" separator="," close=")">
+						#{pstatus}
+					</foreach>
+				</if>
+				<if test="prestatuss != null">
+					AND a.restatus in
+					<foreach item="prestatus" collection="prestatuss" open="(" separator="," close=")">
+						#{prestatus}
+					</foreach>
+				</if>
+				<if test="exitDate != null and exitDate != ''">
+					AND a.exit_date <![CDATA[ >= #{exitDate} ]]>
+				</if>
+				<if test="exitQDate != null and exitQDate != ''">
+					AND a.exit_date <![CDATA[ <= #{exitQDate} ]]>
+				</if>
+				<if test="reDate != null and reDate != ''">
+					AND a.re_date <![CDATA[ >= #{reDate} ]]>
+				</if>
+				<if test="reQDate != null and reQDate != ''">
+					AND a.re_date <![CDATA[ <= #{reQDate} ]]>
+				</if>
+				<if test="startDate != null and startDate != ''">
+					AND a.start_date <![CDATA[ >= #{startDate} ]]>
+				</if>
+				<if test="startQDate != null and startQDate != ''">
+					AND a.start_date <![CDATA[ <= #{startQDate} ]]>
+				</if>
+				<if test="endDate != null and endDate != ''">
+					AND a.end_date <![CDATA[ >= #{endDate} ]]>
+				</if>
+				<if test="endQDate != null and endQDate != ''">
+					AND a.end_date <![CDATA[ <= #{endQDate} ]]>
+				</if>
+			</where>
+			GROUP BY a.id
+			<choose>
+				<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+					ORDER BY ${page.orderBy} ${page.orderByType}, a.start_date DESC, a.applicant ASC, a.status ASC, a.no DESC
+				</when>
+				<otherwise>
+					ORDER BY a.start_date DESC, a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+				</otherwise>
+			</choose>
+		</select>
+
+	<select id="findListKeys" resultType="PwEnter">
+		SELECT
+			<include refid="pwEnterColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterKeysJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="no != null and no != ''">
+				AND a.no LIKE
+					<if test="dbName == 'oracle'">'%'||#{no}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{no}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{no},'%')</if>
+			</if>
+			<if test="keys != null and keys != ''">
+				AND (u3.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					 OR <include refid="pwEnterSnamesColumns" /> LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					 OR <include refid="pwEnterTnamesColumns" /> LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					 OR t.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					 OR c.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+					)
+			</if>
+			<if test="applicant != null">
+				<if test="applicant.id != null and applicant.id != ''">
+					AND a.applicant = #{applicant.id}
+				</if>
+				<if test="applicant.name != null and applicant.name != ''">
+					AND u3.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{applicant.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{applicant.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{applicant.name},'%')</if>
+				</if>
+				<if test="applicant.office != null">
+					<if test="applicant.office.id != null and applicant.office.id != ''">
+						AND o.id = #{applicant.office.id}
+					</if>
+					<if test="applicant.office.name != null and applicant.office.name != ''">
+						AND o.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{applicant.office.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{applicant.office.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{applicant.office.name},'%')</if>
+					</if>
+				</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="restatus != null and restatus != ''">
+				AND a.restatus = #{restatus}
+			</if>
+			<if test="isTemp != null and isTemp != ''">
+				AND a.is_temp = #{isTemp}
+			</if>
+			<if test="isCopy != null and isCopy != ''">
+				AND a.is_copy = #{isCopy}
+			</if>
+			<if test="hasYfp != null">
+				AND (SELECT COUNT(id) FROM pw_enter_room er WHERE er.eid = a.id AND er.del_flag = '0') = #{hasYfp}
+			</if>
+			<if test="isShow != null and isShow != ''">
+				AND a.is_show = #{isShow}
+			</if>
+			<if test="pstatuss != null">
+				AND a.status in
+				<foreach item="pstatus" collection="pstatuss" open="(" separator="," close=")">
+					#{pstatus}
+				</foreach>
+			</if>
+			<if test="prestatuss != null">
+				AND a.restatus in
+				<foreach item="prestatus" collection="prestatuss" open="(" separator="," close=")">
+					#{prestatus}
+				</foreach>
+			</if>
+			<if test="exitDate != null and exitDate != ''">
+				AND a.exit_date <![CDATA[ >= #{exitDate} ]]>
+			</if>
+			<if test="exitQDate != null and exitQDate != ''">
+				AND a.exit_date <![CDATA[ <= #{exitQDate} ]]>
+			</if>
+			<if test="reDate != null and reDate != ''">
+				AND a.re_date <![CDATA[ >= #{reDate} ]]>
+			</if>
+			<if test="reQDate != null and reQDate != ''">
+				AND a.re_date <![CDATA[ <= #{reQDate} ]]>
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date <![CDATA[ >= #{startDate} ]]>
+			</if>
+			<if test="startQDate != null and startQDate != ''">
+				AND a.start_date <![CDATA[ <= #{startQDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.end_date <![CDATA[ >= #{endDate} ]]>
+			</if>
+			<if test="endQDate != null and endQDate != ''">
+				AND a.end_date <![CDATA[ <= #{endQDate} ]]>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.start_date DESC, a.applicant ASC, a.status ASC, a.no DESC
+			</when>
+			<otherwise>
+				ORDER BY a.start_date DESC, a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListRoomYTFKeys" resultType="PwEnter">
+	SELECT
+		(select count(er.id) from pw_enter_room_record as er
+		where er.create_date = (select max(b.create_date)
+		from pw_enter_room_record as b where er.eid = b.eid ) and er.type=20 and er.is_exit=0 and er.del_flag=0 and er.eid = a.id) as isYGH,
+		(SELECT count(pe.id) from pw_enter_room_record pe where pe.del_flag=0 and pe.is_exit=1 and pe.type=20 and pe.eid = a.id) as isTF,
+	<include refid="pwEnterColumns"/>
+	FROM pw_enter a
+		LEFT JOIN sys_user u3 ON u3.id = a.applicant
+		LEFT JOIN sys_office o ON o.id = u3.office_id
+		LEFT JOIN pw_enter_detail et ON et.eid = a.id AND et.type = 0 and et.del_flag = 0
+		LEFT JOIN team t ON t.id = et.rid AND t.del_flag = 0
+		LEFT JOIN pw_enter_detail ec ON ec.eid = a.id AND ec.type = 2 and ec.del_flag = 0
+		LEFT JOIN pw_company c ON c.id = ec.rid AND c.del_flag = 0
+		LEFT JOIN pw_enter_room_record per on per.eid = a.id and per.del_flag=0
+		LEFT JOIN pw_room pr on pr.id = per.rid and pr.del_flag=0
+		<where>
+	a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="rid != null and rid != ''">
+			AND pr.id = #{rid}
+		</if>
+
+		<if test="startDate != null and startDate != ''">
+			AND a.start_date <![CDATA[ >= #{startDate} ]]>
+		</if>
+		<if test="startQDate != null and startQDate != ''">
+			AND a.start_date <![CDATA[ <= #{startQDate} ]]>
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND a.end_date <![CDATA[ >= #{endDate} ]]>
+		</if>
+		<if test="endQDate != null and endQDate != ''">
+			AND a.end_date <![CDATA[ <= #{endQDate} ]]>
+		</if>
+			<if test="keys != null and keys != ''">
+				AND (u3.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+				OR <include refid="pwEnterSnamesColumns" /> LIKE
+				<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+				OR <include refid="pwEnterTnamesColumns" /> LIKE
+				<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+				OR t.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+				OR c.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+				)
+			</if>
+		<if test="applicant != null">
+			<if test="applicant.office != null">
+				<if test="applicant.office.id != null and applicant.office.id != ''">
+					AND o.id = #{applicant.office.id}
+				</if>
+			</if>
+		</if>
+	</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.start_date DESC, a.applicant ASC, a.status ASC, a.no DESC
+			</when>
+			<otherwise>
+				ORDER BY a.start_date DESC, a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListRoomYGHKeys_NoCount" resultType="PwEnter">
+		SELECT
+		<include refid="pwEnterColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterRoomYGHKeysJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="rid != null and rid != ''">
+				AND pr.id = #{rid}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date <![CDATA[ >= #{startDate} ]]>
+			</if>
+			<if test="startQDate != null and startQDate != ''">
+				AND a.start_date <![CDATA[ <= #{startQDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.end_date <![CDATA[ >= #{endDate} ]]>
+			</if>
+			<if test="endQDate != null and endQDate != ''">
+				AND a.end_date <![CDATA[ <= #{endQDate} ]]>
+			</if>
+			<if test="applicant != null">
+				<if test="applicant.office != null">
+					<if test="applicant.office.id != null and applicant.office.id != ''">
+						AND o.id = #{applicant.office.id}
+					</if>
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.start_date DESC, a.applicant ASC, a.status ASC, a.no DESC
+			</when>
+			<otherwise>
+				ORDER BY a.start_date DESC, a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListRoomKeys" resultType="PwEnter">
+		SELECT
+		<include refid="pwEnterColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterRoomKeysJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and  NOW()>=a.start_date  and a.end_date >= NOW()
+			<if test="no != null and no != ''">
+				AND a.no LIKE
+				<if test="dbName == 'oracle'">'%'||#{no}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{no}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{no},'%')</if>
+			</if>
+			<if test="keys != null and keys != ''">
+				AND (u3.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+				OR <include refid="pwEnterSnamesColumns" /> LIKE
+				<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+				OR <include refid="pwEnterTnamesColumns" /> LIKE
+				<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+				OR t.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+				OR c.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+				)
+			</if>
+			<if test="applicant != null">
+				<if test="applicant.id != null and applicant.id != ''">
+					AND a.applicant = #{applicant.id}
+				</if>
+				<if test="applicant.name != null and applicant.name != ''">
+					AND u3.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{applicant.name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{applicant.name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{applicant.name},'%')</if>
+				</if>
+				<if test="applicant.office != null">
+					<if test="applicant.office.id != null and applicant.office.id != ''">
+						AND o.id = #{applicant.office.id}
+					</if>
+					<if test="applicant.office.name != null and applicant.office.name != ''">
+						AND o.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{applicant.office.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{applicant.office.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{applicant.office.name},'%')</if>
+					</if>
+				</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="rid != null and rid != ''">
+				AND pr.id = #{rid}
+			</if>
+			<if test="restatus != null and restatus != ''">
+				AND a.restatus = #{restatus}
+			</if>
+			<if test="isTemp != null and isTemp != ''">
+				AND a.is_temp = #{isTemp}
+			</if>
+			<if test="isCopy != null and isCopy != ''">
+				AND a.is_copy = #{isCopy}
+			</if>
+			<if test="hasYfp != null">
+				AND (SELECT COUNT(id) FROM pw_enter_room er WHERE er.eid = a.id AND er.del_flag = '0') > #{hasYfp}
+			</if>
+			<if test="isShow != null and isShow != ''">
+				AND a.is_show = #{isShow}
+			</if>
+			<if test="pstatuss != null">
+				AND a.status in
+				<foreach item="pstatus" collection="pstatuss" open="(" separator="," close=")">
+					#{pstatus}
+				</foreach>
+			</if>
+			<if test="prestatuss != null">
+				AND a.restatus in
+				<foreach item="prestatus" collection="prestatuss" open="(" separator="," close=")">
+					#{prestatus}
+				</foreach>
+			</if>
+
+			<if test="exitDate != null and exitDate != ''">
+				AND a.exit_date <![CDATA[ >= #{exitDate} ]]>
+			</if>
+			<if test="exitQDate != null and exitQDate != ''">
+				AND a.exit_date <![CDATA[ <= #{exitQDate} ]]>
+			</if>
+			<if test="reDate != null and reDate != ''">
+				AND a.re_date <![CDATA[ >= #{reDate} ]]>
+			</if>
+			<if test="reQDate != null and reQDate != ''">
+				AND a.re_date <![CDATA[ <= #{reQDate} ]]>
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date <![CDATA[ >= #{startDate} ]]>
+			</if>
+			<if test="startQDate != null and startQDate != ''">
+				AND a.start_date <![CDATA[ <= #{startQDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.end_date <![CDATA[ >= #{endDate} ]]>
+			</if>
+			<if test="endQDate != null and endQDate != ''">
+				AND a.end_date <![CDATA[ <= #{endQDate} ]]>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.start_date DESC, a.applicant ASC, a.status ASC, a.no DESC
+			</when>
+			<otherwise>
+				ORDER BY a.start_date DESC, a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="PwEnter">
+		SELECT
+			<include refid="pwEnterColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, a.applicant ASC, a.status ASC, a.no DESC
+			</when>
+			<otherwise>
+				ORDER BY a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllListTeamByg" resultMap="pwEnterTeamMap">
+        SELECT
+                <include refid="pwEnterTeamBygColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterBygJoins"/>
+		<include refid="pwEnterTeamBygJoins"/>
+        <where>
+        	a.del_flag = #{DEL_FLAG_NORMAL}
+        	<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="ids != null and ids.size>0">
+				AND a.id in
+				<foreach collection="ids" item="id" open="(" close=")" separator=",">
+					#{id}
+				</foreach>
+			</if>
+        	ORDER BY a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+        </where>
+   </select>
+
+
+   <select id="findAllListProjectByg" resultMap="pwEnterProjectMap">
+        SELECT
+                <include refid="pwEnterProjectBygColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterBygJoins"/>
+		<include refid="pwEnterProjectBygJoins"/>
+        <where>
+                a.del_flag = #{DEL_FLAG_NORMAL}
+                <if test="id != null and id != ''">
+					AND a.id = #{id}
+				</if>
+				<if test="ids != null and ids.size>0">
+					AND a.id in
+					<foreach collection="ids" item="id" open="(" close=")" separator=",">
+						#{id}
+					</foreach>
+				</if>
+                ORDER BY a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+        </where>
+   </select>
+
+   <select id="findAllListCompanyByg" resultMap="pwEnterCompanyMap">
+        SELECT
+                <include refid="pwEnterCompanyBygColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterBygJoins"/>
+		<include refid="pwEnterCompanyBygJoins"/>
+        <where>
+                a.del_flag = #{DEL_FLAG_NORMAL}
+                <if test="id != null and id != ''">
+					AND a.id = #{id}
+				</if>
+				<if test="ids != null and ids.size>0">
+					AND a.id in
+					<foreach collection="ids" item="id" open="(" close=")" separator=",">
+						#{id}
+					</foreach>
+				</if>
+                ORDER BY a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+        </where>
+   </select>
+
+   <select id="findAllListApplyByg" resultMap="pwEnterApplyMap">
+        SELECT
+                <include refid="pwEnterApplyBygColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterBygJoins"/>
+		<include refid="pwEnterApplyBygJoins"/>
+        <where>
+                a.del_flag = #{DEL_FLAG_NORMAL}
+                <if test="id != null and id != ''">
+					AND a.id = #{id}
+				</if>
+				<if test="ids != null and ids.size>0">
+					AND a.id in
+					<foreach collection="ids" item="id" open="(" close=")" separator=",">
+						#{id}
+					</foreach>
+				</if>
+                ORDER BY a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+        </where>
+   </select>
+
+   <select id="findAllListApplyRsByg" resultMap="pwEnterApplyRsMap">
+        SELECT
+                <include refid="pwEnterApplyRsBygColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterBygJoins"/>
+		<include refid="pwEnterApplyRsBygJoins"/>
+        <where>
+                a.del_flag = #{DEL_FLAG_NORMAL}
+                <if test="id != null and id != ''">
+					AND a.id = #{id}
+				</if>
+				<if test="ids != null and ids.size>0">
+					AND a.id in
+					<foreach collection="ids" item="id" open="(" close=")" separator=",">
+						#{id}
+					</foreach>
+				</if>
+				<if test="applyRecord != null">
+					<if test="applyRecord.type != null and applyRecord.type != ''">
+						AND ayr.type = #{applyRecord.type}
+					</if>
+				</if>
+                ORDER BY a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+        </where>
+   </select>
+
+
+   <select id="findAllListRoomByg" resultMap="pwEnterRoomMap">
+        SELECT
+                <include refid="pwEnterRoomBygColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterBygJoins"/>
+		<include refid="pwEnterRoomBygJoins"/>
+        <where>
+                a.del_flag = #{DEL_FLAG_NORMAL}
+                <if test="id != null and id != ''">
+					AND a.id = #{id}
+				</if>
+				<if test="ids != null and ids.size>0">
+					AND a.id in
+					<foreach collection="ids" item="id" open="(" close=")" separator=",">
+						#{id}
+					</foreach>
+				</if>
+                ORDER BY a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+        </where>
+   </select>
+
+   <select id="findAllListAppRecordRmaxByg" resultMap="pwEnterApplyRmaxMap">
+        SELECT
+                <include refid="pwEnterApplyRmaxBygColumns"/>
+		FROM pw_apply_mrecord ayr
+		LEFT JOIN pw_enter a ON ayr.eid = a.id AND ayr.del_flag = 0
+		<include refid="pwEnterKeysJoins"/>
+        <where>
+                a.del_flag = #{DEL_FLAG_NORMAL}
+                <if test="no != null and no != ''">
+					AND a.no LIKE
+						<if test="dbName == 'oracle'">'%'||#{no}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{no}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{no},'%')</if>
+				</if>
+				<if test="keys != null and keys != ''">
+					AND (u3.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+						 OR <include refid="pwEnterSnamesColumns" /> LIKE
+							<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+						 OR <include refid="pwEnterTnamesColumns" /> LIKE
+							<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+						 OR t.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+						 OR c.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{keys}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{keys}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{keys},'%')</if>
+						)
+				</if>
+				<if test="applicant != null">
+					<if test="applicant.id != null and applicant.id != ''">
+						AND a.applicant = #{applicant.id}
+					</if>
+					<if test="applicant.name != null and applicant.name != ''">
+						AND u3.name LIKE
+							<if test="dbName == 'oracle'">'%'||#{applicant.name}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{applicant.name}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{applicant.name},'%')</if>
+					</if>
+					<if test="applicant.office != null">
+						<if test="applicant.office.id != null and applicant.office.id != ''">
+							AND o.id = #{applicant.office.id}
+						</if>
+						<if test="applicant.office.name != null and applicant.office.name != ''">
+							AND o.name LIKE
+								<if test="dbName == 'oracle'">'%'||#{applicant.office.name}||'%'</if>
+								<if test="dbName == 'mssql'">'%'+#{applicant.office.name}+'%'</if>
+								<if test="dbName == 'mysql'">concat('%',#{applicant.office.name},'%')</if>
+						</if>
+					</if>
+				</if>
+				<if test="type != null and type != ''">
+					AND a.type = #{type}
+				</if>
+				<if test="status != null and status != ''">
+					AND a.status = #{status}
+				</if>
+				<if test="restatus != null and restatus != ''">
+					AND a.restatus = #{restatus}
+				</if>
+				<if test="isTemp != null and isTemp != ''">
+					AND a.is_temp = #{isTemp}
+				</if>
+				<if test="isShow != null and isShow != ''">
+					AND a.is_show = #{isShow}
+				</if>
+				<if test="pstatuss != null">
+					AND a.status in
+					<foreach item="pstatus" collection="pstatuss" open="(" separator="," close=")">
+						#{pstatus}
+					</foreach>
+				</if>
+				<if test="prestatuss != null">
+					AND a.restatus in
+					<foreach item="prestatus" collection="prestatuss" open="(" separator="," close=")">
+						#{prestatus}
+					</foreach>
+				</if>
+				<if test="exitDate != null and exitDate != ''">
+					AND a.exit_date <![CDATA[ >= #{exitDate} ]]>
+				</if>
+				<if test="exitQDate != null and exitQDate != ''">
+					AND a.exit_date <![CDATA[ <= #{exitQDate} ]]>
+				</if>
+				<if test="reDate != null and reDate != ''">
+					AND a.re_date <![CDATA[ >= #{reDate} ]]>
+				</if>
+				<if test="reQDate != null and reQDate != ''">
+					AND a.re_date <![CDATA[ <= #{reQDate} ]]>
+				</if>
+				<if test="startDate != null and startDate != ''">
+					AND a.start_date <![CDATA[ >= #{startDate} ]]>
+				</if>
+				<if test="startQDate != null and startQDate != ''">
+					AND a.start_date <![CDATA[ <= #{startQDate} ]]>
+				</if>
+				<if test="endDate != null and endDate != ''">
+					AND a.end_date <![CDATA[ >= #{endDate} ]]>
+				</if>
+				<if test="endQDate != null and endQDate != ''">
+					AND a.end_date <![CDATA[ <= #{endQDate} ]]>
+				</if>
+                <if test="id != null and id != ''">
+					AND a.id = #{id}
+				</if>
+				<if test="ids != null and ids.size>0">
+					AND a.id in
+					<foreach collection="ids" item="id" open="(" close=")" separator=",">
+						#{id}
+					</foreach>
+				</if>
+				<if test="applyRecord != null">
+					<if test="applyRecord.type != null and applyRecord.type != ''">
+						AND ayr.type LIKE
+							<if test="dbName == 'oracle'">'%'||#{applyRecord.type}||'%'</if>
+							<if test="dbName == 'mssql'">'%'+#{applyRecord.type}+'%'</if>
+							<if test="dbName == 'mysql'">concat('%',#{applyRecord.type},'%')</if>
+					</if>
+					<if test="applyRecord.status != null and applyRecord.status != ''">
+						AND ayr.status = #{applyRecord.status}
+					</if>
+				</if>
+        </where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}, ayr.create_date DESC, a.start_date DESC, a.applicant ASC, a.status ASC, a.no DESC
+			</when>
+			<otherwise>
+                ORDER BY ayr.create_date DESC ,a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+			</otherwise>
+		</choose>
+
+   </select>
+
+	<select id="findAllListTeamByg_NoCount" resultMap="pwEnterTeamMap">
+        SELECT
+                <include refid="pwEnterTeamBygColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterBygJoins"/>
+		<include refid="pwEnterTeamBygJoins"/>
+        <where>
+        	a.del_flag = #{DEL_FLAG_NORMAL}
+        	<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="ids != null and ids.size>0">
+				AND a.id in
+				<foreach collection="ids" item="id" open="(" close=")" separator=",">
+					#{id}
+				</foreach>
+			</if>
+        	ORDER BY a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+        </where>
+   </select>
+
+
+   <select id="findAllListProjectByg_NoCount" resultMap="pwEnterProjectMap">
+        SELECT
+                <include refid="pwEnterProjectBygColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterBygJoins"/>
+		<include refid="pwEnterProjectBygJoins"/>
+        <where>
+                a.del_flag = #{DEL_FLAG_NORMAL}
+                <if test="id != null and id != ''">
+					AND a.id = #{id}
+				</if>
+				<if test="ids != null and ids.size>0">
+					AND a.id in
+					<foreach collection="ids" item="id" open="(" close=")" separator=",">
+						#{id}
+					</foreach>
+				</if>
+                ORDER BY a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+        </where>
+   </select>
+
+   <select id="findAllListCompanyByg_NoCount" resultMap="pwEnterCompanyMap">
+        SELECT
+                <include refid="pwEnterCompanyBygColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterBygJoins"/>
+		<include refid="pwEnterCompanyBygJoins"/>
+        <where>
+                a.del_flag = #{DEL_FLAG_NORMAL}
+                <if test="id != null and id != ''">
+					AND a.id = #{id}
+				</if>
+				<if test="ids != null and ids.size>0">
+					AND a.id in
+					<foreach collection="ids" item="id" open="(" close=")" separator=",">
+						#{id}
+					</foreach>
+				</if>
+                ORDER BY a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+        </where>
+   </select>
+
+   <select id="findAllListApplyByg_NoCount" resultMap="pwEnterApplyMap">
+        SELECT
+                <include refid="pwEnterApplyBygColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterBygJoins"/>
+		<include refid="pwEnterApplyBygJoins"/>
+        <where>
+                a.del_flag = #{DEL_FLAG_NORMAL}
+                <if test="id != null and id != ''">
+					AND a.id = #{id}
+				</if>
+				<if test="ids != null and ids.size>0">
+					AND a.id in
+					<foreach collection="ids" item="id" open="(" close=")" separator=",">
+						#{id}
+					</foreach>
+				</if>
+                ORDER BY a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+        </where>
+   </select>
+
+   <select id="findAllListApplyRmaxByg_NoCount" resultMap="pwEnterApplyRmaxMap">
+        SELECT
+                <include refid="pwEnterApplyRmaxBygColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterBygJoins"/>
+		<include refid="pwEnterApplyRmaxBygJoins"/>
+        <where>
+                a.del_flag = #{DEL_FLAG_NORMAL}
+                <if test="id != null and id != ''">
+					AND a.id = #{id}
+				</if>
+				<if test="ids != null and ids.size>0">
+					AND a.id in
+					<foreach collection="ids" item="id" open="(" close=")" separator=",">
+						#{id}
+					</foreach>
+				</if>
+				<if test="applyRecord != null">
+					<if test="applyRecord.type != null and applyRecord.type != ''">
+						AND ayr.type = #{applyRecord.type}
+					</if>
+				</if>
+                ORDER BY a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+        </where>
+   </select>
+
+   <select id="findAllListRoomByg_NoCount" resultMap="pwEnterRoomMap">
+        SELECT
+                <include refid="pwEnterRoomBygColumns"/>
+		FROM pw_enter a
+		<include refid="pwEnterBygJoins"/>
+		<include refid="pwEnterRoomBygJoins"/>
+        <where>
+                a.del_flag = #{DEL_FLAG_NORMAL}
+                <if test="id != null and id != ''">
+					AND a.id = #{id}
+				</if>
+				<if test="ids != null and ids.size>0">
+					AND a.id in
+					<foreach collection="ids" item="id" open="(" close=")" separator=",">
+						#{id}
+					</foreach>
+				</if>
+                ORDER BY a.applicant ASC, a.status ASC, a.no DESC, a.update_date DESC
+        </where>
+   </select>
+
+
+	<insert id="insert">
+		INSERT INTO pw_enter(
+			id,
+			parent_id,
+			is_copy,
+			type,
+			app_type,
+			no,
+			applicant,
+			declare_photo,
+			status,
+			restatus,
+			re_date,
+			exit_date,
+			start_date,
+			end_date,
+			cursel,
+			is_temp,
+			term,
+			term_num,
+			is_show,
+			is_show_workNum,
+			expect_work_num,
+			expect_term,
+			expect_remark,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{parentId},
+			#{isCopy},
+			#{type},
+			#{appType},
+			#{no},
+			#{applicant.id},
+			#{declarePhoto},
+			#{status},
+			#{restatus},
+			#{reDate},
+			#{exitDate},
+			#{startDate},
+			#{endDate},
+			#{cursel},
+			#{isTemp},
+			#{term},
+			#{termNum},
+			#{isShow},
+			#{isShowWorkNum},
+			#{expectWorkNum},
+			#{expectTerm},
+			#{expectRemark},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pw_enter SET
+			<if test="parentId !=null and parentId !=''">
+			parent_id = #{parentId},
+			</if>
+			<if test="isCopy !=null and isCopy !=''">
+			is_copy = #{isCopy},
+			</if>
+			type = #{type},
+			app_type = #{appType},
+			no = #{no},
+			applicant = #{applicant.id},
+			declare_photo = #{declarePhoto},
+			<if test="status !=null and status !=''">
+			status = #{status},
+			</if>
+			<if test="restatus !=null and restatus !=''">
+			restatus = #{restatus},
+			</if>
+			<if test="reDate !=null and reDate !=''">
+			re_date = #{reDate},
+			</if>
+			<if test="exitDate !=null and exitDate !=''">
+			exit_date = #{exitDate},
+			</if>
+			<if test="startDate !=null and startDate !=''">
+			start_date = #{startDate},
+			</if>
+			<if test="endDate !=null and endDate !=''">
+			end_date = #{endDate},
+			</if>
+			cursel = #{cursel},
+			<if test="isTemp !=null and isTemp !=''">
+			is_temp = #{isTemp},
+			</if>
+			<if test="term !=null and term !=''">
+			term = #{term},
+			</if>
+			<if test="termNum !=null and termNum !=''">
+			term_num = #{termNum},
+			</if>
+			<if test="isShow !=null and isShow !=''">
+			is_show = #{isShow},
+			</if>
+			<if test="isShowWorkNum !=null ">
+				is_show_workNum = #{isShowWorkNum},
+			</if>
+			<if test="expectWorkNum !=null ">
+				expect_work_num = #{expectWorkNum},
+			</if>
+			<if test="expectTerm !=null ">
+				expect_term = #{expectTerm},
+			</if>
+			<if test="expectRemark !=null ">
+				expect_remark = #{expectRemark},
+			</if>
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateStatus">
+		UPDATE pw_enter SET
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateIsShow">
+		UPDATE pw_enter SET
+			is_show = #{isShow}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePwEnterType">
+		UPDATE pw_enter SET
+			type = #{type}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateApplicant">
+			UPDATE pw_enter SET
+				applicant = #{fzr}
+			WHERE id = #{id}
+		</update>
+
+	<update id="updateRestatus">
+		UPDATE pw_enter SET
+			restatus = #{restatus}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE pw_enter SET
+			del_flag = '1'
+		WHERE id = #{id}
+	</update>
+
+	<update id="deletePL">
+		UPDATE pw_enter SET
+			del_flag = '1'
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM pw_enter WHERE id = #{id}
+	</update>
+
+
+
+
+	<select id="getCount" resultType="java.lang.Long">
+		select count(1) FROM pw_enter t WHERE t.del_flag='0' AND t.is_copy='0' AND t.status=#{status} AND t.is_temp='0'
+	</select>
+	<select id="getCountRstatus" resultType="java.lang.Long">
+		select count(1) FROM pw_enter t WHERE t.del_flag='0' AND t.is_copy='0' AND t.is_temp='0' AND t.is_show='1'
+		AND t.status in
+		<foreach item="pstatus" collection="pstatuss" open="(" separator="," close=")">
+			#{pstatus}
+		</foreach>
+		AND t.restatus in
+		<foreach item="prestatus" collection="prestatuss" open="(" separator="," close=")">
+			#{prestatus}
+		</foreach>
+	</select>
+	<select id="getCountBGSH" resultType="java.lang.Long">
+		select count(1) FROM pw_enter t WHERE t.del_flag='0' AND t.is_copy='1' AND t.status=#{status} AND t.app_type=#{appType} and t.is_temp='0'
+	</select>
+	<select id="getMaxComEndDate" resultType="com.oseasy.pw.modules.pw.vo.PwEnterInfo">
+		select max(t.end_date) maxEndTime,GROUP_CONCAT(t.id) enterIds from pw_enter_detail f
+		left join pw_enter t on t.id=f.eid
+		where f.del_flag='0' and f.type='2' and t.status in ('10','30','40','50','60') and t.applicant=#{uid}
+	</select>
+	<select id="getMaxTeamEndDate" resultType="com.oseasy.pw.modules.pw.vo.PwEnterInfo">
+		select max(t.end_date) maxEndTime,GROUP_CONCAT(t.id) enterIds from pw_enter_detail f
+		left join pw_enter t on t.id=f.eid
+		left join team_user_relation r on f.rid=r.team_id and r.del_flag='0' and r.state in('0','4')
+		where f.del_flag='0' and f.type='0' and t.status in ('10','30','40','50','60') and r.user_id=#{uid}
+	</select>
+	<select id="getMaxProEndDate" resultType="com.oseasy.pw.modules.pw.vo.PwEnterInfo">
+		select max(t.end_date) maxEndTime,GROUP_CONCAT(t.id) enterIds from pw_enter_detail f
+		left join pw_enter t on t.id=f.eid
+		left join team_user_history r on f.rid=r.pro_id and r.del_flag='0'
+		where f.del_flag='0' and f.type='1' and t.status in ('10','30','40','50','60') and r.user_id=#{uid}
+	</select>
+	<select id="getPwRoomInfo" resultType="com.oseasy.pw.modules.pw.vo.PwEnterRoomVo">
+		select r.id roomId,r.name roomName,s.id spaceId,
+		(select GROUP_CONCAT(ss.name order by ss.type SEPARATOR '>')
+		from pw_space ss where ss.id!='1' and FIND_IN_SET(ss.id,s.parent_ids) and ss.del_flag='0') spaceFullName
+		from pw_enter_room t
+		left join pw_room r on t.rid=r.id
+		left join pw_space s on r.sid=s.id
+		where t.del_flag='0' and
+		<foreach collection="enids" item="eid" index="index" open="("
+			close=")" separator=" or ">
+			t.eid=#{eid}
+		</foreach>
+	</select>
+</mapper>

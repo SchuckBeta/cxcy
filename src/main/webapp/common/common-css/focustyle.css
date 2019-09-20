@@ -1,0 +1,241 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+li {
+	list-style: none;
+}
+
+/*index-banner-scroll*/
+
+.slideBox {
+	width:100%;
+	overflow: hidden;
+	position: relative;
+}
+
+.slideBox .hd {
+	height: 15px;
+	overflow: hidden;
+	position: absolute;
+	left:50%;
+	bottom: 10px;
+	z-index: 1;
+}
+
+.slideBox .hd ul {
+	overflow: hidden;
+	zoom: 1;
+	float: left;
+}
+
+.slideBox .hd ul li {
+	float: left;
+	margin-right: 5px;
+	width: 10px;
+	height: 10px;
+	line-height: 14px;
+	text-align: center;
+	background: #fff;
+	cursor: pointer;
+	border-radius: 50%;
+}
+
+.slideBox .hd ul li.on {
+	background: #F33;
+	color: #fff;
+}
+
+.slideBox .bd {
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+	z-index: 0;
+}
+
+.slideBox .bd li {
+	zoom: 1;
+	vertical-align: middle;
+}
+
+.slideBox .bd ul li img {
+	display: block;
+	width: 100%;
+}
+
+
+/* 下面是前/后按钮代码，如果不需要删除即可 */
+
+.slideBox .prev,
+.slideBox .next {
+	position: absolute;
+	left: 3%;
+	top: 50%;
+	margin-top: -25px;
+	display: block;
+	width: 32px;
+	height: 40px;
+	background: url(../../img/slider-arrow.png) -110px 5px no-repeat;
+	filter: alpha(opacity=50);
+	opacity: 0.5;
+}
+
+.slideBox .next {
+	left: auto;
+	right: 3%;
+	background-position: 8px 5px;
+}
+
+.slideBox .prev:hover,
+.slideBox .next:hover {
+	filter: alpha(opacity=100);
+	opacity: 1;
+}
+
+
+
+
+
+/*index-hotspotBox-scroll*/
+
+.slideBox2 {
+	width:100%;
+	min-height: 413px;
+	/*overflow: hidden;*/
+	position: relative;
+}
+
+.slideBox2 .hd {
+	height: 15px;
+	overflow: hidden;
+	position: absolute;
+	left:50%;
+	bottom: 10px;
+	z-index: 1;
+}
+
+.slideBox2 .hd ul {
+	overflow: hidden;
+	zoom: 1;
+	float: left;
+}
+
+.slideBox2 .hd ul li {
+	float: left;
+	margin-right: 5px;
+	width: 10px;
+	height: 10px;
+	line-height: 14px;
+	text-align: center;
+	background: #fff;
+	cursor: pointer;
+	border-radius: 50%;
+}
+
+.slideBox2 .hd ul li.on {
+	background: #F33;
+	color: #fff;
+}
+
+.slideBox2 .bd {
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+	z-index: 0;
+}
+
+.slideBox2 .bd li {
+	zoom: 1;
+	vertical-align: middle;
+}
+
+.slideBox2 .bd ul li img {
+	display: block;
+	width: 100%;
+}
+
+
+/* 下面是前/后按钮代码，如果不需要删除即可 */
+
+.slideBox2 .prev,
+.slideBox2 .next {
+	position: absolute;
+	left: 3%;
+	top: 50%;
+	margin-top: -25px;
+	display: block;
+	width: 21px;
+	height: 40px;
+	background: url(../../img/indexArrowUp_03.png) no-repeat;
+	filter: alpha(opacity=50);
+	opacity: 0.5;
+}
+
+.slideBox2 .next {
+	left: auto;
+	right: 3%;
+	background: url(../../img/indexArrowUp_05.png) no-repeat;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.slideBox3 .hd {
+	height: 15px;
+	overflow: hidden;
+	position: absolute;
+	left:50%;
+	bottom: 10px;
+	z-index: 1;
+}
+
+.slideBox3 .hd ul {
+	overflow: hidden;
+	zoom: 1;
+	float: left;
+}
+
+.slideBox3 .hd ul li {
+	float: left;
+	margin-right: 5px;
+	width: 10px;
+	height: 10px;
+	line-height: 14px;
+	text-align: center;
+	background: #ddd;
+	cursor: pointer;
+	border-radius: 50%;
+}
+
+.slideBox3 .hd ul li.on {
+	background: #F33;
+	color: #fff;
+}
+
+
+
+.slideBox3 .bd li {
+	zoom: 1;
+	vertical-align: middle;
+}
+
+.slideBox3 .bd ul li img {
+	display: block;
+	width: 100%;
+}
+
+
+/* 下面是前/后按钮代码，如果不需要删除即可 */
+
+
+

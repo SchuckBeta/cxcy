@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.com.pcore.modules.authorize.dao.SysLicenseDao">
+
+	<sql id="sysLicenseColumns">
+		a.id AS "id",
+		a.license AS "license",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id"
+	</sql>
+
+	<sql id="sysLicenseJoins">
+	</sql>
+
+	<select id="get" resultType="SysLicense">
+		SELECT
+			<include refid="sysLicenseColumns"/>
+		FROM sys_license a
+		<include refid="sysLicenseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="SysLicense">
+		SELECT
+			<include refid="sysLicenseColumns"/>
+		FROM sys_license a
+		<include refid="sysLicenseJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="SysLicense">
+		SELECT
+			<include refid="sysLicenseColumns"/>
+		FROM sys_license a
+		<include refid="sysLicenseJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_license(
+			id,
+			license,
+			update_date,
+			update_by,
+			create_date,
+			create_by
+		) VALUES (
+			#{id},
+			#{license},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id}
+		)
+	</insert>
+	<insert id="insertWithId">
+		INSERT INTO sys_license(
+			id,
+			license,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+		    tenant_id
+		) VALUES (
+			#{id},
+			#{license},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{tenantId}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_license SET
+			license = #{license},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM sys_license
+		WHERE id = #{id}
+	</update>
+
+	<select id="getAllSysLicenses" resultType="arraylist">
+		SELECT
+		<include refid="sysLicenseColumns"/>
+		FROM sys_license a
+		ORDER BY a.update_date DESC
+	</select>
+
+	<select id="getLicense" resultType="string">
+		SELECT
+			license
+		FROM sys_license
+		where id = #{id}
+	</select>
+
+</mapper>

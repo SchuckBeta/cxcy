@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.sys.modules.sys.dao.StudentExpansionDao">
+
+	<sql id="studentExpansionColumns">
+		a.id AS "id",
+		a.cycle AS "cycle",
+		a.user_id AS "user.id",
+		a.project_experience AS
+		"projectExperience",
+		a.contest_experience AS "contestExperience",
+		a.award AS "award",
+		a.is_open AS "isOpen",
+		a.update_date AS
+		"updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS
+		"createDate",
+		a.create_by AS "createBy.id",
+		a.enterdate AS "enterdate",
+		a.del_flag AS "delFlag",
+		a.graduation AS "graduation",
+		a.t_class AS
+		"tClass",
+		a.instudy AS "instudy",
+		a.address AS "address",
+		a.temporary_date AS "temporaryDate",
+		a.curr_state as currState,
+		u.name
+		AS "user.name",
+		u.login_name AS "user.loginName",
+		u.password AS
+		"user.password",
+		u.no AS "user.no",
+		u.email AS "user.email",
+		u.source AS "user.source",
+		u.passc AS "user.passc",
+		u.phone AS
+		"user.phone",
+		u.mobile AS "user.mobile",
+		u.user_type AS "user.userType",
+		u.login_ip AS
+		"user.loginIp",
+		u.login_date AS "user.loginDate",
+		u.login_flag AS "user.loginFlag",
+		u.create_date AS "user.createDate",
+		u.update_date AS "user.updateDate",
+		u.update_by AS "user.updateBy.id",
+		u.remarks AS "user.remarks",
+		u.del_flag AS "user.delFlag",
+		u.photo AS "user.photo",
+		u.id_type AS "user.idType",
+		u.id_no AS "user.idNumber",
+		u.national AS "user.national",
+		u.political AS "user.political",
+		u.education AS "user.education",
+		u.professional AS "user.professional",
+		u.sex AS "user.sex",
+		u.country AS "user.country",
+		u.area AS "user.area",
+		u.degree AS "user.degree",
+		u.domain AS "user.domain",
+		u.likes AS "user.likes",
+		u.qq AS "user.qq",
+		u.introduction AS "user.introduction",
+		u.residence AS "user.residence",
+		u.views AS "user.views",
+		so.name AS "user.office.name",
+		so.id AS
+		"user.office.id"
+	</sql>
+	<sql id="AllstudentExpansionColumns">
+		a.id AS "id",
+		a.cycle AS "cycle",
+		a.user_id AS "user.id",
+		a.project_experience AS "projectExperience",
+		a.contest_experience AS "contestExperience",
+		a.award AS "award",
+		a.is_open AS "isOpen",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.enterdate AS "enterdate",
+		a.del_flag AS "delFlag",
+		a.graduation AS "graduation",
+		a.t_class AS "tClass",
+		a.instudy AS "instudy",
+		a.temporary_date AS "temporaryDate",
+		a.address as "address",
+		a.curr_state as currState,
+		u.name AS "user.name",
+		u.login_name AS "user.loginName",
+		u.password AS "user.password",
+		u.no AS "user.no",
+		u.source AS "user.source",
+		u.passc AS "user.passc",
+		u.qq AS "user.qq",
+		u.email AS "user.email",
+		u.phone AS "user.phone",
+		u.mobile AS "user.mobile",
+		u.user_type AS "user.userType",
+		u.login_ip AS "user.loginIp",
+		u.login_date AS "user.loginDate",
+		u.login_flag AS "user.loginFlag",
+		u.create_date AS "user.createDate",
+		u.update_date AS "user.updateDate",
+		u.update_by AS "user.updateBy.id",
+		u.remarks AS "user.remarks",
+		u.del_flag AS "user.delFlag",
+		u.photo AS "user.photo",
+		u.id_type AS "user.idType",
+		u.id_no AS "user.idNumber",
+		u.national AS "user.national",
+		u.political AS "user.political",
+		u.education AS "user.education",
+		u.professional AS "user.professional",
+		u.sex AS "user.sex",
+		u.country AS "user.country",
+		u.area AS "user.area",
+		u.degree AS "user.degree",
+		u.domain AS "user.domain",
+		u.birthday AS "user.birthday",
+		u.company_id as "user.company.id",
+		u.office_id as "user.office.id",
+		u.likes AS "user.likes",
+		u.views AS "user.views",
+		u.introduction AS "user.introduction",
+		u.residence AS "user.residence",
+		so.name AS "user.office.name",
+		so.id AS "user.office.id"
+	</sql>
+
+	<sql id="AllstudentExpansionColumns1">
+		a.id AS "id",
+		a.cycle AS "cycle",
+		a.project_experience AS "projectExperience",
+		a.contest_experience AS "contestExperience",
+		a.award AS "award",
+		a.is_open AS "isOpen",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.enterdate AS "enterdate",
+		a.del_flag AS "delFlag",
+		a.graduation AS "graduation",
+		a.t_class AS "tClass",
+		a.instudy AS "instudy",
+		a.temporary_date AS "temporaryDate",
+		a.address as "address",
+		a.curr_state as currState,
+		u.id AS "user.id",
+		u.name AS "user.name",
+		u.login_name AS "user.loginName",
+		u.password AS "user.password",
+		u.no AS "user.no",
+		u.qq AS "user.qq",
+		u.source AS "user.source",
+		u.passc AS "user.passc",
+		u.email AS "user.email",
+		u.phone AS "user.phone",
+		u.mobile AS "user.mobile",
+		u.user_type AS "user.userType",
+		u.login_ip AS "user.loginIp",
+		u.login_date AS "user.loginDate",
+		u.login_flag AS "user.loginFlag",
+		u.create_date AS "user.createDate",
+		u.update_date AS "user.updateDate",
+		u.update_by AS "user.updateBy.id",
+		u.remarks AS "user.remarks",
+		u.del_flag AS "user.delFlag",
+		u.photo AS "user.photo",
+		u.id_type AS "user.idType",
+		u.id_no AS "user.idNumber",
+		u.national AS "user.national",
+		u.political AS "user.political",
+		u.education AS "user.education",
+		u.professional AS "user.professional",
+		u.sex AS "user.sex",
+		u.country AS "user.country",
+		u.area AS "user.area",
+		u.degree AS "user.degree",
+		u.domain AS "user.domain",
+		u.birthday AS "user.birthday",
+		u.company_id as "user.company.id",
+		u.office_id as "user.office.id",
+		u.likes AS "user.likes",
+		u.views AS "user.views"
+	</sql>
+
+	<sql id="nowProjectColumn">
+		(select count(userId) from (select
+		p1.id,p1.name,p1.team_id,p1.status,r1.user_id as userId from
+		project_declare p1
+		left join team t1 on p1.team_id=t1.id and t1.state='1'
+		left join team_user_relation r1 on r1.team_id=t1.id
+		where p1.status in (1,2,3,4,5,6,7) and p1.del_flag='0' ) user_view where
+		userId=a.user_id
+		)
+	</sql>
+
+	<sql id="contestExperienceColumn">
+		( SELECT COUNT(userId) FROM (
+			SELECT g1.id,r1.user_id AS
+			userId FROM g_contest g1
+			LEFT JOIN team t1 ON g1.team_id=t1.id
+			LEFT JOIN team_user_relation r1 ON r1.team_id=t1.id
+			WHERE g1.audit_state IN (1,2,3,5,6,7,8) AND g1.del_flag='0'
+			UNION select g1.id,r1.user_id AS
+			userId FROM pro_model g1
+			LEFT JOIN team t1 ON g1.team_id=t1.id
+			LEFT JOIN team_user_relation r1 ON r1.team_id=t1.id
+			WHERE g1.sub_status = '1' AND g1.del_flag='0' and g1.pro_type='7,'
+		) g_user_view
+		WHERE userId=a.user_id )
+	</sql>
+
+	<sql id="projectExperienceColumn">
+		(select count(userId) from (
+		select r1.user_id as userId from
+		project_declare p1
+		left join team t1 on p1.team_id=t1.id
+		left join
+		team_user_relation r1 on r1.team_id=t1.id
+		where p1.status in
+		(1,2,3,4,5,6,7,8,9) and p1.del_flag='0'
+		UNION  select r1.user_id as userId from
+				pro_model p1
+				left join team t1 on p1.team_id=t1.id
+				left join team_user_relation r1 on r1.team_id=t1.id
+				where p1.sub_status = '1' and p1.del_flag='0' and p1.pro_type='1,'
+		) user_view where
+		userId=a.user_id
+		)
+	</sql>
+
+	<sql id="awardColumn">
+		( SELECT COUNT(userId) FROM (SELECT g1.id,r1.user_id AS
+		userId FROM g_contest g1
+		LEFT JOIN team t1 ON g1.team_id=t1.id
+		LEFT JOIN
+		team_user_relation r1 ON r1.team_id=t1.id
+		WHERE g1.schoolend_result IN
+		(2,3,4) AND g1.del_flag='0') g_user_view WHERE userId=a.user_id )
+	</sql>
+
+	<sql id="collegeColumn">
+		(select off1.name from sys_office off1 where
+		off1.id=u.office_id )
+	</sql>
+
+	<sql id="professionalColumn">
+		(select off1.name from sys_office off1 where
+		off1.id=u.professional and off1.del_flag = '0')
+	</sql>
+
+	<sql id="topPriseColumn">
+		( SELECT s.label FROM sys_dict s WHERE
+		s.type='competition_college_prise'
+		AND s.value=
+		(SELECT MAX(g.award) FROM g_contest_award g
+		WHERE g.del_flag=0 AND g.contest_id IN (
+		SELECT DISTINCT(e.id)
+		FROM g_contest e
+		WHERE e.del_flag=0 AND e.declare_id IN(
+		SELECT t.sponsor FROM team t WHERE t.del_flag=0 AND t.id IN(
+		SELECT tur.team_id FROM team_user_relation tur WHERE tur.user_id=a.user_id )
+		)
+		)
+		)
+		) AS "topPrise"
+	</sql>
+
+
+	<sql id="studentExpansionJoins">
+		LEFT JOIN sys_user u ON u.id = a.user_id
+	</sql>
+
+	<select id="get" resultType="StudentExpansion">
+		SELECT
+		<include refid="AllstudentExpansionColumns" />
+		FROM sys_student_expansion a
+		LEFT JOIN sys_user u ON u.id = a.user_id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="StudentExpansion">
+		SELECT
+		<include refid="studentExpansionColumns" />
+	<!-- 	<if test="teamLeaderId != null and teamLeaderId != ''">
+		,
+			(select GROUP_CONCAT(tm.id) from team tm where
+			tm.del_flag='0' and tm.state='0' and tm.sponsor=#{teamLeaderId}
+			and tm.id not in(
+			select DISTINCT tur.team_id from team_user_relation tur
+			where tur.state in('0','2','4')
+			and tur.user_id=a.user_id and tur.del_flag='0')
+			) canInviteTeamIds
+		</if> -->
+		FROM sys_student_expansion a
+		LEFT JOIN sys_user u ON u.id = a.user_id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+		<where>
+			a.del_flag = 0 and u.del_flag='0'
+			<if test="useCorpModel">
+				and a.tenant_id=#{tenantId}
+			</if>
+			and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=u.id and sr.biz_type='1' and sr.del_flag='0'
+				)
+			<!--学院 -->
+			<if
+				test="user != null and user.office != null and user.office.id != null and user.office.id != ''">
+				AND u.office_id = #{user.office.id}
+			</if>
+			<if test="useCorpModel">
+				AND u.tenant_id=#{tenantId}
+			</if>
+			<!-- 专业 -->
+			<if
+				test="user != null and user.professional != null and user.professional != ''">
+				AND u.professional = #{user.professional}
+			</if>
+
+			<!--现状 -->
+			<if test="currState != null and currState != ''">
+				AND a.curr_state = #{currState}
+			</if>
+
+			<!--学位 -->
+			<if test="user != null and user.degree != null and user.degree != ''">
+				AND u.degree = #{user.degree}
+			</if>
+
+			<!-- 是否有在研项目 -->
+			<if test="nowProject !=null and nowProject != ''">
+				AND
+				<include refid="nowProjectColumn" />
+				= #{nowProject}
+			</if>
+
+			<!-- 是否有大赛经历 -->
+			<if
+				test="contestExperience !=null and contestExperience != '' and contestExperience == '0'.toString() ">
+				AND
+				<include refid="contestExperienceColumn" />
+				= 0
+			</if>
+			<if
+				test="contestExperience !=null and contestExperience != '' and contestExperience == '1'.toString()  ">
+				AND
+				<include refid="contestExperienceColumn" />
+				&gt; 0
+			</if>
+
+			<!-- 是否有项目经历 -->
+			<if
+				test="projectExperience !=null and projectExperience != '' and projectExperience == '0'.toString() ">
+				AND
+				<include refid="projectExperienceColumn" />
+				= 0
+			</if>
+			<if
+				test="projectExperience !=null and projectExperience != '' and projectExperience == '1'.toString()  ">
+				AND
+				<include refid="projectExperienceColumn" />
+				&gt; 0
+			</if>
+
+			<!--是否有获奖经历 -->
+			<if test="award !=null and award != '' and award == '0'.toString() ">
+				AND
+				<include refid="awardColumn" />
+				= 0
+			</if>
+			<if test="award !=null and award != '' and award == '1'.toString()  ">
+				AND
+				<include refid="awardColumn" />
+				&gt; 0
+			</if>
+
+			<!-- 后台关键字 查询范围 姓名 学院 专业 学号 -->
+			<if test="myFind!=null and myFind!=''">
+				AND (u.name like concat('%',#{myFind},'%')
+				or
+				<include refid="collegeColumn" />
+				like concat('%',#{myFind},'%')
+				or
+				<include refid="professionalColumn" />
+				like concat('%',#{myFind},'%')
+				or u.no like concat('%',#{myFind},'%')
+				or u.mobile like concat('%',#{myFind},'%')
+				)
+			</if>
+			<!-- 前台关键字 查询范围 姓名 学院 专业 -->
+			<if test="keyWord!=null and keyWord!=''">
+				AND (
+				u.name like concat('%',#{keyWord},'%')
+				or
+				u.no like concat('%',#{keyWord},'%')
+				or
+				u.no like concat('%',#{keyWord},'%')
+				or
+				<include refid="collegeColumn" />
+				like concat('%',#{keyWord},'%')
+				or
+				<include refid="professionalColumn" />
+				like concat('%',#{keyWord},'%')
+				)
+			</if>
+
+			<if test="user != null and user.name != null and user.name != ''">
+				AND u.name like concat('%',#{user.name},'%')
+			</if>
+
+			<if test="user != null and user.education != null and user.education != ''">
+				AND u.education = #{user.education}
+			</if>
+
+			<if test="isOpen != null and isOpen != '' and isFront!=null and isFront !='' and isFront==1">
+				AND a.is_open = 1
+			</if>
+			<if test="curJoinParam!=null">
+				and a.user_id in( select xx.user_id from team_user_history xx where
+				<foreach collection="curJoinParam" item="cj" index="index"
+					open="((" close="))" separator=") or (">
+					xx.pro_type=CONCAT(#{cj.pType}, ',')
+					and xx.pro_sub_type=#{cj.psType} and xx.del_flag='0' and
+					xx.finish='0'
+				</foreach>
+				)
+			</if>
+			and u.office_id is not null and u.name is not null
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="StudentExpansion">
+		SELECT
+		<include refid="studentExpansionColumns" />
+		FROM sys_student_expansion a
+		<include refid="studentExpansionJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="useCorpModel">
+				AND u.tenant_id=#{tenantId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getStuExList" resultType="java.util.HashMap"
+		parameterType="java.util.Map">
+		SELECT
+		<include refid="AllstudentExpansionColumns1" />
+		FROM sys_student_expansion a
+		inner JOIN sys_user u ON u.id = a.user_id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+		where a.del_flag='0'
+		<if test="useCorpModel">
+			AND u.tenant_id=#{tenantId}
+		</if>
+		<if test="collegeId!= null and collegeId != ''">
+			AND u.office_id = #{collegeId}
+		</if>
+		<if test="professional != null and professional != ''">
+			AND u.professional = #{professional}
+		</if>
+		<if test="name != null and name != ''">
+			AND u.name like '%${name}%'
+		</if>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY u.no, a.create_date desc limit
+				#{offset},#{pageSize}
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getStuExListCount" resultType="java.lang.Integer"
+		parameterType="java.util.Map">
+		SELECT count(*)
+		FROM sys_student_expansion a
+		LEFT JOIN sys_user u ON
+		u.id = a.user_id
+		LEFT JOIN sys_office so ON so.id = u.office_id
+		where
+		a.del_flag='0'
+		<if test="useCorpModel">
+			AND u.tenant_id=#{tenantId}
+		</if>
+		<if test="collegeId!= null and collegeId != ''">
+			AND u.office_id = #{collegeId}
+		</if>
+		<if test="professional != null and professional != ''">
+			AND u.professional = #{professional}
+		</if>
+		<if test="name != null and name != ''">
+			AND u.name like concat('%',#{name},'%')
+		</if>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sys_student_expansion(
+		id,
+		user_id,
+		project_experience,
+		contest_experience,
+		award,
+		is_open,
+		update_date,
+		update_by,
+		create_date,
+		create_by,
+		enterdate,
+		del_flag,
+		graduation,
+		t_class,
+		instudy,
+		temporary_date,
+		address,
+		curr_state,
+		cycle
+		) VALUES (
+		#{id},
+		#{user.id},
+		#{projectExperience},
+		#{contestExperience},
+		#{award},
+		#{isOpen},
+		#{updateDate},
+		#{updateBy.id},
+		#{createDate},
+		#{createBy.id},
+		#{enterdate},
+		#{delFlag},
+		#{graduation},
+		#{tClass},
+		#{instudy},
+		#{temporaryDate},
+		#{address},
+		#{currState},
+		#{cycle}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE sys_student_expansion SET
+		user_id = #{user.id},
+		project_experience = #{projectExperience},
+		contest_experience = #{contestExperience},
+		award = #{award},
+		is_open = #{isOpen},
+		update_date = #{updateDate},
+		update_by = #{updateBy.id},
+		enterdate = #{enterdate},
+		graduation = #{graduation},
+		t_class = #{tClass},
+		instudy = #{instudy},
+		temporary_date = #{temporaryDate},
+		address = #{address},
+		curr_state=#{currState},
+		cycle=#{cycle}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE sys_student_expansion SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<select id="getByUserId" resultType="StudentExpansion">
+		SELECT
+		<include refid="AllstudentExpansionColumns1" />
+		FROM sys_student_expansion as a
+		LEFT JOIN sys_user as u ON u.id = a.user_id
+		WHERE u.id = #{userId}
+	</select>
+
+	<select id="getStudentByTeamId" resultType="StudentExpansion"
+		parameterType="java.lang.String">
+		SELECT
+		<include refid="AllstudentExpansionColumns1" />
+		FROM sys_user u
+		LEFT JOIN sys_student_expansion a ON u.id = a.user_id
+		LEFT JOIN team_user_relation t ON t.user_id = u.id
+		WHERE  t.team_id = #{id} and (t.state='0' or t.state='4')
+		and EXISTS (
+				select 1 from sys_user_role ur left join sys_role sr on ur.role_id=sr.id
+				where ur.user_id=u.id and sr.biz_type='1' and sr.del_flag='0'
+				)
+	</select>
+
+	<update id="updateCurrStateByConfig">
+		update  sys_student_expansion t
+		INNER JOIN sys_dict s on s.type='0000000262' and t.cycle=s.value
+		set t.curr_state='2'
+		where t.del_flag='0' and t.curr_state='1'
+		and t.enterDate is not null and t.cycle is not null
+		and str_to_date(concat(date_format(DATE_ADD(t.enterDate, INTERVAL s.label YEAR),'%Y'),'-',#{mo},'-01'), '%Y-%m-%d') &lt;=SYSDATE()
+	</update>
+	<update id="updateCurrState">
+		update  sys_student_expansion t
+		INNER join sys_dict s on s.type='0000000262' and t.cycle=s.value
+		set t.curr_state='2'
+		where t.del_flag='0' and t.curr_state='1'
+		and t.enterDate is not null and t.cycle is not null
+		and DATE_ADD(t.enterDate, INTERVAL s.label YEAR) &lt;=SYSDATE()
+	</update>
+</mapper>

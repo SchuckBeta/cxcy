@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pie.modules.impdata.dao.StudentErrorDao">
+
+	<sql id="studentErrorColumns">
+		a.id AS "id",
+		a.imp_id AS "impId",
+		a.company_id AS
+		"companyId",
+		a.office_id AS "office",
+		a.professional AS "professional",
+		a.login_name AS "loginName",
+		a.password AS "password",
+		a.no AS "no",
+		a.name AS "name",
+		a.email AS "email",
+		a.phone AS "phone",
+		a.mobile AS
+		"mobile",
+		a.user_type AS "userType",
+		a.login_flag AS "loginFlag",
+		a.remarks AS "remarks",
+		a.id_type AS "idType",
+		a.national AS "national",
+		a.political AS "political",
+		a.post_code AS "postCode",
+		a.birthday AS
+		"birthday",
+		a.sex AS "sex",
+		a.country AS "country",
+		a.area AS "area",
+		a.domain AS "domain",
+		a.degree AS "degree",
+		a.education AS "education",
+		a.id_no AS "idNo",
+		a.project_experience AS "projectExperience",
+		a.contest_experience AS "contestExperience",
+		a.award AS "award",
+		a.is_open AS "isOpen",
+		a.graduation AS "graduation",
+		a.enterdate AS "enterdate",
+		a.t_class AS "tClass",
+		a.instudy AS "instudy",
+		a.temporary_date AS "temporaryDate",
+		a.address AS "address",
+		a.curr_state AS "currState",
+		a.province AS "province",
+		a.school AS "school",
+		a.row_index AS "rowIndex",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		o4.name AS "office.name"
+	</sql>
+
+	<sql id="studentErrorJoins">
+		LEFT JOIN sys_office o4 ON o4.id = a.office_id
+	</sql>
+
+	<select id="get" resultType="StudentError">
+		SELECT
+		<include refid="studentErrorColumns" />
+		FROM student_error a
+		<include refid="studentErrorJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="StudentError">
+		SELECT
+		<include refid="studentErrorColumns" />
+		FROM student_error a
+		<include refid="studentErrorJoins" />
+		<where>
+
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="StudentError">
+		SELECT
+		<include refid="studentErrorColumns" />
+		FROM student_error a
+		<include refid="studentErrorJoins" />
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO student_error(
+		id,
+		imp_id,
+		company_id,
+		office_id,
+		professional,
+		login_name,
+		password,
+		no,
+		name,
+		email,
+		phone,
+		mobile,
+		user_type,
+		login_flag,
+		remarks,
+		id_type,
+		national,
+		political,
+		post_code,
+		birthday,
+		sex,
+		country,
+		area,
+		domain,
+		degree,
+		education,
+		id_no,
+		project_experience,
+		contest_experience,
+		award,
+		is_open,
+		graduation,
+		enterdate,
+		t_class,
+		instudy,
+		temporary_date,
+		address,
+		curr_state,
+		province,
+		school,
+		row_index,
+		create_by,
+		create_date,
+		update_by,
+		update_date
+		) VALUES (
+		#{id},
+		#{impId},
+		#{companyId},
+		#{office},
+		#{professional},
+		#{loginName},
+		#{password},
+		#{no},
+		#{name},
+		#{email},
+		#{phone},
+		#{mobile},
+		#{userType},
+		#{loginFlag},
+		#{remarks},
+		#{idType},
+		#{national},
+		#{political},
+		#{postCode},
+		#{birthday},
+		#{sex},
+		#{country},
+		#{area},
+		#{domain},
+		#{degree},
+		#{education},
+		#{idNo},
+		#{projectExperience},
+		#{contestExperience},
+		#{award},
+		#{isOpen},
+		#{graduation},
+		#{enterdate},
+		#{tClass},
+		#{instudy},
+		#{temporaryDate},
+		#{address},
+		#{currState},
+		#{province},
+		#{school},
+		#{rowIndex},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE student_error SET
+		imp_id = #{impId},
+		company_id = #{companyId},
+		office_id = #{office},
+		professional = #{professional},
+		login_name = #{loginName},
+		password = #{password},
+		no = #{no},
+		name = #{name},
+		email = #{email},
+		phone = #{phone},
+		mobile = #{mobile},
+		user_type = #{userType},
+		login_flag = #{loginFlag},
+		remarks = #{remarks},
+		id_type = #{idType},
+		national = #{national},
+		political = #{political},
+		post_code = #{postCode},
+		birthday = #{birthday},
+		sex = #{sex},
+		country = #{country},
+		area = #{area},
+		domain = #{domain},
+		degree = #{degree},
+		education = #{education},
+		id_no = #{idNo},
+		project_experience = #{projectExperience},
+		contest_experience = #{contestExperience},
+		award = #{award},
+		is_open = #{isOpen},
+		graduation = #{graduation},
+		enterdate = #{enterdate},
+		t_class = #{tClass},
+		instudy = #{instudy},
+		temporary_date = #{temporaryDate},
+		address = #{address},
+		curr_state = #{currState},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM student_error
+		WHERE id = #{id}
+	</update>
+
+	<select id="getListByImpId" resultType="java.util.HashMap"
+		parameterType="java.lang.String">
+		SELECT
+		t.*
+		FROM
+		student_error t
+		WHERE
+		t.imp_id = #{impid}
+		order by
+		t.create_date
+	</select>
+	<update id="deleteByImpId"
+		parameterType="java.lang.String">
+		DELETE FROM student_error
+		WHERE imp_id =  #{impid}
+	</update>
+</mapper>

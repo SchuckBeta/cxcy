@@ -1,0 +1,386 @@
+@charset "utf-8";
+
+
+
+.project-view-contanier{
+    width: 1270px;
+}
+.g-contest-detail{
+    width: 1270px;
+}
+
+
+.contest-content {
+    border: 1px solid #efefef;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.contest-content .tool-bar {
+    margin: 6px 5px;
+    overflow: hidden;
+}
+
+.main-title {
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+    font-size: 30px;
+    line-height: 1.1;
+    margin-bottom: 40px;
+    color: #1b1b1b;
+    margin-top: 60px;
+}
+
+.btn-print {
+    float: right;
+    display: block;
+    line-height: 30px;
+    margin-right: 10px;
+    color: #656565;
+    font-size: 14px;
+    padding-left: 24px;
+    background: url(../img/print.png) no-repeat left center;
+    text-decoration: none;
+}
+
+.btn-print:hover {
+    color: #ffd0a8;
+    background: url(../img/printon.png) no-repeat left center;
+    text-decoration: none;
+}
+
+.tool-bar .inner {
+    line-height: 30px;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+.tool-bar .inner > span {
+    color: #656565;
+}
+
+.tool-bar .inner > i {
+    font-style: normal;
+}
+
+.contest-title {
+    line-height: 30px;
+    padding: 5px 0;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 16px;
+    font-weight: 700;
+    background-color: #f4e6d4;
+    text-indent: 10px;
+    text-align: left;
+}
+
+.contest-wrap {
+    padding: 0 15px;
+}
+
+.contest-content .form-group {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.contest-content .control-label {
+    float: left;
+    width: 140px;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.contest-content .control-label .icon-require {
+    color: #e9442d;
+    margin-right: 4px;
+}
+
+.contest-content .input-box {
+    margin-left: 145px;
+    font-size: 14px;
+}
+.contest-content .input-box>p{
+    margin-bottom: 0;
+    line-height: 20px;
+    padding: 6px 12px;
+    height: 34px;
+}
+
+.table-audit >thead>tr{
+    background-color: #f4e6d4;
+}
+.table-audit >tbody>tr>td[rowspan="2"]:first-child{
+    background-color: #f4e6d4;
+    font-weight: 700;
+}
+.table-audit>thead>tr>th,
+.table-audit>tbody>tr>td{
+    vertical-align: middle;
+    text-align: center;
+}
+
+.contest-content .input-inline input {
+    display: inline-block;
+    width: auto;
+    margin-right: 6px;
+}
+
+.edit-bar {
+    margin-bottom: 15px;
+}
+
+.edit-bar-left {
+    position: relative;
+}
+
+.edit-bar-left > span {
+    position: relative;
+    padding: 0 15px 0 0;
+    color: #e9432d;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 2.5;
+    background: #fff;
+    z-index: 1;
+}
+
+.edit-bar-left .line {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    right: 0;
+    border-top: 1px solid rgb(243, 213, 175);
+}
+
+.edit-bar-sm .edit-bar-left > span {
+    color: #000;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.input-box .select-inline {
+    display: inline-block;
+    width: auto;
+    margin-left: 10px;
+    max-width: 625px;
+    vertical-align: top;
+}
+
+.form-span-checkbox .input-box span {
+    position: relative;
+    display: inline-block;
+    padding-left: 20px;
+    margin-bottom: 0;
+    font-weight: 400;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.form-span-checkbox .checkbox-span {
+    margin: 6px 0;
+}
+
+.ys-box {
+    margin-left: 145px;
+}
+
+.time-input-inline input, .time-input-inline span {
+    display: inline-block;
+    width: auto;
+    box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+}
+
+.form-span-checkbox .input-box span + span {
+    margin-top: 0;
+    margin-left: 10px;
+}
+
+.form-span-checkbox .input-box span label {
+    font-weight: normal;
+    margin-left: 4px;
+    margin-bottom: 0;
+}
+
+.table-title > span {
+    display: inline-block;
+    border-radius: 3px 3px 0 0;
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #656565;
+    background-color: #ebebeb;
+}
+
+.table-condition .form-group .control-label {
+    text-align: left;
+    width: 84px;
+}
+
+.table-condition .form-group .input-box {
+    margin-left: 88px;
+}
+
+
+.accessory-box {
+    padding-left: 15px;
+    margin-bottom: 15px;
+}
+
+.accessory-box .upload {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 8px;
+    border-radius: 3px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #df4526;
+}
+
+.btn-tool-bar {
+    height: auto;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/*.btn-tool-bar > a {*/
+    /*display: inline-block;*/
+    /*padding: 6px 12px;*/
+    /*border-radius: 3px;*/
+    /*text-decoration: none;*/
+    /*color: #fff;*/
+    /*border: 1px solid #df4526;*/
+    /*background-color: #df4526;*/
+/*}*/
+
+.btn-tool-bar > a + a {
+    margin-left: 8px;
+}
+
+.table-team {
+    font-size: 14px;
+}
+
+.table-team > thead > tr {
+    background-color: #f4e6d4;
+}
+
+.ui-dialog-buttonset button {
+    height: auto;
+    padding: .4em 1em;
+    display: inline-block;
+    position: relative;
+    line-height: normal;
+    margin-right: .1em;
+    cursor: pointer;
+    vertical-align: middle;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: visible;
+}
+
+
+
+.ui-dialog .ui-dialog-buttonpane button + button {
+    margin-left: 30px;
+}
+
+.ui-dialog-buttonset .ui-corner-all {
+    box-sizing: border-box !important;
+}
+
+.task td a {
+    display: inline-block;
+    width: 19px;
+    height: 19px;
+    background: url(../img/minuse.png) no-repeat;
+}
+
+.task td a:hover {
+    background: url(../img/minus2.png) no-repeat;
+}
+
+.task td a.plus {
+    background: url(../img/plus.png) no-repeat;
+}
+
+.task td a.plus:hover {
+    background: url(../img/plus2.png) no-repeat;
+}
+
+.task tbody tr td:last-child a.plus {
+    display: none;
+}
+
+.task tbody tr:last-child td:last-child a.plus {
+    display: inline-block;
+}
+
+.nocheckerror {
+    display: none;
+    margin-bottom: 15px;
+    margin-left: 20px;
+    color: red;
+    font-size: 14px;
+    font-weight: 700;
+}
+#file li{
+    padding-left: 15px;
+}
+.other p {
+    margin-bottom: 20px;
+}
+
+
+
+.btn-primary-color, .btn-primary-color:hover, .btn-primary-color:focus {
+    color: #fff;
+    border-color: #df4526;
+    background-color: #df4526;
+    text-decoration: none;
+}
+
+.btngroup {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.table-contest-details>thead>tr{
+    background-color: #f4e6d4;
+}
+.table-contest-details>thead>tr>th,.table-contest-details>tbody>tr>td{
+    text-align: center;
+    vertical-align: middle;
+}
+@media print {
+    .header, .footerBox, .btn-tool-bar {
+        display: none;
+    }
+
+    .edit-bar-left .line {
+        left: 110px;
+    }
+    .contest-content .input-box>p{
+        padding-top: 0;
+    }
+    .project-view-contanier,.g-contest-detail{
+        width: 1080px;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+    .main-title{
+        margin-top: 0;
+    }
+    .btn-print{
+        display: none;
+    }
+    .btngroup .btn{
+        display: none;
+    }
+}

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.scr.modules.scr.dao.ScoRsetDao">
+
+	<sql id="scoRsetColumns">
+		a.id AS "id",
+		a.is_keep_npoint AS "isKeepNpoint",
+		a.keep_npoint AS "keepNpoint",
+		a.is_rprd AS "isRprd",
+		a.is_snum AS "isSnum",
+		a.snum_min AS "snumMin",
+		a.snum_val AS "snumVal",
+		a.is_snumlimit AS "isSnumlimit",
+		a.snumlimit AS "snumlimit",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="scoRsetJoins">
+	</sql>
+
+	<select id="get" resultType="ScoRset">
+		SELECT
+			<include refid="scoRsetColumns"/>
+		FROM sco_rset a
+		<include refid="scoRsetJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ScoRset">
+		SELECT
+			<include refid="scoRsetColumns"/>
+		FROM sco_rset a
+		<include refid="scoRsetJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ScoRset">
+		SELECT
+			<include refid="scoRsetColumns"/>
+		FROM sco_rset a
+		<include refid="scoRsetJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO sco_rset(
+			id,
+			is_keep_npoint,
+			keep_npoint,
+			is_rprd,
+			is_snum,
+			snum_min,
+			snum_val,
+			is_snumlimit,
+			snumlimit,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{isKeepNpoint},
+			#{keepNpoint},
+			#{isRprd},
+			#{isSnum},
+			#{snumMin},
+			#{snumVal},
+			#{isSnumlimit},
+			#{snumlimit},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<insert id="insertPL" >
+		INSERT INTO sco_rset(
+			id,
+			is_keep_npoint,
+			keep_npoint,
+			is_rprd,
+			is_snum,
+			snum_min,
+			snum_val,
+			is_snumlimit,
+			snumlimit,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+		<foreach item="item" collection="entitys" index="index" separator=",">
+			(
+			#{item.id},
+			#{item.isKeepNpoint},
+			#{item.keepNpoint},
+			#{item.isRprd},
+			#{item.isSnum},
+			#{item.snumMin},
+			#{item.snumVal},
+			#{item.isSnumlimit},
+			#{item.snumlimit},
+			#{item.updateDate},
+			#{item.updateBy.id},
+			#{item.createDate},
+			#{item.createBy.id},
+			#{item.remarks},
+			#{item.delFlag}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update">
+		UPDATE sco_rset SET
+			is_keep_npoint = #{isKeepNpoint},
+			keep_npoint = #{keepNpoint},
+			is_rprd = #{isRprd},
+			is_snum = #{isSnum},
+			snum_min = #{snumMin},
+			snum_val = #{snumVal},
+			is_snumlimit = #{isSnumlimit},
+			snumlimit = #{snumlimit},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePL" parameterType="java.util.List" >
+		UPDATE sco_rset
+		<trim prefix="set" suffixOverrides=",">
+						<trim prefix="is_keep_npoint =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isKeepNpoint}
+				</foreach>
+			</trim>
+			<trim prefix="keep_npoint =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.keepNpoint}
+				</foreach>
+			</trim>
+			<trim prefix="is_rprd =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isRprd}
+				</foreach>
+			</trim>
+			<trim prefix="is_snum =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isSnum}
+				</foreach>
+			</trim>
+			<trim prefix="snum_min =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.snumMin}
+				</foreach>
+			</trim>
+			<trim prefix="snum_val =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.snumVal}
+				</foreach>
+			</trim>
+			<trim prefix="is_snumlimit =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.isSnumlimit}
+				</foreach>
+			</trim>
+			<trim prefix="snumlimit =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.snumlimit}
+				</foreach>
+			</trim>
+			<trim prefix="update_date =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateDate}
+				</foreach>
+			</trim>
+			<trim prefix="update_by =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.updateBy.id}
+				</foreach>
+			</trim>
+			<trim prefix="remarks =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.remarks}
+				</foreach>
+			</trim>
+
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+
+	<update id="delete">
+		UPDATE sco_rset SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<update id="deleteByTenant">
+		UPDATE sco_rset SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE tenant_id = #{tenantId}
+	</update>
+	<update id="deletePL">
+		UPDATE sco_rset SET
+			del_flag = #{DEL_FLAG_DELETE}
+			WHERE id in
+			<foreach item="id" collection="ids" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM sco_rset WHERE id = #{id}
+	</update>
+
+	<update id="deleteWLPL">
+		DELETE FROM sco_rset WHERE id in
+		<foreach item="id" collection="ids" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteWLAll">
+		DELETE FROM sco_rset
+	</update>
+</mapper>

@@ -1,0 +1,86 @@
+.content{
+	width:960px;
+	overflow: hidden;
+	margin: 43px auto;
+}
+
+.content li{
+	float: left;
+	width:220px;
+	height:300px;
+	background:#f8f8f8;
+	border-bottom:1px solid #e5e5e5;
+	margin: 43px 10px;
+}
+
+.content li .up{
+	width:100%;
+	height:220px;
+	overflow: hidden;
+	position: relative;
+}
+
+.content li .up img{
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	transform: scale(1,1);
+	-webkit-transform: scale(1,1);
+	-moz-transform: scale(1,1);
+	-ms-transform: scale(1,1);
+	-o-transform: scale(1,1);
+	transition: all 0.3s ease-in;
+	-webkit-transition: all 0.3s ease-in;
+	-moz-transition: all 0.3s ease-in;
+	-ms-transition: all 0.3s ease-in;
+	-o-transition: all 0.3s ease-in;
+}
+
+.content li .up span{
+	display: block;
+	width: 100%;
+	height:42px;
+	text-align: center;
+	line-height:42px;
+	background: rgba(34,34,34,0.75);
+	position:absolute;
+	left:0px;
+	top:158px;
+	color: white;
+	font-size: 24px;
+}
+
+.content li:hover{
+	border-bottom:1px solid #fd7752;
+}
+
+.content li:hover .up span{
+	background: rgba(233,67,45,0.75);
+}
+
+.content li:hover .up img{
+	transform: scale(1.2,1.2);
+	-webkit-transform: scale(1.2,1.2);
+	-moz-transform: scale(1.2,1.2);
+	-ms-transform: scale(1.2,1.2);
+	-o-transform: scale(1.2,1.2);
+	transition: all 0.3s ease-in;
+	-webkit-transition: all 0.3s ease-in;
+	-moz-transition: all 0.3s ease-in;
+	-ms-transition: all 0.3s ease-in;
+	-o-transition: all 0.3s ease-in;
+}
+
+.content li p{
+	width: 100%;
+	height: 80px;
+	overflow: hidden;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 10px;
+	font-size: 12px;
+	font-family: "宋体";
+	color: #505050;
+	line-height: 16px;
+}

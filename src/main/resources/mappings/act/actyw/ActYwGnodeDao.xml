@@ -1,0 +1,2478 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwGnodeDao">
+	<resultMap id="actYwGnodesAllMap" type="com.oseasy.act.modules.actyw.entity.ActYwGnode">
+		<id property="id" column="id" />
+		<result property="rid" column="rid" />
+		<result property="parent.id" column="parent.id" />
+		<result property="parentIds" column="parentIds" />
+		<result property="group.id" column="group.id" />
+		<result property="node.id" column="node.id" />
+		<result property="name" column="name" />
+		<result property="type" column="type" />
+		<result property="preId" column="preId" />
+		<result property="isShow" column="isShow" />
+		<result property="isGval" column="isGval" />
+		<result property="isAssign" column="isAssign" />
+		<result property="isDelegate" column="isDelegate" />
+		<result property="isForm" column="isForm" />
+		<result property="iconUrl" column="iconUrl" />
+		<result property="taskType" column="taskType" />
+		<result property="outgoing" column="outgoing" />
+		<result property="level" column="level" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="group.name" column="group.name" />
+		<result property="group.status" column="group.status" />
+		<result property="group.sort" column="group.sort" />
+		<result property="group.type" column="group.type" />
+		<result property="group.keyss" column="group.keyss" />
+		<result property="group.author" column="group.author" />
+		<result property="group.version" column="group.version" />
+		<result property="group.flowId" column="group.flowId" />
+		<result property="group.updateDate" column="group.updateDate" />
+		<result property="group.updateBy.id" column="group.updateBy.id" />
+		<result property="group.createDate" column="group.createDate" />
+		<result property="group.createBy.id" column="group.createBy.id" />
+		<result property="group.remarks" column="group.remarks" />
+		<result property="group.delFlag" column="group.delFlag" />
+
+		<result property="node.name" column="node.name" />
+		<result property="node.type" column="node.type" />
+		<result property="node.isForm" column="node.isForm" />
+		<result property="node.iconUrl" column="node.iconUrl" />
+		<result property="node.nodeType" column="node.nodeType" />
+		<result property="node.nodeKey" column="node.nodeKey" />
+
+		<result property="parent.group.id" column="parent.group.id" />
+		<result property="parent.node.id" column="parent.node.id" />
+		<result property="parent.name" column="parent.name" />
+		<result property="parent.type" column="parent.type" />
+		<result property="parent.preId" column="parent.preId" />
+		<result property="parent.isShow" column="parent.isShow" />
+		<result property="parent.isGval" column="parent.isGval" />
+		<result property="parent.isAssign" column="parent.isAssign" />
+		<result property="parent.isDelegate" column="parent.isDelegate" />
+		<result property="parent.isForm" column="parent.isForm" />
+		<result property="parent.iconUrl" column="parent.iconUrl" />
+		<result property="parent.taskType" column="parent.taskType" />
+		<result property="parent.level" column="parent.level" />
+		<result property="parent.delFlag" column="parent.delFlag" />
+
+		<result property="parent.node.name" column="parent.node.name" />
+		<result property="parent.node.type" column="parent.node.type" />
+		<result property="parent.node.isForm" column="parent.node.isForm" />
+		<result property="parent.node.iconUrl" column="parent.node.iconUrl" />
+		<result property="parent.node.nodeType" column="parent.node.nodeType" />
+		<result property="parent.node.nodeKey" column="parent.node.nodeKey" />
+
+		<collection property="gforms" ofType="ActYwGform">
+			<id property="id" column="gforms.id" />
+			<result property="group.id" column="gforms.group.id" />
+			<result property="gnode.id" column="gforms.gnode.id" />
+			<result property="isDelegate" column="gforms.isDelegate" />
+			<result property="form.id" column="gforms.form.id" />
+			<result property="form.name" column="gforms.form.name" />
+			<result property="form.fname" column="gforms.form.fname" />
+			<result property="form.listId" column="gforms.form.listId" />
+			<result property="form.proType" column="gforms.form.proType" />
+			<result property="form.flowType" column="gforms.form.flowType" />
+			<result property="form.styleType" column="gforms.form.styleType" />
+			<result property="form.clientType" column="gforms.form.clientType" />
+			<result property="form.type" column="gforms.form.type" />
+			<result property="form.model" column="gforms.form.model" />
+			<result property="form.params" column="gforms.form.params" />
+			<result property="form.path" column="gforms.form.path" />
+			<result property="form.content" column="gforms.form.content" />
+			<result property="form.office.id" column="gforms.form.office.id" />
+			<result property="form.updateDate" column="gforms.form.updateDate" />
+			<result property="form.updateBy.id" column="gforms.form.updateBy.id" />
+			<result property="form.createDate" column="gforms.form.createDate" />
+			<result property="form.createBy.id" column="gforms.form.createBy.id" />
+			<result property="form.remarks" column="gforms.form.remarks" />
+			<result property="form.delFlag" column="gforms.form.delFlag" />
+		</collection>
+
+		<collection property="gstatuss" ofType="ActYwGstatus">
+			<id property="id" column="gstatuss.id" />
+			<result property="group.id" column="gstatuss.group.id" />
+			<result property="gnode.id" column="gstatuss.gnode.id" />
+
+			<result property="status.id" column="gstatuss.status.id" />
+			<result property="status.status" column="gstatuss.status.status" />
+			<result property="status.alias" column="gstatuss.status.alias" />
+			<result property="status.gtype" column="gstatuss.status.gtype" />
+			<result property="status.state" column="gstatuss.status.state" />
+			<result property="status.regType" column="gstatuss.status.regType" />
+            <result property="status.name" column="gstatuss.status.name" />
+			<result property="status.updateDate" column="gstatuss.status.updateDate" />
+			<result property="status.updateBy.id" column="gstatuss.status.updateBy.id" />
+			<result property="status.createDate" column="gstatuss.status.createDate" />
+			<result property="status.createBy.id" column="gstatuss.status.createBy.id" />
+			<result property="status.remarks" column="gstatuss.status.remarks" />
+			<result property="status.delFlag" column="gstatuss.status.delFlag" />
+			<result property="status.clientType" column="gstatuss.status.clientType" />
+		</collection>
+
+		<collection property="groles" ofType="ActYwGrole">
+			<id property="id" column="groles.id" />
+			<result property="group.id" column="groles.group.id" />
+			<result property="gnode.id" column="groles.gnode.id" />
+			<result property="isDelegate" column="groles.isDelegate" />
+
+			<result property="role.id" column="groles.role.id" />
+			<result property="role.office.id" column="groles.role.office.id" />
+			<result property="role.name" column="groles.role.name" />
+			<result property="role.enname" column="groles.role.enname" />
+			<result property="role.roleType" column="groles.role.roleType" />
+			<result property="role.dataScope" column="groles.role.dataScope" />
+			<result property="role.remarks" column="groles.role.remarks" />
+			<result property="role.createBy.id" column="groles.role.createBy.id" />
+			<result property="role.updateBy.id" column="groles.role.updateBy.id" />
+			<result property="role.delFlag" column="groles.role.delFlag" />
+		</collection>
+
+		<collection property="gusers" ofType="ActYwGuser">
+			<id property="id" column="gusers.id" />
+			<result property="group.id" column="gusers.group.id" />
+			<result property="gnode.id" column="gusers.gnode.id" />
+
+			<result property="user.id" column="gusers.user.id" />
+			<result property="user.company.id" column="gusers.user.company.id" />
+			<result property="user.office.id" column="gusers.user.office.id" />
+			<result property="user.loginName" column="gusers.user.loginName" />
+			<result property="user.password" column="gusers.user.password" />
+			<result property="user.no" column="gusers.user.no" />
+			<result property="user.sex" column="gusers.user.sex" />
+			<result property="user.name" column="gusers.user.name" />
+			<result property="user.email" column="gusers.user.email" />
+			<result property="user.phone" column="gusers.user.phone" />
+			<result property="user.mobile" column="gusers.user.mobile" />
+			<result property="user.photo" column="gusers.user.photo" />
+			<result property="user.professional" column="gusers.user.professional" />
+			<result property="user.createBy.id" column="gusers.user.createBy.id" />
+			<result property="user.updateBy.id" column="gusers.user.updateBy.id" />
+			<result property="user.delFlag" column="gusers.user.delFlag" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="actYwGnodesMap" type="com.oseasy.act.modules.actyw.entity.ActYwGnode">
+		<id property="id" column="id" />
+		<result property="rid" column="rid" />
+		<result property="parent.id" column="parent.id" />
+		<result property="parentIds" column="parentIds" />
+		<result property="group.id" column="group.id" />
+		<result property="node.id" column="node.id" />
+		<result property="name" column="name" />
+		<result property="type" column="type" />
+		<result property="preId" column="preId" />
+		<result property="isShow" column="isShow" />
+		<result property="isGval" column="isGval" />
+		<result property="isAssign" column="isAssign" />
+		<result property="isDelegate" column="isDelegate" />
+		<result property="isForm" column="isForm" />
+		<result property="iconUrl" column="iconUrl" />
+		<result property="taskType" column="taskType" />
+		<result property="outgoing" column="outgoing" />
+		<result property="level" column="level" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="group.name" column="group.name" />
+		<result property="group.status" column="group.status" />
+		<result property="group.sort" column="group.sort" />
+		<result property="group.type" column="group.type" />
+		<result property="group.keyss" column="group.keyss" />
+		<result property="group.author" column="group.author" />
+		<result property="group.version" column="group.version" />
+		<result property="group.flowId" column="group.flowId" />
+		<result property="group.updateDate" column="group.updateDate" />
+		<result property="group.updateBy.id" column="group.updateBy.id" />
+		<result property="group.createDate" column="group.createDate" />
+		<result property="group.createBy.id" column="group.createBy.id" />
+		<result property="group.remarks" column="group.remarks" />
+		<result property="group.delFlag" column="group.delFlag" />
+
+		<result property="node.name" column="node.name" />
+		<result property="node.type" column="node.type" />
+		<result property="node.isForm" column="node.isForm" />
+		<result property="node.iconUrl" column="node.iconUrl" />
+		<result property="node.nodeType" column="node.nodeType" />
+		<result property="node.nodeKey" column="node.nodeKey" />
+
+		<result property="parent.group.id" column="parent.group.id" />
+		<result property="parent.node.id" column="parent.node.id" />
+		<result property="parent.name" column="parent.name" />
+		<result property="parent.type" column="parent.type" />
+		<result property="parent.preId" column="parent.preId" />
+		<result property="parent.isShow" column="parent.isShow" />
+		<result property="parent.isGval" column="parent.isGval" />
+		<result property="parent.isAssign" column="parent.isAssign" />
+		<result property="parent.isDelegate" column="parent.isDelegate" />
+		<result property="parent.isForm" column="parent.isForm" />
+		<result property="parent.iconUrl" column="parent.iconUrl" />
+		<result property="parent.taskType" column="parent.taskType" />
+		<result property="parent.level" column="parent.level" />
+		<result property="parent.delFlag" column="parent.delFlag" />
+
+		<result property="parent.node.name" column="parent.node.name" />
+		<result property="parent.node.type" column="parent.node.type" />
+		<result property="parent.node.isForm" column="parent.node.isForm" />
+		<result property="parent.node.iconUrl" column="parent.node.iconUrl" />
+		<result property="parent.node.nodeType" column="parent.node.nodeType" />
+		<result property="parent.node.nodeKey" column="parent.node.nodeKey" />
+	</resultMap>
+
+	<resultMap id="actYwGnodesFormMap" type="com.oseasy.act.modules.actyw.entity.ActYwGnode">
+		<id property="id" column="id" />
+		<result property="rid" column="rid" />
+		<result property="parent.id" column="parent.id" />
+		<result property="parentIds" column="parentIds" />
+		<result property="group.id" column="group.id" />
+		<result property="node.id" column="node.id" />
+		<result property="name" column="name" />
+		<result property="type" column="type" />
+		<result property="preId" column="preId" />
+		<result property="isShow" column="isShow" />
+		<result property="isGval" column="isGval" />
+		<result property="isAssign" column="isAssign" />
+		<result property="isDelegate" column="isDelegate" />
+		<result property="isForm" column="isForm" />
+		<result property="iconUrl" column="iconUrl" />
+		<result property="taskType" column="taskType" />
+		<result property="outgoing" column="outgoing" />
+		<result property="level" column="level" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="group.name" column="group.name" />
+		<result property="group.status" column="group.status" />
+		<result property="group.sort" column="group.sort" />
+		<result property="group.type" column="group.type" />
+		<result property="group.keyss" column="group.keyss" />
+		<result property="group.author" column="group.author" />
+		<result property="group.version" column="group.version" />
+		<result property="group.flowId" column="group.flowId" />
+		<result property="group.updateDate" column="group.updateDate" />
+		<result property="group.updateBy.id" column="group.updateBy.id" />
+		<result property="group.createDate" column="group.createDate" />
+		<result property="group.createBy.id" column="group.createBy.id" />
+		<result property="group.remarks" column="group.remarks" />
+		<result property="group.delFlag" column="group.delFlag" />
+
+		<result property="node.name" column="node.name" />
+		<result property="node.type" column="node.type" />
+		<result property="node.isForm" column="node.isForm" />
+		<result property="node.iconUrl" column="node.iconUrl" />
+		<result property="node.nodeType" column="node.nodeType" />
+		<result property="node.nodeKey" column="node.nodeKey" />
+
+		<result property="parent.group.id" column="parent.group.id" />
+		<result property="parent.node.id" column="parent.node.id" />
+		<result property="parent.name" column="parent.name" />
+		<result property="parent.type" column="parent.type" />
+		<result property="parent.preId" column="parent.preId" />
+		<result property="parent.isShow" column="parent.isShow" />
+		<result property="parent.isGval" column="parent.isGval" />
+		<result property="parent.isAssign" column="parent.isAssign" />
+		<result property="parent.isDelegate" column="parent.isDelegate" />
+		<result property="parent.isForm" column="parent.isForm" />
+		<result property="parent.iconUrl" column="parent.iconUrl" />
+		<result property="parent.taskType" column="parent.taskType" />
+		<result property="parent.level" column="parent.level" />
+		<result property="parent.delFlag" column="parent.delFlag" />
+
+		<result property="parent.node.name" column="parent.node.name" />
+		<result property="parent.node.type" column="parent.node.type" />
+		<result property="parent.node.isForm" column="parent.node.isForm" />
+		<result property="parent.node.iconUrl" column="parent.node.iconUrl" />
+		<result property="parent.node.nodeType" column="parent.node.nodeType" />
+		<result property="parent.node.nodeKey" column="parent.node.nodeKey" />
+
+		<collection property="gforms" ofType="ActYwGform">
+			<id property="id" column="gforms.id" />
+			<result property="group.id" column="gforms.group.id" />
+			<result property="gnode.id" column="gforms.gnode.id" />
+			<result property="isDelegate" column="gforms.isDelegate" />
+			<result property="form.id" column="gforms.form.id" />
+			<result property="isDelegate" column="gforms.isDelegate" />
+			<result property="form.name" column="gforms.form.name" />
+			<result property="form.fname" column="gforms.form.fname" />
+			<result property="form.listId" column="gforms.form.listId" />
+			<result property="form.proType" column="gforms.form.proType" />
+			<result property="form.flowType" column="gforms.form.flowType" />
+			<result property="form.styleType" column="gforms.form.styleType" />
+			<result property="form.clientType" column="gforms.form.clientType" />
+			<result property="form.type" column="gforms.form.type" />
+			<result property="form.sgtype" column="gforms.form.sgtype" />
+			<result property="form.model" column="gforms.form.model" />
+			<result property="form.params" column="gforms.form.params" />
+			<result property="form.path" column="gforms.form.path" />
+			<result property="form.content" column="gforms.form.content" />
+			<result property="form.office.id" column="gforms.form.office.id" />
+			<result property="form.updateDate" column="gforms.form.updateDate" />
+			<result property="form.updateBy.id" column="gforms.form.updateBy.id" />
+			<result property="form.createDate" column="gforms.form.createDate" />
+			<result property="form.createBy.id" column="gforms.form.createBy.id" />
+			<result property="form.remarks" column="gforms.form.remarks" />
+			<result property="form.delFlag" column="gforms.form.delFlag" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="actYwGnodesDformMap" type="com.oseasy.act.modules.actyw.entity.ActYwGnode">
+		<id property="id" column="id" />
+		<result property="rid" column="rid" />
+		<result property="parent.id" column="parent.id" />
+		<result property="parentIds" column="parentIds" />
+		<result property="group.id" column="group.id" />
+		<result property="node.id" column="node.id" />
+		<result property="name" column="name" />
+		<result property="type" column="type" />
+		<result property="preId" column="preId" />
+		<result property="isShow" column="isShow" />
+		<result property="isGval" column="isGval" />
+		<result property="isAssign" column="isAssign" />
+		<result property="isDelegate" column="isDelegate" />
+		<result property="isForm" column="isForm" />
+		<result property="iconUrl" column="iconUrl" />
+		<result property="taskType" column="taskType" />
+		<result property="outgoing" column="outgoing" />
+		<result property="level" column="level" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="group.name" column="group.name" />
+		<result property="group.status" column="group.status" />
+		<result property="group.sort" column="group.sort" />
+		<result property="group.type" column="group.type" />
+		<result property="group.keyss" column="group.keyss" />
+		<result property="group.author" column="group.author" />
+		<result property="group.version" column="group.version" />
+		<result property="group.flowId" column="group.flowId" />
+		<result property="group.updateDate" column="group.updateDate" />
+		<result property="group.updateBy.id" column="group.updateBy.id" />
+		<result property="group.createDate" column="group.createDate" />
+		<result property="group.createBy.id" column="group.createBy.id" />
+		<result property="group.remarks" column="group.remarks" />
+		<result property="group.delFlag" column="group.delFlag" />
+
+		<result property="node.name" column="node.name" />
+		<result property="node.type" column="node.type" />
+		<result property="node.isForm" column="node.isForm" />
+		<result property="node.iconUrl" column="node.iconUrl" />
+		<result property="node.nodeType" column="node.nodeType" />
+		<result property="node.nodeKey" column="node.nodeKey" />
+
+		<result property="parent.group.id" column="parent.group.id" />
+		<result property="parent.node.id" column="parent.node.id" />
+		<result property="parent.name" column="parent.name" />
+		<result property="parent.type" column="parent.type" />
+		<result property="parent.preId" column="parent.preId" />
+		<result property="parent.isShow" column="parent.isShow" />
+		<result property="parent.isGval" column="parent.isGval" />
+		<result property="parent.isAssign" column="parent.isAssign" />
+		<result property="parent.isDelegate" column="parent.isDelegate" />
+		<result property="parent.isForm" column="parent.isForm" />
+		<result property="parent.iconUrl" column="parent.iconUrl" />
+		<result property="parent.taskType" column="parent.taskType" />
+		<result property="parent.level" column="parent.level" />
+		<result property="parent.delFlag" column="parent.delFlag" />
+
+		<result property="parent.node.name" column="parent.node.name" />
+		<result property="parent.node.type" column="parent.node.type" />
+		<result property="parent.node.isForm" column="parent.node.isForm" />
+		<result property="parent.node.iconUrl" column="parent.node.iconUrl" />
+		<result property="parent.node.nodeType" column="parent.node.nodeType" />
+		<result property="parent.node.nodeKey" column="parent.node.nodeKey" />
+
+		<collection property="gdforms" ofType="ActYwGform">
+			<id property="id" column="gdforms.id" />
+			<result property="group.id" column="gdforms.group.id" />
+			<result property="gnode.id" column="gdforms.gnode.id" />
+			<result property="isDelegate" column="gdforms.isDelegate" />
+			<result property="form.id" column="gdforms.form.id" />
+			<result property="isDelegate" column="gdforms.isDelegate" />
+			<result property="form.name" column="gdforms.form.name" />
+			<result property="form.fname" column="gdforms.form.fname" />
+			<result property="form.listId" column="gdforms.form.listId" />
+			<result property="form.proType" column="gdforms.form.proType" />
+			<result property="form.flowType" column="gdforms.form.flowType" />
+			<result property="form.styleType" column="gdforms.form.styleType" />
+			<result property="form.clientType" column="gdforms.form.clientType" />
+			<result property="form.type" column="gdforms.form.type" />
+			<result property="form.sgtype" column="gdforms.form.sgtype" />
+			<result property="form.model" column="gdforms.form.model" />
+			<result property="form.params" column="gdforms.form.params" />
+			<result property="form.path" column="gdforms.form.path" />
+			<result property="form.content" column="gdforms.form.content" />
+			<result property="form.office.id" column="gdforms.form.office.id" />
+			<result property="form.updateDate" column="gdforms.form.updateDate" />
+			<result property="form.updateBy.id" column="gdforms.form.updateBy.id" />
+			<result property="form.createDate" column="gdforms.form.createDate" />
+			<result property="form.createBy.id" column="gdforms.form.createBy.id" />
+			<result property="form.remarks" column="gdforms.form.remarks" />
+			<result property="form.delFlag" column="gdforms.form.delFlag" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="actYwGnodesStatusMap" type="com.oseasy.act.modules.actyw.entity.ActYwGnode">
+		<id property="id" column="id" />
+		<result property="rid" column="rid" />
+		<result property="parent.id" column="parent.id" />
+		<result property="parentIds" column="parentIds" />
+		<result property="group.id" column="group.id" />
+		<result property="node.id" column="node.id" />
+		<result property="name" column="name" />
+		<result property="type" column="type" />
+		<result property="preId" column="preId" />
+		<result property="isShow" column="isShow" />
+		<result property="isGval" column="isGval" />
+		<result property="isAssign" column="isAssign" />
+		<result property="isDelegate" column="isDelegate" />
+		<result property="isForm" column="isForm" />
+		<result property="iconUrl" column="iconUrl" />
+		<result property="taskType" column="taskType" />
+		<result property="outgoing" column="outgoing" />
+		<result property="level" column="level" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="group.name" column="group.name" />
+		<result property="group.status" column="group.status" />
+		<result property="group.sort" column="group.sort" />
+		<result property="group.type" column="group.type" />
+		<result property="group.keyss" column="group.keyss" />
+		<result property="group.author" column="group.author" />
+		<result property="group.version" column="group.version" />
+		<result property="group.flowId" column="group.flowId" />
+		<result property="group.updateDate" column="group.updateDate" />
+		<result property="group.updateBy.id" column="group.updateBy.id" />
+		<result property="group.createDate" column="group.createDate" />
+		<result property="group.createBy.id" column="group.createBy.id" />
+		<result property="group.remarks" column="group.remarks" />
+		<result property="group.delFlag" column="group.delFlag" />
+
+		<result property="node.name" column="node.name" />
+		<result property="node.type" column="node.type" />
+		<result property="node.isForm" column="node.isForm" />
+		<result property="node.iconUrl" column="node.iconUrl" />
+		<result property="node.nodeType" column="node.nodeType" />
+		<result property="node.nodeKey" column="node.nodeKey" />
+
+		<result property="parent.group.id" column="parent.group.id" />
+		<result property="parent.node.id" column="parent.node.id" />
+		<result property="parent.name" column="parent.name" />
+		<result property="parent.type" column="parent.type" />
+		<result property="parent.preId" column="parent.preId" />
+		<result property="parent.isShow" column="parent.isShow" />
+		<result property="parent.isGval" column="parent.isGval" />
+		<result property="parent.isAssign" column="parent.isAssign" />
+		<result property="parent.isDelegate" column="parent.isDelegate" />
+		<result property="parent.isForm" column="parent.isForm" />
+		<result property="parent.iconUrl" column="parent.iconUrl" />
+		<result property="parent.taskType" column="parent.taskType" />
+		<result property="parent.level" column="parent.level" />
+		<result property="parent.delFlag" column="parent.delFlag" />
+
+		<result property="parent.node.name" column="parent.node.name" />
+		<result property="parent.node.type" column="parent.node.type" />
+		<result property="parent.node.isForm" column="parent.node.isForm" />
+		<result property="parent.node.iconUrl" column="parent.node.iconUrl" />
+		<result property="parent.node.nodeType" column="parent.node.nodeType" />
+		<result property="parent.node.nodeKey" column="parent.node.nodeKey" />
+
+		<collection property="gstatuss" ofType="ActYwGstatus">
+			<id property="id" column="gstatuss.id" />
+			<result property="group.id" column="gstatuss.group.id" />
+			<result property="gnode.id" column="gstatuss.gnode.id" />
+
+			<result property="status.id" column="gstatuss.status.id" />
+			<result property="status.status" column="gstatuss.status.status" />
+			<result property="status.alias" column="gstatuss.status.alias" />
+			<result property="status.gtype" column="gstatuss.status.gtype" />
+			<result property="status.state" column="gstatuss.status.state" />
+			<result property="status.regType" column="gstatuss.status.regType" />
+            <result property="status.name" column="gstatuss.status.name" />
+			<result property="status.updateDate" column="gstatuss.status.updateDate" />
+			<result property="status.updateBy.id" column="gstatuss.status.updateBy.id" />
+			<result property="status.createDate" column="gstatuss.status.createDate" />
+			<result property="status.createBy.id" column="gstatuss.status.createBy.id" />
+			<result property="status.remarks" column="gstatuss.status.remarks" />
+			<result property="status.delFlag" column="gstatuss.status.delFlag" />
+			<result property="status.clientType" column="gstatuss.status.clientType" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="actYwGnodesRoleMap" type="com.oseasy.act.modules.actyw.entity.ActYwGnode">
+		<id property="id" column="id" />
+		<result property="rid" column="rid" />
+		<result property="parent.id" column="parent.id" />
+		<result property="parentIds" column="parentIds" />
+		<result property="group.id" column="group.id" />
+		<result property="node.id" column="node.id" />
+		<result property="name" column="name" />
+		<result property="type" column="type" />
+		<result property="preId" column="preId" />
+		<result property="isShow" column="isShow" />
+		<result property="isGval" column="isGval" />
+		<result property="isAssign" column="isAssign" />
+		<result property="isDelegate" column="isDelegate" />
+		<result property="isForm" column="isForm" />
+		<result property="iconUrl" column="iconUrl" />
+		<result property="taskType" column="taskType" />
+		<result property="outgoing" column="outgoing" />
+		<result property="level" column="level" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="group.name" column="group.name" />
+		<result property="group.status" column="group.status" />
+		<result property="group.sort" column="group.sort" />
+		<result property="group.type" column="group.type" />
+		<result property="group.keyss" column="group.keyss" />
+		<result property="group.author" column="group.author" />
+		<result property="group.version" column="group.version" />
+		<result property="group.flowId" column="group.flowId" />
+		<result property="group.updateDate" column="group.updateDate" />
+		<result property="group.updateBy.id" column="group.updateBy.id" />
+		<result property="group.createDate" column="group.createDate" />
+		<result property="group.createBy.id" column="group.createBy.id" />
+		<result property="group.remarks" column="group.remarks" />
+		<result property="group.delFlag" column="group.delFlag" />
+
+		<result property="node.name" column="node.name" />
+		<result property="node.type" column="node.type" />
+		<result property="node.isForm" column="node.isForm" />
+		<result property="node.iconUrl" column="node.iconUrl" />
+		<result property="node.nodeType" column="node.nodeType" />
+		<result property="node.nodeKey" column="node.nodeKey" />
+
+		<result property="parent.group.id" column="parent.group.id" />
+		<result property="parent.node.id" column="parent.node.id" />
+		<result property="parent.name" column="parent.name" />
+		<result property="parent.type" column="parent.type" />
+		<result property="parent.preId" column="parent.preId" />
+		<result property="parent.isShow" column="parent.isShow" />
+		<result property="parent.isGval" column="parent.isGval" />
+		<result property="parent.isAssign" column="parent.isAssign" />
+		<result property="parent.isDelegate" column="parent.isDelegate" />
+		<result property="parent.isForm" column="parent.isForm" />
+		<result property="parent.iconUrl" column="parent.iconUrl" />
+		<result property="parent.taskType" column="parent.taskType" />
+		<result property="parent.level" column="parent.level" />
+		<result property="parent.delFlag" column="parent.delFlag" />
+
+		<result property="parent.node.name" column="parent.node.name" />
+		<result property="parent.node.type" column="parent.node.type" />
+		<result property="parent.node.isForm" column="parent.node.isForm" />
+		<result property="parent.node.iconUrl" column="parent.node.iconUrl" />
+		<result property="parent.node.nodeType" column="parent.node.nodeType" />
+		<result property="parent.node.nodeKey" column="parent.node.nodeKey" />
+
+		<collection property="groles" ofType="ActYwGrole">
+			<id property="id" column="groles.id" />
+			<result property="group.id" column="groles.group.id" />
+			<result property="gnode.id" column="groles.gnode.id" />
+			<result property="isDelegate" column="groles.isDelegate" />
+
+			<result property="role.id" column="groles.role.id" />
+			<result property="role.office.id" column="groles.role.office.id" />
+			<result property="role.name" column="groles.role.name" />
+			<result property="role.enname" column="groles.role.enname" />
+			<result property="role.roleType" column="groles.role.roleType" />
+			<result property="role.dataScope" column="groles.role.dataScope" />
+			<result property="role.remarks" column="groles.role.remarks" />
+			<result property="role.createBy.id" column="groles.role.createBy.id" />
+			<result property="role.updateBy.id" column="groles.role.updateBy.id" />
+			<result property="role.delFlag" column="groles.role.delFlag" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="actYwGnodesDroleMap" type="com.oseasy.act.modules.actyw.entity.ActYwGnode">
+		<id property="id" column="id" />
+		<result property="rid" column="rid" />
+		<result property="parent.id" column="parent.id" />
+		<result property="parentIds" column="parentIds" />
+		<result property="group.id" column="group.id" />
+		<result property="node.id" column="node.id" />
+		<result property="name" column="name" />
+		<result property="type" column="type" />
+		<result property="preId" column="preId" />
+		<result property="isShow" column="isShow" />
+		<result property="isGval" column="isGval" />
+		<result property="isAssign" column="isAssign" />
+		<result property="isDelegate" column="isDelegate" />
+		<result property="isForm" column="isForm" />
+		<result property="iconUrl" column="iconUrl" />
+		<result property="taskType" column="taskType" />
+		<result property="outgoing" column="outgoing" />
+		<result property="level" column="level" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="group.name" column="group.name" />
+		<result property="group.status" column="group.status" />
+		<result property="group.sort" column="group.sort" />
+		<result property="group.type" column="group.type" />
+		<result property="group.keyss" column="group.keyss" />
+		<result property="group.author" column="group.author" />
+		<result property="group.version" column="group.version" />
+		<result property="group.flowId" column="group.flowId" />
+		<result property="group.updateDate" column="group.updateDate" />
+		<result property="group.updateBy.id" column="group.updateBy.id" />
+		<result property="group.createDate" column="group.createDate" />
+		<result property="group.createBy.id" column="group.createBy.id" />
+		<result property="group.remarks" column="group.remarks" />
+		<result property="group.delFlag" column="group.delFlag" />
+
+		<result property="node.name" column="node.name" />
+		<result property="node.type" column="node.type" />
+		<result property="node.isForm" column="node.isForm" />
+		<result property="node.iconUrl" column="node.iconUrl" />
+		<result property="node.nodeType" column="node.nodeType" />
+		<result property="node.nodeKey" column="node.nodeKey" />
+
+		<result property="parent.group.id" column="parent.group.id" />
+		<result property="parent.node.id" column="parent.node.id" />
+		<result property="parent.name" column="parent.name" />
+		<result property="parent.type" column="parent.type" />
+		<result property="parent.preId" column="parent.preId" />
+		<result property="parent.isShow" column="parent.isShow" />
+		<result property="parent.isGval" column="parent.isGval" />
+		<result property="parent.isAssign" column="parent.isAssign" />
+		<result property="parent.isDelegate" column="parent.isDelegate" />
+		<result property="parent.isForm" column="parent.isForm" />
+		<result property="parent.iconUrl" column="parent.iconUrl" />
+		<result property="parent.taskType" column="parent.taskType" />
+		<result property="parent.level" column="parent.level" />
+		<result property="parent.delFlag" column="parent.delFlag" />
+
+		<result property="parent.node.name" column="parent.node.name" />
+		<result property="parent.node.type" column="parent.node.type" />
+		<result property="parent.node.isForm" column="parent.node.isForm" />
+		<result property="parent.node.iconUrl" column="parent.node.iconUrl" />
+		<result property="parent.node.nodeType" column="parent.node.nodeType" />
+		<result property="parent.node.nodeKey" column="parent.node.nodeKey" />
+
+		<collection property="gdroles" ofType="ActYwGrole">
+			<id property="id" column="gdroles.id" />
+			<result property="group.id" column="gdroles.group.id" />
+			<result property="gnode.id" column="gdroles.gnode.id" />
+			<result property="isDelegate" column="gdroles.isDelegate" />
+
+			<result property="role.id" column="gdroles.role.id" />
+			<result property="role.office.id" column="gdroles.role.office.id" />
+			<result property="role.name" column="gdroles.role.name" />
+			<result property="role.enname" column="gdroles.role.enname" />
+			<result property="role.roleType" column="gdroles.role.roleType" />
+			<result property="role.dataScope" column="gdroles.role.dataScope" />
+			<result property="role.remarks" column="gdroles.role.remarks" />
+			<result property="role.createBy.id" column="gdroles.role.createBy.id" />
+			<result property="role.updateBy.id" column="gdroles.role.updateBy.id" />
+			<result property="role.delFlag" column="gdroles.role.delFlag" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="actYwGnodesUserMap" type="com.oseasy.act.modules.actyw.entity.ActYwGnode">
+		<id property="id" column="id" />
+		<result property="rid" column="rid" />
+		<result property="parent.id" column="parent.id" />
+		<result property="parentIds" column="parentIds" />
+		<result property="group.id" column="group.id" />
+		<result property="node.id" column="node.id" />
+		<result property="name" column="name" />
+		<result property="type" column="type" />
+		<result property="preId" column="preId" />
+		<result property="isShow" column="isShow" />
+		<result property="isGval" column="isGval" />
+		<result property="isAssign" column="isAssign" />
+		<result property="isDelegate" column="isDelegate" />
+		<result property="isForm" column="isForm" />
+		<result property="iconUrl" column="iconUrl" />
+		<result property="taskType" column="taskType" />
+		<result property="outgoing" column="outgoing" />
+		<result property="level" column="level" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="group.name" column="group.name" />
+		<result property="group.status" column="group.status" />
+		<result property="group.sort" column="group.sort" />
+		<result property="group.type" column="group.type" />
+		<result property="group.keyss" column="group.keyss" />
+		<result property="group.author" column="group.author" />
+		<result property="group.version" column="group.version" />
+		<result property="group.flowId" column="group.flowId" />
+		<result property="group.updateDate" column="group.updateDate" />
+		<result property="group.updateBy.id" column="group.updateBy.id" />
+		<result property="group.createDate" column="group.createDate" />
+		<result property="group.createBy.id" column="group.createBy.id" />
+		<result property="group.remarks" column="group.remarks" />
+		<result property="group.delFlag" column="group.delFlag" />
+
+		<result property="node.name" column="node.name" />
+		<result property="node.type" column="node.type" />
+		<result property="node.isForm" column="node.isForm" />
+		<result property="node.iconUrl" column="node.iconUrl" />
+		<result property="node.nodeType" column="node.nodeType" />
+		<result property="node.nodeKey" column="node.nodeKey" />
+
+		<result property="parent.group.id" column="parent.group.id" />
+		<result property="parent.node.id" column="parent.node.id" />
+		<result property="parent.name" column="parent.name" />
+		<result property="parent.type" column="parent.type" />
+		<result property="parent.preId" column="parent.preId" />
+		<result property="parent.isShow" column="parent.isShow" />
+		<result property="parent.isGval" column="parent.isGval" />
+		<result property="parent.isAssign" column="parent.isAssign" />
+		<result property="parent.isDelegate" column="parent.isDelegate" />
+		<result property="parent.isForm" column="parent.isForm" />
+		<result property="parent.iconUrl" column="parent.iconUrl" />
+		<result property="parent.taskType" column="parent.taskType" />
+		<result property="parent.level" column="parent.level" />
+		<result property="parent.delFlag" column="parent.delFlag" />
+
+		<result property="parent.node.name" column="parent.node.name" />
+		<result property="parent.node.type" column="parent.node.type" />
+		<result property="parent.node.isForm" column="parent.node.isForm" />
+		<result property="parent.node.iconUrl" column="parent.node.iconUrl" />
+		<result property="parent.node.nodeType" column="parent.node.nodeType" />
+		<result property="parent.node.nodeKey" column="parent.node.nodeKey" />
+
+		<collection property="gusers" ofType="ActYwGuser">
+			<id property="id" column="gusers.id" />
+			<result property="group.id" column="gusers.group.id" />
+			<result property="gnode.id" column="gusers.gnode.id" />
+
+			<result property="user.id" column="gusers.user.id" />
+			<result property="user.company.id" column="gusers.user.company.id" />
+			<result property="user.office.id" column="gusers.user.office.id" />
+			<result property="user.loginName" column="gusers.user.loginName" />
+			<result property="user.password" column="gusers.user.password" />
+			<result property="user.no" column="gusers.user.no" />
+			<result property="user.sex" column="gusers.user.sex" />
+			<result property="user.name" column="gusers.user.name" />
+			<result property="user.email" column="gusers.user.email" />
+			<result property="user.phone" column="gusers.user.phone" />
+			<result property="user.mobile" column="gusers.user.mobile" />
+			<result property="user.photo" column="gusers.user.photo" />
+			<result property="user.professional" column="gusers.user.professional" />
+			<result property="user.createBy.id" column="gusers.user.createBy.id" />
+			<result property="user.updateBy.id" column="gusers.user.updateBy.id" />
+			<result property="user.delFlag" column="gusers.user.delFlag" />
+		</collection>
+	</resultMap>
+
+	<resultMap id="actYwGnodesClazzMap" type="com.oseasy.act.modules.actyw.entity.ActYwGnode">
+		<id property="id" column="id" />
+		<result property="rid" column="rid" />
+		<result property="parent.id" column="parent.id" />
+		<result property="parentIds" column="parentIds" />
+		<result property="group.id" column="group.id" />
+		<result property="node.id" column="node.id" />
+		<result property="name" column="name" />
+		<result property="type" column="type" />
+		<result property="preId" column="preId" />
+		<result property="isShow" column="isShow" />
+		<result property="isGval" column="isGval" />
+		<result property="isAssign" column="isAssign" />
+		<result property="isDelegate" column="isDelegate" />
+		<result property="isForm" column="isForm" />
+		<result property="iconUrl" column="iconUrl" />
+		<result property="taskType" column="taskType" />
+		<result property="outgoing" column="outgoing" />
+		<result property="level" column="level" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="group.name" column="group.name" />
+		<result property="group.status" column="group.status" />
+		<result property="group.sort" column="group.sort" />
+		<result property="group.type" column="group.type" />
+		<result property="group.keyss" column="group.keyss" />
+		<result property="group.author" column="group.author" />
+		<result property="group.version" column="group.version" />
+		<result property="group.flowId" column="group.flowId" />
+		<result property="group.updateDate" column="group.updateDate" />
+		<result property="group.updateBy.id" column="group.updateBy.id" />
+		<result property="group.createDate" column="group.createDate" />
+		<result property="group.createBy.id" column="group.createBy.id" />
+		<result property="group.remarks" column="group.remarks" />
+		<result property="group.delFlag" column="group.delFlag" />
+
+		<result property="node.name" column="node.name" />
+		<result property="node.type" column="node.type" />
+		<result property="node.isForm" column="node.isForm" />
+		<result property="node.iconUrl" column="node.iconUrl" />
+		<result property="node.nodeType" column="node.nodeType" />
+		<result property="node.nodeKey" column="node.nodeKey" />
+
+		<result property="parent.group.id" column="parent.group.id" />
+		<result property="parent.node.id" column="parent.node.id" />
+		<result property="parent.name" column="parent.name" />
+		<result property="parent.type" column="parent.type" />
+		<result property="parent.preId" column="parent.preId" />
+		<result property="parent.isShow" column="parent.isShow" />
+		<result property="parent.isGval" column="parent.isGval" />
+		<result property="parent.isAssign" column="parent.isAssign" />
+		<result property="parent.isDelegate" column="parent.isDelegate" />
+		<result property="parent.isForm" column="parent.isForm" />
+		<result property="parent.iconUrl" column="parent.iconUrl" />
+		<result property="parent.taskType" column="parent.taskType" />
+		<result property="parent.level" column="parent.level" />
+		<result property="parent.delFlag" column="parent.delFlag" />
+
+		<result property="parent.node.name" column="parent.node.name" />
+		<result property="parent.node.type" column="parent.node.type" />
+		<result property="parent.node.isForm" column="parent.node.isForm" />
+		<result property="parent.node.iconUrl" column="parent.node.iconUrl" />
+		<result property="parent.node.nodeType" column="parent.node.nodeType" />
+		<result property="parent.node.nodeKey" column="parent.node.nodeKey" />
+	</resultMap>
+
+	<resultMap id="actYwGnodesTimeMap" type="com.oseasy.act.modules.actyw.entity.ActYwGnode">
+		<id property="id" column="id" />
+		<result property="rid" column="rid" />
+		<result property="parent.id" column="parent.id" />
+		<result property="parentIds" column="parentIds" />
+		<result property="group.id" column="group.id" />
+		<result property="node.id" column="node.id" />
+		<result property="name" column="name" />
+		<result property="type" column="type" />
+		<result property="preId" column="preId" />
+		<result property="isShow" column="isShow" />
+		<result property="isGval" column="isGval" />
+		<result property="isAssign" column="isAssign" />
+		<result property="isDelegate" column="isDelegate" />
+		<result property="isForm" column="isForm" />
+		<result property="iconUrl" column="iconUrl" />
+		<result property="taskType" column="taskType" />
+		<result property="outgoing" column="outgoing" />
+		<result property="level" column="level" />
+		<result property="updateDate" column="updateDate" />
+		<result property="updateBy.id" column="updateBy.id" />
+		<result property="createDate" column="createDate" />
+		<result property="createBy.id" column="createBy.id" />
+		<result property="remarks" column="remarks" />
+		<result property="delFlag" column="delFlag" />
+
+		<result property="group.name" column="group.name" />
+		<result property="group.status" column="group.status" />
+		<result property="group.sort" column="group.sort" />
+		<result property="group.type" column="group.type" />
+		<result property="group.keyss" column="group.keyss" />
+		<result property="group.author" column="group.author" />
+		<result property="group.version" column="group.version" />
+		<result property="group.flowId" column="group.flowId" />
+		<result property="group.updateDate" column="group.updateDate" />
+		<result property="group.updateBy.id" column="group.updateBy.id" />
+		<result property="group.createDate" column="group.createDate" />
+		<result property="group.createBy.id" column="group.createBy.id" />
+		<result property="group.remarks" column="group.remarks" />
+		<result property="group.delFlag" column="group.delFlag" />
+
+		<result property="node.name" column="node.name" />
+		<result property="node.type" column="node.type" />
+		<result property="node.isForm" column="node.isForm" />
+		<result property="node.iconUrl" column="node.iconUrl" />
+		<result property="node.nodeType" column="node.nodeType" />
+		<result property="node.nodeKey" column="node.nodeKey" />
+
+		<result property="parent.group.id" column="parent.group.id" />
+		<result property="parent.node.id" column="parent.node.id" />
+		<result property="parent.name" column="parent.name" />
+		<result property="parent.type" column="parent.type" />
+		<result property="parent.preId" column="parent.preId" />
+		<result property="parent.isShow" column="parent.isShow" />
+		<result property="parent.isGval" column="parent.isGval" />
+		<result property="parent.isAssign" column="parent.isAssign" />
+		<result property="parent.isDelegate" column="parent.isDelegate" />
+		<result property="parent.isForm" column="parent.isForm" />
+		<result property="parent.iconUrl" column="parent.iconUrl" />
+		<result property="parent.taskType" column="parent.taskType" />
+		<result property="parent.level" column="parent.level" />
+		<result property="parent.delFlag" column="parent.delFlag" />
+
+		<result property="parent.node.name" column="parent.node.name" />
+		<result property="parent.node.type" column="parent.node.type" />
+		<result property="parent.node.isForm" column="parent.node.isForm" />
+		<result property="parent.node.iconUrl" column="parent.node.iconUrl" />
+		<result property="parent.node.nodeType" column="parent.node.nodeType" />
+		<result property="parent.node.nodeKey" column="parent.node.nodeKey" />
+
+		<result property="actYwGtime.id" column="actYwGtime.id" />
+		<result property="actYwGtime.projectId" column="actYwGtime.projectId" />
+		<result property="actYwGtime.grounpId" column="actYwGtime.grounpId" />
+		<result property="actYwGtime.gnodeId" column="actYwGtime.gnodeId" />
+		<result property="actYwGtime.beginDate" column="actYwGtime.beginDate" />
+		<result property="actYwGtime.endDate" column="actYwGtime.endDate" />
+		<result property="actYwGtime.status" column="actYwGtime.status" />
+		<result property="actYwGtime.rate" column="actYwGtime.rate" />
+		<result property="actYwGtime.rateStatus" column="actYwGtime.rateStatus" />
+		<result property="actYwGtime.updateDate" column="actYwGtime.updateDate" />
+		<result property="actYwGtime.updateBy.id" column="actYwGtime.updateBy.id" />
+		<result property="actYwGtime.createDate" column="actYwGtime.createDate" />
+		<result property="actYwGtime.createBy.id" column="actYwGtime.createBy.id" />
+		<result property="actYwGtime.remarks" column="actYwGtime.remarks" />
+		<result property="actYwGtime.delFlag" column="actYwGtime.delFlag" />
+	</resultMap>
+
+    <sql id="actYwGnodeColumns">
+        a.id AS "id",
+        a.rid AS "rid",
+        a.parent_id AS "parent.id",
+        a.parent_ids AS "parentIds",
+        a.group_id AS "group.id",
+        a.name AS "name",
+        a.type AS "type",
+        a.node_id AS "node.id",
+        a.pre_id AS "preId",
+        a.is_show AS "isShow",
+        a.is_gval AS "isGval",
+        a.is_assign AS "isAssign",
+        a.is_delegate AS "isDelegate",
+        a.is_form AS "isForm",
+        a.icon_url AS "iconUrl",
+        a.task_type AS "taskType",
+        a.outgoing AS "outgoing",
+        a.level AS "level",
+        a.update_date AS "updateDate",
+        a.update_by AS "updateBy.id",
+        a.create_date AS "createDate",
+        a.create_by AS "createBy.id",
+        a.remarks AS "remarks",
+        a.del_flag AS "delFlag",
+
+        b.name AS "group.name",
+        b.status AS "group.status",
+        b.type AS "group.type",
+        b.ntype AS "group.ntype",
+		b.is_push AS "group.isPush",
+		b.temp AS "group.temp",
+		b.theme AS "group.theme",
+
+        c.name AS "node.name",
+        c.type AS "node.type",
+        c.is_form AS "node.isForm",
+        c.icon_url AS "node.iconUrl",
+        c.node_type AS "node.nodeType",
+        c.node_key AS "node.nodeKey",
+
+        p.id AS "parent.id",
+        p.pre_id AS "parent.preId",
+        p.group_id AS "parent.group.id",
+        p.node_id AS "parent.node.id",
+        p.name AS "parent.name",
+        p.type AS "parent.type",
+        p.is_show AS "parent.isShow",
+        p.is_gval AS "parent.isGval",
+        p.is_assign AS "parent.isAssign",
+        p.is_delegate AS "parent.isDelegate",
+        p.is_form AS "parent.isForm",
+        p.icon_url AS "parent.iconUrl",
+        p.task_type AS "parent.taskType",
+        p.level AS "parent.level",
+        p.del_flag AS "parent.delFlag",
+        cp.name AS "parent.node.name",
+        cp.type AS "parent.node.type",
+        cp.is_form AS "parent.node.isForm",
+        cp.icon_url AS "parent.node.iconUrl",
+        cp.node_type AS "parent.node.nodeType",
+        cp.node_key AS "parent.node.nodeKey"
+    </sql>
+
+    <sql id="actGnodeColumns">
+        a.id AS "id",
+        a.rid AS "rid",
+        a.parent_id AS "parent.id",
+        a.parent_ids AS "parentIds",
+        a.group_id AS "group.id",
+        a.name AS "name",
+        a.type AS "type",
+        a.node_id AS "node.id",
+        a.pre_id AS "preId",
+        a.is_show AS "isShow",
+        a.is_gval AS "isGval",
+        a.is_assign AS "isAssign",
+        a.is_delegate AS "isDelegate",
+        a.is_form AS "isForm",
+        a.icon_url AS "iconUrl",
+        a.task_type AS "taskType",
+        a.outgoing AS "outgoing",
+        a.level AS "level",
+        a.update_date AS "updateDate",
+        a.update_by AS "updateBy.id",
+        a.create_date AS "createDate",
+        a.create_by AS "createBy.id",
+        a.remarks AS "remarks",
+        a.del_flag AS "delFlag"
+    </sql>
+
+    <sql id="actGnodeColumns2">
+        a.id AS "id",
+        a.rid AS "rid",
+        a.parent_id AS "parent.id",
+        a.parent_ids AS "parentIds",
+        a.group_id AS "group.id",
+        a.name AS "name",
+        a.type AS "type",
+        a.node_id AS "node.id",
+        a.pre_id AS "preId",
+        a.is_show AS "isShow",
+        a.is_gval AS "isGval",
+        a.is_assign AS "isAssign",
+        a.is_delegate AS "isDelegate",
+        a.is_form AS "isForm",
+        a.icon_url AS "iconUrl",
+        a.task_type AS "taskType",
+        a.outgoing AS "outgoing",
+        a.level AS "level",
+        a.update_date AS "updateDate",
+        a.update_by AS "updateBy.id",
+        a.create_date AS "createDate",
+        a.create_by AS "createBy.id",
+        a.remarks AS "remarks",
+        a.del_flag AS "delFlag",
+
+        b.type AS "node.type",
+        b.name AS "node.name"
+    </sql>
+
+	<sql id="actYwGnodeBygColumns">
+		a.id AS "id",
+        a.rid AS "rid",
+        a.parent_id AS "parent.id",
+        a.parent_ids AS "parentIds",
+        a.group_id AS "group.id",
+        a.name AS "name",
+        a.type AS "type",
+        a.node_id AS "node.id",
+        a.pre_id AS "preId",
+        a.is_show AS "isShow",
+        a.is_gval AS "isGval",
+        a.is_assign AS "isAssign",
+        a.is_delegate AS "isDelegate",
+        a.is_form AS "isForm",
+        a.icon_url AS "iconUrl",
+        a.task_type AS "taskType",
+        a.outgoing AS "outgoing",
+        a.level AS "level",
+        a.update_date AS "updateDate",
+        a.update_by AS "updateBy.id",
+        a.create_date AS "createDate",
+        a.create_by AS "createBy.id",
+        a.remarks AS "remarks",
+        a.del_flag AS "delFlag",
+
+        b.name AS "group.name",
+        b.status AS "group.status",
+        b.sort AS "group.sort",
+        b.type AS "group.type",
+        b.ntype AS "group.ntype",
+		b.is_push AS "group.isPush",
+		b.temp AS "group.temp",
+		b.theme AS "group.theme",
+        b.keyss AS "group.keyss",
+        b.author AS "group.author",
+        b.version AS "group.version",
+        b.flow_id AS "group.flowId",
+        b.update_date AS "group.updateDate",
+        b.update_by AS "group.updateBy.id",
+        b.create_date AS "group.createDate",
+        b.create_by AS "group.createBy.id",
+        b.remarks AS "group.remarks",
+        b.del_flag AS "group.delFlag",
+
+        c.name AS "node.name",
+        c.type AS "node.type",
+        c.is_form AS "node.isForm",
+        c.icon_url AS "node.iconUrl",
+        c.node_type AS "node.nodeType",
+        c.node_key AS "node.nodeKey",
+
+        p.id AS "parent.id",
+        p.pre_id AS "parent.preId",
+        p.group_id AS "parent.group.id",
+        p.node_id AS "parent.node.id",
+        p.name AS "parent.name",
+        p.type AS "parent.type",
+        p.is_show AS "parent.isShow",
+        p.is_gval AS "parent.isGval",
+        p.is_assign AS "parent.isAssign",
+        p.is_delegate AS "parent.isDelegate",
+        p.is_form AS "parent.isForm",
+        p.icon_url AS "parent.iconUrl",
+        p.task_type AS "parent.taskType",
+        p.level AS "parent.level",
+        p.del_flag AS "parent.delFlag",
+        cp.name AS "parent.node.name",
+        cp.type AS "parent.node.type",
+        cp.is_form AS "parent.node.isForm",
+        cp.icon_url AS "parent.node.iconUrl",
+        cp.node_type AS "parent.node.nodeType",
+        cp.node_key AS "parent.node.nodeKey"
+	</sql>
+
+	<sql id="actYwGnodeFormBygColumns">
+    	<include refid="actYwGnodeBygColumns"/>,
+        gf.id AS "gforms.id",
+        gf.group_id AS "gforms.group.id",
+        gf.gnode_id AS "gforms.gnode.id",
+        gf.is_delegate AS "gforms.isDelegate",
+        f.id AS "gforms.form.id",
+        f.name AS "gforms.form.name",
+        f.fname AS "gforms.form.fname",
+        f.list_id AS "gforms.form.listId",
+        f.pro_type AS "gforms.form.proType",
+        f.flow_type AS "gforms.form.flowType",
+        f.style_type AS "gforms.form.styleType",
+		f.sgtype AS "gforms.form.sgtype",
+        f.type AS "gforms.form.type",
+        f.model AS "gforms.form.model",
+        f.params AS "gforms.form.params",
+        f.path AS "gforms.form.path",
+        f.content AS "gforms.form.content",
+        f.office_id AS "gforms.form.office.id",
+        f.update_date AS "gforms.form.updateDate",
+        f.update_by AS "gforms.form.updateBy.id",
+        f.create_date AS "gforms.form.createDate",
+        f.create_by AS "gforms.form.createBy.id",
+        f.remarks AS "gforms.form.remarks",
+        f.client_type AS "gforms.form.clientType",
+        f.del_flag AS "gforms.form.delFlag"
+	</sql>
+
+	<sql id="actYwGnodeDformBygColumns">
+    	<include refid="actYwGnodeBygColumns"/>,
+        gf.id AS "gdforms.id",
+        gf.group_id AS "gdforms.group.id",
+        gf.gnode_id AS "gdforms.gnode.id",
+        gf.is_delegate AS "gdforms.isDelegate",
+        f.id AS "gdforms.form.id",
+        f.name AS "gdforms.form.name",
+        f.fname AS "gdforms.form.fname",
+        f.list_id AS "gdforms.form.listId",
+        f.pro_type AS "gdforms.form.proType",
+        f.flow_type AS "gdforms.form.flowType",
+        f.style_type AS "gdforms.form.styleType",
+		f.sgtype AS "gdforms.form.sgtype",
+        f.type AS "gdforms.form.type",
+        f.model AS "gdforms.form.model",
+        f.params AS "gdforms.form.params",
+        f.path AS "gdforms.form.path",
+        f.content AS "gdforms.form.content",
+        f.office_id AS "gdforms.form.office.id",
+        f.update_date AS "gdforms.form.updateDate",
+        f.update_by AS "gdforms.form.updateBy.id",
+        f.create_date AS "gdforms.form.createDate",
+        f.create_by AS "gdforms.form.createBy.id",
+        f.remarks AS "gdforms.form.remarks",
+        f.client_type AS "gdforms.form.clientType",
+        f.del_flag AS "gdforms.form.delFlag"
+	</sql>
+
+	<sql id="actYwGnodeStatusBygColumns">
+    	<include refid="actYwGnodeBygColumns"/>,
+        gs.id AS "gstatuss.id",
+        gs.group_id AS "gstatuss.group.id",
+        gs.gnode_id AS "gstatuss.gnode.id",
+		s.id AS "gstatuss.status.id",
+		s.status AS "gstatuss.status.status",
+		s.alias AS "gstatuss.status.alias",
+		s.gtype AS "gstatuss.status.gtype",
+		s.state AS "gstatuss.status.state",
+		sg.reg_type AS "gstatuss.status.regType",
+		sg.name AS "gstatuss.status.name",
+		s.update_date AS "gstatuss.status.updateDate",
+		s.update_by AS "gstatuss.status.updateBy.id",
+		s.create_date AS "gstatuss.status.createDate",
+		s.create_by AS "gstatuss.status.createBy.id",
+		s.remarks AS "gstatuss.status.remarks",
+		s.del_flag AS "gstatuss.status.delFlag"
+	</sql>
+
+	<sql id="actYwGnodeRoleBygColumns">
+    	<include refid="actYwGnodeBygColumns"/>,
+        gr.group_id AS "groles.group.id",
+        gr.gnode_id AS "groles.gnode.id",
+        gr.is_delegate AS "groles.isDelegate",
+		r.id AS "groles.role.id",
+    	r.office_id AS "groles.role.office.id",
+    	r.name AS "groles.role.name",
+    	r.enname AS "groles.role.enname",
+    	r.role_type AS "groles.role.roleType",
+    	r.data_scope AS "groles.role.dataScope",
+    	r.remarks AS "groles.role.remarks",
+    	r.create_by AS "groles.role.createBy.id",
+    	r.update_by AS "groles.role.updateBy.id",
+    	r.del_flag AS "groles.role.delFlag"
+	</sql>
+	<sql id="actYwGnodeDroleBygColumns">
+    	<include refid="actYwGnodeBygColumns"/>,
+        gr.group_id AS "gdroles.group.id",
+        gr.gnode_id AS "gdroles.gnode.id",
+        gr.is_delegate AS "gdroles.isDelegate",
+		r.id AS "gdroles.role.id",
+    	r.office_id AS "gdroles.role.office.id",
+    	r.name AS "gdroles.role.name",
+    	r.enname AS "gdroles.role.enname",
+    	r.role_type AS "gdroles.role.roleType",
+    	r.data_scope AS "gdroles.role.dataScope",
+    	r.remarks AS "gdroles.role.remarks",
+    	r.create_by AS "gdroles.role.createBy.id",
+    	r.update_by AS "gdroles.role.updateBy.id",
+    	r.del_flag AS "gdroles.role.delFlag"
+	</sql>
+
+	<sql id="actYwGnodeUserBygColumns">
+    	<include refid="actYwGnodeBygColumns"/>,
+        gu.group_id AS "gusers.group.id",
+        gu.gnode_id AS "gusers.gnode.id",
+		u.id AS "gusers.user.id",
+		u.company_id AS "gusers.user.company.id",
+		u.office_id AS "gusers.user.office.id",
+		u.login_name AS "gusers.user.loginName",
+		u.password AS "gusers.user.password",
+		u.no AS "gusers.user.no",
+		u.sex AS "gusers.user.sex",
+		u.name AS "gusers.user.name",
+		u.email AS "gusers.user.email",
+		u.phone AS "gusers.user.phone",
+		u.mobile AS "gusers.user.mobile",
+		u.photo AS "gusers.user.photo",
+		u.professional AS "gusers.user.professional",
+		u.create_by AS "gusers.user.createBy.id",
+		u.update_by AS "gusers.user.updateBy.id",
+    	u.del_flag AS "gusers.user.delFlag"
+	</sql>
+
+	<sql id="actYwGnodeClazzBygColumns">
+    	<include refid="actYwGnodeBygColumns"/>,
+		gc.id AS "gclazzs.id",
+		gc.group_id AS "gclazzs.group.id",
+		gc.gnode_id AS "gclazzs.gnode.id",
+		gc.listener_id AS "gclazzs.listener.id",
+
+		cz.type AS "gclazzs.listener.type",
+		cz.packag AS "gclazzs.listener.packag",
+		cz.clazz AS "gclazzs.listener.clazz",
+		cz.alias AS "gclazzs.listener.alias",
+		cz.remarks AS "gclazzs.listener.remarks",
+		cz.del_flag AS "gclazzs.listener.delFlag"
+	</sql>
+
+	<sql id="actYwGnodeTimeBygColumns">
+    	<include refid="actYwGnodeBygColumns"/>,
+    	gt.id AS "actYwGtime.id",
+		gt.project_id AS "actYwGtime.projectId",
+		gt.grounp_id AS "actYwGtime.grounpId",
+		gt.gnode_id AS "actYwGtime.gnodeId",
+		gt.begin_date AS "actYwGtime.beginDate",
+		gt.end_date AS "actYwGtime.endDate",
+		gt.status AS "actYwGtime.status",
+		gt.rate AS "actYwGtime.rate",
+		gt.has_tpl AS "actYwGtime.hasTpl",
+		gt.excel_tpl_path AS "actYwGtime.excelTplPath",
+		gt.excel_tpl_clazz AS "actYwGtime.excelTplClazz",
+		gt.rate_status AS "actYwGtime.rateStatus",
+		gt.update_date AS "actYwGtime.updateDate",
+		gt.update_by AS "actYwGtime.updateBy.id",
+		gt.create_date AS "actYwGtime.createDate",
+		gt.create_by AS "actYwGtime.createBy.id",
+		gt.remarks AS "actYwGtime.remarks",
+		gt.del_flag AS "actYwGtime.delFlag"
+	</sql>
+
+	<sql id="actYwGnodeJoins">
+        LEFT JOIN act_yw_group b ON b.id = a.group_id
+        LEFT JOIN act_yw_node c ON c.id = a.node_id
+        LEFT JOIN act_yw_gnode p ON p.id = a.parent_id
+        LEFT JOIN act_yw_node cp ON cp.id = p.node_id
+	</sql>
+
+	<sql id="actYwGnodeBygJoins">
+        LEFT JOIN act_yw_group b ON b.id = a.group_id
+        <!-- 关联当前节点元素 -->
+        LEFT JOIN act_yw_node c ON c.id = a.node_id
+		<!-- 关联父节点及节点元素 -->
+        LEFT JOIN act_yw_gnode p ON p.id = a.parent_id
+        LEFT JOIN act_yw_node cp ON cp.id = p.node_id
+	</sql>
+
+	<sql id="actYwGnodeFormBygJoins">
+		<!-- 关联表单 -->
+        LEFT JOIN act_yw_gform gf ON gf.gnode_id = a.id AND gf.group_id = a.group_id
+        LEFT JOIN act_yw_form f ON f.id = gf.form_id
+	</sql>
+
+	<sql id="actYwGnodeStatusBygJoins">
+		<!-- 关联状态 -->
+        LEFT JOIN act_yw_gstatus gs ON gs.gnode_id = a.id AND gs.group_id = a.group_id
+        LEFT JOIN act_yw_status s ON s.id = gs.status_id
+        LEFT JOIN act_yw_sgtype sg ON s.gtype = sg.id
+	</sql>
+
+	<sql id="actYwGnodeRoleBygJoins">
+		<!-- 关联角色 -->
+        LEFT JOIN act_yw_grole gr ON gr.gnode_id = a.id AND gr.group_id = a.group_id
+        LEFT JOIN sys_role r ON r.id = gr.role_id
+	</sql>
+
+	<sql id="actYwGnodeUserBygJoins">
+		<!-- 关联用户 -->
+        LEFT JOIN act_yw_guser gu ON gu.gnode_id = a.id AND gu.group_id = a.group_id
+        LEFT JOIN sys_user u ON u.id = gu.user_id
+	</sql>
+
+	<sql id="actYwGnodeClazzBygJoins">
+		<!-- 关联用户 -->
+        LEFT JOIN act_yw_gclazz gc ON gc.gnode_id = a.id AND gc.group_id = a.group_id
+		LEFT JOIN act_yw_clazz cz on cz.id=gc.listener_id
+	</sql>
+
+	<sql id="actYwGnodeTimeBygJoins">
+		<!-- 关联时间 -->
+        LEFT JOIN act_yw_gtime gt ON gt.gnode_id = a.id AND gt.grounp_id = a.group_id
+	</sql>
+
+	<select id="get" resultType="ActYwGnode">
+            SELECT
+                    <include refid="actYwGnodeColumns"/>
+            FROM act_yw_gnode a
+            <include refid="actYwGnodeJoins"/>
+            WHERE a.id = #{id}
+    </select>
+
+	<select id="getStart" resultType="ActYwGnode">
+            SELECT
+                    <include refid="actYwGnodeColumns"/>
+            FROM act_yw_gnode a
+            <include refid="actYwGnodeJoins"/>
+            WHERE a.group_id = #{groupId} AND a.type = '110'
+    </select>
+
+	<select id="getFirstTask" resultType="ActYwGnode">
+            SELECT
+                <include refid="actYwGnodeBygColumns"/>
+			FROM act_yw_gnode a
+			LEFT JOIN act_yw_gnode p ON p.id = a.parent_id
+	        LEFT JOIN act_yw_node c ON c.id = a.node_id
+	        LEFT JOIN act_yw_node cp ON cp.id = p.node_id
+			LEFT JOIN act_yw_group b ON b.id = a.group_id
+			LEFT JOIN act_yw yw ON yw.group_id = a.group_id
+			WHERE a.type = #{type}
+			<if test="groupId != null and groupId != ''">
+					AND a.group_id = #{groupId}
+            </if>
+            <if test="ywid != null and ywid != ''">
+                    AND yw.id =  #{ywid}
+            </if>
+			ORDER BY p.`level` ASC, a.`level` ASC
+			LIMIT 1
+    </select>
+
+	<select id="getLastTask" resultType="ActYwGnode">
+            SELECT
+                <include refid="actYwGnodeBygColumns"/>
+			FROM act_yw_gnode a
+			LEFT JOIN act_yw_gnode p ON p.id = a.parent_id
+	        LEFT JOIN act_yw_node c ON c.id = a.node_id
+	        LEFT JOIN act_yw_node cp ON cp.id = p.node_id
+			LEFT JOIN act_yw_group b ON b.id = a.group_id
+			LEFT JOIN act_yw yw ON yw.group_id = a.group_id
+			WHERE a.type = #{type}
+            <if test="groupId != null and groupId != ''">
+					AND a.group_id = #{groupId}
+            </if>
+            <if test="ywid != null and ywid != ''">
+                    AND yw.id =  #{ywid}
+            </if>
+			ORDER BY p.`level` DESC, a.`level` DESC
+			LIMIT 1
+    </select>
+
+	<select id="getEndByRoot" resultType="ActYwGnode">
+            SELECT
+                    <include refid="actYwGnodeColumns"/>
+            FROM act_yw_gnode a
+            <include refid="actYwGnodeJoins"/>
+            WHERE a.group_id = #{groupId} AND a.type = '130'
+    </select>
+
+	<select id="getEndNameByRoot" resultType="ActYwGnode">
+		SELECT
+			a.name AS "name"
+		FROM act_yw_gnode a
+		WHERE a.group_id = #{groupId} AND a.type = '130'
+	</select>
+
+    <select id="getEndBySub" resultType="ActYwGnode">
+            SELECT
+                    <include refid="actYwGnodeColumns"/>
+            FROM act_yw_gnode a
+            <include refid="actYwGnodeJoins"/>
+            WHERE a.group_id = #{groupId} AND a.type = '230'
+            <if test="nodeIds != null">
+                  AND a.node_id IN
+                <foreach item="item" collection="nodeIds" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+    </select>
+
+	<!-- 根据结束节点前线查找结束 -->
+    <select id="getEnds" resultType="ActYwGnode">
+            SELECT
+                    <include refid="actYwGnodeColumns"/>
+            FROM act_yw_gnode a
+            <include refid="actYwGnodeJoins"/>
+            WHERE a.group_id = #{groupId} AND ((a.type = '130') OR (
+            	a.type = '230'
+	            <if test="nodeIds != null">
+	                  AND a.node_id IN
+	                <foreach item="item" collection="nodeIds" separator="," open="("
+	                         close=")">
+	                    #{item}
+	                </foreach>
+	            </if>
+            ))
+            <if test="preIds != null">
+                  AND a.pre_id IN
+                <foreach item="item" collection="preIds" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+    </select>
+
+	<!-- 根据结束节点前业务节点查找结束 -->
+    <select id="getEndsByPre" resultType="ActYwGnode">
+            SELECT
+                    <include refid="actYwGnodeColumns"/>
+            FROM act_yw_gnode a
+            <include refid="actYwGnodeJoins"/>
+			LEFT JOIN act_yw_gnode pre ON pre.id = a.pre_id
+            WHERE a.group_id = #{groupId} AND ((a.type = '130') OR (
+            	a.type = '230'
+	            <if test="nodeIds != null">
+	                  AND a.node_id IN
+	                <foreach item="item" collection="nodeIds" separator="," open="("
+	                         close=")">
+	                    #{item}
+	                </foreach>
+	            </if>
+            ))
+            <if test="preIds != null">
+                AND pre.pre_id IN
+                <foreach item="item" collection="preIds" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+    </select>
+
+	<!-- 根据结束节点前前业务节点查找结束 -->
+    <select id="getEndsByPpre" resultType="ActYwGnode">
+            SELECT
+                    <include refid="actYwGnodeColumns"/>
+            FROM act_yw_gnode a
+            <include refid="actYwGnodeJoins"/>
+			LEFT JOIN act_yw_gnode pre ON pre.id = a.pre_id
+			LEFT JOIN act_yw_gnode ppre ON ppre.id = pre.pre_id
+            WHERE a.group_id = #{groupId} AND ((a.type = '130') OR (
+            	a.type = '230'
+	            <if test="nodeIds != null">
+	                  AND a.node_id IN
+	                <foreach item="item" collection="nodeIds" separator="," open="("
+	                         close=")">
+	                    #{item}
+	                </foreach>
+	            </if>
+            ))
+            <if test="preIds != null">
+                AND ppre.pre_id IN
+                <foreach item="item" collection="preIds" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+    </select>
+
+        <select id="findList" resultType="ActYwGnode">
+                SELECT
+                        <include refid="actYwGnodeColumns"/>
+                FROM act_yw_gnode a
+                <include refid="actYwGnodeJoins"/>
+                <where>
+                        a.del_flag = #{DEL_FLAG_NORMAL}
+                        <if test="parent != null and parent.id != null and parent.id != ''">
+                                AND a.parent_id = #{parent.id}
+                        </if>
+                        <if test="group != null and group.id != null and group.id != ''">
+                                AND a.group_id = #{group.id}
+                        </if>
+                        <if test="name != null and name != ''">
+                                AND a.name LIKE
+                                        <if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+                                        <if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+                                        <if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+                        </if>
+                        <if test="type != null and type != ''">
+                                AND a.type = #{type}
+                        </if>
+                        <if test="node != null and node.id != null and node.id != ''">
+                                AND a.node_id = #{node.id}
+                        </if>
+                        <if test="preId != null and preId != ''">
+                                AND a.pre_id = #{preId}
+                        </if>
+                        <if test="isShow != null and isShow != ''">
+                                AND a.is_show = #{isShow}
+                        </if>
+						<if test="isGval != null and isGval != ''">
+							AND a.is_gval = #{isGval}
+						</if>
+						<if test="isAssign != null and isAssign != ''">
+							AND a.is_assign = #{isAssign}
+						</if>
+						<if test="isDelegate != null and isDelegate != ''">
+								AND a.is_delegate = #{isDelegate}
+						</if>
+                        <if test="isForm != null and isForm != ''">
+                                AND a.is_form = #{isForm}
+                        </if>
+                        <if test="iconUrl != null and iconUrl != ''">
+                                AND a.icon_url = #{iconUrl}
+                        </if>
+                        <if test="taskType != null and taskType != ''">
+                                AND a.task_type = #{taskType}
+                        </if>
+                        <if test="updateDate != null and updateDate != ''">
+                                AND a.update_date = #{updateDate}
+                        </if>
+                        <if test="type == null or type == ''">
+                          <if test="types != null">
+                                AND a.type IN
+                              <foreach item="item" collection="types" separator="," open="("
+                                       close=")">
+                                  #{item}
+                              </foreach>
+                          </if>
+                        </if>
+                </where>
+                <choose>
+                        <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                                ORDER BY ${page.orderBy} ${page.orderByType}
+                        </when>
+                        <otherwise>
+                                ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+                        </otherwise>
+                </choose>
+        </select>
+
+	<select id="findListByGroup" resultType="ActYwGnode">
+		SELECT
+		<include refid="actYwGnodeColumns"/>
+		FROM act_yw_gnode a
+		<include refid="actYwGnodeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND a.group_id = #{group.id}
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="node != null and node.id != null and node.id != ''">
+				AND a.node_id = #{node.id}
+			</if>
+			<if test="preId != null and preId != ''">
+				AND a.pre_id = #{preId}
+			</if>
+			<if test="isShow != null and isShow != ''">
+				AND a.is_show = #{isShow}
+			</if>
+			<if test="isGval != null and isGval != ''">
+				AND a.is_gval = #{isGval}
+			</if>
+			<if test="isAssign != null and isAssign != ''">
+				AND a.is_assign = #{isAssign}
+			</if>
+			<if test="isDelegate != null and isDelegate != ''">
+				AND a.is_delegate = #{isDelegate}
+			</if>
+			<if test="isForm != null and isForm != ''">
+				AND a.is_form = #{isForm}
+			</if>
+			<if test="iconUrl != null and iconUrl != ''">
+				AND a.icon_url = #{iconUrl}
+			</if>
+			<if test="taskType != null and taskType != ''">
+				AND a.task_type = #{taskType}
+			</if>
+			<if test="updateDate != null and updateDate != ''">
+				AND a.update_date = #{updateDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListBytGroup" resultType="ActYwGnode">
+		SELECT
+		<include refid="actYwGnodeColumns"/>
+		FROM act_yw_gnode a
+		<include refid="actYwGnodeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND a.group_id = #{group.id}
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="node != null and node.id != null and node.id != ''">
+				AND a.node_id = #{node.id}
+			</if>
+			<if test="preId != null and preId != ''">
+				AND a.pre_id = #{preId}
+			</if>
+			<if test="isShow != null and isShow != ''">
+				AND a.is_show = #{isShow}
+			</if>
+			<if test="isGval != null and isGval != ''">
+				AND a.is_gval = #{isGval}
+			</if>
+			<if test="isAssign != null and isAssign != ''">
+				AND a.is_assign = #{isAssign}
+			</if>
+			<if test="isDelegate != null and isDelegate != ''">
+				AND a.is_delegate = #{isDelegate}
+			</if>
+			<if test="isForm != null and isForm != ''">
+				AND a.is_form = #{isForm}
+			</if>
+			<if test="iconUrl != null and iconUrl != ''">
+				AND a.icon_url = #{iconUrl}
+			</if>
+			<if test="taskType != null and taskType != ''">
+				AND a.task_type = #{taskType}
+			</if>
+			<if test="updateDate != null and updateDate != ''">
+				AND a.update_date = #{updateDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+        <select id="findListBygMenu" resultMap="actYwGnodesMap">
+                SELECT
+                        <include refid="actYwGnodeBygColumns"/>
+                FROM act_yw_gnode a
+                <include refid="actYwGnodeBygJoins"/>
+                <where>
+                        a.del_flag = #{DEL_FLAG_NORMAL} AND a.group_id = #{group.id} AND a.type in ('150', '190')
+                        ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+                </where>
+        </select>
+
+        <select id="findListByGparent" resultType="ActYwGnode">
+                SELECT
+                        <include refid="actYwGnodeColumns"/>
+                FROM act_yw_gnode a
+                <include refid="actYwGnodeJoins"/>
+                <where>
+                        a.del_flag = #{DEL_FLAG_NORMAL} AND a.group_id = #{group.id} AND a.parent_id = #{parent.id}
+                        <if test="type != null and type != ''">
+                                AND a.type = #{type}
+                        </if>
+                        <if test="types != null">
+	                        AND a.type in
+							<foreach item="ctype" collection="types" open="(" separator="," close=")">
+								#{ctype}
+							</foreach>
+	                    </if>
+                        ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+                </where>
+        </select>
+
+	    <select id="findListByPre" resultType="ActYwGnode">
+	        SELECT  <include refid="actGnodeColumns2"/>
+	        FROM act_yw_gnode a
+	        LEFT JOIN  act_yw_node  b on  a.node_id =b.id
+	        WHERE a.del_flag = '0' AND a.pre_id LIKE concat('%',#{preId},'%')
+	    </select>
+
+        <select id="findListByInIds" resultType="ActYwGnode">
+                SELECT
+                        <include refid="actYwGnodeColumns"/>
+                FROM act_yw_gnode a
+                <include refid="actYwGnodeJoins"/>
+                <where>
+                      a.id in
+					<foreach item="id" collection="ids" open="(" separator=","
+						close=")">
+						#{id}
+					</foreach>
+                </where>
+                ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+        </select>
+
+        <select id="findAllList" resultType="ActYwGnode">
+                SELECT
+                        <include refid="actYwGnodeColumns"/>
+                FROM act_yw_gnode a
+                <include refid="actYwGnodeJoins"/>
+                <where>
+                        a.del_flag = 0
+                </where>
+                <choose>
+                        <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                                ORDER BY ${page.orderBy} ${page.orderByType}
+                        </when>
+                        <otherwise>
+                                ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+                        </otherwise>
+                </choose>
+        </select>
+
+	    <select id="getALLByGroup" resultType="ActYwGnode">
+	        SELECT
+	        <include refid="actYwGnodeColumns"/>
+	        FROM act_yw_gnode a
+	        <include refid="actYwGnodeJoins"/>
+	        <where>
+	            a.group_id =#{group.id} and a.del_flag=#{DEL_FLAG_NORMAL} GROUP BY a.id
+	            ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+	        </where>
+	    </select>
+
+		<select id="getByg" resultMap="actYwGnodesMap">
+                SELECT
+                        <include refid="actYwGnodeBygColumns"/>
+                FROM act_yw_gnode a
+                <include refid="actYwGnodeBygJoins"/>
+                WHERE a.id = #{id} GROUP BY a.id
+        </select>
+
+        <select id="getStartByg" resultMap="actYwGnodesMap">
+            SELECT
+            	<include refid="actYwGnodeBygColumns"/>
+            FROM act_yw_gnode a
+            <include refid="actYwGnodeBygJoins"/>
+            WHERE a.group_id = #{groupId} AND a.type = '110' GROUP BY a.id
+	    </select>
+
+		<select id="getEndBygRoot" resultMap="actYwGnodesMap">
+	            SELECT
+            		<include refid="actYwGnodeBygJoins"/>
+	            FROM act_yw_gnode a
+            	<include refid="actYwGnodeBygJoins"/>
+	            WHERE a.group_id = #{groupId} AND a.type = '130' GROUP BY a.id
+	    </select>
+
+        <select id="findListByg" resultMap="actYwGnodesMap">
+                SELECT
+                        <include refid="actYwGnodeBygColumns"/>
+                FROM act_yw_gnode a
+                <include refid="actYwGnodeBygJoins"/>
+                <where>
+                        a.del_flag = #{DEL_FLAG_NORMAL}
+                        <if test="parent != null and parent.id != null and parent.id != ''">
+                                AND a.parent_id = #{parent.id}
+                        </if>
+                        <if test="group != null and group.id != null and group.id != ''">
+                                AND a.group_id = #{group.id}
+                        </if>
+                        <if test="name != null and name != ''">
+                                AND a.name LIKE
+                                        <if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+                                        <if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+                                        <if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+                        </if>
+                        <if test="type != null and type != ''">
+                                AND a.type = #{type}
+                        </if>
+                        <if test="node != null and node.id != null and node.id != ''">
+                                AND a.node_id = #{node.id}
+                        </if>
+                        <if test="preId != null and preId != ''">
+                                AND a.pre_id = #{preId}
+                        </if>
+                        <if test="isShow != null and isShow != ''">
+                                AND a.is_show = #{isShow}
+                        </if>
+						<if test="isGval != null and isGval != ''">
+							AND a.is_gval = #{isGval}
+						</if>
+						<if test="isAssign != null and isAssign != ''">
+								AND a.is_assign = #{isAssign}
+						</if>
+						<if test="isDelegate != null and isDelegate != ''">
+								AND a.is_delegate = #{isDelegate}
+						</if>
+                        <if test="isForm != null and isForm != ''">
+                                AND a.is_form = #{isForm}
+                        </if>
+                        <if test="iconUrl != null and iconUrl != ''">
+                                AND a.icon_url = #{iconUrl}
+                        </if>
+                        <if test="taskType != null and taskType != ''">
+                                AND a.task_type = #{taskType}
+                        </if>
+                        <if test="updateDate != null and updateDate != ''">
+                                AND a.update_date = #{updateDate}
+                        </if>
+                </where>
+				GROUP BY a.id
+                <choose>
+                        <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                                ORDER BY ${page.orderBy} ${page.orderByType}
+                        </when>
+                        <otherwise>
+                                ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+                        </otherwise>
+                </choose>
+        </select>
+
+        <select id="findListBygGroup" resultMap="actYwGnodesMap">
+                SELECT
+                        <include refid="actYwGnodeBygColumns"/>
+                FROM act_yw_gnode a
+                <include refid="actYwGnodeBygJoins"/>
+                <where>
+                        a.del_flag = #{DEL_FLAG_NORMAL} AND a.group_id = #{group.id}
+                        <if test="parent != null and parent.id != null and parent.id != ''">
+                                AND a.parent_id = #{parent.id}
+                        </if>
+                        <if test="name != null and name != ''">
+                                AND a.name LIKE
+                                        <if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+                                        <if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+                                        <if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+                        </if>
+                        <if test="type != null and type != ''">
+                                AND a.type = #{type}
+                        </if>
+                        <if test="types != null">
+	                        AND a.type in
+							<foreach item="ctype" collection="types" open="(" separator="," close=")">
+								#{ctype}
+							</foreach>
+	                    </if>
+                        <if test="node != null and node.id != null and node.id != ''">
+                                AND a.node_id = #{node.id}
+                        </if>
+                        <if test="preId != null and preId != ''">
+                                AND a.pre_id = #{preId}
+                        </if>
+                        <if test="isShow != null and isShow != ''">
+                                AND a.is_show = #{isShow}
+                        </if>
+						<if test="isGval != null and isGval != ''">
+							AND a.is_gval = #{isGval}
+						</if>
+						<if test="isAssign != null and isAssign != ''">
+							AND a.is_assign = #{isAssign}
+						</if>
+						<if test="isDelegate != null and isDelegate != ''">
+								 AND a.is_delegate = #{isDelegate}
+						</if>
+                        <if test="isForm != null and isForm != ''">
+                                AND a.is_form = #{isForm}
+                        </if>
+                        <if test="iconUrl != null and iconUrl != ''">
+                                AND a.icon_url = #{iconUrl}
+                        </if>
+                        <if test="taskType != null and taskType != ''">
+                                AND a.task_type = #{taskType}
+                        </if>
+                        <if test="updateDate != null and updateDate != ''">
+                                AND a.update_date = #{updateDate}
+                        </if>
+                </where>
+				GROUP BY a.id
+                <choose>
+                        <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                                ORDER BY ${page.orderBy} ${page.orderByType}
+                        </when>
+                        <otherwise>
+                                ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+                        </otherwise>
+                </choose>
+        </select>
+
+        <select id="findListBygInIds" resultMap="actYwGnodesMap">
+                SELECT
+                        <include refid="actYwGnodeBygColumns"/>
+                FROM act_yw_gnode a
+                <include refid="actYwGnodeBygJoins"/>
+                <where>
+                      a.id in
+					<foreach item="id" collection="ids" open="(" separator=","
+						close=")">
+						#{id}
+					</foreach>
+                </where>
+				GROUP BY a.id
+				ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+        </select>
+
+        <select id="findListBygParentIdsLike" resultMap="actYwGnodesMap">
+                SELECT
+                        <include refid="actYwGnodeBygColumns"/>
+                FROM act_yw_gnode a
+                <include refid="actYwGnodeBygJoins"/>
+                <where>
+                	a.del_flag = 0 AND b.del_flag = 0 AND c.del_flag = 0 AND a.group_id = #{group.id}
+                	AND a.parent_ids LIKE
+                	<if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%', #{parentIds}, '%')</if>
+					<if test="types != null">
+                        AND a.type in
+						<foreach item="ctype" collection="types" open="(" separator="," close=")">
+							#{ctype}
+						</foreach>
+                    </if>
+                </where>
+				GROUP BY a.id
+				ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+        </select>
+
+        <select id="findAllListFormByg" resultMap="actYwGnodesFormMap">
+                SELECT
+                        <include refid="actYwGnodeFormBygColumns"/>
+                FROM act_yw_gnode a
+		        <include refid="actYwGnodeBygJoins"/>
+                <include refid="actYwGnodeFormBygJoins"/>
+                <where>
+                        a.del_flag = #{DEL_FLAG_NORMAL} AND a.group_id = #{group.id} AND gf.is_delegate='0'
+                </where>
+                <choose>
+                        <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                                ORDER BY ${page.orderBy} ${page.orderByType}
+                        </when>
+                        <otherwise>
+                                ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+                        </otherwise>
+                </choose>
+        </select>
+
+        <select id="findAllListDformByg" resultMap="actYwGnodesDformMap">
+                SELECT
+                        <include refid="actYwGnodeDformBygColumns"/>
+                FROM act_yw_gnode a
+		        <include refid="actYwGnodeBygJoins"/>
+                <include refid="actYwGnodeFormBygJoins"/>
+                <where>
+                        a.del_flag = #{DEL_FLAG_NORMAL} AND a.group_id = #{group.id} AND gf.is_delegate='1'
+                </where>
+                <choose>
+                        <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                                ORDER BY ${page.orderBy} ${page.orderByType}
+                        </when>
+                        <otherwise>
+                                ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+                        </otherwise>
+                </choose>
+        </select>
+
+        <select id="findAllListStatusByg" resultMap="actYwGnodesStatusMap">
+                SELECT
+                        <include refid="actYwGnodeStatusBygColumns"/>
+                FROM act_yw_gnode a
+		        <include refid="actYwGnodeBygJoins"/>
+                <include refid="actYwGnodeStatusBygJoins"/>
+                <where>
+                        a.del_flag = #{DEL_FLAG_NORMAL} AND a.group_id = #{group.id}
+                </where>
+                <choose>
+                        <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                                ORDER BY ${page.orderBy} ${page.orderByType}
+                        </when>
+                        <otherwise>
+                                ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+                        </otherwise>
+                </choose>
+        </select>
+
+        <select id="findAllListRoleByg" resultMap="actYwGnodesRoleMap">
+                SELECT
+                        <include refid="actYwGnodeRoleBygColumns"/>
+                FROM act_yw_gnode a
+		        <include refid="actYwGnodeBygJoins"/>
+                <include refid="actYwGnodeRoleBygJoins"/>
+                <where>
+                        a.del_flag = #{DEL_FLAG_NORMAL} AND a.group_id = #{group.id} AND gr.is_delegate='0'
+                </where>
+                <choose>
+                        <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                                ORDER BY ${page.orderBy} ${page.orderByType}
+                        </when>
+                        <otherwise>
+                                ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+                        </otherwise>
+                </choose>
+        </select>
+
+        <select id="findAllListDroleByg" resultMap="actYwGnodesDroleMap">
+                SELECT
+                        <include refid="actYwGnodeDroleBygColumns"/>
+                FROM act_yw_gnode a
+		        <include refid="actYwGnodeBygJoins"/>
+                <include refid="actYwGnodeRoleBygJoins"/>
+                <where>
+                        a.del_flag = #{DEL_FLAG_NORMAL} AND a.group_id = #{group.id} AND gr.is_delegate='1'
+                </where>
+                <choose>
+                        <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                                ORDER BY ${page.orderBy} ${page.orderByType}
+                        </when>
+                        <otherwise>
+                                ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+                        </otherwise>
+                </choose>
+        </select>
+
+        <select id="findAllListUserByg" resultMap="actYwGnodesUserMap">
+                SELECT
+                        <include refid="actYwGnodeUserBygColumns"/>
+                FROM act_yw_gnode a
+		        <include refid="actYwGnodeBygJoins"/>
+                <include refid="actYwGnodeUserBygJoins"/>
+                <where>
+                        a.del_flag = #{DEL_FLAG_NORMAL} AND a.group_id = #{group.id}
+                </where>
+                <choose>
+                        <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                                ORDER BY ${page.orderBy} ${page.orderByType}
+                        </when>
+                        <otherwise>
+                                ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+                        </otherwise>
+                </choose>
+        </select>
+
+        <select id="findAllListClazzByg" resultMap="actYwGnodesClazzMap">
+                SELECT
+                        <include refid="actYwGnodeClazzBygColumns"/>
+                FROM act_yw_gnode a
+		        <include refid="actYwGnodeBygJoins"/>
+                <include refid="actYwGnodeClazzBygJoins"/>
+                <where>
+                        a.del_flag = #{DEL_FLAG_NORMAL} AND a.group_id = #{group.id}
+                </where>
+                <choose>
+                        <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                                ORDER BY ${page.orderBy} ${page.orderByType}
+                        </when>
+                        <otherwise>
+                                ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+                        </otherwise>
+                </choose>
+        </select>
+
+        <select id="findAllListTimeByg" resultMap="actYwGnodesTimeMap">
+                SELECT
+                        <include refid="actYwGnodeTimeBygColumns"/>
+                FROM act_yw_gnode a
+		        <include refid="actYwGnodeBygJoins"/>
+                <include refid="actYwGnodeTimeBygJoins"/>
+                <where>
+                        a.del_flag = #{DEL_FLAG_NORMAL} AND a.group_id = #{group.id} AND gt.project_id = #{actYwGtime.projectId}
+						<if test="actYwGtime != null">
+							<if test="actYwGtime.yearId != null and actYwGtime.yearId != ''">
+									AND gt.year_id = #{actYwGtime.yearId}
+							</if>
+						</if>
+				</where>
+                <choose>
+                        <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                                ORDER BY ${page.orderBy} ${page.orderByType}
+                        </when>
+                        <otherwise>
+                                ORDER BY a.parent_ids ASC, a.level ASC, a.update_date DESC
+                        </otherwise>
+                </choose>
+        </select>
+
+        <insert id="insert">
+                INSERT INTO act_yw_gnode(
+                        id,
+                        rid,
+                        parent_id,
+                        parent_ids,
+                        group_id,
+                        name,
+                        type,
+                        node_id,
+                        pre_id,
+                        is_show,
+                        is_gval,
+                        is_assign,
+                        is_delegate,
+                        is_form,
+                        icon_url,
+                        task_type,
+                        outgoing,
+                        level,
+                        update_date,
+                        update_by,
+                        create_date,
+                        create_by,
+                        remarks,
+                        del_flag
+                ) VALUES (
+                        #{id},
+                        #{rid},
+                        #{parent.id},
+                        #{parentIds},
+                        #{group.id},
+                        #{name},
+                        #{type},
+                        #{node.id},
+                        #{preId},
+                        #{isShow},
+                        #{isGval},
+                        #{isAssign},
+                        #{isDelegate},
+                        #{isForm},
+                        #{iconUrl},
+                        #{taskType},
+                        #{outgoing},
+                        #{level},
+                        #{updateDate},
+                        #{updateBy.id},
+                        #{createDate},
+                        #{createBy.id},
+                        #{remarks},
+                        #{delFlag}
+                )
+        </insert>
+
+        <update id="update">
+                UPDATE act_yw_gnode SET
+                        rid = #{rid},
+                        parent_id = #{parent.id},
+                        parent_ids = #{parentIds},
+                        group_id = #{group.id},
+                        name = #{name},
+                        type = #{type},
+                        node_id = #{node.id},
+                        pre_id = #{preId},
+                        is_show = #{isShow},
+                        is_gval = #{isGval},
+                        is_assign = #{isAssign},
+                        is_delegate = #{isDelegate},
+                        is_form = #{isForm},
+                        icon_url = #{iconUrl},
+                        task_type = #{taskType},
+                        outgoing = #{outgoing},
+                        level = #{level},
+                        update_date = #{updateDate},
+                        update_by = #{updateBy.id},
+                        remarks = #{remarks}
+                WHERE id = #{id}
+        </update>
+
+		<insert id="savePl" >
+			INSERT INTO act_yw_gnode(
+				id,
+				rid,
+				parent_id,
+                parent_ids,
+                group_id,
+                name,
+                type,
+                node_id,
+                pre_id,
+				is_show,
+				is_gval,
+				is_assign,
+				is_delegate,
+                is_form,
+                icon_url,
+                task_type,
+                outgoing,
+                level,
+                update_date,
+                update_by,
+                create_date,
+                create_by,
+                remarks,
+                del_flag
+			) VALUES
+			<foreach collection="list" item="item" index="index"
+					 separator=",">
+				(
+				#{item.id},
+				#{item.rid},
+                #{item.parent.id},
+                #{item.parentIds},
+                #{item.group.id},
+                #{item.name},
+                #{item.type},
+                #{item.node.id},
+                #{item.preId},
+				#{item.isShow},
+				#{item.isGval},
+				#{item.isAssign},
+				#{item.isDelegate},
+                #{item.isForm},
+                #{item.iconUrl},
+                #{item.taskType},
+                #{item.outgoing},
+                #{item.level},
+                #{item.updateDate},
+                #{item.updateBy.id},
+                #{item.createDate},
+                #{item.createBy.id},
+                #{item.remarks},
+                #{item.delFlag}
+				)
+			</foreach>
+		</insert>
+
+        <update id="delete">
+                UPDATE act_yw_gnode SET
+                        del_flag = #{DEL_FLAG_DELETE}
+                WHERE id = #{id}
+        </update>
+
+        <update id="deletePlwlByGroup">
+                DELETE FROM act_yw_gnode WHERE group_id = #{groupId}
+        </update>
+
+        <update id="deleteWL">
+                DELETE FROM act_yw_gnode WHERE id = #{id}
+        </update>
+
+	    <select id="getALLVersionByGroup" resultType="ActYwGnode">
+	        SELECT
+	        <include refid="actYwGnodeColumns"/>
+	        FROM act_yw_gnode_version a
+	        <include refid="actYwGnodeJoins"/>
+	        <where>
+	            a.group_id =#{groupId} and a.version=#{version}
+	        </where>
+	    </select>
+
+		<insert id="savePlVersion">
+			INSERT INTO act_yw_gnode_version(
+				id,
+				rid,
+                version,
+                parent_id,
+                parent_ids,
+                group_id,
+                name,
+                type,
+                node_id,
+                pre_id,
+				is_show,
+				is_gval,
+				is_assign,
+				is_delegate,
+                is_form,
+                icon_url,
+                task_type,
+                outgoing,
+                level,
+                update_date,
+                update_by,
+                create_date,
+                create_by,
+                remarks,
+                del_flag
+			) VALUES
+			<foreach collection="list" item="item" index="index"
+					 separator=",">
+				(
+				#{item.id},
+				#{ritem.id},
+				#{version},
+                #{item.parent.id},
+                #{item.parentIds},
+                #{item.group.id},
+                #{item.name},
+                #{item.type},
+                #{item.node.id},
+                #{item.preId},
+				#{item.isShow},
+				#{item.isGval},
+				#{item.isAssign},
+				#{item.isDelegate},
+                #{item.isForm},
+                #{item.iconUrl},
+                #{item.taskType},
+                #{item.outgoing},
+                #{item.level},
+                #{item.updateDate},
+                #{item.updateBy.id},
+                #{item.createDate},
+                #{item.createBy.id},
+                #{item.remarks},
+                #{item.delFlag}
+				)
+			</foreach>
+		</insert>
+
+        <update id="deleteVersionPlwlByGroup">
+                DELETE FROM act_yw_gnode_version WHERE group_id = #{groupId} AND version = #{version}
+        </update>
+
+    <select id="getNextNode" resultType="ActYwGnode">
+        SELECT  <include refid="actGnodeColumns2"/>
+        from act_yw_gnode a  LEFT JOIN  act_yw_node  b on  a.node_id =b.id
+        where a.del_flag = #{DEL_FLAG_NORMAL}
+        and a.pre_id
+        LIKE <if test="dbName == 'oracle'">'%'||#{id}||'%'</if>
+              <if test="dbName == 'mssql'">'%'+#{id}+'%'</if>
+              <if test="dbName == 'mysql'">concat('%',#{id},'%')</if>
+        and a.parent_id =#{parent.id}
+    </select>
+
+    <select id="getBygNextNode" resultMap="actYwGnodesMap">
+        SELECT  <include refid="actYwGnodeBygColumns"/>
+        from act_yw_gnode a
+        <include refid="actYwGnodeBygJoins"/>
+        WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+        AND a.pre_id=#{id} AND a.parent_id =#{parent.id} GROUP BY a.id
+    </select>
+
+    <!--非网关节点查询下下个节点-->
+    <select id="getNextNextNode" resultType="ActYwGnode">
+        select <include refid="actGnodeColumns2"/> from act_yw_gnode a  LEFT JOIN  act_yw_node  b on  a.node_id =b.id
+        where  a.del_flag = #{DEL_FLAG_NORMAL} and a.pre_id LIKE
+		CONCAT('%',(
+		SELECT id
+		FROM act_yw_gnode b
+		WHERE b.pre_id like #{id}
+		AND b.parent_id =#{parent.id}
+		),'%')
+    </select>
+
+
+    <select id="getChildFlowAllNode" resultType="ActYwGnode">
+        SELECT  <include refid="actGnodeColumns2"/>
+        from act_yw_gnode a   LEFT JOIN  act_yw_node  b on  a.node_id =b.id
+        where a.del_flag = #{DEL_FLAG_NORMAL} and a.parent_id =#{id}
+    </select>
+	<select id="getAssignNodes" resultType="ActYwGnode">
+		select distinct c.id, c.name from act_yw_gnode c
+		left join act_yw a on a.group_id=c.group_id
+		WHERE  (c.type = '150' or c.type = '250') and c.is_assign='1' and
+			a.id=#{actywid}
+		order by c.level
+	</select>
+	<select id="findGnodesByDelegate" resultType="ActYwGnode">
+		select distinct c.id, c.name from act_yw_gnode c
+		left join act_yw a on a.group_id=c.group_id
+		WHERE  (c.type = '150' or c.type = '250') and c.is_delegate='1' and
+			a.id=#{actywid}
+		order by c.level
+	</select>
+
+	<select id="getAuditNodes" resultType="ActYwGnode">
+		select distinct a.id, a.name from  act_yw_gnode a
+		LEFT JOIN act_yw_gform gf ON gf.gnode_id = a.id AND gf.group_id = a.group_id
+		LEFT JOIN act_yw_form f ON f.id = gf.form_id
+		left join act_yw ay on ay.group_id=a.group_id
+		WHERE  (a.type = '150' or a.type = '250') and f.sgtype='1'
+		and ay.id=#{actywId}
+	</select>
+
+	<select id="getDelegateNode" resultType="ActYwGnode">
+		select distinct a.id, a.name from  act_yw_gnode a
+			LEFT JOIN act_yw_gform gf ON gf.gnode_id = a.id AND gf.group_id = a.group_id
+			LEFT JOIN act_yw_form f ON f.id = gf.form_id
+			left join act_yw ay on ay.group_id=a.group_id
+			WHERE  (a.type = '150' or a.type = '250') and a.is_delegate='1'
+		and ay.id=#{actywId}
+	</select>
+
+
+
+
+	<select id="getAssignUserNames"  resultType="java.util.Map">
+		select t.promodel_id,GROUP_CONCAT(u.name SEPARATOR '、') anames from act_yw_gassign t left join sys_user u on t.rev_user_id=u.id
+		where t.del_flag='0' and t.gnode_id=#{gnodeid} and (
+		<foreach item="item" collection="pids"  separator=" or ">
+            t.promodel_id=#{item}
+        </foreach>
+        )
+		group by t.promodel_id
+	</select>
+
+
+	<select id="getAssignUsers"  resultType="java.util.Map">
+		select t.promodel_id,u.name ,u.id
+		from act_yw_gassign t left join sys_user u on t.rev_user_id=u.id
+		where t.del_flag='0' and t.gnode_id = #{gnodeId} and  t.promodel_id = #{promodelId}
+	</select>
+
+</mapper>

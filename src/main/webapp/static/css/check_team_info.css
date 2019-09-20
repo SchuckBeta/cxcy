@@ -1,0 +1,208 @@
+body,html{
+	font-size: 14px;
+	font-family: "寰蒋闆呴粦";
+	color:#5d5d5d;
+}
+.main-wrap{
+    width: 1240px;
+    margin:30px auto 0;
+}
+.mybreadcrumbs{
+	margin-bottom: 28px;
+    font-size: 14px;
+    color:#332c2b;
+    font-weight: normal;
+}
+.body-content{
+	padding: 0;
+}
+.form_desc{
+	height: 40px;
+	line-height: 40px;
+	margin-bottom: 39px;
+}
+
+label,p{
+	font-size: 13px;
+	font-weight: normal;
+	color:#5d5d5d;
+}
+.btn-back{
+	text-align: center;
+	height: 30px;
+	line-height: 30px;
+}
+.btn-back a{
+	background:#e9432d;
+	color:#fff;
+	font-size: 12px;
+	padding: 3px 11px; 
+}
+.btn-back a span{
+	margin-right: 5px;
+}
+.btn-back a:hover{
+	background: -webkit-linear-gradient(#e8422d, #ba3424); /* Safari 5.1 - 6.0 */
+	background: -o-linear-gradient(#e8422d, #ba3424); /* Opera 11.1 - 12.0 */
+	background: -moz-linear-gradient(#e8422d, #ba3424); /* Firefox 3.6 - 15 */
+	background: linear-gradient(#e8422d, #ba3424); /* 鏍囧噯鐨勮娉� */
+	color:#fff;
+}
+.head-title{
+	height: 41px;
+	background: #e7e7e7;
+}
+.prj_common_info{
+	height: 30px;
+	line-height: 30px;
+	margin:20px 16px;
+	position: relative; 
+}
+
+.prj_common_info .yw-line{
+	position: absolute;
+	left: 0px;
+	top:15px;
+	width: 100%;
+	height: 1px;
+	background: #f3d5af;
+}
+.colxs7{
+	margin-left: -10px;
+}
+.prj_common_info span{
+	position: absolute;
+	left: 0px;
+	padding-right: 10px;
+	margin-top: 0px;
+	font-size: 15px;
+	background: #fff;
+	z-index: 990;
+	color:#343434;
+}
+.form-group label span{
+    color:#ed7468;
+    height: 6px;
+    width:6px;
+    margin-right: 2px;
+}
+.form-horizontal{
+	padding:0px;
+}
+.content-wrap{
+	padding:35px 137px;
+}
+.form-group{
+	margin-bottom: 0 !important;
+}
+
+table th{
+	font-size: 14px;
+	color:#282828;
+	background: #f4e6d4;
+	text-align: center;
+}
+table tr td{
+	text-align: center;
+	font-size: 14px;
+	color:#282828;
+	vertical-align: middle !important;
+}
+table tr td .btn{
+	padding: 3px 11px;
+	background: #e5e5e5;
+	color: #666;
+	margin-bottom: 5px;
+}
+table tr td .btn:hover{
+	background: #e9432d;
+	color: #fff;
+}
+.table-wrap{
+	padding:0px 15px;
+}
+.wrap-box{
+	border:2px solid #efefef;
+	border-radius: 5px;
+}
+
+.my-form-group{
+	padding-left: 30px;
+}
+
+.overflow{
+	overflow: hidden;
+}
+
+.tec-label{
+	float: left;padding-left: 16px;
+}
+
+.tec-require{
+	width:90%;
+	float:left;
+}
+
+.tec-require p{
+	padding-left: 26px;
+}
+caption{
+	margin:0;
+	padding:0;
+}
+.table-desc{
+	position: relative;
+}
+.table-desc span{
+	display: inline-block;
+	background: #ebebeb;
+	color:#616161;
+	width:80px;
+	height: 28px;
+	line-height: 28px;
+	text-align: center;
+	border-radius: 3px 3px 0 0 ;
+}
+
+.table-desc i{
+	position: relative;
+	left: 10px;
+	font-style: normal;
+	color:#e9432d;
+}
+.table-desc a{
+	position: absolute;
+	right:0;
+	bottom:10px;
+	background: #e9432d;
+	color: #fff;
+	padding:3px 11px;
+}
+.table-desc a:hover{
+	background: #e9432d;
+	color: #fff;
+}
+.my-form{
+	overflow: hidden;
+	margin-bottom: 15px;
+}
+
+.form-desc{
+	height: 80px;
+	max-height: 80px;
+	overflow-y: auto;
+	resize:none;
+}
+
+.prj-summary{
+	height: 100px;
+	max-height: 100px;
+	overflow-y: auto;
+	resize:none;
+}
+
+.number-ipt{
+	width: 60px;
+	margin-left: 10px;
+	padding-left: 2px;
+}

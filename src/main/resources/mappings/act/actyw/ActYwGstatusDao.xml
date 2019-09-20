@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwGstatusDao">
+
+	<sql id="actYwGstatusColumns">
+		a.id AS "id",
+		a.group_id AS "group.id",
+
+		g.name AS "group.name",
+		g.type AS "group.type",
+		g.ntype AS "group.ntype",
+		g.is_push AS "group.isPush",
+		g.theme AS "group.theme",
+		g.temp AS "group.temp",
+		g.status AS "group.status",
+		g.tenant_id AS "tenantId",
+		g.flow_type AS "group.flow_type",
+
+		a.gnode_id AS "gnode.id",
+		gn.name AS "gnode.name",
+		gn.type AS "gnode.type",
+
+		a.status_id AS "status.id",
+		s.status AS "status.status",
+		s.state AS "status.state",
+		s.alias AS "status.alias"
+	</sql>
+
+	<sql id="actYwGstatusJoins">
+	        LEFT JOIN act_yw_group g ON g.id = a.group_id
+			LEFT JOIN act_yw_gnode gn ON gn.id = a.gnode_id
+			LEFT JOIN act_yw_status s ON s.id = a.status_id
+	</sql>
+
+	<select id="get" resultType="ActYwGstatus">
+		SELECT
+			<include refid="actYwGstatusColumns"/>
+		FROM act_yw_gstatus a
+		<include refid="actYwGstatusJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ActYwGstatus">
+		SELECT
+			<include refid="actYwGstatusColumns"/>
+		FROM act_yw_gstatus a
+		<include refid="actYwGstatusJoins"/>
+		<where>
+			1=1
+			<if test="group != null and group.id != null and group.id != ''">
+				AND a.group_id = #{group.id}
+			</if>
+			<if test="gnode != null and gnode.id != null and gnode.id != ''">
+				AND a.gnode_id = #{gnode.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwGstatus">
+		SELECT
+			<include refid="actYwGstatusColumns"/>
+		FROM act_yw_gstatus a
+		<include refid="actYwGstatusJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="saveAll" parameterType="java.util.List">
+	insert into act_yw_gstatus (id,group_id,gnode_id,status_id)
+	    values
+	    <foreach collection="list" item="item" index="index" separator="," >
+	        (#{id},#{item.group.id},#{item.gnode.id},#{item.gtatus.id})
+	    </foreach>
+	</insert>
+
+	<insert id="insert">
+		INSERT INTO act_yw_gstatus(
+			id,
+			group_id,
+			gnode_id,
+			status_id
+		) VALUES (
+			#{id},
+			#{group.id},
+			#{gnode.id},
+			#{status.id}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_gstatus SET
+			group_id = #{group.id},
+			gnode_id = #{gnode.id},
+			status_id = #{status.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM act_yw_gstatus
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteByGroupIdAndGnodeId"  parameterType="java.lang.String">
+		DELETE FROM act_yw_gstatus
+		WHERE group_id = #{groupId} and gnode_id= #{gnodeId}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM act_yw_gstatus WHERE id = #{id}
+	</update>
+
+	<insert id="savePl" >
+		INSERT INTO act_yw_gstatus(
+			id,
+			group_id,
+			gnode_id,
+			status_id
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+				 separator=",">
+			(
+				#{item.id},
+                #{item.group.id},
+                #{item.gnode.id},
+                #{item.status.id}
+			)
+		</foreach>
+	</insert>
+
+    <update id="deletePlwl">
+            DELETE FROM act_yw_gstatus WHERE group_id = #{groupId} AND gnode_id = #{gnodeId}
+    </update>
+
+    <update id="deletePlwlByGroup">
+            DELETE FROM act_yw_gstatus WHERE group_id = #{groupId}
+    </update>
+</mapper>

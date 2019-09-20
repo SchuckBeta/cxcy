@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.sys.modules.team.dao.TeamUserChangeDao">
+
+	<sql id="teamUserChangeColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.oper_type AS "operType",
+		a.team_id AS "teamId",
+		a.oper_user_id AS "operUserId",
+		a.pro_id AS "proId",
+		a.duty AS "duty",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag"
+	</sql>
+
+	<sql id="teamUserChangeJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+
+	<select id="get" resultType="TeamUserChange">
+		SELECT
+			<include refid="teamUserChangeColumns"/>
+		FROM team_oper_log a
+		<include refid="teamUserChangeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="TeamUserChange">
+		SELECT
+			<include refid="teamUserChangeColumns"/>
+		FROM team_oper_log a
+		<include refid="teamUserChangeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="proId != null and proId != ''">
+				AND a.pro_id = #{proId}
+			</if>
+			<if test="teamId != null and teamId != ''">
+				AND a.team_id = #{teamId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="TeamUserChange">
+		SELECT
+			<include refid="teamUserChangeColumns"/>
+		FROM team_oper_log a
+		<include refid="teamUserChangeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="savePl" >
+		INSERT INTO team_oper_log(
+				id,
+				user_id,
+				oper_type,
+				team_id,
+				oper_user_id,
+				pro_id,
+				duty,
+				update_date,
+				update_by,
+				create_date,
+				create_by,
+				del_flag
+			) VALUES
+			<foreach collection="list" item="item" index="index" separator=",">
+				(
+				#{item.id},
+				#{item.userId},
+				#{item.operType},
+				#{item.teamId},
+				#{item.operUserId},
+				#{item.proId},
+				#{item.duty},
+				#{item.updateDate},
+				#{item.updateBy.id},
+				#{item.createDate},
+				#{item.createBy.id},
+				#{item.delFlag}
+				)
+			</foreach>
+		</insert>
+
+	<insert id="insert">
+		INSERT INTO team_oper_log(
+			id,
+			user_id,
+			oper_type,
+			team_id,
+			oper_user_id,
+			pro_id,
+			duty,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag
+		) VALUES (
+			#{id},
+			#{userId},
+			#{operType},
+			#{teamId},
+			#{operUserId},
+			#{proId},
+			#{duty},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE team_oper_log SET
+			user_id = #{userId},
+			oper_type = #{operType},
+			team_id = #{teamId},
+			pro_id = #{proId},
+			duty = #{duty},
+			oper_user_id = #{operUserId},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE team_oper_log SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM team_oper_log WHERE id = #{id}
+	</update>
+</mapper>

@@ -1,0 +1,33 @@
+.table-thead-bg thead tr{
+    background-color: #f4e6d4;
+}
+.table th{
+    background: none;
+}
+#searchForm{
+    height: auto;
+    padding: 15px 0 0;
+    overflow: hidden;
+}
+.ul-form input[type="text"]{
+    height: 20px;
+}
+.ul-form select{
+    height: 30px;
+    width: 174px;
+    max-width: 174px;
+}
+.form-search .ul-form li{
+    margin-bottom: 15px;
+}
+.form-search .ul-form li.btns{
+    float: right;
+}
+.table{
+    margin-bottom: 20px;
+}
+.form-search .input-append .btn {
+    -webkit-border-radius: 0 4px 4px 0;
+    -moz-border-radius: 0 4px 4px 0;
+    border-radius: 0 4px 4px 0;
+}

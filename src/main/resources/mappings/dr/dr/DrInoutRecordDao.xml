@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.dr.modules.dr.dao.DrInoutRecordDao">
+
+	<sql id="drInoutRecordColumns">
+		a.id AS "id",
+		a.uid AS "uid",
+		a.card_id AS "cardId",
+		a.erspace_id AS "erspaceId",
+		a.gid AS "group.id",
+		a.enter_time AS "enterTime",
+		a.exit_time AS "exitTime",
+		a.del_flag AS "delFlag",
+		a.pc_time AS "pcTime",
+		a.card_no AS "cardNo",
+		a.ept_id AS "eptId",
+		a.rsp_type AS "rspType",
+		a.rspace_id AS "rspaceId",
+		a.dr_no AS "drNo",
+		a.name AS "name"
+	</sql>
+
+	<sql id="drInoutRecordJoins">
+	</sql>
+
+	<select id="get" resultType="DrInoutRecord">
+		SELECT
+			<include refid="drInoutRecordColumns"/>
+		FROM dr_inout_record a
+		<include refid="drInoutRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+
+	<select id="findInList" resultType="java.lang.String">
+		select dc.id from dr_card dc
+		where dc.id not in(
+			select dc.id  from dr_card dc
+			left join dr_card_record dcr  on dcr.card_id=dc.id
+			where dcr.is_enter='1'
+			GROUP BY dcr.card_id
+			HAVING max(dcr.pc_time)>
+			date_add(
+				SYSDATE(),interval -#{day} day
+			)
+		)
+	</select>
+
+	<select id="getAllDrByCardId" resultType="DrInoutRecord">
+			SELECT
+				<include refid="drInoutRecordColumns"/>
+			FROM dr_inout_record a
+			<include refid="drInoutRecordJoins"/>
+			<where>
+				a.del_flag = '0' and a.card_id=#{cardId}
+			</where>
+		</select>
+
+
+
+
+	<select id="findList" resultType="DrInoutRecord">
+		SELECT
+			<include refid="drInoutRecordColumns"/>
+		FROM dr_inout_record a
+		<include refid="drInoutRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="DrInoutRecord">
+		SELECT
+			<include refid="drInoutRecordColumns"/>
+		FROM dr_inout_record a
+		<include refid="drInoutRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dr_inout_record(
+			id,
+			uid,
+			card_id,
+			erspace_id,
+			gid,
+			enter_time,
+			exit_time,
+			del_flag,
+			pc_time,
+			card_no,
+			ept_id,
+			rsp_type,
+			create_date,
+			rspace_id,
+			dr_no,
+			name
+		) VALUES (
+			#{id},
+			#{uid},
+			#{cardId},
+			#{erspaceId},
+			#{group.id},
+			#{enterTime},
+			#{exitTime},
+			#{delFlag},
+			#{pcTime},
+			#{cardNo},
+			#{eptId},
+			#{rspType},
+			#{createDate},
+			#{rspaceId},
+			#{drNo},
+			#{name}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE dr_inout_record SET
+			uid = #{uid},
+			card_id = #{cardId},
+			erspace_id = #{erspaceId},
+			gid = #{group.id},
+			enter_time = #{enterTime},
+			exit_time = #{exitTime},
+			pc_time=#{pcTime},
+			card_no=#{cardNo},
+			ept_id=#{eptId},
+			rsp_type=#{rspType},
+			rspace_id=#{rspaceId},
+			dr_no=#{drNo},
+			name=#{name}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateByPl" parameterType="java.util.List" >
+		UPDATE dr_inout_record
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="uid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.uid}
+				</foreach>
+			</trim>
+			<trim prefix="card_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.cardId}
+				</foreach>
+			</trim>
+			<trim prefix="erspace_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.erspaceId}
+				</foreach>
+			</trim>
+			<trim prefix="gid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.group.id}
+				</foreach>
+			</trim>
+			<trim prefix="enter_time =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.enterTime}
+				</foreach>
+			</trim>
+			<trim prefix="exit_time =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.exitTime}
+				</foreach>
+			</trim>
+			<trim prefix="pc_time =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.pcTime}
+				</foreach>
+			</trim>
+			<trim prefix="card_no =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.cardNo}
+				</foreach>
+			</trim>
+			<trim prefix="ept_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.eptId}
+				</foreach>
+			</trim>
+			<trim prefix="rsp_type =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rspType}
+				</foreach>
+			</trim>
+			<trim prefix="rspace_id =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.rspaceId}
+				</foreach>
+			</trim>
+			<trim prefix="dr_no =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.drNo}
+				</foreach>
+			</trim>
+			<trim prefix="name =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.name}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="updateUidByPl" parameterType="java.util.List" >
+		UPDATE dr_inout_record
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="card_no =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.cardNo}
+				</foreach>
+			</trim>
+			<trim prefix="uid =case" suffix="end,">
+				<foreach item="item" collection="entitys" index="index">
+					when id=#{item.id} then #{item.uid}
+				</foreach>
+			</trim>
+		</trim>
+		WHERE id in
+		<foreach item="item" collection="entitys" separator="," open="("
+			close=")">
+			#{item.id}
+		</foreach>
+	</update>
+
+	<update id="delete">
+		UPDATE dr_inout_record SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM dr_inout_record WHERE id = #{id}
+	</update>
+	<select id="getLastEnterData" resultType="DrInoutRecord">
+		SELECT
+		<include refid="drInoutRecordColumns"/>
+		FROM dr_inout_record a
+		WHERE a.card_id=#{cardId} and a.rspace_id=#{rspaceId}
+		order by a.enter_time desc limit 1
+	</select>
+	<select id="getListVo" resultType="com.oseasy.dr.modules.dr.vo.DrInoutRecordVo">
+		select
+			t.id id,
+			t.card_no cardNo,
+			(case when dc.card_type='0' then dc.tmp_no else u.no end) uno,
+			(case when dc.card_type='0' then dc.tmp_name else u.name end) uname,
+			(case when dc.card_type='0' then dc.tmp_tel else u.mobile end) umobile,
+			o.name office,
+			t.enter_time enterTime,
+			t.exit_time exitTime,
+			date_format(t.enter_time,'%Y-%m-%d %H:%i') enterTimeStr,
+			date_format(t.exit_time,'%Y-%m-%d %H:%i') exitTimeStr,
+			(select GROUP_CONCAT(ss.name /*subOrder*/order by ss.type SEPARATOR '>')
+		from pw_space ss
+		where
+			ss.id!='1'
+			and (FIND_IN_SET(ss.id,ps.parent_ids) or ss.id=ps.id) and ss.del_flag='0') psname,
+			CONCAT(
+				(
+				select
+					GROUP_CONCAT(ss.name /*subOrder*/order by ss.type SEPARATOR '>')
+				from pw_space ss
+				where
+					ss.id!='1' and (FIND_IN_SET(ss.id,ps2.parent_ids) or ss.id=ps2.id)
+				and ss.del_flag='0'),'>',pr.name
+			) prname
+		from dr_inout_record t
+			left join dr_equipment_rspace b on b.id=t.erspace_id
+			left join sys_user u on t.uid=u.id
+			left join sys_office o on u.office_id=o.id
+			left join pw_space ps on t.rspace_id=ps.id
+			left join pw_room pr on t.rspace_id=pr.id
+			left join pw_space ps2 on pr.sid=ps2.id
+			left join dr_card dc on t.card_id=dc.id
+		where 1=1
+			and dc.id is not null
+			<if test="officeIds != null and officeIds.size() != 0">
+                  AND o.id IN
+                <foreach item="item" collection="officeIds" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+			<if test="ids != null and ids.size() != 0">
+                  AND t.id IN
+                <foreach item="item" collection="ids" separator="," open="("
+                         close=")">
+                    #{item}
+                </foreach>
+            </if>
+			<if test="qryStr !=null and qryStr !='' ">
+				AND (
+					t.card_no LIKE concat('%',#{qryStr},'%')
+					OR dc.no like concat('%',#{qryStr},'%')
+					OR dc.tmp_no LIKE concat('%',#{qryStr},'%')
+					OR dc.tmp_name LIKE concat('%',#{qryStr},'%')
+					OR dc.tmp_tel LIKE concat('%',#{qryStr},'%')
+					OR u.no like concat('%',#{qryStr},'%')
+					OR u.name like concat('%',#{qryStr},'%')
+					OR b.name like concat('%',#{qryStr},'%')
+					OR o.name like concat('%',#{qryStr},'%')
+					OR pr.NAME LIKE concat('%',#{qryStr},'%')
+					OR ps.NAME LIKE concat('%',#{qryStr},'%')
+				)
+			</if>
+			<if test="qryOffice !=null and qryOffice !='' ">
+				and o.id=#{qryOffice}
+			</if>
+			<if test="qryType != null">
+				<if test="qryType =='1' ">
+					<if test="qryStartTime !=null and qryStartTime !='' ">
+						and t.enter_time <![CDATA[ >= ]]> str_to_date(concat(#{qryStartTime},' 00:00:00'),'%Y-%m-%d %H:%i:%s')
+					</if>
+					<if test="qryEndTime !=null and qryEndTime !='' ">
+						and t.enter_time <![CDATA[ <= ]]> str_to_date(concat(#{qryEndTime},' 23:59:59'),'%Y-%m-%d %H:%i:%s')
+					</if>
+				</if>
+				<if test="qryType =='2' ">
+					<if test="qryStartTime !=null and qryStartTime !='' ">
+						and t.exit_time <![CDATA[ >= ]]> str_to_date(concat(#{qryStartTime},' 00:00:00'),'%Y-%m-%d %H:%i:%s')
+					</if>
+					<if test="qryEndTime !=null and qryEndTime !='' ">
+						and t.exit_time <![CDATA[ <= ]]> str_to_date(concat(#{qryEndTime},' 23:59:59'),'%Y-%m-%d %H:%i:%s')
+					</if>
+				</if>
+			</if>
+			<if test="qryType == null">
+				<if test="qryStartTime !=null and qryStartTime !='' ">
+					and t.enter_time <![CDATA[ >= ]]> str_to_date(concat(#{qryStartTime},' 00:00:00'),'%Y-%m-%d %H:%i:%s')
+				</if>
+				<if test="qryEndTime !=null and qryEndTime !='' ">
+					and t.enter_time <![CDATA[ <= ]]> str_to_date(concat(#{qryEndTime},' 23:59:59'),'%Y-%m-%d %H:%i:%s')
+				</if>
+			</if>
+			order by t.pc_time desc
+	</select>
+
+	<update id="updateChildEmptyOutTime">
+		update dr_inout_record t set t.exit_time=str_to_date(#{date},'%Y-%m-%d %H:%i:%s')
+		where t.rspace_id in(
+				select h.id sid from pw_room h where h.del_flag='0' and h.sid=#{spaceOrRoomId}
+				union all
+				select f.id sid from pw_space f where f.del_flag='0' and f.id!='1' and FIND_IN_SET(#{spaceOrRoomId},f.parent_ids)
+		)
+		and t.exit_time is null
+		and (UNIX_TIMESTAMP(str_to_date(#{date},'%Y-%m-%d %H:%i:%s')) - UNIX_TIMESTAMP(t.enter_time))&lt;#{maxTime}
+	</update>
+</mapper>

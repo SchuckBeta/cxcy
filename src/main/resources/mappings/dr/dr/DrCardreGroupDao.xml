@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.dr.modules.dr.dao.DrCardreGroupDao">
+	<resultMap id="drCardreGroupBygMap" type="com.oseasy.dr.modules.dr.entity.DrCardreGroup">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="isTimeLimit" column="isTimeLimit" />
+		<result property="isShow" column="isShow" />
+		<result property="delFlag" column="delFlag" />
+		<result property="remarks" column="remarks" />
+
+		<collection property="drCreGitems" ofType="DrCardreGitem">
+			<id property="id" column="drCreGitems.id" />
+			<result property="estatus" column="drCreGitems.estatus" />
+			<result property="erspace.id" column="drCreGitems.erspace.id" />
+			<result property="erspace.rspType" column="drCreGitems.erspace.rspType" />
+			<result property="erspace.rspace" column="drCreGitems.erspace.rspace" />
+			<result property="erspace.rspaceName" column="drCreGitems.erspace.rspaceName" />
+			<result property="erspace.drNo" column="drCreGitems.erspace.drNo" />
+			<result property="erspace.name" column="drCreGitems.erspace.name" />
+			<result property="erspace.dealStatus" column="drCreGitems.erspace.dealStatus" />
+			<result property="erspace.epment.id" column="drCreGitems.erspace.epment.id" />
+			<result property="erspace.epment.no" column="drCreGitems.erspace.epment.no" />
+			<result property="erspace.epment.name" column="drCreGitems.erspace.epment.name" />
+			<result property="erspace.epment.psw" column="drCreGitems.erspace.epment.psw" />
+			<result property="erspace.epment.ip" column="drCreGitems.erspace.epment.ip" />
+			<result property="erspace.epment.type" column="drCreGitems.erspace.epment.type" />
+			<result property="erspace.epment.port" column="drCreGitems.erspace.epment.port" />
+			<result property="erspace.epment.drNo" column="drCreGitems.erspace.epment.drNo" />
+			<result property="erspace.epment.tindex" column="drCreGitems.erspace.epment.tindex" />
+		</collection>
+	</resultMap>
+
+	<sql id="drCardreGroupColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.is_time_limit AS "isTimeLimit",
+		a.del_flag AS "delFlag",
+		a.is_show AS "isShow",
+		a.remarks AS "remarks"
+	</sql>
+
+	<sql id="drCardreGroupBygColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.is_time_limit AS "isTimeLimit",
+		a.del_flag AS "delFlag",
+		a.is_show AS "isShow",
+		a.remarks AS "remarks",
+
+		b.id AS "drCreGitems.id",
+		b.estatus AS "drCreGitems.estatus",
+		b.erspace_id AS "drCreGitems.erspace.id",
+
+		e.ept_id AS "drCreGitems.erspace.epment.id",
+		e.rsp_type AS "drCreGitems.erspace.rspType",
+		e.rspace_id AS "drCreGitems.erspace.rspace",
+		eps.rspaceName AS "drCreGitems.erspace.rspaceName",
+		e.dr_no AS "drCreGitems.erspace.drNo",
+		e.name AS "drCreGitems.erspace.name",
+		e.deal_status AS "drCreGitems.erspace.dealStatus",
+
+		et.no AS "drCreGitems.erspace.epment.no",
+		et.name AS "drCreGitems.erspace.epment.name",
+		et.psw AS "drCreGitems.erspace.epment.psw",
+		et.ip AS "drCreGitems.erspace.epment.ip",
+		et.type AS "drCreGitems.erspace.epment.type",
+		et.port AS "drCreGitems.erspace.epment.port",
+		et.dr_no AS "drCreGitems.erspace.epment.drNo",
+		et.tindex AS "drCreGitems.erspace.epment.tindex"
+	</sql>
+
+	<sql id="drCardreGroupJoins">
+	</sql>
+
+	<sql id="drCardreGroupBygJoins">
+        LEFT JOIN dr_cardre_gitem b ON b.gid = a.id
+        LEFT JOIN dr_equipment_rspace e ON e.id = b.erspace_id
+        LEFT JOIN dr_equipment et ON et.id = e.ept_id
+		LEFT JOIN (
+			SELECT
+				'2' AS "rspType",
+				pr.id AS "rspaceId",
+				  (case when (pspppp.name='root') then
+							CONCAT(psppp.name, "/", pspp.name, "/", psp.name, "/", ps.name, "/", pr.name)
+					when (psppp.name = 'root') then
+							CONCAT(pspp.name, "/", psp.name, "/", ps.name, "/", pr.name)
+					when (pspp.name = 'root') then
+							CONCAT(psp.name, "/", ps.name, "/", pr.name)
+					when (psp.name = 'root') then
+							CONCAT(ps.name, "/", pr.name)
+					when (pr.sid IS NULL OR pr.sid = '') then
+							CONCAT(pr.name)
+					end) AS "rspaceName"
+			FROM pw_room pr
+			LEFT JOIN pw_space ps ON ps.id = pr.sid
+			LEFT JOIN pw_space psp ON psp.id = ps.parent_id
+			LEFT JOIN pw_space pspp ON pspp.id = psp.parent_id
+			LEFT JOIN pw_space psppp ON psppp.id = pspp.parent_id
+			LEFT JOIN pw_space pspppp ON pspppp.id = psppp.parent_id
+			UNION ALL
+			SELECT
+				'1' AS "rspType",
+				ps.id AS "rspaceId",
+				(case when (pspppp.name='root') then
+						CONCAT(psppp.name, "/", pspp.name, "/", psp.name, "/", ps.name)
+				when (psppp.name = 'root') then
+						CONCAT(pspp.name, "/", psp.name, "/", ps.name)
+				when (pspp.name = 'root') then
+						CONCAT(psp.name, "/", ps.name)
+				when (psp.name = 'root') then
+						CONCAT(ps.name)
+				end) AS "rspaceName"
+			FROM pw_space ps
+			LEFT JOIN pw_space psp ON psp.id = ps.parent_id
+			LEFT JOIN pw_space pspp ON pspp.id = psp.parent_id
+			LEFT JOIN pw_space psppp ON psppp.id = pspp.parent_id
+			LEFT JOIN pw_space pspppp ON pspppp.id = psppp.parent_id
+		) eps ON eps.rspaceId = e.rspace_id
+	</sql>
+
+	<select id="get" resultType="DrCardreGroup">
+		SELECT
+			<include refid="drCardreGroupColumns"/>
+		FROM dr_cardre_group a
+		<include refid="drCardreGroupJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByg" resultMap="drCardreGroupBygMap">
+		SELECT
+			<include refid="drCardreGroupBygColumns"/>
+		FROM dr_cardre_group a
+		<include refid="drCardreGroupBygJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="DrCardreGroup">
+		SELECT
+			<include refid="drCardreGroupColumns"/>
+		FROM dr_cardre_group a
+		<include refid="drCardreGroupJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="isShow != null and isShow != ''">
+				AND a.is_show = #{isShow}
+			</if>
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByg" resultMap="drCardreGroupBygMap">
+		SELECT
+			<include refid="drCardreGroupBygColumns"/>
+		FROM dr_cardre_group a
+		<include refid="drCardreGroupBygJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="isShow != null and isShow != ''">
+				AND a.is_show = #{isShow}
+			</if>
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="DrCardreGroup">
+		SELECT
+			<include refid="drCardreGroupColumns"/>
+		FROM dr_cardre_group a
+		<include refid="drCardreGroupJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllListByg" resultMap="drCardreGroupBygMap">
+		SELECT
+			<include refid="drCardreGroupBygColumns"/>
+		FROM dr_cardre_group a
+		<include refid="drCardreGroupBygJoins"/>
+		<where>
+			a.del_flag = '0'
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dr_cardre_group(
+			id,
+			name,
+			del_flag,
+			is_show,
+			remarks
+		) VALUES (
+			#{id},
+			#{name},
+			#{delFlag},
+			#{isShow},
+			#{remarks}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE dr_cardre_group SET
+			name = #{name},
+			is_show = #{isShow},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateIsShow">
+		UPDATE dr_cardre_group SET
+			is_show = #{isShow}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE dr_cardre_group SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM dr_cardre_group WHERE id = #{id}
+	</update>
+</mapper>

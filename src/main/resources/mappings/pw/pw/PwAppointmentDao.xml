@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.pw.modules.pw.dao.PwAppointmentDao">
+
+	<sql id="pwAppointmentColumns">
+		a.id AS "id",
+		a.apply_id AS "applyId",
+		a.attend_user AS "attendUser",
+		a.start_date AS "startDate",
+		a.start_time AS "startTime",
+		a.end_date AS "endDate",
+		a.end_time AS "endTime",
+		a.status AS "status",
+		a.subject AS "subject",
+		a.person_num AS "personNum",
+		a.op_type AS "opType",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.appointmentstyle AS "appointmentstyle",
+		r.id AS "pwRoom.id",
+		r.name AS "pwRoom.name",
+		r.type AS "pwRoom.type",
+		r.num_type AS "pwRoom.numtype",
+		r.num AS "pwRoom.num",
+		u.id AS "user.id",
+		u.name AS "user.name"
+	</sql>
+
+	<sql id="pwAppointmentByRoomColumns">
+		a.id AS "id",
+		a.rid AS "pwRoom.id",
+		a.apply_id AS "applyId",
+		a.attend_user AS "attendUser",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.apply_user_id AS "user.id",
+		a.status AS "status",
+		a.subject AS "subject",
+		a.person_num AS "personNum",
+		a.op_type AS "opType",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		r.name AS "pwRoom.name",
+		r.person AS "pwRoom.person",
+		r.phone AS "pwRoom.phone",
+		r.mobile AS "pwRoom.mobile",
+		r.alias AS "pwRoom.alias",
+		r.type AS "pwRoom.type",
+		r.num AS "pwRoom.num",
+		r.is_usable AS "pwRoom.isUsable",
+		r.sid AS "pwRoom.pwSpace.id",
+		r.update_date AS "pwRoom.updateDate",
+		r.update_by AS "pwRoom.updateBy.id",
+		r.create_date AS "pwRoom.createDate",
+		r.create_by AS "pwRoom.createBy.id",
+		r.remarks AS "pwRoom.remarks",
+		r.del_flag AS "pwRoom.delFlag",
+
+		b.parent_id AS "pwRoom.pwSpace.parent.id",
+		b.parent_ids AS "pwRoom.pwSpace.parentIds",
+		b.name AS "pwRoom.pwSpace.name",
+		b.person AS "pwRoom.pwSpace.person",
+		b.type AS "pwRoom.pwSpace.type",
+		b.phone AS "pwRoom.pwSpace.phone",
+		b.mobile AS "pwRoom.pwSpace.mobile",
+		b.open_week AS "pwRoom.pwSpace.openWeek",
+		b.am_open_start_time AS "pwRoom.pwSpace.amOpenStartTime",
+		b.am_open_end_time AS "pwRoom.pwSpace.amOpenEndTime",
+		b.pm_open_start_time AS "pwRoom.pwSpace.pmOpenStartTime",
+		b.pm_open_end_time AS "pwRoom.pwSpace.pmOpenEndTime",
+		b.floor_num AS "pwRoom.pwSpace.floorNum",
+		b.area AS "pwRoom.pwSpace.area",
+		b.update_date AS "pwRoom.pwSpace.updateDate",
+		b.update_by AS "pwRoom.pwSpace.updateBy.id",
+		b.create_date AS "pwRoom.pwSpace.createDate",
+		b.create_by AS "pwRoom.pwSpace.createBy.id",
+		b.remarks AS "pwRoom.pwSpace.remarks",
+		b.del_flag AS "pwRoom.pwSpace.delFlag",
+
+		p.parent_id AS "pwRoom.pwSpace.parent.parent.id",
+		p.parent_ids AS "pwRoom.pwSpace.parent.parentIds",
+		p.name AS "pwRoom.pwSpace.parent.name",
+
+		pp.parent_id AS "pwRoom.pwSpace.parent.parent.parent.id",
+		pp.parent_ids AS "pwRoom.pwSpace.parent.parent.parentIds",
+		pp.name AS "pwRoom.pwSpace.parent.parent.name"
+	</sql>
+
+	<sql id="pwAppointmentJoins">
+		LEFT JOIN pw_room r ON r.id = a.rid
+		LEFT JOIN sys_user u ON u.id = a.apply_user_id
+	</sql>
+
+	<sql id="pwAppointmentByRoomJoins">
+		LEFT JOIN pw_room r ON r.id = a.rid
+		LEFT JOIN pw_space b ON b.id = r.sid
+		LEFT JOIN pw_space p ON p.id = b.parent_id
+		LEFT JOIN pw_space pp ON pp.id = p.parent_id
+	</sql>
+
+	<select id="get" resultType="PwAppointment">
+		SELECT
+			<include refid="pwAppointmentColumns"/>
+		FROM pw_appointment a
+		<include refid="pwAppointmentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findRoomOrderDetailList" resultType="PwAppointment">
+		SELECT
+		( SELECT count(p.id) from pw_appointment p
+		LEFT JOIN pw_room r1 ON r1.id = p.rid and r1.del_flag=0
+		where p.`status`=1 and NOW() >= p.start_date and p.end_date >= now()
+		and p.id = a.id
+		) as isUsing
+		,
+		( SELECT count(p.id) from pw_appointment p
+		LEFT JOIN pw_room r1 ON r1.id = p.rid and r1.del_flag=0
+		where p.`status`=1 and p.start_date > now()
+		and p.id = a.id
+		) as isToUse,
+		( SELECT count(p.id) from pw_appointment p
+		LEFT JOIN pw_room r1 ON r1.id = p.rid and r1.del_flag=0
+		where p.`status`=1 and now() > p.end_date
+		and p.id = a.id
+		) as isUsed,
+		( SELECT count(p.id) from pw_appointment p
+		LEFT JOIN pw_room r1 ON r1.id = p.rid and r1.del_flag=0
+		where p.`status`=3
+		and p.id = a.id
+		) as isNoUse,
+		a.id AS "id",
+        a.apply_id AS "applyId",
+        a.attend_user AS "attendUser",
+        a.start_date AS "startDate",
+        a.start_time AS "startTime",
+        a.end_date AS "endDate",
+        a.end_time AS "endTime",
+        a.status AS "status",
+		a.appointmentstyle as "appointmentstyle",
+        a.subject AS "subject",
+        a.person_num AS "personNum",
+        a.op_type AS "opType",
+        a.update_date AS "updateDate",
+        a.update_by AS "updateBy.id",
+        a.create_date AS "createDate",
+        a.create_by AS "createBy.id",
+        a.remarks AS "remarks",
+        a.del_flag AS "delFlag",
+        r.id AS "pwRoom.id",
+        r.name AS "pwRoom.name",
+        r.type AS "pwRoom.type",
+        r.num AS "pwRoom.num",
+        u.id AS "user.id",
+        u.name AS "user.name",
+		u.professional AS "user.professional",
+        u.no as "user.no",
+        u.mobile as "user.mobile",
+        op.name as "office.name"
+		FROM pw_appointment a
+		LEFT JOIN pw_room r ON r.id = a.rid
+		LEFT JOIN sys_user u ON u.id = a.apply_user_id
+		LEFT JOIN sys_office op ON op.id = u.office_id
+
+		<where>
+			a.rid = #{pwRoom.id} AND a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="querySql != null and querySql != ''">
+				${querySql}
+			</if>
+			<if test="office != null">
+				<if test="office.id != null and office.id != ''">
+					AND op.id = #{office.id}
+				</if>
+			</if>
+		</where>
+	</select>
+	
+	
+	<select id="findList" resultType="PwAppointment">
+		SELECT
+			<include refid="pwAppointmentColumns"/>
+		FROM pw_appointment a
+		<include refid="pwAppointmentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="pwRoom != null">
+				<if test="pwRoom.id != null and pwRoom.id != ''">
+					AND a.rid = #{pwRoom.id}
+				</if>
+				<if test="pwRoom.type != null and pwRoom.type != ''">
+					AND r.type = #{pwRoom.type}
+				</if>
+			</if>
+			<if test="user != null">
+				<if test="user.id != null and user.id != ''">
+					AND u.id = #{user.id}
+				</if>
+				<if test="user.name != null and user.name != ''">
+					AND u.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{user.name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{user.name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{user.name},'%')</if>
+				</if>
+			</if>
+			<if test="applyId != null and applyId != ''">
+				AND a.apply_id = #{applyId}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date = #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.end_date = #{endDate}
+			</if>
+			<if test="multiStatus == null and status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="multiStatus != null">
+				AND a.status in
+				<foreach item="item" collection="multiStatus" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="subject != null and subject != ''">
+				AND a.subject = #{subject}
+			</if>
+			<if test="personNum != null and personNum != ''">
+				AND a.person_num = #{personNum}
+			</if>
+			<if test="opType != null and opType != ''">
+				AND a.op_type = #{opType}
+			</if>
+			<if test="rangeDateFrom != null and rangeDateFrom != ''">
+				AND a.start_date <![CDATA[>=]]> #{rangeDateFrom}
+			</if>
+			<if test="rangeDateTo != null and rangeDateTo != ''">
+				AND a.end_date <![CDATA[<=]]> #{rangeDateTo}
+			</if>
+			<if test="startTime != 0">
+				AND a.start_time <![CDATA[>=]]> #{startTime}
+			</if>
+			<if test="endTime != 0">
+				AND a.end_time <![CDATA[<=]]> #{endTime}
+			</if>
+			<if test="capacityMin != null and capacityMin != ''">
+				AND r.num <![CDATA[>=]]> #{capacityMin}
+			</if>
+			<if test="capacityMax != null and capacityMax != ''">
+				AND r.num <![CDATA[<=]]> #{capacityMax}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="findViewMonth" resultType="PwAppointment">
+		SELECT
+			<include refid="pwAppointmentColumns"/>
+		FROM pw_appointment a
+		<include refid="pwAppointmentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND r.is_usable = '1'
+			<if test="pwRoom != null">
+				<if test="pwRoom.id != null and pwRoom.id != ''">
+					AND a.rid = #{pwRoom.id}
+				</if>
+				<if test="pwRoom.num != null and pwRoom.num != ''">
+					AND r.num = #{pwRoom.num}
+				</if>
+			</if>
+
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date = #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.end_date = #{endDate}
+			</if>
+
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="subject != null and subject != ''">
+				AND a.subject = #{subject}
+			</if>
+			<if test="personNum != null and personNum != ''">
+				AND a.person_num = #{personNum}
+			</if>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findViewMonthList"  parameterType="com.oseasy.pw.modules.pw.vo.PwAppointmentVo" resultType="com.oseasy.pw.modules.pw.vo.PwAppMouthVo">
+		select count(*) as num,
+		a.status,
+		SUBSTRING(a.start_date,1,10) as mday
+		FROM pw_appointment a
+		<include refid="findListByPwAppointmentVoJoins"/>
+		<where>
+			a.del_flag ='0' AND r.is_usable = '1'
+			<!--<if test="mouth != null and mouth != ''">-->
+				<!--AND  SUBSTRING(a.start_date,6,2)=#{mouth}-->
+			<!--</if>-->
+
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date <![CDATA[>=]]> #{startDate}
+
+			</if>
+
+			<if test="status != null">
+				AND a.status IN
+				<foreach item="item" collection="status" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+
+			<if test="endDate != null and endDate != ''">
+				AND a.end_date <![CDATA[<=]]> #{endDate}
+			</if>
+
+			<if test="roomTypes != null and roomTypes.size() > 0">
+				AND r.type IN
+				<foreach item="item" collection="roomTypes" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+			<if test="roomIds != null and roomIds.size() > 0">
+				AND r.id IN
+				<foreach item="item" collection="roomIds" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+
+			<if test="roomNumMin != null and roomNumMin != ''">
+				AND r.num <![CDATA[>=]]> #{roomNumMin}
+			</if>
+			<if test="roomNumMax != null and roomNumMax != ''">
+				AND r.num <![CDATA[<=]]> #{roomNumMax}
+			</if>
+
+			<if test="floorId != null and floorId != ''" >
+				AND p.id = #{floorId}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.apply_user_id = #{user.id}
+			</if>
+		</where>
+		group by a.`status` ,SUBSTRING(a.start_date,1,10)
+	</select>
+
+
+	<select id="findMyPwAppointmentList" resultType="PwAppointment">
+		SELECT
+			<include refid="pwAppointmentByRoomColumns"/>
+		FROM pw_appointment a
+		<include refid="pwAppointmentByRoomJoins"/>
+		<where>
+			a.del_flag ='0' AND r.is_usable = '1'
+			<if test="user != null ">
+				AND a.apply_user_id = #{user.id}
+			</if>
+			<if test="applyId != null and applyId != ''">
+				AND a.apply_id = #{applyId}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date = #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.end_date = #{endDate}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="subject != null and subject != ''">
+				AND a.subject = #{subject}
+			</if>
+			<if test="personNum != null and personNum != ''">
+				AND a.person_num = #{personNum}
+			</if>
+			<if test="opType != null and opType != ''">
+				AND a.op_type = #{opType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="findListByCalendarParam" resultType="PwAppointment" parameterType="com.oseasy.pw.modules.pw.vo.PwAppCalendarParam">
+		SELECT
+			<include refid="pwAppointmentByRoomColumns"/>
+		FROM pw_appointment a
+		<include refid="pwAppointmentByRoomJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="status != null">
+				AND a.rid in
+				<foreach item="st" collection="status" open="(" separator=","
+					close=")">
+					#{st}
+				</foreach>
+			</if>
+
+			<if test="opTypes != null">
+				AND a.op_type in
+				<foreach item="opt" collection="opTypes" open="(" separator=","
+					close=")">
+					#{opt}
+				</foreach>
+			</if>
+
+
+			<if test="subject != null and subject != ''">
+				AND a.subject LIKE
+					<if test="dbName == 'oracle'">'%'||#{subject}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{subject}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{subject},'%')</if>
+			</if>
+
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date <![CDATA[>=]]> #{startDate}
+
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.end_date <![CDATA[<=]]> #{endDate}
+			</if>
+
+			<if test="roomIds != null">
+				AND r.id in
+				<foreach item="id" collection="roomIds" open="(" separator=","
+					close=")">
+					#{id}
+				</foreach>
+			</if>
+
+			<if test="numMin != null and numMin != ''">
+				AND r.num <![CDATA[>=]]> #{numMin}
+			</if>
+			<if test="numMax != null and numMax != ''">
+				AND r.num <![CDATA[<=]]> #{numMax}
+			</if>
+
+			<if test="floorIds != null">
+				AND b.id in
+				<foreach item="id" collection="floorIds" open="(" separator=","
+					close=")">
+					#{id}
+				</foreach>
+			</if>
+
+			<if test="buildingIds != null">
+				AND p.id in
+				<foreach item="id" collection="buildingIds" open="(" separator=","
+					close=")">
+					#{id}
+				</foreach>
+			</if>
+
+			<if test="baseIds != null">
+				AND pp.id in
+				<foreach item="id" collection="baseIds" open="(" separator=","
+					close=")">
+					#{id}
+				</foreach>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="PwAppointment">
+		SELECT
+			<include refid="pwAppointmentColumns"/>
+		FROM pw_appointment a
+		<include refid="pwAppointmentJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO pw_appointment(
+			id,
+			rid,
+			apply_id,
+			start_date,
+			end_date,
+			start_time,
+			end_time,
+			apply_user_id,
+			status,
+			subject,
+			appointmentstyle,
+			person_num,
+			op_type,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{pwRoom.id},
+			#{applyId},
+			#{startDate},
+			#{endDate},
+			#{startTime},
+			#{endTime},
+			#{user.id},
+			#{status},
+			#{subject},
+			#{appointmentstyle},
+			#{personNum},
+			#{opType},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE pw_appointment SET
+			rid = #{pwRoom.id},
+			apply_id = #{applyId},
+			color = #{color},
+			start_date = #{startDate},
+			end_date = #{endDate},
+			apply_user_id = #{user.id},
+			status = #{status},
+			subject = #{subject},
+			person_num = #{personNum},
+			op_type = #{opType},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE pw_appointment SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+
+	<update id="deleteByRoomIds" parameterType="java.util.List">
+		UPDATE pw_appointment SET
+		del_flag = '1'
+		WHERE rid IN
+		<foreach item="item" collection="roomIds" open="(" separator=","
+				 close=")">
+			#{item}
+		</foreach>
+	</update>
+
+
+	<sql id="findListByPwAppointmentVoColumns">
+		a.id AS "id",
+		a.apply_id AS "applyId",
+		a.attend_user AS "attendUser",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.status AS "status",
+		a.subject AS "subject",
+		a.person_num AS "personNum",
+		a.op_type AS "opType",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		r.color AS "color",
+
+		r.id AS "pwRoom.id",
+		r.name AS "pwRoom.name",
+
+		u.id AS "user.id",
+		u.name AS "user.name",
+		u.user_type AS "user.userType"
+	</sql>
+
+	<sql id="findListByPwAppointmentVoJoins">
+		INNER JOIN sys_user u on u.id = a.apply_user_id
+		INNER JOIN pw_room r on r.id = a.rid
+		INNER JOIN pw_space p on p.id = r.sid
+		INNER JOIN pw_space pp on pp.id = p.parent_id
+	</sql>
+
+
+
+	<select id="findListByPwAppointmentVo" resultType="PwAppointment" parameterType="com.oseasy.pw.modules.pw.vo.PwAppointmentVo">
+		SELECT
+		<include refid="findListByPwAppointmentVoColumns"/>
+		FROM pw_appointment a
+		<include refid="findListByPwAppointmentVoJoins"/>
+		<where>
+			a.del_flag = '0' AND r.is_usable = '1'
+			<if test="startDate != null and startDate != ''">
+				AND a.start_date <![CDATA[>=]]> #{startDate}
+
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.end_date <![CDATA[<=]]> #{endDate}
+			</if>
+			<if test="status != null">
+				AND a.status IN
+				<foreach item="item" collection="status" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+
+			<if test="opType != null and opType != ''">
+				AND a.op_type = #{opType}
+			</if>
+
+			<if test="roomTypes != null and roomTypes.size() > 0">
+				AND r.type IN
+				<foreach item="item" collection="roomTypes" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+
+			<if test="roomNumMin != null and roomNumMin !=''">
+				AND r.num <![CDATA[>=]]> #{roomNumMin}
+			</if>
+			<if test="roomNumMax != null and roomNumMax !=''">
+				AND r.num <![CDATA[<=]]> #{roomNumMax}
+			</if>
+
+			<if test="roomIds != null and roomIds.size() > 0">
+				AND r.id IN
+				<foreach item="item" collection="roomIds" open="(" separator=","
+						 close=")">
+					#{item}
+				</foreach>
+			</if>
+
+			<if test="floorId != null and floorId != ''" >
+				AND p.id = #{floorId}
+			</if>
+
+			<if test="buildingId != null and buildingId != ''">
+				AND pp.id = #{buildingId}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.apply_user_id = #{user.id}
+			</if>
+		</where>
+	</select>
+
+	<select id="getCount" resultType="java.lang.Long">
+		select count(1) from pw_appointment t where t.del_flag='0'  and t.status=#{status} and t.start_date<![CDATA[>=]]>sysdate()
+	</select>
+</mapper>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwAuditInfoDao">
+
+	<sql id="actYwAuditInfoColumns">
+		a.id AS "id",
+		a.promodel_id AS "promodelId",
+		a.audit_id AS "auditId",
+		a.audit_level AS "auditLevel",
+		a.audit_name AS "auditName",
+		a.gnode_id AS "gnodeId",
+		a.suggest AS "suggest",
+		a.score AS "score",
+		a.grade AS "grade",
+		a.is_back AS "isBack",
+		a.gnode_vesion  AS "gnodeVesion",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag",
+		a.proc_ins_id AS "procInsId",
+
+		u.id AS "user.id",
+		u.name AS "user.name"
+	</sql>
+
+	<sql id="actYwAuditInfoJoins">
+		LEFT JOIN sys_user u on u.id = a.audit_id
+	</sql>
+
+	<select id="get" resultType="ActYwAuditInfo">
+		SELECT
+			<include refid="actYwAuditInfoColumns"/>
+		FROM act_yw_audit_info a
+		<include refid="actYwAuditInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getLastAudit" resultType="ActYwAuditInfo">
+		SELECT
+			<include refid="actYwAuditInfoColumns"/>
+		FROM act_yw_audit_info a
+		<include refid="actYwAuditInfoJoins"/>
+		WHERE a.promodel_id=#{promodelId}
+		<if test="auditId!=null and auditId!=''">
+		and a.audit_id=#{auditId}
+		</if>
+		and a.gnode_id=#{gnodeId} and (a.is_back !='1' or a.is_back is null)
+		limit 1
+	</select>
+
+	<select id="getInAudit" resultType="ActYwAuditInfo">
+		SELECT
+			<include refid="actYwAuditInfoColumns"/>
+		FROM act_yw_audit_info a
+		<include refid="actYwAuditInfoJoins"/>
+		WHERE a.promodel_id=#{promodelId}
+		and a.gnode_id=#{gnodeId} and a.del_flag = '0'
+		limit 1
+	</select>
+
+
+	<select id="getProModelChangeGnode" resultType="ActYwAuditInfo">
+		select p.id AS "id",
+				p.promodel_id AS "promodelId",
+				p.audit_id AS "auditId",
+				p.audit_level AS "auditLevel",
+				p.audit_name AS "auditName",
+				p.gnode_id AS "gnodeId"
+		from (
+		select MIN(a.create_date)  as minTime, a.*   from act_yw_audit_info a
+		where a.promodel_id=#{promodelId}
+		group BY a.gnode_id
+		) p
+		ORDER BY p.minTime
+	</select>
+
+	<select id="getLastAuditByPromodel" resultType="ActYwAuditInfo">
+		SELECT
+			<include refid="actYwAuditInfoColumns"/>
+		FROM act_yw_audit_info a
+		<include refid="actYwAuditInfoJoins"/>
+		WHERE a.promodel_id=#{promodelId}  and (a.is_back !='1' or a.is_back is null)
+		ORDER BY  a.create_date desc
+		limit 1
+	</select>
+
+	<select id="getFirstAuditByPromodel" resultType="ActYwAuditInfo">
+		SELECT
+			<include refid="actYwAuditInfoColumns"/>
+		FROM act_yw_audit_info a
+		<include refid="actYwAuditInfoJoins"/>
+		WHERE a.promodel_id=#{promodelId}  and (a.is_back !='1' or a.is_back is null) and
+		a.gnode_id=#{gnodeId}
+		ORDER BY  a.create_date desc
+		limit 1
+	</select>
+
+	<select id="getLastAuditListByPromodel" resultType="ActYwAuditInfo">
+		SELECT
+			<include refid="actYwAuditInfoColumns"/>
+		FROM act_yw_audit_info a
+		<include refid="actYwAuditInfoJoins"/>
+		WHERE a.promodel_id=#{promodelId}  and (a.is_back !='1' or a.is_back is null)
+		ORDER BY  a.create_date desc
+	</select>
+
+	<select id="getGnodeByNextGnode" resultType="ActYwAuditInfo">
+		SELECT
+			<include refid="actYwAuditInfoColumns"/>
+		FROM act_yw_audit_info a
+		<include refid="actYwAuditInfoJoins"/>
+		WHERE a.promodel_id=#{promodelId}  and (a.is_back !='1' or a.is_back is null)
+		and a.gnode_id!=#{gnodeId}
+		ORDER BY  a.create_date desc
+		limit 1
+	</select>
+
+
+	<select id="findList" resultType="ActYwAuditInfo">
+		SELECT
+			<include refid="actYwAuditInfoColumns"/>
+		FROM act_yw_audit_info a
+		<include refid="actYwAuditInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="promodelId!=null and promodelId!=''">
+			AND a.promodel_id = #{promodelId}
+			</if>
+			<if test="gnodeId!=null and gnodeId!=''">
+			AND a.gnode_id = #{gnodeId}
+			</if>
+			<if test="isDelegate!=null and isDelegate!=''">
+			AND a.is_delegate = #{isDelegate}
+			</if>
+			<if test="gnodeVesion!=null and gnodeVesion!=''">
+			AND a.gnode_vesion = #{gnodeVesion}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="findNoBackList" resultType="ActYwAuditInfo">
+		SELECT
+			<include refid="actYwAuditInfoColumns"/>
+		FROM act_yw_audit_info a
+		<include refid="actYwAuditInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and a.grade != '999'
+			<if test="promodelId!=null and promodelId!=''">
+			AND a.promodel_id = #{promodelId}
+			</if>
+			<if test="gnodeId!=null and gnodeId!=''">
+			AND a.gnode_id = #{gnodeId}
+			</if>
+			<if test="gnodeVesion!=null and gnodeVesion!=''">
+			AND a.gnode_vesion = #{gnodeVesion}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="findSubStringList" resultType="java.lang.String">
+	select DISTINCT((case when ga.type in ('250') then gaa.id else ga.id end)) gnode_id from act_yw_audit_info ay
+	left join act_yw_gnode ga on ga.id=ay.gnode_id
+	left join act_yw_gnode gaa on gaa.id=ga.parent_id
+	where ay.promodel_id=#{promodelId}
+	ORDER BY gaa.`level` asc;
+	</select>
+
+	<select id="findAllList" resultType="ActYwAuditInfo">
+		SELECT
+			<include refid="actYwAuditInfoColumns"/>
+		FROM act_yw_audit_info a
+		<include refid="actYwAuditInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_audit_info(
+			id,
+			promodel_id,
+			gnode_vesion,
+			is_delegate,
+			audit_id,
+			audit_level,
+			audit_name,
+			gnode_id,
+			is_back,
+			suggest,
+			score,
+			grade,
+			update_date,
+			update_by,
+			create_date,
+			create_by,
+			del_flag,
+			proc_ins_id
+		) VALUES (
+			#{id},
+			#{promodelId},
+			#{gnodeVesion},
+			#{isDelegate},
+			#{auditId},
+			#{auditLevel},
+			#{auditName},
+			#{gnodeId},
+			#{isBack},
+			#{suggest},
+			#{score},
+			#{grade},
+			#{updateDate},
+			#{updateBy.id},
+			#{createDate},
+			#{createBy.id},
+			#{delFlag},
+			#{procInsId}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_audit_info SET
+			promodel_id = #{promodelId},
+			gnode_vesion = #{gnodeVesion},
+			audit_id = #{auditId},
+			audit_level = #{auditLevel},
+			audit_name = #{auditName},
+			gnode_id = #{gnodeId},
+			is_back = #{isBack},
+			suggest = #{suggest},
+			score = #{score},
+			grade = #{grade},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			proc_ins_id = #{procInsId}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE act_yw_audit_info SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteByProIdAndGnodeId">
+		UPDATE act_yw_audit_info SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE promodel_id = #{promodelId}
+		and gnode_id=#{gnodeId}
+		and is_back is  null
+	</update>
+
+	<update id="updateIsBack">
+		UPDATE act_yw_audit_info SET
+			is_back = '1'
+		WHERE id = #{id}
+	</update>
+
+	<select id="getActYwAuditRecord" resultType="com.oseasy.act.modules.actyw.entity.ActYwAuditInfo">
+		select id from act_yw_audit_info where promodel_id =#{promodelId}
+	</select>
+
+</mapper>

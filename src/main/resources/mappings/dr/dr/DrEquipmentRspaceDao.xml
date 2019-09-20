@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.dr.modules.dr.dao.DrEquipmentRspaceDao">
+
+	<sql id="drEquipmentRspaceColumns">
+		a.id AS "id",
+		a.ept_id AS "epment.id",
+		a.rsp_type AS "rspType",
+		a.rspace_id AS "rspace",
+		a.dr_no AS "drNo",
+		a.name AS "name",
+		a.deal_status AS "dealStatus",
+
+		b.no AS "epment.no",
+		b.name AS "epment.name",
+		b.psw AS "epment.psw",
+		b.ip AS "epment.ip",
+		b.type AS "epment.type",
+		b.port AS "epment.port",
+		b.dr_no AS "epment.drNo",
+		b.tindex AS "epment.tindex"
+	</sql>
+
+	<sql id="drEquipmentRspaceByRoomColumns">
+		<include refid="drEquipmentRspaceColumns"/>,
+
+		sr.rsname AS "rsname",
+		sr.pnames AS "pnames"
+	</sql>
+
+	<sql id="drEquipmentRspaceJoins">
+        LEFT JOIN dr_equipment b ON b.id = a.ept_id
+	</sql>
+	<sql id="drEquipmentRspaceByRoomJoins">
+		<include refid="drEquipmentRspaceJoins"/>
+		LEFT JOIN (
+			SELECT
+				der.id AS "erid",
+				ps.id AS "id",
+				ps.parent_ids AS "parent_ids",
+				replace(ps.name, 'root/', '') AS "rsname",
+				replace(concat_ws("/", ppppps.name, pppps.name, ppps.name, pps.name), 'root/', '') AS "pnames"
+			FROM pw_space ps
+				LEFT JOIN dr_equipment_rspace der ON der.rspace_id = ps.id AND der.rsp_type = '1'
+				LEFT JOIN pw_space pps ON pps.id = ps.parent_id
+				LEFT JOIN pw_space ppps ON ppps.id = pps.parent_id
+				LEFT JOIN pw_space pppps ON pppps.id = ppps.parent_id
+				LEFT JOIN pw_space ppppps ON ppppps.id = pppps.parent_id
+			UNION ALL
+			SELECT
+				der.id AS "erid",
+				pr.id AS "id",
+				ps.parent_ids AS "parent_ids",
+				replace(pr.name, 'root/', '') AS "rsname",
+				replace(concat_ws("/", ppppps.name, pppps.name, ppps.name, pps.name), 'root/', '') AS "pnames"
+			FROM pw_room pr
+				LEFT JOIN dr_equipment_rspace der ON der.rspace_id = pr.id AND der.rsp_type = '2'
+				LEFT JOIN pw_space ps ON ps.id = pr.sid
+				LEFT JOIN pw_space pps ON pps.id = ps.parent_id
+				LEFT JOIN pw_space ppps ON ppps.id = pps.parent_id
+				LEFT JOIN pw_space pppps ON pppps.id = ppps.parent_id
+				LEFT JOIN pw_space ppppps ON ppppps.id = pppps.parent_id
+		) sr ON sr.erid = a.id
+	</sql>
+
+	<select id="get" resultType="DrEquipmentRspace">
+		SELECT
+			<include refid="drEquipmentRspaceColumns"/>
+		FROM dr_equipment_rspace a
+		<include refid="drEquipmentRspaceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByRoom" resultType="DrEquipmentRspace">
+		SELECT
+			<include refid="drEquipmentRspaceByRoomColumns"/>
+		FROM dr_equipment_rspace a
+		<include refid="drEquipmentRspaceByRoomJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="DrEquipmentRspace">
+		SELECT
+			<include refid="drEquipmentRspaceColumns"/>
+		FROM dr_equipment_rspace a
+		<include refid="drEquipmentRspaceJoins"/>
+		<where> 1 = 1
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="ids != null and ids.size >0">
+                AND a.id IN
+               <foreach item="item" collection="ids" separator="," open="("
+                        close=")">
+                   #{item}
+               </foreach>
+           	</if>
+			<if test="drNos != null">
+                AND a.dr_no IN
+               <foreach item="item" collection="drNos" separator="," open="("
+                        close=")">
+                   #{item}
+               </foreach>
+           	</if>
+           	<if test="queryStr != null and queryStr != ''">
+				AND (
+					b.no LIKE concat('%',#{queryStr},'%')
+					OR b.name LIKE concat('%',#{queryStr},'%')
+					OR b.ip LIKE concat('%',#{queryStr},'%')
+				)
+			</if>
+			<if test="epment != null">
+				<if test="epment.id != null and epment.id != ''">
+					AND b.id = #{epment.id}
+				</if>
+				<if test="epment.no != null and epment.no != ''">
+					AND b.no = #{epment.no}
+				</if>
+				<if test="epment.name != null and epment.name != ''">
+					AND b.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{epment.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{epment.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{epment.name},'%')</if>
+				</if>
+				<if test="epment.ip != null and epment.ip != ''">
+					AND b.ip = #{epment.ip}
+				</if>
+				<if test="epment.port != null and epment.port != ''">
+					AND b.port = #{epment.port}
+				</if>
+				<if test="epment.type != null and epment.type != ''">
+					AND b.type = #{epment.type}
+				</if>
+				<if test="epment.drNo != null and epment.drNo != ''">
+					AND b.dr_no LIKE
+						<if test="dbName == 'oracle'">'%'||#{epment.drNo}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{epment.drNo}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{epment.drNo},'%')</if>
+				</if>
+				<!--<if test="epment.tindex != null and epment.tindex != ''">
+					AND  b.tindex <![CDATA[  >= ]]> #{epment.tindex}
+				</if>-->
+			</if>
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="rspType != null and rspType != ''">
+				AND a.rsp_type = #{rspType}
+			</if>
+			<if test="rspace != null and rspace != ''">
+				AND a.rspace_id = #{rspace}
+			</if>
+			<if test="drNo != null and drNo != ''">
+				AND a.dr_no = #{drNo}
+			</if>
+			<if test="dealStatus != null and dealStatus != ''">
+				AND a.deal_status = #{dealStatus}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+                ORDER BY a.ept_id ASC, a.rsp_type ASC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByRoom" resultType="DrEquipmentRspace">
+		SELECT
+			<include refid="drEquipmentRspaceByRoomColumns"/>
+		FROM dr_equipment_rspace a
+		<include refid="drEquipmentRspaceByRoomJoins"/>
+		<where> 1 = 1
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="drNos != null">
+                AND a.dr_no IN
+               <foreach item="item" collection="drNos" separator="," open="("
+                        close=")">
+                   #{item}
+               </foreach>
+           </if>
+           <if test="queryStr != null and queryStr != ''">
+				AND (
+					b.no LIKE concat('%',#{queryStr},'%')
+					OR b.name LIKE concat('%',#{queryStr},'%')
+					OR b.ip LIKE concat('%',#{queryStr},'%')
+					OR a.name LIKE concat('%',#{queryStr},'%')
+					OR sr.rsname LIKE concat('%',#{queryStr},'%')
+					OR sr.pnames LIKE concat('%',#{queryStr},'%')
+				)
+			</if>
+			<if test="epment != null">
+				<if test="epment.id != null and epment.id != ''">
+					AND b.id = #{epment.id}
+				</if>
+				<if test="epment.no != null and epment.no != ''">
+					AND b.no = #{epment.no}
+				</if>
+				<if test="epment.name != null and epment.name != ''">
+					AND b.name LIKE
+						<if test="dbName == 'oracle'">'%'||#{epment.name}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{epment.name}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{epment.name},'%')</if>
+				</if>
+				<if test="epment.ip != null and epment.ip != ''">
+					AND b.ip = #{epment.ip}
+				</if>
+				<if test="epment.port != null and epment.port != ''">
+					AND b.port = #{epment.port}
+				</if>
+				<if test="epment.type != null and epment.type != ''">
+					AND b.type = #{epment.type}
+				</if>
+				<if test="epment.drNo != null and epment.drNo != ''">
+					AND b.dr_no LIKE
+						<if test="dbName == 'oracle'">'%'||#{epment.drNo}||'%'</if>
+						<if test="dbName == 'mssql'">'%'+#{epment.drNo}+'%'</if>
+						<if test="dbName == 'mysql'">concat('%',#{epment.drNo},'%')</if>
+				</if>
+				<!--<if test="epment.tindex != null and epment.tindex != ''">
+					AND  b.tindex <![CDATA[  >= ]]> #{epment.tindex}
+				</if>-->
+			</if>
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="rspType != null and rspType != ''">
+				AND a.rsp_type = #{rspType}
+			</if>
+			<if test="rspace != null and rspace != ''">
+				AND a.rspace_id = #{rspace}
+			</if>
+			<if test="drNo != null and drNo != ''">
+				AND a.dr_no = #{drNo}
+			</if>
+			<if test="dealStatus != null and dealStatus != ''">
+				AND a.deal_status = #{dealStatus}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="rsname != null and rsname != ''">
+				AND sr.rsname LIKE
+					<if test="dbName == 'oracle'">'%'||#{rsname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{rsname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{rsname},'%')</if>
+			</if>
+			<if test="pnames != null and pnames != ''">
+				AND sr.pnames LIKE
+					<if test="dbName == 'oracle'">'%'||#{pnames}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{pnames}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{pnames},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+                ORDER BY sr.parent_ids ASC, a.rspace_id ASC, a.ept_id ASC, a.rsp_type ASC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getAllRelationListByDrEquipment" resultType="DrEquipmentRspace">
+		SELECT
+			<include refid="drEquipmentRspaceColumns"/>
+		FROM dr_equipment_rspace a
+		<include refid="drEquipmentRspaceJoins"/>
+		<where>
+			  b.id = #{drEquipmentid}
+		</where>
+	</select>
+
+	<select id="findAllList" resultType="DrEquipmentRspace">
+		SELECT
+			<include refid="drEquipmentRspaceColumns"/>
+		FROM dr_equipment_rspace a
+		<include refid="drEquipmentRspaceJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO dr_equipment_rspace(
+			id,
+			ept_id,
+			rsp_type,
+			rspace_id,
+			name,
+			deal_status,
+			dr_no
+		) VALUES (
+			#{id},
+			#{epment.id},
+			#{rspType},
+			#{rspace},
+			#{name},
+			#{dealStatus},
+			#{drNo}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE dr_equipment_rspace SET
+			ept_id = #{epment.id},
+			rsp_type = #{rspType},
+			rspace_id = #{rspace},
+			name = #{name},
+			deal_status = #{dealStatus},
+			dr_no = #{drNo}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateDoorStatusByEquipmentIdAndDoorNos">
+		UPDATE dr_equipment_rspace SET
+		deal_status = #{dealStatus}
+		<where>
+			<if test="equipmentId != null and equipmentId != ''"> AND ept_id = #{equipmentId} </if>
+			<if test="doorNos != null"> AND dr_no IN
+				<foreach collection="doorNos" item="doorNo" open="(" separator="," close=")">
+					#{doorNo}
+				</foreach>
+			</if>
+		</where>
+	</update>
+
+	<update id="updateDealStatusByPl" parameterType="java.util.List" >
+		UPDATE dr_equipment_rspace SET
+			deal_status = #{dealStatus}
+		WHERE id in
+		<foreach item="id" collection="ids" separator="," open="("
+			close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteByDrEquipmentId">
+		DELETE FROM dr_equipment_rspace
+		WHERE ept_id = #{drEquipmentId}
+	</update>
+
+	<update id="delete">
+		DELETE FROM dr_equipment_rspace
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM dr_equipment_rspace WHERE id = #{id}
+	</update>
+</mapper>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.act.modules.actyw.dao.ActYwGformDao">
+
+	<sql id="actYwGformColumns">
+		a.id AS "id",
+		a.group_id AS "group.id",
+		a.gnode_id AS "gnode.id",
+		a.is_delegate AS "isDelegate",
+		a.form_id AS "form.id",
+		f.style_type AS "form.styleType",
+		f.path AS "form.path",
+		f.name AS "form.name"
+	</sql>
+
+	<sql id="actYwGformJoins">
+		LEFT JOIN act_yw_form f on f.id=a.form_id
+	</sql>
+
+	<select id="get" resultType="ActYwGform">
+		SELECT
+			<include refid="actYwGformColumns"/>
+		FROM act_yw_gform a
+		<include refid="actYwGformJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="ActYwGform">
+		SELECT
+			<include refid="actYwGformColumns"/>
+		FROM act_yw_gform a
+		<include refid="actYwGformJoins"/>
+		<where>
+			<if test="group != null">
+				<if test="group.id != null and group.id != ''">
+					AND a.group_id = #{group.id}
+				</if>
+
+			</if>
+			<if test="gnode != null">
+				<if test="gnode.id != null and gnode.id != ''">
+					AND a.gnode_id = #{gnode.id}
+				</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="ActYwGform">
+		SELECT
+			<include refid="actYwGformColumns"/>
+		FROM act_yw_gform a
+		<include refid="actYwGformJoins"/>
+		<where>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy} ${page.orderByType}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO act_yw_gform(
+			id,
+			group_id,
+			gnode_id,
+			form_id,
+			is_delegate
+		) VALUES (
+			#{id},
+			#{group.id},
+			#{gnode.id},
+			#{form.id},
+			#{isDelegate}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE act_yw_gform SET
+			id = #{id},
+			group_id = #{group.id},
+			gnode_id = #{gnode.id},
+			is_delegate = #{isDelegate},
+			form_id = #{form.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		DELETE FROM act_yw_gform
+		WHERE id = #{id}
+	</update>
+
+	<update id="deleteWL">
+		DELETE FROM act_yw_gform WHERE id = #{id}
+	</update>
+
+	<insert id="savePl" >
+		INSERT INTO act_yw_gform(
+			id,
+			group_id,
+			gnode_id,
+			is_delegate,
+			form_id
+		) VALUES
+		<foreach collection="list" item="item" index="index"
+				 separator=",">
+			(
+               #{item.id},
+               #{item.group.id},
+               #{item.gnode.id},
+               #{item.isDelegate},
+               #{item.form.id}
+			)
+		</foreach>
+	</insert>
+
+    <update id="deletePlwl">
+            DELETE FROM act_yw_gform WHERE group_id = #{groupId} AND gnode_id = #{gnodeId}
+    </update>
+
+    <update id="deletePlwlByGroup">
+            DELETE FROM act_yw_gform WHERE group_id = #{groupId}
+    </update>
+</mapper>

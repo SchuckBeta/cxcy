@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<jsonparam>
+	<![CDATA[{
+		    'groups': [
+			    {
+			    	'url':'模块跳转链接,如：f/page-projectshow',
+			    	'groupName':'分组1',
+			    	'list':[
+			    		{
+			    			'title':'分组1-标题1',
+			    			'img':'分组1-图片1',
+			    			'url':'分组1-跳转链接',
+			    			'desc':'分组1-描述1'
+			    		},
+			    		{
+			    			'title':'分组1-标题2',
+			    			'img':'分组1-图片2',
+			    			'url':'分组1-跳转链接',
+			    			'desc':'分组1-描述2'
+			    		}
+			    	]
+			    },
+			    {
+			    	'groupName':'分组2',
+			    	'list':[
+			    		{
+			    			'title':'分组2-标题1',
+			    			'img':'分组2-图片1',
+			    			'url':'分组2-跳转链接',
+			    			'desc':'分组2-描述1'
+			    		},
+			    		{
+			    			'title':'分组2-标题2',
+			    			'img':'分组2-图片2',
+			    			'url':'分组2-跳转链接',
+			    			'desc':'分组2-描述2'
+			    		}
+			    	]
+			    }
+		    ]
+		}]]>
+	</jsonparam>
+	<content>
+		<![CDATA[<img class="indexdeco" src="/img/indexdecopic_14.png" alt="" />
+	<div class="itemDisplayBox">
+		<a href="${url}"><img class="title"
+			src="/img/indexItemTitle.png" /></a>
+		<ul class="threeBlock">
+			<#list groups as group>
+				<li <#if group_index==0> class="active" </#if>  role="presentation"><a href="#projectTab${group_index}" aria-controls="#projectTab${group_index}" role="tab" data-toggle="tab">${group.groupName}</a></li>
+			</#list>
+		</ul>
+		<div  class="tab-content">
+			<#list groups as group>
+				<ul role="tabpanel" class="tab-pane <#if group_index==0> active </#if> content" id="projectTab${group_index}">
+					<#list group.list as obj>
+						<li><a href="/f${obj.url}"><img src="${freemarkerGetFtpUrl(obj.img)}" alt="" />
+							<h5>${obj.title}</h5>
+							<p id="spillout">${obj.desc}</p>
+							</a>
+						</li>
+					</#list>
+				</ul>
+			</#list>
+		</div>
+	</div>]]>
+	</content>
+</template>

@@ -1,0 +1,728 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oseasy.sys.modules.team.dao.TeamDao">
+	<sql id="teamColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.sponsor AS "sponsor",
+		a.first_teacher AS "firstTeacher",
+		a.state AS "state",
+		a.summary AS "summary",
+		a.project_name AS
+		"projectName",
+		a.project_introduction AS "projectIntroduction",
+		a.enterprise_teacher_num AS "enterpriseTeacherNum",
+		a.school_teacher_num AS "schoolTeacherNum",
+		a.member_num AS
+		"memberNum",
+		a.update_date AS "updateDate",
+		a.update_by AS
+		"updateBy.id",
+		a.create_date AS "createDate",
+		a.create_by AS
+		"createBy.id",
+		a.del_flag AS "delFlag",
+		a.valid_date AS "validDate",
+		a.membership AS "membership",
+		a.valid_date_start AS "validDateStart",
+		a.valid_date_end AS "validDateEnd",
+		a.local_college AS "localCollege",
+		a.member_names AS "memberNames",
+		a.sch_teacher_names AS
+		"schTeacherNames",
+		a.ent_teacher_names AS "entTeacherNames",
+		a.number AS "number"
+	</sql>
+
+	<sql id="teamJoins">
+
+	</sql>
+
+	<select id="get" resultType="Team">
+		SELECT DISTINCT
+		<include refid="teamColumns" />
+		FROM team a
+		<include refid="teamJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="getByUsable" resultType="Team">
+		SELECT DISTINCT
+		<include refid="teamColumns" />
+		FROM team a
+		<include refid="teamJoins" />
+		WHERE a.id = #{id} AND a.del_flag = '0' AND a.state = '1'
+	</select>
+
+	<select id="findList" resultType="Team">
+		SELECT DISTINCT
+		<include refid="teamColumns" />
+		FROM team a
+		<include refid="teamJoins" />
+		left join  sys_user u on a.sponsor = u.id
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="nameSch != null and nameSch != ''">
+				AND ( a.name LIKE concat('%',#{nameSch},'%')
+				or (select
+				sf.name from sys_office sf where sf.id= a.local_college)
+				LIKE concat('%',#{nameSch},'%')
+				or ( u.name like concat('%',#{nameSch},'%'))
+				)
+			</if>
+			<if test="stateSch != null and stateSch.size() &gt; 0">
+				AND a.state IN
+				<foreach collection="stateSch" item="state" open="(" separator="," close=")">
+					#{state}
+				</foreach>
+			</if>
+			<if
+				test="beginValidDate != null and endValidDate != null and beginValidDate != '' and endValidDate != ''">
+				AND a.valid_date BETWEEN #{beginValidDate} AND #{endValidDate}
+			</if>
+			<if test="localCollege != null and localCollege != ''">
+				AND (
+				a.local_college = #{localCollege}
+				or a.local_college
+				in (
+				SELECT sf.id FROM sys_office sf
+				WHERE FIND_IN_SET(#{localCollege},sf.parent_ids) )
+				)
+			</if>
+			<if test="user!=null and user.id!=null and user.id!=''">
+				AND (a.sponsor = #{user.id}
+				OR a.id IN (SELECT n.s_id FROM
+				oa_notify_record nr LEFT JOIN oa_notify n ON nr.oa_notify_id = n.id
+				WHERE n.type in (6,7,10,11) AND nr.user_id = #{user.id} and
+				(nr.out_team='0' or nr.out_team is null))
+				OR a.id in(select t.team_id
+				from team_user_relation t where t.user_id= #{user.id} and t.state
+				in('0','1','2'))
+				)
+			</if>
+			<if test="inResearch!=null and inResearch!='' and inResearch==1">
+				AND a.id IN (SELECT p.team_id FROM project_declare p
+				WHERE p.status BETWEEN 0 AND 7) AND a.state IN(0,1)
+			</if>
+			<if test="inResearch!=null and inResearch!='' and inResearch==0">
+				AND a.id NOT IN (SELECT p.team_id FROM project_declare p
+				WHERE p.status BETWEEN 0 AND 7) OR
+				(a.id IN (SELECT p.team_id FROM project_declare p WHERE p.status BETWEEN
+				0 AND 7) AND a.state=2)
+			</if>
+
+			<if test="creator != null and creator != ''">
+				AND a.sponsor IN (SELECT u.id FROM sys_user u where
+				u.name like
+				concat('%',#{creator},'%'))
+			</if>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findTeamByIds" resultType="Team">
+		SELECT
+		<include refid="teamColumns" />
+		FROM team a
+		<include refid="teamJoins" />
+		<where>
+			<if test="ids != null and ids.size() &gt; 0">
+				a.id IN
+				<foreach collection="ids" item="id" open="(" separator="," close=")">
+					#{id}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+	<select id="findInTeamList" resultType="Team">
+		SELECT DISTINCT
+		<include refid="teamColumns" />
+		FROM team a
+		<include refid="teamJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} AND a.state in (0,1)
+			<if test="sponsor != null and sponsor != ''">
+				AND a.sponsor = #{sponsor}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findTeamListByUserId" resultType="Team">
+		SELECT DISTINCT
+		<include refid="teamColumns" />
+		FROM team a
+		left join team_user_relation f on a.id=f.team_id and f.del_flag='0'
+		<where>
+			a.del_flag = '0' AND a.state in ('0','1')
+			and f.state in('0','4')
+			AND f.user_id = #{userid}
+		</where>
+	</select>
+	<select id="findListByCreatorId" resultType="Team">
+		SELECT DISTINCT
+		<include refid="teamColumns" />
+		FROM team a
+		<include refid="teamJoins" />
+
+		<where>
+			a.del_flag = 0 AND a.state in (0,1)
+
+			<if test="sponsor != null and sponsor != ''">
+				AND a.sponsor = #{sponsor}
+			</if>
+
+		</where>
+
+	</select>
+	<select id="findListByCreatorIdAndState" resultType="Team">
+
+
+		SELECT a.*,tem.*
+		FROM (
+		select t.team_id,ifnull(sum(case when t.user_type='1' then 1 else 0
+		end),0) userCount,
+		ifnull(sum(case when t.user_type='2' and te.teacherType='1' then 1 else 0 end),0)
+		schoolNum,
+		ifnull(sum(case when t.user_type='2' and te.teacherType='2'
+		then 1 else 0 end),0) enterpriseNum
+		from team_user_relation t left join
+		sys_teacher_expansion te on t.user_type='2' and t.user_id=te.user_id
+		and te.del_flag='0'
+		where t.state in ('0','4') and t.del_flag='0'
+		and t.team_id in(
+		select tm.id from team tm where tm.del_flag = '0' AND tm.state =#{state}
+		AND tm.sponsor = #{sponsor}
+		)
+		group by t.team_id
+		) tem
+		left join team a on tem.team_id=a.id
+		order by
+		a.create_date desc
+	</select>
+
+
+	<select id="findAllList" resultType="Team">
+		SELECT
+		<include refid="teamColumns" />
+		FROM team a
+		<include refid="teamJoins" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO team(
+		id,
+		name,
+		sponsor,
+		state,
+		summary,
+		first_teacher,
+		project_name,
+		project_introduction,
+		enterprise_teacher_num,
+		school_teacher_num,
+		member_num,
+		update_date,
+		update_by,
+		create_date,
+		create_by,
+		del_flag,
+		valid_date,
+		membership,
+		valid_date_start,
+		valid_date_end,
+		local_college,
+		member_names,
+		sch_teacher_names,
+		ent_teacher_names,
+		number
+		) VALUES (
+		#{id},
+		#{name},
+		#{sponsor},
+		#{state},
+		#{summary},
+		#{firstTeacher},
+		#{projectName},
+		#{projectIntroduction},
+		#{enterpriseTeacherNum},
+		#{schoolTeacherNum},
+		#{memberNum},
+		#{updateDate},
+		#{updateBy.id},
+		#{createDate},
+		#{createBy.id},
+		#{delFlag},
+		#{validDate},
+		#{membership},
+		#{validDateStart},
+		#{validDateEnd},
+		#{localCollege},
+		#{memberNames},
+		#{schTeacherNames},
+		#{entTeacherNames},
+		#{number}
+		)
+	</insert>
+
+	<update id="updateAllInfo">
+		UPDATE team SET
+		name = #{name},
+		<if test="number!=null and number!=''">
+		number=#{number},
+		</if>
+		<if test="firstTeacher!=null and firstTeacher!=''">
+		first_teacher=#{firstTeacher},
+		</if>
+		sponsor = #{sponsor},
+		state = #{state},
+		summary = #{summary},
+		project_name = #{projectName},
+		project_introduction = #{projectIntroduction},
+		enterprise_teacher_num = #{enterpriseTeacherNum},
+		school_teacher_num = #{schoolTeacherNum},
+		member_num = #{memberNum},
+		update_date = #{updateDate},
+		update_by = #{updateBy.id},
+		valid_date = #{validDate},
+		membership = #{membership},
+		valid_date_start = #{validDateStart},
+		valid_date_end = #{validDateEnd},
+		local_college = #{localCollege},
+		member_names = #{memberNames},
+		sch_teacher_names = #{schTeacherNames},
+		ent_teacher_names = #{entTeacherNames}
+		WHERE id = #{id}
+	</update>
+	<update id="update">
+		UPDATE team SET
+		name = #{name},
+		<if test="number!=null and number!=''">
+		number=#{number},
+		</if>
+		state = #{state},
+		summary = #{summary},
+		<if test="firstTeacher!=null and firstTeacher!=''">
+		first_teacher = #{firstTeacher},
+		</if>
+		project_name = #{projectName},
+		project_introduction = #{projectIntroduction},
+		enterprise_teacher_num = #{enterpriseTeacherNum},
+		school_teacher_num = #{schoolTeacherNum},
+		member_num = #{memberNum},
+		update_date = #{updateDate},
+		update_by = #{updateBy.id},
+		valid_date = #{validDate},
+		membership = #{membership},
+		valid_date_start = #{validDateStart},
+		valid_date_end = #{validDateEnd},
+		local_college = #{localCollege},
+		member_names = #{memberNames},
+		sch_teacher_names = #{schTeacherNames},
+		ent_teacher_names = #{entTeacherNames}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE team SET
+		del_flag = '1'
+		WHERE id = #{id}
+	</update>
+
+	<select id="findTeamDetails" resultType="com.oseasy.sys.modules.team.entity.TeamDetails">
+		SELECT DISTINCT t.sponsor AS "sponsor",
+		t.id as "id",
+		t.first_teacher as "firstTeacher",
+		t.name as "name",
+		t.valid_date_start as "validDateStart",
+		t.valid_date_end as "validDateEnd",
+		t.local_college as "localCollege",
+		t.summary as "summary",
+		t.project_introduction as "projectIntroduction",
+		t.member_num as "memberNum",
+		t.school_teacher_num as "schoolTeacherNum",
+		t.enterprise_teacher_num as "enterpriseTeacherNum",
+		t.membership as "membership",
+		t.id teamId,
+		t.state
+		FROM team AS t
+		LEFT JOIN team_user_relation AS r
+		ON t.id=r.team_id
+		LEFT JOIN sys_user AS u
+		ON u.id=r.user_id
+		LEFT JOIN sys_teacher_expansion te
+		ON te.user_id=u.id
+		WHERE t.id=#{id}
+	</select>
+
+	<!-- 前台查看团队查询团队人员信息 -->
+	<select id="findTeamInfo" resultType="com.oseasy.sys.modules.team.entity.TeamDetails">
+		SELECT
+		u.name AS "uName",
+		u.degree AS "degree",
+		u.professional AS "professional",
+		so.name AS "officeId",
+		u.domain AS "domain",
+		te.teacherType AS "teacherType",
+		t.sch_teacher_names AS "schTeacherNames",
+		t.ent_teacher_names AS "entTeacherNames",
+		t.membership AS "membership",
+		r.`user_type` AS "userType",
+		u.no AS "no",
+		se.instudy AS "instudy",
+		r.state AS "state",
+		u.phone AS "phone",
+		u.photo AS "photo",
+		u.mobile AS "mobile",
+		r.user_id AS "userId",
+		t.sponsor AS "sponsor",
+		se.curr_state AS "currState",
+		(select GROUP_CONCAT(DISTINCT ifnull(s1.label,s2.label)) from
+		team_user_history thu
+		left join sys_dict s1 on s1.value=thu.pro_sub_type and
+		s1.type='project_style' and thu.pro_type='1,'
+		left join sys_dict s2 on s2.value=thu.pro_sub_type and
+		s2.type='competition_type' and thu.pro_type='7,'
+		where thu.user_id=u.id and thu.del_flag='0' and thu.finish='0') curJoin
+		FROM team_user_relation AS r
+		LEFT JOIN team AS t
+		ON t.id=r.team_id
+		LEFT JOIN sys_user AS u
+		ON u.id=r.user_id
+		LEFT JOIN sys_teacher_expansion te
+		ON te.user_id=u.id
+		LEFT JOIN sys_student_expansion se
+		ON se.user_id=u.id
+		left join sys_office so on u.office_id=so.id
+		WHERE t.id=#{0} AND
+		(r.state='0' or r.state='4') AND r.user_type=#{1}
+	</select>
+
+
+	<insert id="saveTeamUserRelation"
+		parameterType="com.oseasy.sys.modules.team.entity.TeamUserRelation">
+		INSERT INTO team_user_relation(
+		id,
+		user_type,
+		user_id,
+		team_id,
+		update_date,
+		update_by,
+		create_date,
+		create_by,
+		del_flag,
+		state
+		) VALUES (
+		#{id},
+		#{userType},
+		#{user.id},
+		#{teamId},
+		#{updateDate},
+		#{updateBy.id},
+		#{createDate},
+		#{createBy.id},
+		#{delFlag},
+		#{state}
+		)
+	</insert>
+
+
+	<select id="findTeamUserName" resultType="com.oseasy.sys.modules.team.entity.Team">
+		SELECT distinct
+		(SELECT e.name FROM sys_user AS e WHERE e.id= r.user_id ) AS
+		uName,
+		r.user_id,
+		r.user_type AS "teamUserType",
+		te.teacherType AS
+		"teacherType"
+		FROM team_user_relation AS r
+		INNER JOIN team AS t
+		ON t.id=r.team_id
+		LEFT JOIN sys_teacher_expansion AS te
+		ON te.user_id=r.user_id
+		WHERE t.id=#{id} AND (r.state='0' or r.state='4')
+	</select>
+
+	<update id="updateTeamState">
+		UPDATE team
+		SET state=#{state}
+		WHERE id=#{id}
+	</update>
+	<update id="hiddenDeleteWithNotify">
+		update oa_notify_record t set t.out_team='1'
+		where t.user_id=#{uid}
+		and EXISTS
+		(select 1 from oa_notify f where f.id=t.oa_notify_id and
+		f.s_id=#{tid})
+	</update>
+
+	<update id="auditAllBiuldOver">
+		update team tt set tt.state='1',update_by=#{uid},update_date=SYSDATE() where
+		tt.del_flag='0' and tt.state in ('0','3')
+		and EXISTS (
+		select 1 from (
+		select r.team_id,sum(case when r.user_type='1' then 1 else 0 end)
+		stunum,
+		sum(case when r.user_type='2' and se.teacherType='1' then 1 else 0 end)
+		sconum,
+		sum(case when r.user_type='2' and se.teacherType='2' then 1
+		else 0 end) entnum
+		from team_user_relation r
+		left join sys_user su on r.user_id=su.id and su.del_flag='0'
+		left join
+		sys_teacher_expansion se on r.user_type='2' and se.user_id=su.id and
+		se.del_flag='0'
+		where r.del_flag='0' and r.state in ('0','4')
+		group by
+		r.team_id) tem
+		where tt.id=tem.team_id and tt.del_flag='0' and tt.state in ('0','3') and
+		tt.member_num=tem.stunum and tt.school_teacher_num=tem.sconum and
+		tt.enterprise_teacher_num=tem.entnum)
+	</update>
+	<update id="auditAllBiuldIng">
+		update team tt set tt.state='0',update_by=#{uid},update_date=SYSDATE() where
+		tt.del_flag='0' and tt.state in ('1','3')
+		and EXISTS (
+		select 1 from (
+		select r.team_id,sum(case when r.user_type='1' then 1 else 0 end)
+		stunum,
+		sum(case when r.user_type='2' and se.teacherType='1' then 1 else 0 end)
+		sconum,
+		sum(case when r.user_type='2' and se.teacherType='2' then 1
+		else 0 end) entnum
+		from team_user_relation r
+		left join sys_user su on r.user_id=su.id and su.del_flag='0'
+		left join
+		sys_teacher_expansion se on r.user_type='2' and se.user_id=su.id and
+		se.del_flag='0'
+		where r.del_flag='0' and r.state in ('0','4')
+		group by
+		r.team_id) tem
+		where tt.id=tem.team_id and tt.del_flag='0' and tt.state in ('1','3') and
+		(tt.member_num!=tem.stunum or tt.school_teacher_num!=tem.sconum or
+		tt.enterprise_teacher_num!=tem.entnum))
+	</update>
+	<update id="auditOne">
+		UPDATE team
+		SET state=#{res},update_by=#{uid},update_date=SYSDATE()
+		WHERE id=#{teamId} and state='3' and del_flag='0'
+	</update>
+
+	<select id="findTeamNumByUserId" resultType="java.lang.Integer"
+		parameterType="com.oseasy.sys.modules.team.entity.TeamUserRelation">
+		SELECT count(1)
+		FROM team_user_relation AS r
+		left join team as t on r.team_id =t.id
+		WHERE r.user_id=#{user.id} AND (r.state='0' or r.state='4') and
+		r.del_flag='0'
+		and t.del_flag='0' AND (t.state='0' or t.state='1')
+	</select>
+
+		<select id="findStuNumByTeamId" resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM team_user_relation AS r
+		WHERE r.team_id=#{teamId} AND (r.state='0' or r.state='4') and r.user_type
+		= '1'
+		AND r.del_flag = '0'
+	</select>
+	<select id="checkTeamIsInProject" resultType="java.lang.Integer">
+		select count(1) cc from team_user_history thu
+		where thu.team_id=#{tid} and thu.del_flag='0' and thu.finish in('0','2')
+	</select>
+	<select id="checkTeamIsInCyjd" resultType="java.lang.Integer">
+		SELECT
+		count(1)
+		FROM pw_enter e
+		left join pw_enter_detail h on e.id=h.eid and h.type='0'
+		WHERE
+		e. STATUS IN ('0', '10', '30', '40', '50')
+		AND h.rid=#{tid} and h.del_flag='0'
+	</select>
+
+	<select id="findTe1NumByTeamId" resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM team_user_relation AS r
+		JOIN sys_teacher_expansion AS te ON te.user_id= r.user_id
+		WHERE r.team_id=#{teamId} AND (r.state='0' or r.state='4') and r.user_type
+		= '2'
+		AND r.del_flag = '0' AND te.teacherType = '1'
+	</select>
+
+	<select id="findTe2NumByTeamId" resultType="java.lang.Integer">
+		SELECT count(1)
+		FROM team_user_relation AS r
+		JOIN sys_teacher_expansion AS te ON te.user_id= r.user_id
+		WHERE r.team_id=#{teamId} AND (r.state='0' or r.state='4') and r.user_type
+		= '2'
+		AND r.del_flag = '0' AND te.teacherType = '2'
+	</select>
+
+	<select id="findTeamJoinInNums" resultType="com.oseasy.sys.modules.team.entity.Team">
+		select a.*,tem.*
+		from(select t.team_id,ifnull(sum(case when t.user_type='1' then 1 else
+		0 end),0) userCount,
+		ifnull(sum(case when t.user_type='2' and te.teacherType='1' then 1 else 0 end),0)
+		schoolNum,
+		ifnull(sum(case when t.user_type='2' and te.teacherType='2'
+		then 1 else 0 end),0) enterpriseNum
+		from team_user_relation t
+		left join sys_teacher_expansion te on t.user_type='2' and
+		t.user_id=te.user_id and te.del_flag='0'
+		where t.state in ('0','4') and
+		t.del_flag='0' and t.team_id=#{teamId}
+		group by t.team_id) tem
+		left join team a on tem.team_id=a.id
+	</select>
+
+	<!-- 前台团队建设查询 -->
+	<select id="findTeamByTeamId" resultType="com.oseasy.sys.modules.team.entity.TeamDetails">
+		SELECT distinct
+		u.name AS "uName",
+		u.degree AS "degree",
+		u.photo AS "avatar",
+		u.professional AS "professional",
+		so.name AS "officeId",
+		u.domain AS "domain",
+		te.teacherType AS "teacherType",
+		t.sch_teacher_names AS "schTeacherNames",
+		t.ent_teacher_names AS "entTeacherNames",
+		t.membership AS "membership",
+		r.`user_type` AS "userType",
+		u.no AS "no",
+		se.instudy AS "instudy",
+		r.state AS "state",
+		u.phone AS "phone",
+		u.mobile AS "mobile",
+		r.team_id AS "teamId",
+		r.user_id AS "userId",
+		r.id AS "turId",
+		t.sponsor AS "sponsor",
+		se.curr_state as currState,
+		(select GROUP_CONCAT(DISTINCT ifnull(s1.label,s2.label)) from
+		team_user_history thu
+		left join sys_dict s1 on s1.value=thu.pro_sub_type and
+		s1.type='project_style' and thu.pro_type='1,'
+		left join sys_dict s2 on s2.value=thu.pro_sub_type and
+		s2.type='competition_type' and thu.pro_type='7,'
+		where thu.user_id=u.id and thu.del_flag='0' and thu.finish='0') curJoin
+		FROM team_user_relation AS r
+		LEFT JOIN team AS t ON t.id=r.team_id
+		LEFT JOIN sys_user AS u ON u.id=r.user_id
+		LEFT JOIN sys_teacher_expansion te ON te.user_id=u.id
+		LEFT JOIN sys_student_expansion se ON se.user_id=u.id
+		left join sys_office so on u.office_id=so.id
+		WHERE t.id=#{0} AND r.state
+		BETWEEN '0' AND '2' AND r.user_type=#{1}
+	</select>
+
+
+	<select id="findMyList" resultType="Team">
+		SELECT
+		<include refid="teamColumns" />
+		FROM team a JOIN oa_notify o ON a.id = o.s_id
+		JOIN oa_notify_record b ON o.id= b.oa_notify_id
+		WHERE o.type=7 AND b.user_id=#{userId} ORDER BY a.update_date DESC
+	</select>
+
+	<select id="countBuildByUserId" resultType="java.lang.Long">
+		SELECT
+		count(1)
+		FROM team t
+		WHERE t.sponsor=#{id} and t.state in('0','1','3','4') and t.del_flag='0'
+	</select>
+	<select id="checkIsJoinInTUR" parameterType="java.lang.String"
+		resultType="java.util.HashMap">
+		select t.team_id,count(1) cc from team_user_relation t left join team
+		r on t.team_id=r.id
+		where t.del_flag='0' and r.del_flag='0' and t.user_id=#{uid} and t.state
+		in('0','1','2','4')
+		and t.team_id in
+		<foreach collection="tds" item="td" index="index" open="("
+			close=")" separator=",">
+			#{td.id}
+		</foreach>
+		group by t.team_id
+	</select>
+	<select id="checkIsJoinInTeams" parameterType="java.lang.String"
+		resultType="java.util.HashMap">
+		select t.team_id,count(1) cc from team_user_relation t left join team
+		r on t.team_id=r.id
+		where t.del_flag='0' and r.del_flag='0' and t.user_id=#{uid} and t.state
+		in('0','4')
+		and t.team_id in
+		<foreach collection="tds" item="td" index="index" open="("
+			close=")" separator=",">
+			#{td.id}
+		</foreach>
+		group by t.team_id
+	</select>
+	<select id="selectTeamByName" resultType="Team">
+		SELECT a.id,a.name
+		FROM
+		team a
+		WHERE a.name = #{name} and a.del_flag = '0'
+	</select>
+
+	<select id="findTeams" resultType="com.oseasy.sys.modules.team.entity.Team"
+		parameterType="java.lang.String">
+		SELECT t.* FROM team t
+		WHERE t.sponsor = #{userId} AND t.del_flag='0' AND t.state='1'
+	</select>
+
+	<select id="getById" resultType="com.oseasy.sys.modules.team.entity.Team"
+			parameterType="java.lang.String">
+		SELECT
+		<include refid="teamColumns" />
+		FROM team a
+		<include refid="teamJoins" />
+		WHERE a.id = #{teamId} AND a.del_flag='0'
+	</select>
+
+	<select id="findFistTeacherByTeamId" resultType="java.lang.String">
+		SELECT t.first_teacher FROM team t
+		WHERE t.id = #{teamId} AND t.del_flag='0'
+	</select>
+
+	<!--根据两个人的userId，查找所在同一个团队数量 两人都得同意加入 -->
+	<select id="findTeamByUserId" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT COUNT(t.id) FROM team t
+		INNER JOIN team_user_relation tur ON t.id=tur.team_id
+		WHERE t.del_flag='0' AND tur.del_flag='0' and tur.state ='0'
+		AND tur.user_id = #{user1Id}
+		AND t.id IN (SELECT a.id
+		FROM team a
+		INNER JOIN team_user_relation b ON a.id=b.team_id
+		WHERE a.del_flag='0' AND b.del_flag='0' and b.state ='0'
+		AND b.user_id =#{user2Id})
+	</select>
+	<select id="getTeamCount" resultType="java.lang.Long">
+		select count(1) from team a where a.del_flag='0'  and a.state=#{state}
+	</select>
+</mapper>
