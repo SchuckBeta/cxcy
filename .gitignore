@@ -1,0 +1,100 @@
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+# *.jar
+*.war
+*.ear
+.zip
+.rar
+.idea
+*.iml
+.mymetadata
+.checkstyle
+
+
+target
+/target/
+/target/*
+/*/target
+/*/target/*
+/*/target/*/*
+/*/*/target
+/*/*/target/*
+/*/*/target/*/*
+
+
+# bin Files #
+/bin/
+/*/bin
+/*/bin/*
+/*/bin/*/*
+/*/*/bin
+/*/*/bin/*
+/*/*/bin/*/*
+
+
+# indexes Files #
+/indexes/*
+
+
+# svn Files #
+.svn
+.svn/*
+/.svn
+/*.svn
+
+
+# Settings Files #
+.settings
+.settings/*
+/.settings
+/*.settings
+/settings/
+/*/settings
+/*/settings/*
+/*/settings/*/*
+/*/*/settings
+/*/*/settings/*
+/*/*/settings/*/*
+
+
+# project Files #
+.project
+*.project
+/*.project
+
+
+# class Files #
+.class
+*.class
+/*.class
+
+
+/src/main/webapp/userfiles/*
+/src/main/webapp/WEB-INF/classes/*
+/*/src/main/webapp/WEB-INF/classes/
+/*/src/main/webapp/WEB-INF/classes/*
+/*/src/main/webapp/WEB-INF/classes/*/*
+/*/*/src/main/webapp/WEB-INF/classes/
+/*/*/src/main/webapp/WEB-INF/classes/*
+/*/*/src/main/webapp/WEB-INF/classes/*/*
+
+# classpath Files #
+.classpath
+*.classpath
+/.classpath
+/*.classpath
+
+
+# test-output Files #
+.test-output
+/.test-output
+/*.test-output
+
+
+/logs
+/temp
+
+/test-output
+/cxcy-nprovince-ui/node_modules
