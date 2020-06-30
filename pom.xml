@@ -43,7 +43,7 @@
 		<jsonlib.version>2.4</jsonlib.version>
 		<orgjson.version>20080701</orgjson.version>
 		<gson.version>2.3.1</gson.version>
-		<xstream.version>1.4.7</xstream.version>
+		<xstream.version>1.4.10-java7</xstream.version>
 		<guava.version>17.0</guava.version>
 		<dozer.version>5.5.1</dozer.version>
 		<poi.version>3.15</poi.version>
