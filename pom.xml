@@ -20,7 +20,7 @@
 		<curproject.warFinalName>ncenter</curproject.warFinalName>
 		<curproject.warDepProName>cxcy-ncom-web</curproject.warDepProName>
 
-		<spring.version>4.2.5.RELEASE</spring.version>
+		<spring.version>5.3.19</spring.version>
 		<validator.version>5.2.4.Final</validator.version>
 		<mybatis.version>3.2.8</mybatis.version>
 		<mybatis-spring.version>1.2.3</mybatis-spring.version>
